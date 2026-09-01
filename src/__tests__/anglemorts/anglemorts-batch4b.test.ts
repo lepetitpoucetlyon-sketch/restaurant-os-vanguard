@@ -51,7 +51,6 @@ import { MenuComboTaxProrataService } from '@/modules/finance/fiscalite/MenuComb
 import { SmartCardRoutingService } from '@/modules/finance/tresorerie/SmartCardRoutingService';
 import { PrinterFailoverRoutingService } from '@/modules/ops/service/restaurant/pos/services/PrinterFailoverRoutingService';
 import { HardenedTouchUiHelper } from '@/modules/ops/service/restaurant/pos/services/HardenedTouchUiHelper';
-import { ThermalOverheatP2PFailoverService } from '@/modules/ops/service/restaurant/pos/services/ThermalOverheatP2PFailoverService';
 import { BilingualTipGratuityHelper } from '@/modules/ops/service/restaurant/pos/services/BilingualTipGratuityHelper';
 describe('Angles Morts — Batch 4 (Part 2)', () => {
   beforeEach(() => { vi.clearAllMocks(); });
@@ -246,23 +245,6 @@ describe('Angles Morts — Batch 4 (Part 2)', () => {
     });
   });
 
-  // ── L45: ThermalOverheatP2PFailoverService ─────────────────────────────────
-  describe('L45 — ThermalOverheatP2PFailoverService', () => {
-    it('triggers P2P failover QR when tablet temperature >= 50°C', async () => {
-      const res = await ThermalOverheatP2PFailoverService.evaluateThermalState({
-        tenantId: 'tenant-1',
-        deviceId: 'IPAD-TERRASSE-01',
-        deviceModel: 'iPad Pro 11',
-        batteryTempCelsius: 52.4,
-        cpuTempCelsius: 54.1,
-        activeOrderId: 'ORD-TERRASSE-42',
-      });
-
-      expect(res.isOverheated).toBe(true);
-      expect(res.failoverTriggered).toBe(true);
-      expect(res.failoverQrPayload).toContain('ORD-TERRASSE-42');
-    });
-  });
 
   // ── L81: BilingualTipGratuityHelper ───────────────────────────────────────
   describe('L81 — BilingualTipGratuityHelper', () => {

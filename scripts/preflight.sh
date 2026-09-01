@@ -96,9 +96,9 @@ VERTICAL_STUBS_MAX=0         # écrans de verticale rendus par VerticalPageStub 
 VERTICAL_SCREENS_UNWIRED_MAX=0   # ecrans de verticale sans acces donnees (Nexus/bus/adapter) — angle mort de
                                  # VERTICAL_STUBS_MAX : remplacer un stub par une maquette a donnees locales
                                  # le fait passer a 0 sans rien livrer. Baseline mesuree le 2026-09-01.
-VERTICAL_SERVICES_UNWIRED_MAX=176 # services de verticale/ops non câblés — angle mort de Loi 8 (services avec test mais sans appelant applicatif)
+VERTICAL_SERVICES_UNWIRED_MAX=162 # services de verticale/ops non câblés — 176→162 : Lot 2 déduplications (2026-09-01)
 FR_HARDCODED_MAX=777         # chaînes FR en dur hors legal & verticals — recalibré à 777 (2026-09-01)
-HARDCODED_HEX_MAX=958        # couleurs #hex ET rgba()/rgb() en dur (DESIGNUP Lot 0).
+HARDCODED_HEX_MAX=955        # couleurs #hex ET rgba()/rgb() en dur — 958→955 (2026-09-01)
                              # 795 -> 958 : ce n'est PAS une regression. La mesure m16 ne comptait
                              # que #hex alors que son titre annoncait rgba() : les 161 rgba() du depot
                              # etaient invisibles, et purger l'or des primitives ne bougeait pas le

@@ -33,38 +33,15 @@ vi.mock('@/lib/offline/OutboxService', () => ({
 
 import { AuditLogger } from '@/lib/audit';
 
-import { KDSVisualDelayWarningService } from '@/modules/ops/production/kds/services/KDSVisualDelayWarningService';
 import { VolatileFoodCompatibilityMatrixService } from '@/modules/logistics/stock/inventory/services/VolatileFoodCompatibilityMatrixService';
 import { CrustaceanTankMonitorService } from '@/modules/compliance/qualite/haccp/services/CrustaceanTankMonitorService';
 import { GreaseTrapSaturationSensorService } from '@/modules/compliance/qualite/haccp/services/GreaseTrapSaturationSensorService';
 import { EmergencyExitOpeningChecklistService } from '@/modules/compliance/qualite/haccp/services/EmergencyExitOpeningChecklistService';
 import { KitchenHoodDeltaTMonitoringService } from '@/modules/compliance/qualite/haccp/services/KitchenHoodDeltaTMonitoringService';
-import { SelfHealingRecipeBomService } from '@/modules/ops/production/kds/services/SelfHealingRecipeBomService';
 describe('Angles Morts — Batch 5 (Part 2)', () => {
   beforeEach(() => { vi.clearAllMocks(); });
 
 
-  describe('L13 — KDSVisualDelayWarningService', () => {
-    it('triggers orange warning at 11 min and red critical with amuse-bouche at 13 min', () => {
-      const warn11 = KDSVisualDelayWarningService.evaluateDelay({
-        tenantId: 'tenant-1',
-        orderId: 'ORD-11',
-        tableNumber: '5',
-        sentToKitchenTimestamp: Date.now() - (11.5 * 60 * 1000),
-      });
-      expect(warn11.alertLevel).toBe('warning_11m');
-      expect(warn11.amuseBoucheTriggered).toBe(false);
-
-      const crit13 = KDSVisualDelayWarningService.evaluateDelay({
-        tenantId: 'tenant-1',
-        orderId: 'ORD-13',
-        tableNumber: '5',
-        sentToKitchenTimestamp: Date.now() - (14 * 60 * 1000),
-      });
-      expect(crit13.alertLevel).toBe('critical_13m');
-      expect(crit13.amuseBoucheTriggered).toBe(true);
-    });
-  });
 
   // ── L32: VolatileFoodCompatibilityMatrixService ───────────────────────────
   describe('L32 — VolatileFoodCompatibilityMatrixService', () => {
@@ -168,30 +145,4 @@ describe('Angles Morts — Batch 5 (Part 2)', () => {
     });
   });
 
-  // ── L73: SelfHealingRecipeBomService ──────────────────────────────────────
-  describe('L73 — SelfHealingRecipeBomService', () => {
-    it('substitutes out-of-stock ingredient and recalculates portion cost', () => {
-      const res = SelfHealingRecipeBomService.applyHealingSubstitution('tenant-1', {
-        dishId: 'DISH-BRIOCHE',
-        dishName: 'Brioche Perdue',
-        missingIngredientId: 'BEURRE-AOP',
-        originalPortionCostInMicrounits: 2_500_000,
-        originalIngredientCostInMicrounits: 800_000,
-        rules: [
-          {
-            missingIngredientId: 'BEURRE-AOP',
-            substituteIngredientId: 'BEURRE-STD',
-            substituteName: 'Beurre Gastronomique 82%',
-            conversionRatio: 1.0,
-            substituteUnitPriceInMicrounits: 600_000,
-          },
-        ],
-      });
-
-      expect(res.canSubstitute).toBe(true);
-      expect(res.chosenSubstituteId).toBe('BEURRE-STD');
-      expect(res.costDifferenceInMicrounits).toBe(-200_000); // 0.20€ saving
-      expect(res.newPortionCostInMicrounits).toBe(2_300_000);
-    });
-  });
 });

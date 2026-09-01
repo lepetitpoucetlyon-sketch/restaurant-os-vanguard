@@ -241,66 +241,6 @@ describe('M109 — GiftCardLockService', () => {
   });
 });
 
-// ── M110 — Late Allergen Interception ───────────────────────────────────────
-describe('M110 — LateAllergenInterceptionService', () => {
-  it('computeImpact détecte les items avec allergène', async () => {
-    const { LateAllergenInterceptionService } = await import(
-      '@/modules/ops/production/kds/services/LateAllergenInterceptionService'
-    );
-    const r = LateAllergenInterceptionService.computeImpact({
-      tenantId: 't1',
-      orderId: 'ord_1',
-      operatorId: 'op_1',
-      newAllergens: ['arachide'],
-      items: [
-        { id: 'i1', productId: 'p1', name: 'Pad Thai', allergens: ['arachide', 'gluten'], status: 'cooking' },
-        { id: 'i2', productId: 'p2', name: 'Sorbet', allergens: [], status: 'plated' },
-      ],
-      changedAt: 1000,
-      reservationTimeMs: 1000 + 15 * 60_000,
-    });
-    expect(r.intercepted).toBe(true);
-    expect(r.impactedItemIds).toEqual(['i1']);
-    expect(r.minutesBeforeArrival).toBe(15);
-  });
-
-  it('items tous served → intercepted=false, reason=ALL_SERVED', async () => {
-    const { LateAllergenInterceptionService } = await import(
-      '@/modules/ops/production/kds/services/LateAllergenInterceptionService'
-    );
-    const r = LateAllergenInterceptionService.computeImpact({
-      tenantId: 't1', orderId: 'o', operatorId: 'op',
-      newAllergens: ['gluten'],
-      items: [{ id: 'i1', productId: 'p', name: 'Pain', allergens: ['gluten'], status: 'served' }],
-      changedAt: 1000, reservationTimeMs: 2000,
-    });
-    expect(r.intercepted).toBe(false);
-    expect(r.reason).toBe('ALL_SERVED');
-    expect(r.impactedItemIds).toEqual(['i1']);
-  });
-
-  it('intercept() émet event + outbox SANITAIRE + audit ALLERGEN_ORDER_BLOCKED', async () => {
-    const { LateAllergenInterceptionService } = await import(
-      '@/modules/ops/production/kds/services/LateAllergenInterceptionService'
-    );
-    await LateAllergenInterceptionService.intercept({
-      tenantId: 't1',
-      orderId: 'ord_1',
-      operatorId: 'op_1',
-      newAllergens: ['arachide'],
-      items: [
-        { id: 'i1', productId: 'p1', name: 'Pad Thai', allergens: ['arachide'], status: 'cooking' },
-      ],
-      changedAt: 1000,
-      reservationTimeMs: 1000 + 15 * 60_000,
-    });
-
-    expect(emittedEvents.some(e => e.name === 'kds.critical_allergen_interception')).toBe(true);
-    expect(outboxEnqueued[0].priority).toBe(2); // SANITAIRE
-    expect(outboxEnqueued[0].collection).toContain('haccp_incidents');
-    expect(auditLogs[0].action).toBe('ALLERGEN_ORDER_BLOCKED');
-  });
-});
 
 // ── M105 — SMS Sanitizer ────────────────────────────────────────────────────
 describe('M105 — SmsSanitizerService', () => {

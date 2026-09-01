@@ -42,12 +42,9 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 
 import { TpeResilienceSimulatorService } from '@/modules/ops/service/restaurant/pos/services/TpeResilienceSimulatorService';
-import { PosFiscalSealE2EPipeline } from '@/modules/ops/service/restaurant/pos/services/PosFiscalSealE2EPipeline';
-import { SplitBillService } from '@/modules/ops/service/restaurant/pos/services/SplitBillService';
 import { CashDrawerReconciliationService } from '@/modules/ops/service/restaurant/pos/services/CashDrawerReconciliationService';
 import { MealVoucherLimitGuard } from '@/modules/ops/service/restaurant/pos/services/MealVoucherLimitGuard';
 import { ExactChangeAssistanceService } from '@/modules/ops/service/restaurant/pos/services/ExactChangeAssistanceService';
-import { SharedBillDispatchService } from '@/modules/ops/service/restaurant/pos/services/SharedBillDispatchService';
 import { UniversalPrinterBridgeService } from '@/modules/ops/service/restaurant/pos/services/UniversalPrinterBridgeService';
 import { CashDrawerTriggerService } from '@/modules/ops/service/restaurant/pos/services/CashDrawerTriggerService';
 import { CustomerFacingDisplayService } from '@/modules/ops/service/restaurant/pos/services/CustomerFacingDisplayService';
@@ -93,67 +90,6 @@ describe('Angles Morts — Batch 4 (POS, Encaissement, Bar & Hardware)', () => {
     });
   });
 
-  // ── A2: PosFiscalSealE2EPipeline ──────────────────────────────────────────
-  describe('A2 — PosFiscalSealE2EPipeline', () => {
-    it('executes full E2E sealing pipeline with tax breakdown', async () => {
-      const result = await PosFiscalSealE2EPipeline.processOrderAndSeal(
-        'tenant-1',
-        'ORD-101',
-        'TCK-0042',
-        [
-          { productId: 'P1', name: 'Burger', quantity: 2, unitPriceInMicrounits: 15_000_000, taxRate: '0.10' },
-          { productId: 'P2', name: 'Bière', quantity: 1, unitPriceInMicrounits: 7_000_000, taxRate: '0.20' },
-        ],
-        [
-          { method: 'cb', amountInMicrounits: 37_000_000 },
-        ]
-      );
-
-      expect(result.orderId).toBe('ORD-101');
-      expect(result.totalInMicrounits).toBe(37_000_000);
-      expect(result.isFullyPaid).toBe(true);
-      expect(result.seal.hash).toBeDefined();
-      expect(result.taxSummary['0.10']).toBeDefined();
-      expect(result.taxSummary['0.20']).toBeDefined();
-    });
-
-    it('throws error if payment is underpaid', async () => {
-      await expect(
-        PosFiscalSealE2EPipeline.processOrderAndSeal(
-          'tenant-1',
-          'ORD-102',
-          'TCK-0043',
-          [{ productId: 'P1', name: 'Burger', quantity: 1, unitPriceInMicrounits: 15_000_000, taxRate: '0.10' }],
-          [{ method: 'cash', amountInMicrounits: 10_000_000 }]
-        )
-      ).rejects.toThrow('Incomplete payment');
-    });
-  });
-
-  // ── A3: SplitBillService ──────────────────────────────────────────────────
-  describe('A3 — SplitBillService (Microunits Remainder Rule)', () => {
-    it('splits bill 3 ways with indivisible penny allocated to last guest', () => {
-      // 10.00 € = 10_000_000 microunits / 3 = 3_333_333 each, remainder = 1 microunit
-      const result = SplitBillService.splitEquipartition('tenant-1', 'ORD-201', 10_000_000, 3);
-      expect(result.parts.length).toBe(3);
-      expect(result.parts[0].amountInMicrounits).toBe(3_333_333);
-      expect(result.parts[1].amountInMicrounits).toBe(3_333_333);
-      expect(result.parts[2].amountInMicrounits).toBe(3_333_334);
-      expect(result.isExactSum).toBe(true);
-    });
-
-    it('splits bill by percentages exactly summing to 100%', () => {
-      const result = SplitBillService.splitByPercentages('tenant-1', 'ORD-202', 100_000_000, [50, 25, 25]);
-      expect(result.parts[0].amountInMicrounits).toBe(50_000_000);
-      expect(result.parts[1].amountInMicrounits).toBe(25_000_000);
-      expect(result.parts[2].amountInMicrounits).toBe(25_000_000);
-      expect(result.isExactSum).toBe(true);
-    });
-
-    it('rejects percentage sum not equal to 100', () => {
-      expect(() => SplitBillService.splitByPercentages('tenant-1', 'ORD-203', 100_000_000, [50, 40])).toThrow('must equal 100%');
-    });
-  });
 
   // ── A4: CashDrawerReconciliationService ────────────────────────────────────
   describe('A4 — CashDrawerReconciliationService', () => {
@@ -265,22 +201,6 @@ describe('Angles Morts — Batch 4 (POS, Encaissement, Bar & Hardware)', () => {
     });
   });
 
-  // ── A7: SharedBillDispatchService ─────────────────────────────────────────
-  describe('A7 — SharedBillDispatchService', () => {
-    it('dispatches digital bill link and emits event', async () => {
-      const res = await SharedBillDispatchService.dispatchBill({
-        tenantId: 'tenant-1',
-        orderId: 'ORD-401',
-        tableNumber: '12',
-        totalInMicrounits: 45_000_000,
-        channel: 'qr',
-      });
-
-      expect(res.shareUrl).toContain('/b/BILL-tenant-1-ORD-401');
-      expect(res.qrDataUri).toContain('data:image/svg+xml');
-      expect(NexusEventBus.emit).toHaveBeenCalledWith('pos.shared_bill_dispatched', expect.any(Object));
-    });
-  });
 
   // ── I1: UniversalPrinterBridgeService ─────────────────────────────────────
   describe('I1 — UniversalPrinterBridgeService', () => {

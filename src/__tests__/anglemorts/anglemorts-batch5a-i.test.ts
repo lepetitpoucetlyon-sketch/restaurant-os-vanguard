@@ -34,7 +34,6 @@ vi.mock('@/lib/offline/OutboxService', () => ({
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { AuditLogger } from '@/lib/audit';
 
-import { SmartStationRoutingService } from '@/modules/ops/production/kds/services/SmartStationRoutingService';
 import { KDSStationRecoveryService } from '@/modules/ops/production/kds/services/KDSStationRecoveryService';
 import { RecipeBOMCostService } from '@/modules/ops/production/kds/services/RecipeBOMCostService';
 import { PassPickupReminderService } from '@/modules/ops/production/kds/services/PassPickupReminderService';
@@ -47,27 +46,6 @@ describe('Angles Morts — Batch 5 (KDS, Cuisine, Recettes & HACCP)', () => {
     vi.clearAllMocks();
   });
 
-  // ── B1: SmartStationRoutingService ───────────────────────────────────────
-  describe('B1 — SmartStationRoutingService', () => {
-    it('routes hot dishes to chaud station', () => {
-      const decision = SmartStationRoutingService.routeDish('tenant-1', {
-        orderId: 'ORD-1',
-        itemId: 'ITEM-1',
-        dishName: 'Burger Maison & Frites',
-      });
-      expect(decision.station).toBe('chaud');
-      expect(decision.confidencePct).toBe(95);
-    });
-
-    it('routes cocktails to bar station', () => {
-      const decision = SmartStationRoutingService.routeDish('tenant-1', {
-        orderId: 'ORD-2',
-        itemId: 'ITEM-2',
-        dishName: 'Cocktail Mojito Passion',
-      });
-      expect(decision.station).toBe('bar');
-    });
-  });
 
   // ── B2: KDSStationRecoveryService ─────────────────────────────────────────
   describe('B2 — KDSStationRecoveryService', () => {
