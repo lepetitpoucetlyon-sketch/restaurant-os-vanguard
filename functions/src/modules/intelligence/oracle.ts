@@ -1,9 +1,10 @@
-import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions/v2';
+// firebase-admin v14 : API modulaire obligatoire.
+import { getFirestore } from 'firebase-admin/firestore';
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import { GoogleGenerativeAI, Part, SchemaType, Tool } from '@google/generative-ai';
 
-const db = admin.firestore();
+const db = getFirestore();
 const API_KEY_PARAM = functions.params.defineString('GEMINI_API_KEY');
 let genAI: GoogleGenerativeAI | null = null;
 

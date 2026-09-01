@@ -1,11 +1,13 @@
 import { createHash } from 'node:crypto';
 import * as argon2 from 'argon2';
-import * as admin from 'firebase-admin';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
-import { FieldValue } from 'firebase-admin/firestore';
+// firebase-admin v14 a supprime l'API a namespace (admin.firestore(), admin.auth()).
+// L'API modulaire est la seule supportee.
+import { FieldValue, getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 
-const db = admin.firestore();
-const adminAuth = admin.auth();
+const db = getFirestore();
+const adminAuth = getAuth();
 
 export type UserRole =
     | 'server'
