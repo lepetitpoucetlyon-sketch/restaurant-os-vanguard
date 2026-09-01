@@ -4,8 +4,10 @@ import { useRegistre } from "@/shared/contexts/RegistreContext";
 import { Flame, MapPin, Calendar, Clock, CheckCircle2, AlertTriangle, Users, Plus } from "lucide-react";
 import { Button } from "@ui/Button";
 import { cn } from "@/lib/ui.foundations";
+import { useLanguage } from '@/shared/hooks';
 
 export function IncendieSection() {
+  const { t } = useLanguage();
     const { incendieDoc, extincteurs, exercices } = useRegistre();
 
     return (
@@ -18,7 +20,7 @@ export function IncendieSection() {
                         <Flame strokeWidth={1.5} className="w-8 h-8 text-status-danger" />
                     </div>
                     <div>
-                        <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">Registre de Sécurité Incendie</h2>
+                        <h2 className="text-3xl font-serif font-black italic text-text-primary tracking-tight">{t('fire_register.title')}</h2>
                         <p className="text-text-muted text-sm mt-2 max-w-xl leading-relaxed">{String(incendieDoc?.name || 'Registre de sécurité incendie en attente de synchronisation.')}</p>
                         <div className="flex items-center gap-6 mt-4">
                             <div className="flex items-center gap-2 text-text-muted">
@@ -49,9 +51,9 @@ export function IncendieSection() {
                             <tr className="bg-bg-tertiary/30 text-nano font-black text-text-muted uppercase tracking-[0.2em] border-b border-border">
                                 <th className="px-8 py-5">Emplacement</th>
                                 <th className="px-8 py-5">Type</th>
-                                <th className="px-6 py-5">Dernier Contrôle</th>
-                                <th className="px-6 py-5">Prochain Contrôle</th>
-                                <th className="px-6 py-5">État</th>
+                                <th className="px-6 py-5">{t('fire_register.last_check')}</th>
+                                <th className="px-6 py-5">{t('fire_register.next_check')}</th>
+                                <th className="px-6 py-5">{t('fire_register.status')}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/50">
@@ -129,12 +131,12 @@ export function IncendieSection() {
                 <div className="flex items-start gap-4">
                     <AlertTriangle strokeWidth={1.5} className="w-5 h-5 text-status-danger mt-0.5 shrink-0" />
                     <div>
-                        <h4 className="font-serif font-bold text-status-danger dark:text-status-danger mb-2">Consignes de Sécurité</h4>
+                        <h4 className="font-serif font-bold text-status-danger dark:text-status-danger mb-2">{t('fire_register.instructions')}</h4>
                         <ul className="text-sm text-status-danger dark:text-status-danger/80 space-y-2 leading-relaxed">
-                            <li>• Les issues de secours doivent rester dégagées en permanence</li>
-                            <li>• Exercice d'évacuation obligatoire tous les 6 mois</li>
-                            <li>• Vérification annuelle des extincteurs par un organisme agréé</li>
-                            <li>• Le registre de sécurité incendie doit être tenu à disposition des autorités</li>
+                            <li>{t('fire_register.exits_clear')}</li>
+                            <li>{t('fire_register.drill')}</li>
+                            <li>{t('fire_register.extinguishers')}</li>
+                            <li>{t('fire_register.availability')}</li>
                         </ul>
                     </div>
                 </div>

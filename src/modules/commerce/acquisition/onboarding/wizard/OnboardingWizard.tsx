@@ -14,6 +14,7 @@ import { SimpleFloorPlanEditor, type SimpleTable, type SimpleZone } from './Simp
 import { OnboardingHelpButton } from './OnboardingHelpButton';
 import { SubdomainSelectorStep } from './SubdomainSelectorStep';
 import { Button } from "@/shared/components/ui/Button";
+import { useLanguage } from '@/shared/hooks';
 
 interface ImportEntry {
   category: ImportCategory;
@@ -48,6 +49,7 @@ const WIZARD_STEPS: WizardStep[] = [
 ];
 
 export function OnboardingWizard() {
+  const { t } = useLanguage();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState<WizardStepId>('mode');
   const [completedSteps, setCompletedSteps] = useState<WizardStepId[]>([]);
@@ -174,7 +176,7 @@ export function OnboardingWizard() {
         <div className="mb-8 text-center">
           <div className="text-4xl mb-2">🚀</div>
           <h1 className="text-2xl font-bold text-gray-900">Bienvenue sur Restaurant OS</h1>
-          <p className="text-gray-500 mt-1">Quelques étapes pour être prêt à ouvrir</p>
+          <p className="text-gray-500 mt-1">{t('onboarding_wizard.steps_to_open')}</p>
         </div>
 
         {/* Stepper */}
@@ -193,20 +195,20 @@ export function OnboardingWizard() {
           {/* STEP: MODE */}
           {currentStep === 'mode' && (
             <div className="space-y-4">
-              <h2 className="text-lg font-semibold text-gray-900">Comment souhaitez-vous démarrer ?</h2>
-              <p className="text-sm text-gray-500">Votre choix détermine le parcours d&apos;installation</p>
+              <h2 className="text-lg font-semibold text-gray-900">{t('onboarding_wizard.how_to_start')}</h2>
+              <p className="text-sm text-gray-500">{t('onboarding_wizard.choice_determines')}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                 <Button variant="ghost"
                   onClick={() => handleModeSelect('from_zero')}
                   className="p-5 rounded-xl border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 text-left transition-all group"
                 >
                   <div className="text-3xl mb-2">✨</div>
-                  <div className="font-semibold text-gray-800 group-hover:text-indigo-700">Démarrer de zéro</div>
-                  <p className="text-sm text-gray-500 mt-1">Nouveau restaurant ou nouvelle activité</p>
+                  <div className="font-semibold text-gray-800 group-hover:text-indigo-700">{t('onboarding_wizard.start_from_scratch')}</div>
+                  <p className="text-sm text-gray-500 mt-1">{t('onboarding_wizard.new_business')}</p>
                   <ul className="mt-3 space-y-1 text-xs text-gray-400">
-                    <li>✓ Menu à créer</li>
-                    <li>✓ Plan de salle à configurer</li>
-                    <li>✓ Équipe à ajouter</li>
+                    <li>{t('onboarding_wizard.menu_to_create')}</li>
+                    <li>{t('onboarding_wizard.floor_to_setup')}</li>
+                    <li>{t('onboarding_wizard.team_to_add')}</li>
                   </ul>
                 </Button>
                 <Button variant="ghost"
@@ -215,11 +217,11 @@ export function OnboardingWizard() {
                 >
                   <div className="text-3xl mb-2">🔄</div>
                   <div className="font-semibold text-gray-800 group-hover:text-indigo-700">Migrer depuis un autre logiciel</div>
-                  <p className="text-sm text-gray-500 mt-1">Importer vos données existantes</p>
+                  <p className="text-sm text-gray-500 mt-1">{t('onboarding_wizard.import_existing')}</p>
                   <ul className="mt-3 space-y-1 text-xs text-gray-400">
                     <li>✓ Menu & produits</li>
                     <li>✓ Clients & historique</li>
-                    <li>✓ Comptabilité</li>
+                    <li>{t('onboarding_wizard.accounting')}</li>
                   </ul>
                 </Button>
               </div>
@@ -230,7 +232,7 @@ export function OnboardingWizard() {
           {currentStep === 'source' && (
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-gray-900">Quel logiciel utilisez-vous actuellement ?</h2>
-              <p className="text-sm text-gray-500">Nous pouvons importer vos données automatiquement</p>
+              <p className="text-sm text-gray-500">{t('onboarding_wizard.can_import_auto')}</p>
               <SourceSystemSelector
                 selected={connectorId}
                 onSelect={handleSourceSelect}
@@ -280,7 +282,7 @@ export function OnboardingWizard() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900">Import des données</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">{t('onboarding_wizard.data_import')}</h2>
                   <p className="text-sm text-gray-500">
                     {mode === 'from_zero'
                       ? 'Complétez les éléments requis avant d&apos;ouvrir'
@@ -380,7 +382,7 @@ export function OnboardingWizard() {
             <div className="text-center py-8 space-y-6">
               <div className="text-5xl">🎉</div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">Vous êtes prêt à ouvrir !</h2>
+                <h2 className="text-xl font-bold text-gray-900">{t('onboarding_wizard.ready_to_open')}</h2>
                 <p className="text-gray-500 text-sm max-w-sm mx-auto mt-1">
                   {importedCategories.length} catégorie{importedCategories.length > 1 ? 's' : ''} configurée{importedCategories.length > 1 ? 's' : ''}.
                   {subdomain && <span className="block mt-1 font-mono text-xs text-indigo-600 font-semibold">https://{subdomain}.webapp.fr</span>}
@@ -394,7 +396,7 @@ export function OnboardingWizard() {
                     <span className="text-xl">✍️</span>
                     <div>
                       <h4 className="text-xs font-bold uppercase tracking-wider text-text-muted/50">Contrat SaaS & Licence NF525</h4>
-                      <p className="text-micro text-text-muted/80">Signature électronique certifiée eIDAS (DocuSeal)</p>
+                      <p className="text-micro text-text-muted/80">{t('onboarding_wizard.eidas_signature')}</p>
                     </div>
                   </div>
                   <span className="px-2 py-0.5 text-nano font-bold rounded-full bg-indigo-100 text-indigo-700">

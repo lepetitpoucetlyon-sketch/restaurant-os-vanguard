@@ -1,6 +1,64 @@
 import { SovereignData } from "@/shared/nexus/contracts/sovereign.types";
 
 const ja: SovereignData = {
+    "ops_dashboard": {
+        "stock_napping": "• セクション2のリネン在庫を確認",
+        "salon_vip": "• サロン301はVIP準備が必要",
+        "brigade": "• 調理班は14時出勤",
+        "weather": "現地の天気",
+        "sunny": "晴れ時々くもり",
+        "add_unit": "ユニットを追加",
+        "architecture": "システム構成",
+        "central_prop": "本店"
+    },
+    "fire_register": {
+        "title": "防火安全記録簿",
+        "last_check": "前回点検",
+        "next_check": "次回点検",
+        "status": "状態",
+        "instructions": "安全指示",
+        "exits_clear": "• 非常口は常に確保すること",
+        "drill": "• 6か月ごとに避難訓練を実施",
+        "extinguishers": "• 消火器は認定機関による年次点検",
+        "availability": "• 記録簿は当局の求めに応じて提示できること"
+    },
+    "recipe_sheet": {
+        "ingredients": "材料",
+        "quantity": "分量",
+        "ingredient": "材料名",
+        "allergens": "アレルゲン",
+        "prep_steps": "調理手順",
+        "preparation": "下ごしらえ",
+        "difficulty": "難易度"
+    },
+    "maintenance_recipients": {
+        "matrix_title": "責任者と連絡チャネルの一覧",
+        "director": "責任者・店長",
+        "director_desc": "重大アラートを受信（重故障・保証終了30日前・CERFA点検）",
+        "ch_app_mail_sms": "有効チャネル：アプリ内・メール・SMS",
+        "manager_desc": "D-7予防保守・軽故障・清掃遅延の全アラートを受信",
+        "ch_app_mail": "有効チャネル：アプリ内・メール",
+        "kitchen_desc": "冷蔵庫の温度異常と厨房・バー機器の障害を受信",
+        "ch_app_sms": "有効チャネル：アプリ内・SMS",
+        "immediate": "重大故障の報告時にメール／SMSで即時通知",
+        "ch_mail_sms": "有効チャネル：メール・SMS"
+    },
+    "onboarding_wizard": {
+        "steps_to_open": "開店準備のためのステップ",
+        "how_to_start": "どのように始めますか？",
+        "choice_determines": "選択に応じて設定手順が決まります",
+        "start_from_scratch": "ゼロから始める",
+        "new_business": "新規開店または新規事業",
+        "menu_to_create": "✓ メニュー作成",
+        "floor_to_setup": "✓ フロア設定",
+        "team_to_add": "✓ スタッフ追加",
+        "import_existing": "既存データをインポート",
+        "accounting": "✓ 会計",
+        "can_import_auto": "データを自動でインポートできます",
+        "data_import": "データインポート",
+        "ready_to_open": "開店準備が整いました",
+        "eidas_signature": "eIDAS認証電子署名 (DocuSeal)"
+    },
     "role": {
         "head_waiter": "フロア主任",
         "head_chef": "料理長",

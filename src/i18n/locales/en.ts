@@ -1,6 +1,64 @@
 import { SovereignData } from "@/shared/nexus/contracts/sovereign.types";
 
 const en: SovereignData = {
+    "ops_dashboard": {
+        "stock_napping": "• Check the table linen stock for Section 2.",
+        "salon_vip": "• Room 301 requires a VIP setup.",
+        "brigade": "• Brigade shift starts at 2 p.m.",
+        "weather": "Local Weather",
+        "sunny": "Sunny with some clouds",
+        "add_unit": "Add a Unit",
+        "architecture": "System Architecture",
+        "central_prop": "Central Property"
+    },
+    "fire_register": {
+        "title": "Fire Safety Register",
+        "last_check": "Last Inspection",
+        "next_check": "Next Inspection",
+        "status": "Status",
+        "instructions": "Safety Instructions",
+        "exits_clear": "• Emergency exits must remain clear at all times",
+        "drill": "• Mandatory evacuation drill every 6 months",
+        "extinguishers": "• Annual extinguisher inspection by an approved body",
+        "availability": "• The fire safety register must be available to the authorities"
+    },
+    "recipe_sheet": {
+        "ingredients": "Ingredients",
+        "quantity": "Quantity",
+        "ingredient": "Ingredient",
+        "allergens": "Allergens",
+        "prep_steps": "Preparation Steps",
+        "preparation": "Preparation",
+        "difficulty": "Difficulty"
+    },
+    "maintenance_recipients": {
+        "matrix_title": "Responsibility & Contact Channel Matrix",
+        "director": "Director / Manager",
+        "director_desc": "Receives critical alerts (blocking breakdown, D-30 warranty expiry, CERFA inspection).",
+        "ch_app_mail_sms": "Enabled channels: In-App, Email, SMS",
+        "manager_desc": "Receives all D-7 preventive maintenance alerts, degraded breakdowns and cleaning delays.",
+        "ch_app_mail": "Enabled channels: In-App, Email",
+        "kitchen_desc": "Receives cold room temperature anomalies and cooking/bar equipment incidents.",
+        "ch_app_sms": "Enabled channels: In-App, SMS",
+        "immediate": "Immediate email/SMS notification as soon as a blocking critical breakdown is reported.",
+        "ch_mail_sms": "Enabled channels: Email, SMS"
+    },
+    "onboarding_wizard": {
+        "steps_to_open": "A few steps to be ready to open",
+        "how_to_start": "How would you like to start?",
+        "choice_determines": "Your choice determines the setup path",
+        "start_from_scratch": "Start from scratch",
+        "new_business": "New restaurant or new business",
+        "menu_to_create": "✓ Menu to create",
+        "floor_to_setup": "✓ Floor plan to configure",
+        "team_to_add": "✓ Team to add",
+        "import_existing": "Import your existing data",
+        "accounting": "✓ Accounting",
+        "can_import_auto": "We can import your data automatically",
+        "data_import": "Data import",
+        "ready_to_open": "You are ready to open!",
+        "eidas_signature": "eIDAS-certified electronic signature (DocuSeal)"
+    },
     "role": {
         "head_waiter": "Head Waiter",
         "head_chef": "Head Chef",

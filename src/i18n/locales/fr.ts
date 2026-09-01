@@ -1,6 +1,64 @@
 import { SovereignData } from "@/shared/nexus/contracts/sovereign.types";
 
 const fr: SovereignData = {
+    "ops_dashboard": {
+        "stock_napping": "• Vérifier le stock de nappage pour le Carré 2.",
+        "salon_vip": "• Le Salon 301 nécessite une Mise en Place VIP.",
+        "brigade": "• Prise de poste Brigade à 14h.",
+        "weather": "Météo Locale",
+        "sunny": "Ensoleillé avec quelques nuages",
+        "add_unit": "Ajouter une Unité",
+        "architecture": "Architecture Système",
+        "central_prop": "Propriété Centrale"
+    },
+    "fire_register": {
+        "title": "Registre de Sécurité Incendie",
+        "last_check": "Dernier Contrôle",
+        "next_check": "Prochain Contrôle",
+        "status": "État",
+        "instructions": "Consignes de Sécurité",
+        "exits_clear": "• Les issues de secours doivent rester dégagées en permanence",
+        "drill": "• Exercice d'évacuation obligatoire tous les 6 mois",
+        "extinguishers": "• Vérification annuelle des extincteurs par un organisme agréé",
+        "availability": "• Le registre de sécurité incendie doit être tenu à disposition des autorités"
+    },
+    "recipe_sheet": {
+        "ingredients": "Ingrédients",
+        "quantity": "Quantité",
+        "ingredient": "Ingrédient",
+        "allergens": "Allergènes",
+        "prep_steps": "Étapes de Préparation",
+        "preparation": "Préparation",
+        "difficulty": "Difficulté"
+    },
+    "maintenance_recipients": {
+        "matrix_title": "Matrice des Responsabilités & Canaux de Contact",
+        "director": "Directeur / Gérant",
+        "director_desc": "Reçoit les alertes critiques (Panne bloquante, J-30 fin de garantie, contrôle CERFA).",
+        "ch_app_mail_sms": "Canaux activés : In-App, Email, SMS",
+        "manager_desc": "Reçoit toutes les alertes de maintenance préventive J-7, pannes dégradées et retards de nettoyage.",
+        "ch_app_mail": "Canaux activés : In-App, Email",
+        "kitchen_desc": "Reçoit les anomalies de température des chambres froides et les incidents matériel de cuisson/bar.",
+        "ch_app_sms": "Canaux activés : In-App, SMS",
+        "immediate": "Notification immédiate par email/SMS dès la déclaration d une panne critique bloquante.",
+        "ch_mail_sms": "Canaux activés : Email, SMS"
+    },
+    "onboarding_wizard": {
+        "steps_to_open": "Quelques étapes pour être prêt à ouvrir",
+        "how_to_start": "Comment souhaitez-vous démarrer ?",
+        "choice_determines": "Votre choix détermine le parcours d&apos;installation",
+        "start_from_scratch": "Démarrer de zéro",
+        "new_business": "Nouveau restaurant ou nouvelle activité",
+        "menu_to_create": "✓ Menu à créer",
+        "floor_to_setup": "✓ Plan de salle à configurer",
+        "team_to_add": "✓ Équipe à ajouter",
+        "import_existing": "Importer vos données existantes",
+        "accounting": "✓ Comptabilité",
+        "can_import_auto": "Nous pouvons importer vos données automatiquement",
+        "data_import": "Import des données",
+        "ready_to_open": "Vous êtes prêt à ouvrir !",
+        "eidas_signature": "Signature électronique certifiée eIDAS (DocuSeal)"
+    },
     "role": {
         "head_waiter": "Chef de rang",
         "head_chef": "Chef cuisinier",

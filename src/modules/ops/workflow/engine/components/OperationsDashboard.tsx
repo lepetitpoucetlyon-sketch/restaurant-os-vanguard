@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '@/shared/hooks';
 import {
     Book,
     Home,
@@ -39,6 +40,7 @@ import { Lock } from 'lucide-react';
 
 
 export function OperationsDashboard() {
+  const { t } = useLanguage();
     const floorOps = useOMS();
     const areas = floorOps?.areas ?? [];
     const updateAreaStatus = (id: string, status: string) => {
@@ -143,9 +145,9 @@ export function OperationsDashboard() {
                                 <h3 className="text-lg font-bold">Notes du Jour</h3>
                             </div>
                             <div className="space-y-4 text-sm text-secondary leading-relaxed italic">
-                                <p>• Vérifier le stock de nappage pour le Carré 2.</p>
-                                <p>• Le Salon 301 nécessite une Mise en Place VIP.</p>
-                                <p>• Prise de poste Brigade à 14h.</p>
+                                <p>{t('ops_dashboard.stock_napping')}</p>
+                                <p>{t('ops_dashboard.salon_vip')}</p>
+                                <p>{t('ops_dashboard.brigade')}</p>
                             </div>
                             <div className="mt-8 pt-6 border-t border-dashed border-subtle">
                                 <div className="flex justify-between items-center text-nano uppercase font-black tracking-widest text-muted">
@@ -170,10 +172,10 @@ export function OperationsDashboard() {
                             >
                                 <Cloud className="w-32 h-32" />
                             </motion.div>
-                            <h4 className="text-nano font-black uppercase tracking-[0.2em] text-muted mb-4">Météo Locale</h4>
+                            <h4 className="text-nano font-black uppercase tracking-[0.2em] text-muted mb-4">{t('ops_dashboard.weather')}</h4>
                             <div className="flex items-center gap-4">
                                 <div className="text-4xl font-black">18°C</div>
-                                <div className="text-sm text-secondary italic">Ensoleillé avec quelques nuages</div>
+                                <div className="text-sm text-secondary italic">{t('ops_dashboard.sunny')}</div>
                             </div>
                         </div>
                     </div>
@@ -248,7 +250,7 @@ export function OperationsDashboard() {
                                     <div className="w-12 h-12 rounded-full bg-surface-bg flex items-center justify-center text-muted group-hover:bg-surface-glass group-hover:text-text-primary transition-all">
                                         <Plus className="w-6 h-6" />
                                     </div>
-                                    <span className="text-xs font-black uppercase tracking-widest text-muted group-hover:text-primary">Ajouter une Unité</span>
+                                    <span className="text-xs font-black uppercase tracking-widest text-muted group-hover:text-primary">{t('ops_dashboard.add_unit')}</span>
                                 </button>
                             </div>
                         ) : (
@@ -287,9 +289,9 @@ export function OperationsDashboard() {
                                         <PenTool className="w-4 h-4 text-brand" /> Note de Conception
                                     </div>
                                     <div className="space-y-4">
-                                        <h4 className="text-xl font-black italic">Architecture Système</h4>
+                                        <h4 className="text-xl font-black italic">{t('ops_dashboard.architecture')}</h4>
                                         <p className="text-xs text-secondary leading-relaxed">
-                                            L'écosystème de Service est structuré en 5 piliers interconnectés. Chaque unité opérationnelle (Node) transmet des données en temps réel vers la <strong>Propriété Centrale</strong>.
+                                            L'écosystème de Service est structuré en 5 piliers interconnectés. Chaque unité opérationnelle (Node) transmet des données en temps réel vers la <strong>{t('ops_dashboard.central_prop')}</strong>.
                                         </p>
                                         <div className="flex items-center gap-4 pt-4">
                                             <div className="flex -space-x-2">

@@ -1,6 +1,64 @@
 import { SovereignData } from "@/shared/nexus/contracts/sovereign.types";
 
 const es: SovereignData = {
+    "ops_dashboard": {
+        "stock_napping": "• Comprobar el stock de mantelería para el Sector 2.",
+        "salon_vip": "• El Salón 301 requiere una preparación VIP.",
+        "brigade": "• Entrada del equipo a las 14:00.",
+        "weather": "Clima local",
+        "sunny": "Soleado con algunas nubes",
+        "add_unit": "Añadir una unidad",
+        "architecture": "Arquitectura del sistema",
+        "central_prop": "Propiedad central"
+    },
+    "fire_register": {
+        "title": "Registro de seguridad contra incendios",
+        "last_check": "Última inspección",
+        "next_check": "Próxima inspección",
+        "status": "Estado",
+        "instructions": "Consignas de seguridad",
+        "exits_clear": "• Las salidas de emergencia deben permanecer despejadas en todo momento",
+        "drill": "• Simulacro de evacuación obligatorio cada 6 meses",
+        "extinguishers": "• Verificación anual de los extintores por un organismo autorizado",
+        "availability": "• El registro de seguridad debe estar a disposición de las autoridades"
+    },
+    "recipe_sheet": {
+        "ingredients": "Ingredientes",
+        "quantity": "Cantidad",
+        "ingredient": "Ingrediente",
+        "allergens": "Alérgenos",
+        "prep_steps": "Pasos de preparación",
+        "preparation": "Preparación",
+        "difficulty": "Dificultad"
+    },
+    "maintenance_recipients": {
+        "matrix_title": "Matriz de responsabilidades y canales de contacto",
+        "director": "Director / Gerente",
+        "director_desc": "Recibe las alertas críticas (avería bloqueante, D-30 fin de garantía, control CERFA).",
+        "ch_app_mail_sms": "Canales activos: In-App, Email, SMS",
+        "manager_desc": "Recibe todas las alertas de mantenimiento preventivo D-7, averías degradadas y retrasos de limpieza.",
+        "ch_app_mail": "Canales activos: In-App, Email",
+        "kitchen_desc": "Recibe las anomalías de temperatura de las cámaras frigoríficas y las incidencias de equipos de cocina/bar.",
+        "ch_app_sms": "Canales activos: In-App, SMS",
+        "immediate": "Notificación inmediata por email/SMS en cuanto se declara una avería crítica bloqueante.",
+        "ch_mail_sms": "Canales activos: Email, SMS"
+    },
+    "onboarding_wizard": {
+        "steps_to_open": "Unos pasos para estar listo para abrir",
+        "how_to_start": "¿Cómo desea empezar?",
+        "choice_determines": "Su elección determina la ruta de instalación",
+        "start_from_scratch": "Empezar desde cero",
+        "new_business": "Nuevo restaurante o nueva actividad",
+        "menu_to_create": "✓ Menú por crear",
+        "floor_to_setup": "✓ Plano de sala por configurar",
+        "team_to_add": "✓ Equipo por añadir",
+        "import_existing": "Importar sus datos existentes",
+        "accounting": "✓ Contabilidad",
+        "can_import_auto": "Podemos importar sus datos automáticamente",
+        "data_import": "Importación de datos",
+        "ready_to_open": "¡Está listo para abrir!",
+        "eidas_signature": "Firma electrónica certificada eIDAS (DocuSeal)"
+    },
     "role": {
         "head_waiter": "Jefe de rango",
         "head_chef": "Jefe de cocina",

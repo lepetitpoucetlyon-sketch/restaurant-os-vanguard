@@ -1,6 +1,64 @@
 import { SovereignData } from "@/shared/nexus/contracts/sovereign.types";
 
 const pt: SovereignData = {
+    "ops_dashboard": {
+        "stock_napping": "• Verificar o stock de toalhas para o Setor 2.",
+        "salon_vip": "• A Sala 301 requer preparação VIP.",
+        "brigade": "• Entrada da brigada às 14h.",
+        "weather": "Meteorologia local",
+        "sunny": "Sol com algumas nuvens",
+        "add_unit": "Adicionar uma unidade",
+        "architecture": "Arquitetura do sistema",
+        "central_prop": "Propriedade central"
+    },
+    "fire_register": {
+        "title": "Registo de segurança contra incêndios",
+        "last_check": "Última inspeção",
+        "next_check": "Próxima inspeção",
+        "status": "Estado",
+        "instructions": "Instruções de segurança",
+        "exits_clear": "• As saídas de emergência devem permanecer desimpedidas",
+        "drill": "• Exercício de evacuação obrigatório a cada 6 meses",
+        "extinguishers": "• Verificação anual dos extintores por organismo aprovado",
+        "availability": "• O registo de segurança deve estar à disposição das autoridades"
+    },
+    "recipe_sheet": {
+        "ingredients": "Ingredientes",
+        "quantity": "Quantidade",
+        "ingredient": "Ingrediente",
+        "allergens": "Alergénios",
+        "prep_steps": "Etapas de preparação",
+        "preparation": "Preparação",
+        "difficulty": "Dificuldade"
+    },
+    "maintenance_recipients": {
+        "matrix_title": "Matriz de responsabilidades e canais de contacto",
+        "director": "Diretor / Gerente",
+        "director_desc": "Recebe os alertas críticos (avaria bloqueante, D-30 fim de garantia, controlo CERFA).",
+        "ch_app_mail_sms": "Canais ativos: In-App, Email, SMS",
+        "manager_desc": "Recebe todos os alertas de manutenção preventiva D-7, avarias degradadas e atrasos de limpeza.",
+        "ch_app_mail": "Canais ativos: In-App, Email",
+        "kitchen_desc": "Recebe as anomalias de temperatura das câmaras frias e os incidentes de equipamento de cozinha/bar.",
+        "ch_app_sms": "Canais ativos: In-App, SMS",
+        "immediate": "Notificação imediata por email/SMS assim que é declarada uma avaria crítica bloqueante.",
+        "ch_mail_sms": "Canais ativos: Email, SMS"
+    },
+    "onboarding_wizard": {
+        "steps_to_open": "Alguns passos para estar pronto a abrir",
+        "how_to_start": "Como deseja começar?",
+        "choice_determines": "A sua escolha determina o percurso de instalação",
+        "start_from_scratch": "Começar do zero",
+        "new_business": "Novo restaurante ou nova atividade",
+        "menu_to_create": "✓ Menu a criar",
+        "floor_to_setup": "✓ Planta de sala a configurar",
+        "team_to_add": "✓ Equipa a adicionar",
+        "import_existing": "Importar os seus dados existentes",
+        "accounting": "✓ Contabilidade",
+        "can_import_auto": "Podemos importar os seus dados automaticamente",
+        "data_import": "Importação de dados",
+        "ready_to_open": "Está pronto para abrir!",
+        "eidas_signature": "Assinatura eletrónica certificada eIDAS (DocuSeal)"
+    },
     "role": {
         "head_waiter": "Chefe de fila",
         "head_chef": "Chefe de cozinha",

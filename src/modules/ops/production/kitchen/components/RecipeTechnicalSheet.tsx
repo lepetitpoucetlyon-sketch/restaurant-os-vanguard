@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Clock, ChefHat, Download, X } from 'lucide-react';
+import { useLanguage } from '@/shared/hooks';
 ;
 
 interface Ingredient {
@@ -38,6 +39,7 @@ export function RecipeTechnicalSheet({
     allergens,
     onClose
 }: RecipeProps) {
+  const { t } = useLanguage();
     const handleDownloadPdf = () => {
         const printWindow = window.open('', '_blank', 'width=900,height=700');
         if (!printWindow) {
@@ -79,14 +81,14 @@ export function RecipeTechnicalSheet({
     </div>
     <button class="no-print" onclick="window.print()" style="padding:8px 16px; background:#1a1a1a; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Imprimer / PDF</button>
   </div>
-  <h2>Ingrédients</h2>
+  <h2>{t('recipe_sheet.ingredients')}</h2>
   <table>
-    <thead><tr><th>Quantité</th><th>Ingrédient</th></tr></thead>
+    <thead><tr><th>{t('recipe_sheet.quantity')}</th><th>{t('recipe_sheet.ingredient')}</th></tr></thead>
     <tbody>${ingredientRows}</tbody>
   </table>
-  <h2>Allergènes</h2>
+  <h2>{t('recipe_sheet.allergens')}</h2>
   <div style="margin-bottom: 16px;">${allergenBadges}</div>
-  <h2>Étapes de Préparation</h2>
+  <h2>{t('recipe_sheet.prep_steps')}</h2>
   <ol style="padding-left: 20px;">${stepRows}</ol>
 </body>
 </html>`);
@@ -119,18 +121,18 @@ export function RecipeTechnicalSheet({
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="bg-surface-card dark:bg-bg-tertiary p-6 rounded-3xl border border-subtle dark:border-border shadow-sm">
-                            <p className="text-nano font-black text-muted dark:text-text-muted uppercase tracking-widest mb-1.5">Préparation</p>
+                            <p className="text-nano font-black text-muted dark:text-text-muted uppercase tracking-widest mb-1.5">{t('recipe_sheet.preparation')}</p>
                             <p className="text-sm font-mono font-bold text-primary dark:text-text-primary italic">{prepTime}</p>
                         </div>
                         <div className="bg-surface-card dark:bg-bg-tertiary p-6 rounded-3xl border border-subtle dark:border-border shadow-sm">
-                            <p className="text-nano font-black text-muted dark:text-text-muted uppercase tracking-widest mb-1.5">Difficulté</p>
+                            <p className="text-nano font-black text-muted dark:text-text-muted uppercase tracking-widest mb-1.5">{t('recipe_sheet.difficulty')}</p>
                             <p className="text-sm font-mono font-bold text-primary dark:text-text-primary italic uppercase">{difficulty}</p>
                         </div>
                     </div>
 
                     {/* Ingredients */}
                     <div className="pt-6 border-t border-subtle dark:border-border">
-                        <h3 className="text-nano font-black text-primary dark:text-text-primary uppercase tracking-widest mb-8">Ingrédients</h3>
+                        <h3 className="text-nano font-black text-primary dark:text-text-primary uppercase tracking-widest mb-8">{t('recipe_sheet.ingredients')}</h3>
                         <div className="space-y-6">
                             {ingredients.map((ing, i) => (
                                 <div key={i} className="flex justify-between items-end border-b border-subtle dark:border-border pb-3 group">
@@ -143,7 +145,7 @@ export function RecipeTechnicalSheet({
 
                     {/* Allergens */}
                     <div className="pt-6">
-                        <h3 className="text-nano font-black text-primary dark:text-text-primary uppercase tracking-widest mb-4">Allergènes</h3>
+                        <h3 className="text-nano font-black text-primary dark:text-text-primary uppercase tracking-widest mb-4">{t('recipe_sheet.allergens')}</h3>
                         <div className="flex flex-wrap gap-2 pb-10">
                             {allergens.length > 0 ? allergens.map((allergen, i) => (
                                 <span key={i} className="px-5 py-2 rounded-full bg-error/10 text-error text-chip-label-sm">
