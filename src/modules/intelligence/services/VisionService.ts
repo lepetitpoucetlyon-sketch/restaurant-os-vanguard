@@ -159,7 +159,7 @@ export const VisionService = {
             return response.json();
         }
 
-        const { IdentityGuardService } = await import('@/lib/IdentityGuardService');
+        const { IdentityGuardService } = await import('./IdentityGuardService');
         return IdentityGuardService.scanDocument(base64Image, options);
     },
 

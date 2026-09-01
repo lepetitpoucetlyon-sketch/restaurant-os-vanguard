@@ -1,4 +1,4 @@
-import type { BrandInput } from '@/lib/BrandingService';
+import type { BrandInput } from '@/modules/intelligence';
 
 export type WizardStep = 'source' | 'preview' | 'confirm';
 

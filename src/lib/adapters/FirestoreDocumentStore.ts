@@ -1,16 +1,7 @@
 import { Firestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc, increment, serverTimestamp as firestoreServerTimestamp } from 'firebase/firestore';
 import { SovereignSecurityViolation } from '@/shared/nexus/contracts/security.errors';
 import { SovereignGuard } from '@/shared/nexus/guards/SovereignGuard';
-import { FirestoreHydrator } from '@/lib/sovereign/firestoreHydrator';
 import { IDocumentStore } from '@/shared/nexus/contracts/infrastructure/storage.contracts';
-
-function hydrateBasedOnPath(pathOrCollection: string, data: Record<string, unknown>) {
-    if (!data) return data;
-    if (pathOrCollection.includes('users')) return FirestoreHydrator.hydrateUser(data);
-    if (pathOrCollection.includes('orders')) return FirestoreHydrator.hydrateOrder(data);
-    if (pathOrCollection.includes('modules')) return FirestoreHydrator.hydrateModule(data);
-    return data;
-}
 
 export class FirestoreDocumentStore implements IDocumentStore {
     constructor(private db: Firestore) {}
@@ -19,8 +10,7 @@ export class FirestoreDocumentStore implements IDocumentStore {
         const docRef = doc(this.db, path);
         const snap = await getDoc(docRef);
         if (!snap.exists()) return null;
-        const rawData = { id: snap.id, ...snap.data() } as Record<string, unknown>;
-        return hydrateBasedOnPath(path, rawData) as unknown as T;
+        return { id: snap.id, ...snap.data() } as unknown as T;
     }
 
     async set<T>(path: string, data: T, options?: { merge?: boolean }): Promise<void> {

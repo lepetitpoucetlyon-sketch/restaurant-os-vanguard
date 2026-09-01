@@ -79,3 +79,6 @@ export * from './ia/ai/speculative';
 export { AutomationsPanel } from "./automations/components/AutomationsPanel";
 export { AutomationBuilder } from "./automations/components/AutomationBuilder";
 export { registerAutomationRunner } from "./automations/engine/AutomationRunner";
+export { BrandingService, type BrandInput } from "./services/BrandingService";
+export { Slayer } from "./services/Slayer";
+export { IdentityGuardService } from "./services/IdentityGuardService";

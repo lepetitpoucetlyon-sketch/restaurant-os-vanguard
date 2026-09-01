@@ -47,3 +47,4 @@ export {
 
 export type { TableStatus } from './spaces/types';
 export { assertTableTransition, isTableTransitionAllowed, getAllowedTransitions, TableTransitionError, TABLE_LIFECYCLE_TRANSITIONS } from '@/shared/domain/tableLifecycle';
+export { MaintenanceAgent } from './services/MaintenanceAgent';

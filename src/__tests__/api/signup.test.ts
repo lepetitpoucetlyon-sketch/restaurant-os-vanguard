@@ -40,11 +40,16 @@ vi.mock('@/lib/ProvisioningEngine', () => ({
 }));
 
 const mockExtractFromUrl = vi.fn();
-vi.mock('@/lib/BrandingService', () => ({
-    BrandingService: {
-        extractFromUrl: mockExtractFromUrl,
-    },
-}));
+vi.mock('@/modules/intelligence', async (importOriginal) => {
+    const actual = await importOriginal<Record<string, unknown>>();
+    return {
+        ...actual,
+        BrandingService: {
+            extractFromUrl: mockExtractFromUrl,
+            generateThemeFromBrand: vi.fn(),
+        },
+    };
+});
 
 const mockCreateCheckoutSession = vi.fn();
 vi.mock('@/modules/finance', () => ({

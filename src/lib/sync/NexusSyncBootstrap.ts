@@ -7,7 +7,7 @@ import { NexusBridge } from '@/lib/nexus/NexusBridge';
 import { TelemetryService } from '@/lib/nexus/TelemetryService';
 import { TaskContext, TASK_MAPS, readZcpoState, degradeImportanceMap } from '@/lib/icm';
 import { startDLQRetryService } from '@/shared/eventBus/DLQRetryService';
-import { initPillarSyncs } from './pillarSyncRegistry';
+import { initPillarSyncs } from '@/shared/nexus/sync/pillarSyncRegistry';
 import { evaluatePrivacyGate, evaluateGenomeGate } from './syncGates';
 import { initMasterBridgeListener } from './masterBridgeInit';
 import { startSelfHealingInterval } from './selfHealingInit';

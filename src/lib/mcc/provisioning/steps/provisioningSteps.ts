@@ -4,8 +4,8 @@ import { hashPin } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import Stripe from 'stripe';
 import { Resend } from 'resend';
-import { fleetTelemetry, sovereignCreateWorkspace } from '@/modules/intelligence';
-import { scrapeCompany } from '@/modules/commerce';
+import { fleetTelemetry } from '@/shared/providers/fleet/FleetTelemetryService';
+import { sovereignCreateWorkspace } from '@/lib/rag/SovereignRAGClient';
 import type { TenantID } from '@/shared/types/brands';
 import { FiscalKeyService } from '@/lib/mcc/fiscal/FiscalKeyService';
 import { toError } from "@/lib/toError";
@@ -142,6 +142,7 @@ export async function resolveBrandingOverlayFromRequest(
 ): Promise<ScrapedBrandingOverlay | null> {
     if (!input.websiteUrl) return null;
     try {
+        const { scrapeCompany } = await import('@/modules/commerce');
         const profile = await scrapeCompany({
             websiteUrl: input.websiteUrl,
             fallbackName: input.companyName,

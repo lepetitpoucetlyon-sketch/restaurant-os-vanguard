@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
 import { ProvisioningEngine } from '@/lib/ProvisioningEngine';
-import { BrandingService } from '@/lib/BrandingService';
+import { BrandingService } from '@/modules/intelligence';
  
 import { BillingService } from '@/modules/finance';
 import { Nexus } from '@/lib/nexus/NexusAdapter';

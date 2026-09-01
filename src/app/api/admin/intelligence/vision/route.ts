@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (action === 'COMPLIANCE_SCAN') {
-       const { IdentityGuardService } = await import('@/lib/IdentityGuardService');
+       const { IdentityGuardService } = await import('@/modules/intelligence');
        const result = await IdentityGuardService.scanDocument(payload.base64Image, {
          tenantId: caller.tenantId,
          trustedContext: payload.trustedContext

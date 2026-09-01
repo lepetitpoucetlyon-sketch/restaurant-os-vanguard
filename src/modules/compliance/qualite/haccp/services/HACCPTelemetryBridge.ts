@@ -48,7 +48,7 @@ export const HACCPTelemetryBridge = {
 
       // 🚨 Trigger SOS if health is critical
       if (healthScore < 60 || criticalEvents > 2) {
-        const { MaintenanceAgent } = await import('@/lib/MaintenanceAgent');
+        const { MaintenanceAgent } = await import('@/modules/facility');
         await MaintenanceAgent.submitSOS({
           tenantId,
           userId: 'system_haccp_bridge',

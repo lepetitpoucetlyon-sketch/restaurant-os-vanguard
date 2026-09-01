@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Loader2, Globe, Palette } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 import { useToast } from '@ui/Toast';
-import type { BrandInput } from '@/lib/BrandingService';
+import type { BrandInput } from '@/modules/intelligence';
 import type { ExtractedBrand } from './brandWizardTypes';
 
 interface SourceStepProps {

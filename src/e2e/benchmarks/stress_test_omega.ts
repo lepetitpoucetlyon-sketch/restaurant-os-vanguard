@@ -1,4 +1,4 @@
-import { Slayer } from '@/lib/Slayer';
+import { Slayer } from '@/modules/intelligence/services/Slayer';
 import { logger } from '@/lib/logger';
 
 async function runStressTest() {

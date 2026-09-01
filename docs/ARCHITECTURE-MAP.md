@@ -5,17 +5,17 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3749** · LOC : **358 439**
+- Fichiers `.ts/.tsx` : **3751** · LOC : **358 263**
 - Pages : **87** · Routes API : **216**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1630 |
-| `src/shared/` | 733 |
+| `src/modules/` | 1637 |
+| `src/shared/` | 734 |
 | `src/app/` | 461 |
 | `src/verticals/` | 255 |
-| `src/lib/` | 240 |
+| `src/lib/` | 234 |
 | `src/infrastructure/` | 46 |
 | `src/kernel/` | 39 |
 | `src/store/` | 24 |
@@ -37,7 +37,7 @@
 |---|---:|
 | `shared/eventBus/` | 224 |
 | `shared/components/` | 203 |
-| `shared/nexus/` | 137 |
+| `shared/nexus/` | 138 |
 | `shared/hooks/` | 51 |
 | `shared/providers/` | 31 |
 | `shared/seeds/` | 15 |
@@ -63,12 +63,12 @@
 |---|---:|:---:|
 | `commerce` | 348 | ✅ |
 | `ops` | 321 | ✅ |
-| `finance` | 243 | ✅ |
+| `finance` | 245 | ✅ |
 | `compliance` | 184 | ✅ |
-| `intelligence` | 170 | ✅ |
+| `intelligence` | 174 | ✅ |
 | `logistics` | 149 | ✅ |
 | `human` | 135 | ✅ |
-| `facility` | 73 | ✅ |
+| `facility` | 74 | ✅ |
 | `system` ⚠️ | 6 | ✅ |
 
 > ⚠️ **Hors taxonomie des 8 piliers** : `system` — à formaliser ou rapatrier.

@@ -12,7 +12,16 @@
  * - app/(marketing)/* & app/(client)/(public)/* (landing pages publiques)
  * - Fichiers de test
  */
-const HEX_OR_RGBA_REGEX = /#[0-9a-fA-F]{3,8}\b|rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+/;
+/**
+ * Motif partagé — SOURCE UNIQUE de ce qu'est « une couleur en dur ».
+ * La mesure m16 (scripts/measure/measures.mjs) l'importe pour ne pas diverger :
+ * elle comptait `#hex` seulement alors que son titre annonçait « #hex et rgba() »,
+ * si bien que la purge des `rgba(197,160,89,…)` du Lot 0 n'a pas fait bouger le
+ * compteur d'un point (797 sur trois relevés consécutifs).
+ * `rgb()` sans alpha est inclus : il fuit exactement autant.
+ */
+export const HEX_OR_RGB_REGEX = /#[0-9a-fA-F]{3,8}\b|rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+/;
+const HEX_OR_RGBA_REGEX = HEX_OR_RGB_REGEX;
 
 const WHITELIST_PATHS = [
   /globals\.css$/,

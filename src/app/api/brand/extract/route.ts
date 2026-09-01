@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { BrandingService } from '@/lib/BrandingService';
+import { BrandingService } from '@/modules/intelligence';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 

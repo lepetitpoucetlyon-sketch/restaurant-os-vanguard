@@ -1,3 +1,4 @@
+import { HEX_OR_RGB_REGEX } from '../../eslint-plugins/no-hardcoded-hex.mjs';
 /**
  * measures.mjs — les mesures permanentes du dépôt.
  *
@@ -614,7 +615,10 @@ export const m16_hardcodedHex = {
   // Bloque les couleurs littérales dans les classes CSS, styles et props JSX.
   run(c) {
     const whitelist = /(?:globals\.css$|\/tokens\/|\/blueprints\/|\/verticals\/[^/]+\/ui\.ts$|\/app\/\(marketing\)\/|\/app\/\(client\)\/\(public\)\/|\.test\.[tj]sx?$|\/__tests__\/|\/tests\/|\/e2e\/)/;
-    const re = /#[0-9a-fA-F]{3,8}\b/g;
+    // Le motif vient du LINT (source unique) : la mesure et la gate doivent dire
+    // la même chose. Avant, m16 ne comptait que `#hex` — les `rgba()` passaient au
+    // travers, et purger l'or n'y changeait rien.
+    const re = new RegExp(HEX_OR_RGB_REGEX.source, 'g');
     const hits = [];
     for (const [f, src] of c.contenu) {
       const rel = c.rel(f);

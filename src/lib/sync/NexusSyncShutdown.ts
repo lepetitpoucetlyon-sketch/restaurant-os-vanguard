@@ -5,7 +5,7 @@ import { db } from '@/lib/offline/offline-store';
 import { NexusBridge } from '@/lib/nexus/NexusBridge';
 import { TelemetryService } from '@/lib/nexus/TelemetryService';
 import { stopDLQRetryService } from '@/shared/eventBus/DLQRetryService';
-import { stopPillarSyncs } from './pillarSyncRegistry';
+import { stopPillarSyncs } from '@/shared/nexus/sync/pillarSyncRegistry';
 
 export interface NexusSyncRuntimeHandles {
   healing_interval: NodeJS.Timeout | null;

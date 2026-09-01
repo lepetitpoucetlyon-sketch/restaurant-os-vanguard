@@ -1,5 +1,5 @@
 import type { BrandConfig } from '@/shared/nexus/tokens/brand';
-import type { BrandInput } from '@/lib/BrandingService';
+import type { BrandInput } from '@/modules/intelligence';
 
 export type ExtractedTokens = Partial<BrandConfig>;
 export type Phase = 'idle' | 'scanning' | 'preview_ready' | 'applying' | 'done';

@@ -2,9 +2,9 @@ import 'server-only';
 import type { ThemeSettings } from '@nexus/contracts';
 import { logger } from '@/lib/axiom';
 import { toError } from '@/lib/toError';
-import { LLMManager } from '@/modules/intelligence';
+import { LLMManager } from '../ia/ai/LLMManager';
 import { VERTICAL_DEFAULT_TOKENS } from '@/shared/nexus/tokens/verticals';
-import type { PlatformVariant } from '@/modules/system';
+import type { PlatformVariant } from '@/kernel/contracts/tenant';
 
 /**
  * BRANDING SERVICE (Phase 33 - Nexus Industrialization)
@@ -34,12 +34,11 @@ export const BrandingService = {
         logger.info(`[Nexus Branding] Initiating AI Extraction for: ${url}`);
         
         try {
-            const { VisualIdentityExtractor } = await import('@modules/intelligence/services/VisualIdentityExtractor');
+            const { VisualIdentityExtractor } = await import('./VisualIdentityExtractor');
 
             const base64Image = await VisualIdentityExtractor.captureUrl(url);
 
-             
-            const { AI_MODELS } = await import('@/modules/intelligence/ia/ai');
+            const { AI_MODELS } = await import('../ia/ai');
             const response = await LLMManager.provider.generateFromImage({
                 model: AI_MODELS.fast,
                 systemPrompt: 'You are a Senior Art Director.',

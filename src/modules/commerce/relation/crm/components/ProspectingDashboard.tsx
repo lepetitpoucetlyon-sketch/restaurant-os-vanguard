@@ -8,7 +8,7 @@ import { useBrandEditor } from '@/shared/hooks/useBrandEditor';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { BrandingUI } from '@/lib/BrandingUI';
 import { useSettings } from '@/shared/contexts/SettingsContext';
-import type { BrandInput } from '@/lib/BrandingService';
+import type { BrandInput } from '@/modules/intelligence';
 import type { ExtractedTokens, Phase } from './prospecting/prospectingConstants';
 import { ProspectingScannerInput } from './prospecting/ProspectingScannerInput';
 import { ProspectingTokensPreview } from './prospecting/ProspectingTokensPreview';

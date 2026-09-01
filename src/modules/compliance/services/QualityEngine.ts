@@ -119,7 +119,7 @@ export class QualityEngine {
         const recentFailures = snapshots.filter(d => d.hygieneStatus === 'dirty');
         
         if (recentFailures.length >= 3) {
-            const { MaintenanceAgent } = await import('@/lib/MaintenanceAgent');
+            const { MaintenanceAgent } = await import('@/modules/facility');
             await MaintenanceAgent.submitSOS({
                 tenantId,
                 userId: 'system_quality',

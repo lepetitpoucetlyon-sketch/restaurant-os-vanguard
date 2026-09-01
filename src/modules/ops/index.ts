@@ -107,3 +107,5 @@ export * from './production/kds/handlers/KdsPrepDelayAlertHandler';
 export * from './production/kds/handlers/KdsPrepTimeAnalyzerHandler';
 export * from './production/kds/handlers/KdsPrintFallbackHandler';
 export * from './production/kds/handlers/KdsRoutingHandler';
+export { ServiceTicketService } from './service/core/application/services/ServiceTicketService';
+export type { ServiceTicket, ServiceLine, PaymentSplit, ServiceState } from './service/core/domain/types';

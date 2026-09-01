@@ -2,6 +2,7 @@ import { IFinanceRepository } from '@/modules/finance';
 import { JournalEntry, Account, BankTransaction, ExpenseClaim } from '@nexus/contracts';
 import { INexusAdapter, Nexus } from '@/lib/nexus/NexusAdapter';
 import { FirestoreHydrator } from '@/lib/sovereign/firestoreHydrator';
+import { FinanceHydrator } from './FinanceHydrator';
 
 /**
  * 🏛️ FirestoreFinanceRepository - Grade X Adapter
@@ -23,7 +24,7 @@ export class FirestoreFinanceRepository implements IFinanceRepository {
 
     async getJournalEntries(): Promise<JournalEntry[]> {
         const raw = await this.adapter.query<Record<string, unknown>>(this.getPath('journalEntries'));
-        return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateJournalEntry);
+        return FirestoreHydrator.hydrateCollection(raw, FinanceHydrator.hydrateJournalEntry);
     }
 
     async saveJournalEntry(entry: JournalEntry): Promise<void> {
@@ -32,7 +33,7 @@ export class FirestoreFinanceRepository implements IFinanceRepository {
 
     async getAccounts(): Promise<Account[]> {
         const raw = await this.adapter.query<Record<string, unknown>>(this.getPath('accounts'));
-        return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateAccount);
+        return FirestoreHydrator.hydrateCollection(raw, FinanceHydrator.hydrateAccount);
     }
 
     async saveAccount(account: Account): Promise<void> {
@@ -41,12 +42,12 @@ export class FirestoreFinanceRepository implements IFinanceRepository {
 
     async getBankTransactions(): Promise<BankTransaction[]> {
         const raw = await this.adapter.query<Record<string, unknown>>(this.getPath('bankTransactions'));
-        return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateBankTransaction);
+        return FirestoreHydrator.hydrateCollection(raw, FinanceHydrator.hydrateBankTransaction);
     }
 
     async getExpenseClaims(): Promise<ExpenseClaim[]> {
         const raw = await this.adapter.query<Record<string, unknown>>(this.getPath('expenseClaims'));
-        return FirestoreHydrator.hydrateCollection(raw, FirestoreHydrator.hydrateExpenseClaim);
+        return FirestoreHydrator.hydrateCollection(raw, FinanceHydrator.hydrateExpenseClaim);
     }
 
     async saveExpenseClaim(claim: ExpenseClaim): Promise<void> {

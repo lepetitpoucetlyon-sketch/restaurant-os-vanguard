@@ -1,13 +1,14 @@
-/* eslint-disable no-restricted-imports */
 import { logger } from '@/lib/logger';
 import {
     IdentityExtractionSchema,
     ComplianceExtractionErrorSchema,
     type IdentityExtraction,
     type ComplianceExtractionError
-} from '@/modules/compliance/domain/schemas/compliance.schemas';
+} from '@/modules/compliance';
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
 import { toError } from "@/lib/toError";
+import { LLMManager } from '../ia/ai/LLMManager';
+import { AI_MODELS } from '../ia/ai';
 
 export type IdentityExtractionResult =
     | { success: true; data: IdentityExtraction; rawResponse: string }
@@ -64,7 +65,6 @@ export const IdentityGuardService = {
             ? "\nCONTEXTE : TRUSTED_SECURE_VASSAL. Vous pouvez extraire les raw_values."
             : "\nCONTEXTE : UNTRUSTED_OUTSIDE_VASSAL. raw_value doit être NULL pour tout Tier 4.";
 
-        const { LLMManager, AI_MODELS } = await import('@/modules/intelligence/ia/ai');
         const response = await LLMManager.provider.generateFromImage({
             model: AI_MODELS.fast,
             systemPrompt: IDENTITY_GUARD_SYSTEM_PROMPT + contextInstruction,

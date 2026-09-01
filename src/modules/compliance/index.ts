@@ -60,6 +60,7 @@ export * from './domain/schemas/policy';
 export * from './domain/schemas/quality';
 export * from './domain/schemas/rbac';
 export * from './domain/schemas/license';
+export * from './domain/schemas/compliance.schemas';
 export type { SensorReading } from './qualite/haccp/types';
 export type { IoTSensor, SensorTransport, IoTSensorReading } from './domain/schemas/haccp';
 

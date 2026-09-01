@@ -108,3 +108,4 @@ export * from './domain/schemas/finance';
 export * from './domain/schemas/cash';
 export * from './domain/schemas/periodClosure';
 export * from './domain/schemas/supplier-invoice.schemas';
+export { ThemisCollectorJob } from './tresorerie/collection/cron/ThemisCollectorJob';

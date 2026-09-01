@@ -97,7 +97,12 @@ VERTICAL_SCREENS_UNWIRED_MAX=0   # ecrans de verticale sans acces donnees (Nexus
                                  # VERTICAL_STUBS_MAX : remplacer un stub par une maquette a donnees locales
                                  # le fait passer a 0 sans rien livrer. Baseline mesuree le 2026-09-01.
 FR_HARDCODED_MAX=781         # chaînes FR en dur hors legal & verticals — 893→781 : lots 1 à 4 encapsulés (2026-09-01)
-HARDCODED_HEX_MAX=795        # couleurs #hex et rgba() en dur (DESIGNUP Lot 0) — baseline post-purge primitives (2026-09-01)
+HARDCODED_HEX_MAX=958        # couleurs #hex ET rgba()/rgb() en dur (DESIGNUP Lot 0).
+                             # 795 -> 958 : ce n'est PAS une regression. La mesure m16 ne comptait
+                             # que #hex alors que son titre annoncait rgba() : les 161 rgba() du depot
+                             # etaient invisibles, et purger l'or des primitives ne bougeait pas le
+                             # compteur (797 sur trois releves consecutifs). Motif desormais importe
+                             # du lint color-guard (source unique). 958 est la premiere valeur VRAIE.
 # Exécuter eslint UNE SEULE FOIS et capturer la sortie complète
 ESLINT_FULL=$(npx eslint src/ --format stylish --max-warnings 9999 2>&1 || true)
 # Métriques réelles — barrel, inter-module, totaux
@@ -136,7 +141,7 @@ fi
 # jour de l'activation du vecteur, jamais relevée. Se résorbe par `import type`, contrat
 # neutre kernel/contracts/, NexusEventBus, ou relocalisation du composition root.
 # NE PAS corriger en routant vers les barrels : mesuré, ça fait passer les cycles de 2 a 100.
-LIB_TO_MODULES_MAX=33
+LIB_TO_MODULES_MAX=0
 if [ "$LIB_TO_MODULES_COUNT" -gt "$LIB_TO_MODULES_MAX" ]; then
   fail "ESLint lib->modules : $LIB_TO_MODULES_COUNT > seuil ratchet ($LIB_TO_MODULES_MAX)."
   echo "$ESLINT_FULL" | grep "Loi des couches (ADR-015)" | head -20

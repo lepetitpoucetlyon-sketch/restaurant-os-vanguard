@@ -101,7 +101,7 @@ export class NexusBridge {
     if (typeof window === 'undefined') return; // pulse côté instance uniquement
 
  
-    import('@/modules/intelligence/ia/fleet/FleetTelemetryService')
+    import('@/shared/providers/fleet/FleetTelemetryService')
       .then(({ fleetTelemetry }) => {
         fleetTelemetry.registerNode(tenantId as import('@/shared/types/brands').TenantID);
       })
@@ -114,7 +114,7 @@ export class NexusBridge {
 
   private static async pushPulse(tenantId: string): Promise<void> {
     try {
-      const { fleetTelemetry } = await import('@/modules/intelligence/ia/fleet/FleetTelemetryService');
+      const { fleetTelemetry } = await import('@/shared/providers/fleet/FleetTelemetryService');
 
       await fleetTelemetry.pushSiteTelemetry(tenantId as import('@/shared/types/brands').TenantID, {
         status: 'ONLINE',

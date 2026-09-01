@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Globe, Wand2, Loader2, AlertTriangle } from 'lucide-react';
 import { Button } from '@ui/Button';
-import type { BrandInput } from '@/lib/BrandingService';
+import type { BrandInput } from '@/modules/intelligence';
 import { PRESETS } from './prospectingConstants';
 
 interface ProspectingScannerInputProps {

@@ -5,10 +5,14 @@
  */
 
 import { logger } from "@/lib/logger";
-import { DataDigester } from "@/modules/intelligence";
+// Voisin direct : un fichier n'importe JAMAIS le barrel de son propre pilier
+// (cycle index.ts -> Slayer.ts -> index.ts).
+import { DataDigester } from "./DataDigester";
 import { LegacyOrder, Order } from "@nexus/contracts";
 import { toMicrounits } from "@/shared/schemas/primitives";
-import { FinanceCore } from "@/modules/finance";
+// FinanceCore est charge a la demande : un import statique de @/modules/finance
+// ferme une boucle intelligence -> finance -> ... -> intelligence (3 cycles madge).
+// Un seul point d'usage, dans une methode async : le differer suffit.
 import { NexusTransaction } from "@/lib/adapters/NexusTransaction";
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { DEFAULT_TENANT_ID } from '@/config/instance';
@@ -59,12 +63,10 @@ export class Slayer {
         
         let ingested = 0;
         let errors = 0;
+        const chunkSize = 100; // Batch processing pour performance Firestore
 
-        // 📦 CHUNKING INDUSTRIEL (Lots de 200 pour Firestore Batch)
-        const CHUNK_SIZE = 200;
-        
-        for (let i = 0; i < stream.length; i += CHUNK_SIZE) {
-            const chunk = stream.slice(i, i + CHUNK_SIZE);
+        for (let i = 0; i < stream.length; i += chunkSize) {
+            const chunk = stream.slice(i, i + chunkSize);
             
             try {
                 await NexusTransaction.run(
@@ -86,6 +88,7 @@ export class Slayer {
                                 if (!nexusOrder) throw new Error("Validation Failed");
 
                                 // 2. SCELLAGE FISCAL (SHA-256 Post-Quantum)
+                                const { FinanceCore } = await import("@/modules/finance");
                                 const seal = await FinanceCore.sealRecordWithHash(nexusOrder.id, nexusOrder);
                                 
                                 // Extension du type pour inclure le scellage fiscal sans cast "unknown"
@@ -108,13 +111,13 @@ export class Slayer {
                 );
 
                 if (onProgress) onProgress(ingested);
-                
+
             } catch (batchError) {
                 logger.error(`[Slayer] Batch Failure (i=${i})`, { error: toError(batchError).message });
             }
         }
 
+        logger.info(`[Slayer] OMEGA COMPLETED: Ingested=${ingested}, Errors=${errors}`);
         return { ingested, errors };
     }
 }
-
