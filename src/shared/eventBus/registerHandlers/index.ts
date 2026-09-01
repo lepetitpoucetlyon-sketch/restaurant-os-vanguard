@@ -48,6 +48,13 @@ export function registerNexusHandlers(): void {
   );
 }
 
+/**
+ * Handlers montes cote serveur. NE PAS y ajouter de groupe dependant de
+ * `server-only` : ce module est aussi importe par le bootstrap client, donc un
+ * import statique ici remonte dans le bundle navigateur quel que soit l'endroit
+ * ou la fonction est appelee. Ces groupes-la se montent depuis ServerEventBus.ts,
+ * qui n'est jamais importe cote client.
+ */
 export function registerServerNexusHandlers(): void {
   if (serverInitialized) return;
   serverInitialized = true;

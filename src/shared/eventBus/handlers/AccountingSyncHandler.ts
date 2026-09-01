@@ -1,12 +1,13 @@
 import { NexusEventBus } from '../NexusEventBus';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { AccountingProviderFactory } from '@/modules/finance';
 import { decryptCredentials } from '@/lib/server/credentialCipher';
+import { AccountingProviderFactory } from '@/modules/finance';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 import type { ConnectorState } from '@/shared/connector-manifest';
 
 const ACCOUNTING_CONNECTOR_IDS = ['pennylane'] as const;
+
 
 /**
  * Résout le provider comptable actif du tenant (le premier connecteur actif

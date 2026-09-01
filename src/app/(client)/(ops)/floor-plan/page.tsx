@@ -19,7 +19,7 @@ import { ResponsiveShell } from "@/shared/components/ui/ResponsiveShell";
 
 
 const FloorPlanEditor = dynamic(
-    () => import("@/modules/facility").then(mod => mod.FloorPlanEditor),
+    () => import("@/modules/facility/spaces/floor-plan/FloorPlanEditor").then(mod => mod.FloorPlanEditor),
     { 
         ssr: false,
         loading: () => <div className="absolute inset-0 bg-bg-primary flex items-center justify-center animate-pulse"><div className="w-20 h-20 bg-accent/10 rounded-full border border-accent/20" /></div>

@@ -1,4 +1,8 @@
-import { registerAccountingSyncHandler } from '../handlers/AccountingSyncHandler';
+// AccountingSyncHandler N'EST PAS enregistre ici : il depend de credentialCipher,
+// qui pose `import 'server-only'`. Ce groupe est monte par le bootstrap CLIENT
+// comme par le serveur, donc l'y laisser fait remonter server-only dans le bundle
+// navigateur et casse `next build`. Il vit dans finance-server.ts, monte par le
+// seul registerServerNexusHandlers().
 import { registerPaymentLedgerHandler } from '../handlers/PaymentLedgerHandler';
 import { registerCompMealHandler } from '../handlers/CompMealHandler';
 import { registerCashCountReconciliationHandler } from '../handlers/CashCountReconciliationHandler';
@@ -13,7 +17,6 @@ import { registerCriticalWasteFiscalHandler } from '../handlers/CriticalWasteFis
 
 export function registerFinanceLedgerHandlers(): Array<() => void> {
   return [
-    registerAccountingSyncHandler(),
     registerPaymentLedgerHandler(),
     registerCompMealHandler(),
     registerCashCountReconciliationHandler(),

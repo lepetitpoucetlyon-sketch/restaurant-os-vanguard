@@ -30,7 +30,9 @@ export { DeviceFleetManager, type DeviceRecord, type DeviceType, type DeviceStat
 export { AmbianceService, type RestaurantAmbiance } from './spaces/AmbianceService';
 
 export { EquipmentHubView } from './components/equipment/EquipmentHubView';
-export { FloorPlanEditor } from './spaces/floor-plan/FloorPlanEditor';
+// FloorPlanEditor n'est PAS exporte en valeur : il tire konva + react-konva (~400 Ko)
+// dans tout consommateur de @/modules/facility. A charger via next/dynamic :
+//   dynamic(() => import('@/modules/facility/spaces/floor-plan/FloorPlanEditor').then(m => m.FloorPlanEditor), { ssr: false })
 export type { FloorPlanEditorRef } from './spaces/floor-plan/FloorPlanEditor';
 export { FloorPlanHeader } from './spaces/components/FloorPlanHeader';
 export {

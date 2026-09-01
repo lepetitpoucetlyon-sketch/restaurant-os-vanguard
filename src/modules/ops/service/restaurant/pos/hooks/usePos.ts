@@ -1,5 +1,6 @@
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 "use client";
+
+import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useSetAtom } from "jotai";

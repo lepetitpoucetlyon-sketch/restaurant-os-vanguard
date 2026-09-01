@@ -1,10 +1,11 @@
 import type { ParsedRow, ImportWarning } from '../types';
-import ExcelJS from 'exceljs';
 
 export async function xlsxToRows(file: File): Promise<{ headers: string[]; rows: ParsedRow[]; warnings: ImportWarning[] }> {
   const warnings: ImportWarning[] = [];
 
   try {
+    // exceljs (~900 Ko) n'est charge que si un .xlsx est reellement depose.
+    const { default: ExcelJS } = await import('exceljs');
     const buf = await file.arrayBuffer();
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.load(buf);

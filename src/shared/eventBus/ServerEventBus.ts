@@ -1,5 +1,6 @@
 import { NexusEventBus, NexusEventName, NexusEventPayload } from './NexusEventBus';
 import { registerServerNexusHandlers } from './registerHandlers';
+import { registerFinanceServerHandlers } from './registerHandlers/finance-server';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
@@ -18,6 +19,9 @@ export async function dispatchServerEvent<E extends NexusEventName>(
 ): Promise<void> {
   if (!serverInitialized) {
     registerServerNexusHandlers();
+    // Groupes dependant de `server-only` — montes ici et nulle part ailleurs :
+    // ServerEventBus n'est jamais importe par le bundle navigateur.
+    registerFinanceServerHandlers();
     serverInitialized = true;
   }
 

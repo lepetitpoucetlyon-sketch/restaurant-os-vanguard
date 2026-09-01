@@ -6,7 +6,8 @@
 
 export * from './ComplianceView';
 export * from './MenuEngineeringMatrix';
-export { MindMap } from '@/shared/nexus/components/MindMap';
+// MindMap n'est PAS re-exporte : il tire d3 (~270 Ko) dans tout le pilier.
+// A charger via next/dynamic depuis l'ecran qui l'affiche.
 export * from './OracleChatDrawer';
 export * from './OraclePredictor';
 export * from './ProfitabilityView';
