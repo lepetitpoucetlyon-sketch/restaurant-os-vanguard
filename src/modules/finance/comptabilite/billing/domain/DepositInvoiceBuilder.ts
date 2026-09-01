@@ -2,7 +2,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
-import type { GeneratedInvoice } from './InvoiceService';
+import type { GeneratedInvoice } from './types/invoice.types';
 import { INVOICE_COLLECTION, buildDualTaxDetail, getNextInvoiceNumber, computeInvoiceSeal } from './invoice-helpers';
 
 export async function generateDeposit(

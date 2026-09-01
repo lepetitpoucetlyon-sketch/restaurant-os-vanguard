@@ -49,6 +49,27 @@ function previousMonthWindow(reference: Date): { startMs: number; endMs: number;
   return { startMs, endMs, label };
 }
 
+/** Somme des recettes NF525 de la fenêtre — hors annulées, remboursées et hors bornes. */
+function sumRevenue(entries: JournalEntryRecord[], startMs: number, endMs: number): number {
+  return entries.reduce((sum, entry) => {
+    if (entry.type !== 'revenue') return sum;
+    if (entry.status === 'cancelled' || entry.status === 'refunded') return sum;
+    const ts = toMillis(entry.serverTimestamp);
+    if (ts === null || ts < startMs || ts >= endMs) return sum;
+    return sum + (entry.amountInMicrounits ?? 0);
+  }, 0);
+}
+
+/** Terminaux POS actifs vus dans la fenêtre d'activité. */
+function countActiveTerminals(devices: DeviceRecord[], activityFloor: number): number {
+  return devices.filter(
+    d =>
+      d.status === 'active' &&
+      (d.deviceType ?? '').startsWith('pos') &&
+      (d.lastActiveAt ?? 0) >= activityFloor
+  ).length;
+}
+
 function toMillis(value: number | string | undefined): number | null {
   if (typeof value === 'number') return value;
   if (typeof value === 'string') {
@@ -108,23 +129,11 @@ export const SaaSBillingJob = {
 
       // ── Volume encaissé : journal NF525, écritures de recette de la période ──
       const entries = await Nexus.adapter.query<JournalEntryRecord>(`tenants/${tenantId}/journalEntries`);
-      const totalVolumeProcessedInMicrounits = entries.reduce((sum, entry) => {
-        if (entry.type !== 'revenue') return sum;
-        if (entry.status === 'cancelled' || entry.status === 'refunded') return sum;
-        const ts = toMillis(entry.serverTimestamp);
-        if (ts === null || ts < startMs || ts >= endMs) return sum;
-        return sum + (entry.amountInMicrounits ?? 0);
-      }, 0);
+      const totalVolumeProcessedInMicrounits = sumRevenue(entries, startMs, endMs);
 
       // ── Terminaux actifs : le premier est inclus dans le forfait ──────────────
       const devices = await Nexus.adapter.query<DeviceRecord>(`tenants/${tenantId}/devices`);
-      const activityFloor = endMs - TERMINAL_ACTIVITY_WINDOW_MS;
-      const activeTerminals = devices.filter(
-        d =>
-          d.status === 'active' &&
-          (d.deviceType ?? '').startsWith('pos') &&
-          (d.lastActiveAt ?? 0) >= activityFloor
-      ).length;
+      const activeTerminals = countActiveTerminals(devices, endMs - TERMINAL_ACTIVITY_WINDOW_MS);
       const billableTerminalCount = Math.max(0, activeTerminals - 1);
 
       const invoice = await MultiTenantBillingEngineService.generateMonthlySaaSInvoice(

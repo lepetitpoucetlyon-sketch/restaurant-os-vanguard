@@ -12,26 +12,10 @@ import { generateDeposit, convertQuoteToInvoice } from './DepositInvoiceBuilder'
 
 const INVOICE_THRESHOLD_HT_MU = 150_000_000 as Microunits;
 
-export interface InvoiceFromTicketParams {
-  tenantId: string;
-  journalEntry: JournalEntry;
-  customerName?: string;
-  customerAddress?: string;
-  customerSiret?: string;
-}
-
-export type InvoiceType = 'invoice' | 'credit_note' | 'deposit' | 'from_quote';
-
-export interface GeneratedInvoice extends LegalInvoice {
-  sourceJournalEntryId: string;
-  customerAddress?: string;
-  customerSiret?: string;
-  invoiceType?: InvoiceType;
-  originalInvoiceId?: string;
-  originalInvoiceNumber?: string;
-  depositGroupId?: string;
-  quoteId?: string;
-}
+// Types deplaces dans ./types/invoice.types pour casser le cycle service <-> builders.
+// Re-exportes ici : les consommateurs externes (barrel finance) ne changent pas.
+export type { InvoiceFromTicketParams, InvoiceType, GeneratedInvoice } from './types/invoice.types';
+import type { InvoiceFromTicketParams, GeneratedInvoice } from './types/invoice.types';
 
 export const InvoiceService = {
   shouldAutoInvoice(totalHTInMicrounits: number): boolean {
