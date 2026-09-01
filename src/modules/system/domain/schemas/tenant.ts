@@ -1,38 +1,9 @@
 import { z } from 'zod';
 import { TimestampSchema } from '@/shared/schemas/primitives';
+import { PLATFORM_VARIANTS, VERTICAL_META, type PlatformVariant } from '@/kernel/contracts/tenant';
 
-export const PLATFORM_VARIANTS = [
-    'restaurant',
-    'hotel',
-    'bakery',
-    'garage',
-    'salon',
-    'clinic',
-    'retail',
-    'custom',
-    'gym',
-    'coworking',
-    'veterinary',
-    'florist',
-] as const;
-
+export { PLATFORM_VARIANTS, VERTICAL_META, type PlatformVariant };
 export const PlatformVariantSchema = z.enum(PLATFORM_VARIANTS);
-export type PlatformVariant = z.infer<typeof PlatformVariantSchema>;
-
-export const VERTICAL_META: Record<PlatformVariant, { emoji: string; label: string }> = {
-    restaurant: { emoji: '🍽️', label: 'Restaurant' },
-    hotel: { emoji: '🏨', label: 'Hôtel' },
-    bakery: { emoji: '🥐', label: 'Boulangerie' },
-    garage: { emoji: '🔧', label: 'Garage' },
-    salon: { emoji: '✂️', label: 'Salon' },
-    clinic: { emoji: '🏥', label: 'Clinique' },
-    retail: { emoji: '🛍️', label: 'Retail' },
-    custom: { emoji: '✨', label: 'Personnalisé' },
-    gym: { emoji: '🏋️', label: 'Salle de Sport' },
-    coworking: { emoji: '🏢', label: 'Coworking' },
-    veterinary: { emoji: '🐾', label: 'Vétérinaire' },
-    florist: { emoji: '🌸', label: 'Fleuriste' },
-};
 
 export const TenantThemeSchema = z.object({
     primaryColor: z.string(),

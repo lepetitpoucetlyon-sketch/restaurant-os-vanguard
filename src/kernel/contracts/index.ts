@@ -4,4 +4,5 @@
  */
 export * from './rbac';
 export * from './oracle';
+export * from './tenant';
 

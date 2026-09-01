@@ -7,7 +7,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@/shared/nexus/contracts/permissions.types';
 import { MCC_DEV_MODE_SERVER } from '@/lib/mcc/devMode';
 import { DEV_PIN_BYPASS_HEADER } from '@/lib/authConstants';
-import { DeviceFleetManager } from '@/modules/facility';
+import { isDeviceRevoked } from '@/lib/server/deviceRevocation';
 import { toError } from "@/lib/toError";
 
 interface StoredDevice {
@@ -221,7 +221,7 @@ async function checkFleetAdminMFA(
 
 async function checkDeviceRevocation(deviceId: string | null): Promise<NextResponse | null> {
   if (!deviceId) return null;
-  const isRevoked = await DeviceFleetManager.isDeviceRevoked(deviceId);
+  const isRevoked = await isDeviceRevoked(deviceId);
   if (isRevoked) {
     logger.warn(`[adminAuth] Accès bloqué : appareil ${deviceId} révoqué`);
     return new NextResponse(

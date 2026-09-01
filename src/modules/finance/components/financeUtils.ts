@@ -10,7 +10,7 @@ export type { BankTransaction } from "../types";
 
 // ── Tab types ─────────────────────────────────────────────────────────────────
 
-export type FinanceTab = "accounting" | "billing" | "bank" | "audit" | "treasury";
+export type FinanceTab = "accounting" | "billing" | "einvoicing" | "bank" | "audit" | "treasury";
 
 // ── Local bank account shape (from bankAccounts/ Nexus collection) ─────────
 

@@ -26,6 +26,7 @@ import {
 import {
     AccountingTab,
     BillingTab,
+    EInvoicingTab,
     AuditTab,
     TreasuryTab,
     BankTab,
@@ -35,9 +36,10 @@ import {
     Wallet,
     ShieldCheck,
     PlusCircle,
+    Globe,
 } from "./FinanceTabRegistry";
 
-const VALID_FINANCE_TABS: FinanceTab[] = ["accounting", "billing", "bank", "treasury", "audit"];
+const VALID_FINANCE_TABS: FinanceTab[] = ["accounting", "billing", "einvoicing", "bank", "treasury", "audit"];
 
 function computeInitialTab(tabParam: string | null): FinanceTab {
     return tabParam && VALID_FINANCE_TABS.includes(tabParam as FinanceTab) ? (tabParam as FinanceTab) : "accounting";
@@ -91,6 +93,7 @@ export function FinanceDashboard() {
     const financeTabs = ([
         { id: "accounting" as const, label: "Comptabilité", icon: BookOpen, visible: true },
         { id: "billing" as const, label: "Facturation", icon: Receipt, visible: true },
+        { id: "einvoicing" as const, label: "Facturation Électronique (PDP)", icon: Globe, visible: true },
         { id: "bank" as const, label: "Connexion Bancaire", icon: Landmark, visible: true },
         { id: "treasury" as const, label: "Trésorerie", icon: Wallet, visible: canSeeTreasury },
         { id: "audit" as const, label: "Audit fiscal", icon: ShieldCheck, visible: canSeeAudit },
@@ -159,6 +162,13 @@ export function FinanceDashboard() {
                                 />
                             )}
 
+                            {activeTab === "einvoicing" && (
+                                <EInvoicingTab
+                                    paidOrders={paidOrders}
+                                    ordersLoading={ordersLoading}
+                                />
+                            )}
+
                             {activeTab === "bank" && (
                                 <BankTab
                                     connectingBank={bank.connectingBank}
@@ -209,6 +219,13 @@ export function FinanceDashboard() {
 
                             {activeTab === "billing" && (
                                 <BillingTab
+                                    paidOrders={paidOrders}
+                                    ordersLoading={ordersLoading}
+                                />
+                            )}
+
+                            {activeTab === "einvoicing" && (
+                                <EInvoicingTab
                                     paidOrders={paidOrders}
                                     ordersLoading={ordersLoading}
                                 />

@@ -9,8 +9,7 @@
  * Les tenantIds clients suivent la convention : `tenant_{siret}`
  */
 
-import { PLATFORM_VARIANTS } from '@/modules/system';
-import type { PlatformVariant } from '@/modules/system';
+import { PLATFORM_VARIANTS, type PlatformVariant } from '@/kernel/contracts';
 
 export type SystemTier = 'DEMO' | 'TEST' | 'REFERENCE';
 

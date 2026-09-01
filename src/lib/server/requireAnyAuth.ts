@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAuth } from 'firebase-admin/auth';
 import { initFirebaseAdmin } from '@/lib/firebase-admin-init';
 import { DEV_PIN_BYPASS_HEADER } from '@/lib/authConstants';
-import { DeviceFleetManager } from '@/modules/facility';
+import { isDeviceRevoked } from '@/lib/server/deviceRevocation';
 import { logger } from '@/lib/logger';
 
 export interface AuthContext {
@@ -35,7 +35,7 @@ export async function requireAnyAuth(req: NextRequest | Request): Promise<AuthCo
 
   // 1. Contrôle Kill-Switch de la flotte MDM
   if (deviceId) {
-    const isRevoked = await DeviceFleetManager.isDeviceRevoked(deviceId);
+    const isRevoked = await isDeviceRevoked(deviceId);
     if (isRevoked) {
       logger.warn(`[requireAnyAuth] Tentative d'accès depuis un appareil révoqué : ${deviceId}`);
       throw new NextResponse(
