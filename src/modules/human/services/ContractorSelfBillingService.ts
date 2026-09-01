@@ -98,6 +98,23 @@ export class ContractorSelfBillingService {
   }
 
   /**
+   * Génère un numéro séquentiel strict de facture d'auto-facturation sans trou (NF525 / Art. 242 nonies CGI).
+   */
+  static async generateSequentialInvoiceNumber(tenantId: string, periodMonth: string): Promise<string> {
+    const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+    const counterPath = `tenants/${tenantId}/counters/selfBilling_${periodMonth.replace('-', '')}`;
+    
+    let nextSeq = 1;
+    await Nexus.adapter.runTransaction(async (tx) => {
+      const counter = await tx.get<{ sequence: number }>(counterPath);
+      nextSeq = (counter?.sequence ?? 0) + 1;
+      tx.set(counterPath, { sequence: nextSeq, updatedAt: new Date().toISOString() });
+    });
+
+    return `FAC-AUTO-${periodMonth.replace('-', '')}-${String(nextSeq).padStart(4, '0')}`;
+  }
+
+  /**
    * Calcule et génère la facture Factur-X complète au nom de l'auto-entrepreneur.
    */
   static generateSelfBillingInvoice(input: {
@@ -113,7 +130,7 @@ export class ContractorSelfBillingService {
     };
     shifts: ContractorShift[];
     periodMonth: string;
-    invoiceSequenceNumber?: number;
+    invoiceSequenceNumber?: number | string;
   }): SelfBillingInvoiceDraft {
     const profile = input.contractor.contractorProfile;
     const siret = profile?.siret || '00000000000000';
@@ -122,8 +139,14 @@ export class ContractorSelfBillingService {
     const hourlyRateInMu = profile?.rateInMicrounits ?? (input.contractor.hourlyRateInMicrounits || (20 * 1_000_000));
     const hourlyRateEur = hourlyRateInMu / 1_000_000;
 
-    const seq = input.invoiceSequenceNumber || Math.floor(1000 + Math.random() * 9000);
-    const invoiceNumber = `FAC-AUTO-${input.periodMonth.replace('-', '')}-${seq}`;
+    const seqStr = typeof input.invoiceSequenceNumber === 'string'
+      ? input.invoiceSequenceNumber
+      : (typeof input.invoiceSequenceNumber === 'number'
+          ? String(input.invoiceSequenceNumber).padStart(4, '0')
+          : '0001');
+    const invoiceNumber = seqStr.startsWith('FAC-AUTO-')
+      ? seqStr
+      : `FAC-AUTO-${input.periodMonth.replace('-', '')}-${seqStr}`;
     const issueDate = new Date().toISOString();
     
     // Échéance à 15 jours par défaut pour les prestataires

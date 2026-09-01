@@ -122,4 +122,14 @@ describe('ContractorSelfBillingService — Mandat d\'Auto-Facturation B2B Freela
     expect(journalEntry.lines[2].accountCode).toBe('401000'); // Crédit Fournisseur
     expect(journalEntry.lines[2].amountInCents).toBe(18000);
   });
+
+  it('génère des numéros de facture strictement consécutifs sans trou (NF525)', async () => {
+    const num1 = await ContractorSelfBillingService.generateSequentialInvoiceNumber('tenant_seq', '2026-09');
+    const num2 = await ContractorSelfBillingService.generateSequentialInvoiceNumber('tenant_seq', '2026-09');
+    const num3 = await ContractorSelfBillingService.generateSequentialInvoiceNumber('tenant_seq', '2026-09');
+
+    expect(num1).toBe('FAC-AUTO-202609-0001');
+    expect(num2).toBe('FAC-AUTO-202609-0002');
+    expect(num3).toBe('FAC-AUTO-202609-0003');
+  });
 });

@@ -220,6 +220,21 @@ Ce registre doit être révisé chaque trimestre pour :
 
 ---
 
+## 🚨 6. Dettes et Angles Morts Extraits de l'Audit (2026-09-01)
+
+| # | Angle Mort (Audit) | Domaine | Impact | Statut / Action |
+|---|--------------------|---------|--------|-----------------|
+| 1 | **SplitBillDialog : conversion µ / amountInCents** | Encaissement | Historique d'un bug facteur 10 000. | Vérifier que `usePosSplit` est l'unique chemin actif en production. |
+| 2 | **Émission interne `reservation.confirmed`** | Réservations | Non émis par le parcours interne. | À câbler lors de la création manuelle (en plus du connecteur). |
+| 3 | **Audit chaîne NF525 `entryId`** | Fiscal | Jointure sur champ inexistant (`entryId`), pas de cron. `BREACH` silencieux. | À corriger dans `TicketZHandler` / `registerFinanceNf525Handlers`. |
+| 4 | **Buzzer Cuisine `ESC B 3 2`** | Hardware | La commande matérielle pure manque (passe par audio JS applicatif). | L'ajouter à la table `CMD` si une imprimante physique l'exige. |
+| 5 | **ADR-019c : niveaux vs noms de rôle** | RBAC | ~160 fichiers comparent encore les chaînes (ex: `"chef_rang"`) au lieu du level (ex: `>= 50`). | Migrer le reste (`merge-plan-10-items`). |
+| 6 | **SovereignGuard hors chemin serveur** | Nexus / DB | Membrane cross-tenant désactivée sous `NODE_ENV=test` et mal placée côté serveur. | À déplacer à l'enregistrement `registerServerAdapter`. |
+| 7 | **Bypass `IServerAuthProvider`** | Auth / DB | 174 routes API appellent `getAuth().verifyIdToken()` (Couplage direct Firebase Admin). | Appliquer la factory `getServerAuthProvider` partout. |
+| 8 | **Violation Barrel Contract (Human)** | Architecture | Import profond (`@/modules/human/services/...`) au lieu de passer par le barrel. | Fixer les imports dans `PayrollTab`, `FreelanceTab`, etc. |
+
+---
+
 ## Références Croisées
 
 - **Backlog produit tactique** : [BACKLOG.md](../BACKLOG.md) — statut ✅/🔧/⬜ par feature + Horizon + Code ref

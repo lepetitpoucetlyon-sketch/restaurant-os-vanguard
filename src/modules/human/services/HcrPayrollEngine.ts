@@ -76,15 +76,21 @@ export interface HcrEmployeeMonthlyPayroll {
 
 export class HcrPayrollEngine {
   /**
-   * Calcule le nombre d'heures de nuit (entre 22h00 et 07h00) pour un intervalle donné.
+   * Calcule le nombre d'heures de nuit (entre 22h00 et 07h00) pour un intervalle donné,
+   * aligné sur le fuseau horaire de l'établissement (ex: 'Europe/Paris').
    */
-  static computeNightHours(start: Date, end: Date): number {
+  static computeNightHours(start: Date, end: Date, timeZone: string = 'Europe/Paris'): number {
     let nightMs = 0;
     const current = new Date(start);
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      hour: 'numeric',
+      hour12: false,
+    });
     
     // Parcourt minute par minute pour précision absolue
     while (current < end) {
-      const h = current.getHours();
+      const h = parseInt(formatter.format(current), 10);
       if (h >= HCR_CONSTANTS.NIGHT_HOUR_START || h < HCR_CONSTANTS.NIGHT_HOUR_END) {
         nightMs += 60_000;
       }
@@ -135,7 +141,8 @@ export class HcrPayrollEngine {
   static computeMonthlyPayroll(
     user: User,
     shifts: { startTime: string; endTime: string; date: string }[],
-    month: string // "YYYY-MM"
+    month: string, // "YYYY-MM"
+    timeZone: string = 'Europe/Paris'
   ): HcrEmployeeMonthlyPayroll {
     const rateInMu = user.hourlyRateInMicrounits ?? (15 * HCR_CONSTANTS.MU_TO_EUR);
     const hourlyRateEur = rateInMu / HCR_CONSTANTS.MU_TO_EUR;
@@ -153,7 +160,7 @@ export class HcrPayrollEngine {
       if (diffMs > 0) {
         const hours = diffMs / (1000 * 60 * 60);
         totalDurationHours += hours;
-        totalNightHours += this.computeNightHours(start, end);
+        totalNightHours += this.computeNightHours(start, end, timeZone);
         
         // Repas accordé si shift >= 5h de travail
         if (hours >= 5) {

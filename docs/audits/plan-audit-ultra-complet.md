@@ -1,9 +1,10 @@
 # 🏛️ PLAN D'AUDIT & ENCYCLOPÉDIE TECHNIQUE — RESTAURANT OS CORE
 
-> **Document de référence & d'ingénierie système**
+> ⚠️ **CARTE D'ORIENTATION ONE-SHOT — INSTANTANÉ DU 2026-09-01**
+> Ce document est une photographie à un instant T. Ne pas chercher à le maintenir à jour manuellement. 
+> S'il dérive, régénérer ou jeter. **Revérifier le code source (ou la carte générée) avant de citer.**
+> 
 > **Version** : 3.0 — développée & ancrée dans le code
-> **Date** : 2026-09-01
-> **Périmètre** : plateforme Restaurant complète (POS, KDS, salle, menu, réservations, fiscal NF525, stocks, HACCP, achats, RH HCR, freelances, contrats, drivers, offline, RBAC)
 > **Preuves formelles** (mesurées dans la session de rédaction — cf. [Annexe A](#annexe-a--preuves-formelles-mesurées-en-session)) :
 > `npx tsc --noEmit` → **exit 0, 0 erreur** · `npx vitest run src/__tests__/human/` → **3 fichiers, 11/11 tests, 1,20 s** · `node scripts/gate-last-mile.mjs` → **14/14 cliquets, aucun compteur en hausse** · `node scripts/verify-gate-integrity.mjs` → **hash `249420b039b90281` OK**
 
