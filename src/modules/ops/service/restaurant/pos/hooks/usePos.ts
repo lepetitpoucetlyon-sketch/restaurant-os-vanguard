@@ -18,6 +18,10 @@ import type { ConsumptionMode } from "../../../../workflow/engine/types";
 import { POSService } from "../domain";
 import { PosIdempotencyGuard } from "../services/PosIdempotencyGuard";
 import { HardenedTouchUiHelper } from "../services/HardenedTouchUiHelper";
+import { TableTransferService } from "../services/TableTransferService";
+import { TableMergeService } from "../services/TableMergeService";
+import { TableHandoffService } from "../services/TableHandoffService";
+import { DineAndDashDetectorService } from "../services/DineAndDashDetectorService";
 
 // Pure helpers (zéro effets de bord)
 import {
@@ -268,6 +272,63 @@ export function usePOSController() {
         [cartItems, currentTable, currentUser, addOrder, updateTable, selectedTableId, showToast, activeTenantId]
     );
 
+    const handleTransferTable = useCallback(async (toTableId: string, orderId: string) => {
+        if (!activeTenantId || !currentTable) return;
+        const res = await TableTransferService.transfer({
+            tenantId: activeTenantId,
+            orderId,
+            fromTableId: currentTable.id,
+            toTableId,
+            operatorId: currentUser?.id ?? 'unknown',
+        });
+        if (res.success) {
+            showToast(`Table transférée avec succès vers la table cible`, "success");
+            setSelectedTableId(toTableId);
+        } else {
+            showToast(`Échec du transfert : ${res.reason}`, "error");
+        }
+    }, [activeTenantId, currentTable, currentUser, showToast, setSelectedTableId]);
+
+    const handleMergeTable = useCallback(async (secondaryTableId: string, secondaryOrderId: string, primaryOrderId: string) => {
+        if (!activeTenantId || !currentTable) return;
+        const res = await TableMergeService.merge({
+            tenantId: activeTenantId,
+            primaryTableId: currentTable.id,
+            primaryOrderId,
+            secondaryTableId,
+            secondaryOrderId,
+            operatorId: currentUser?.id ?? 'unknown',
+        });
+        if (res.success) {
+            showToast("Tables fusionnées avec succès", "success");
+        } else {
+            showToast(`Échec de la fusion : ${res.reason}`, "error");
+        }
+    }, [activeTenantId, currentTable, currentUser, showToast]);
+
+    const handleHandoffTable = useCallback(async (orderId: string, toOperatorId: string) => {
+        if (!activeTenantId) return;
+        try {
+            await TableHandoffService.transferOwnership(
+                activeTenantId,
+                orderId,
+                currentUser?.id ?? 'unknown',
+                toOperatorId
+            );
+            showToast("Passation de table effectuée", "success");
+        } catch (e) {
+            showToast(e instanceof Error ? e.message : "Erreur lors de la passation", "error");
+        }
+    }, [activeTenantId, currentUser, showToast]);
+
+    const handleScanDineAndDash = useCallback(async () => {
+        if (!activeTenantId) return [];
+        return DineAndDashDetectorService.scanOpenOrders({
+            tenantId: activeTenantId,
+            operatorId: currentUser?.id ?? 'unknown',
+        });
+    }, [activeTenantId, currentUser]);
+
     return {
         // State
         selectedTableId, setSelectedTableId,
@@ -310,6 +371,10 @@ export function usePOSController() {
         handleSetItemNote,
         handleSetItemConsumptionMode,
         handleToggleDoggyBag,
+        handleTransferTable,
+        handleMergeTable,
+        handleHandoffTable,
+        handleScanDineAndDash,
         partialPayments,
     };
 }

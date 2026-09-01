@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-import { usePOSController } from "@modules/ops";
+import { usePOSController, useTableLock } from "@modules/ops";
 import { useKitchen, useTables } from "@/modules/ops";
 import { useAuth, useTenant } from "@/shared/providers/NexusCoreProvider";
 import { useIsMobile } from "@/shared/hooks";
@@ -40,6 +40,15 @@ export function usePosPage() {
         const tableParam = searchParams.get("table");
         if (tableParam) setSelectedTableId(tableParam);
     }, [searchParams, setSelectedTableId]);
+
+    // ── Verrouillage distribué de la table sélectionnée (Anti-concurrence) ────
+    useTableLock({
+        tenantId: activeTenantId ?? '',
+        tableId: selectedTableId,
+        operatorId: posUser?.id ?? 'unknown',
+        operatorName: posUser?.displayName ?? posUser?.name,
+        autoAcquire: true,
+    });
 
     // ── Scanner Code-barres / Douchette en Caisse ─────────────────────────────
     useBarcodeScanner(posController.products, posController.handleAddToCart);
