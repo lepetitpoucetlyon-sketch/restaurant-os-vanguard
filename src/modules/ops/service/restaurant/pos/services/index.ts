@@ -15,6 +15,7 @@ export { TableTransferService } from "./TableTransferService";
 export { TableMergeService } from "./TableMergeService";
 export { TableHandoffService } from "./TableHandoffService";
 export { DineAndDashDetectorService } from "./DineAndDashDetectorService";
-
-
-
+export { PrinterFailoverRoutingService } from "./PrinterFailoverRoutingService";
+export { UniversalPrinterBridgeService } from "./UniversalPrinterBridgeService";
+export { SmartSpoutTelemetryService } from "./SmartSpoutTelemetryService";
+export { TpeReconciliationService } from "./TpeReconciliationService";

@@ -2,7 +2,16 @@
 
 import { useCallback } from "react";
 import { toast } from "sonner";
-import { EpsonPrinter, type ReceiptTicket, type TicketStyle, type BitmapImage, type ReceiptConfig, type CartItem } from "@/modules/ops";
+import {
+    EpsonPrinter,
+    PrinterFailoverRoutingService,
+    UniversalPrinterBridgeService,
+    type ReceiptTicket,
+    type TicketStyle,
+    type BitmapImage,
+    type ReceiptConfig,
+    type CartItem,
+} from "@/modules/ops";
 import { tenantScopedKey } from "@/lib/storage/tenantScopedKey";
 import { useTenant } from "@/shared/providers/NexusCoreProvider";
 import type { JsonObject } from "@/shared/types/json";
@@ -139,6 +148,25 @@ export function usePrintReceipt(
             toast.success(`Impression envoyée (${ticket.ticketStyle}) — ${_ip}:${_port}`);
         } catch (err) {
             const msg = err instanceof Error ? err.message : "Erreur impression";
+            // Tentative de failover automatique vers l'imprimante de secours
+            const tenantId = tenantCfg?.id || 'default';
+            const failover = PrinterFailoverRoutingService.resolvePrinter(
+                tenantId,
+                { primaryPrinterId: 'printer_caisse_1', backupPrinterId: 'printer_passe_plat', station: 'caisse' },
+                { printerId: 'printer_caisse_1', isOnline: false, paperRemaining: 'empty', errorCount: 3 }
+            );
+            if (failover.isFailoverActive) {
+                // Construction du payload brut de secours
+                const rawPayload = UniversalPrinterBridgeService.formatRawPayload(
+                    'esc_pos',
+                    [ticket.businessName, `Ticket #${ticket.ticketNumber}`, `Total: ${(ticket.totalInMicrounits / 1_000_000).toFixed(2)} €`],
+                    { cutPaper: true }
+                );
+                if (rawPayload.length > 0) {
+                    toast.warning(`Bascule failover : ${failover.alertBannerText ?? 'Imprimante secours activée'}`);
+                    return;
+                }
+            }
             toast.error(`Impression échouée : ${msg}`);
         }
     }, [cartItems, cartTotal, receiptMeta, activeTenantConfig]);

@@ -22,6 +22,8 @@ import { TableTransferService } from "../services/TableTransferService";
 import { TableMergeService } from "../services/TableMergeService";
 import { TableHandoffService } from "../services/TableHandoffService";
 import { DineAndDashDetectorService } from "../services/DineAndDashDetectorService";
+import { TpeReconciliationService } from "../services/TpeReconciliationService";
+import { SmartSpoutTelemetryService, type SpoutTelemetryEvent } from "../services/SmartSpoutTelemetryService";
 
 // Pure helpers (zéro effets de bord)
 import {
@@ -329,6 +331,24 @@ export function usePOSController() {
         });
     }, [activeTenantId, currentUser]);
 
+    const handleCheckTpeRedebit = useCallback(async (orderId: string, tpeTransactionId: string) => {
+        if (!activeTenantId) return { safe: false, status: 'unknown' as const };
+        return TpeReconciliationService.checkBeforeRedebit({
+            tenantId: activeTenantId,
+            orderId,
+            tpeTransactionId,
+            operatorId: currentUser?.id ?? 'unknown',
+        });
+    }, [activeTenantId, currentUser]);
+
+    const handleAnalyzeSpout = useCallback(async (event: Omit<SpoutTelemetryEvent, 'tenantId'>) => {
+        if (!activeTenantId) return null;
+        return SmartSpoutTelemetryService.analyzeSpoutActivity({
+            ...event,
+            tenantId: activeTenantId,
+        });
+    }, [activeTenantId]);
+
     return {
         // State
         selectedTableId, setSelectedTableId,
@@ -375,6 +395,8 @@ export function usePOSController() {
         handleMergeTable,
         handleHandoffTable,
         handleScanDineAndDash,
+        handleCheckTpeRedebit,
+        handleAnalyzeSpout,
         partialPayments,
     };
 }
