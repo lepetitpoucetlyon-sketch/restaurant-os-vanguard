@@ -1,353 +1,463 @@
 # DESIGNUP — Refonte visuelle par le design system
 
-> **Prémisse** : les 84 pages consomment un design system partagé.
-> On monte le DS d'un cran, les 84 pages remontent avec — sans les toucher.
-> Date : 2026-08-31
+> **Prémisse corrigée (mesurée le 2026-09-01)** : **26 pages sur 87** consomment une
+> primitive du design system. Les deux tiers du produit ne remonteront pas
+> mécaniquement. Monter le DS reste le meilleur levier, mais il n'est pas suffisant :
+> il faut aussi **élargir sa couverture**.
+>
+> Version 2 — réécrite après mesure. La v1 (2026-08-31) ordonnait ses lots sur des
+> estimations en `~` : deux d'entre elles étaient fausses d'un facteur 7.
 > Post-audit : `docs/plans/TASTE-SKILL-AUDIT-RESTAURANT.md`
 
 ---
 
-## 0. Point de départ (mesuré, pas ressenti)
+## 0. Point de départ — mesuré, pas estimé
+
+Toutes les valeurs de cette section sont reproductibles. Aucune n'est recopiée.
 
 ### Ce qui est déjà propre
 
 | Actif | État |
 |---|---|
-| Tokens sémantiques CSS (`--color-action-*`, `--color-surface-*`, `--color-status-*`, glass surfaces) | Bien structuré, dark/light dual-track (`data-theme` + `prefers-color-scheme`) |
-| Breakpoints métier | 4 tiers alignés JS + CSS : mobile ≤ 640, tablet ≤ 1024, desktop ≤ 1440, kiosk > 1440 |
-| Safe area iOS | `pb-safe`, `pt-safe`, `px-safe` utilities |
-| Touch targets | `touch-target` utility (44px WCAG 2.5.5) |
-| Motion tokens | `ease-out-expo`, `ease-out-back`, `ease-in-out-quint` + 5 durations |
-| Framer Motion | 65 imports dans `shared/components`, `layout`/`layoutId`/`AnimatePresence` utilisés |
-| ResponsiveShell | 4 slots mobile/tablet/desktop/kiosk avec fallback |
-| BentoGrid | Composant partagé, déjà utilisé sur POS/KDS/Timeclock/Inventory/Menu Engineering/Analytics |
-| PageShell | Shell éditorial avec kicker + tabs + alerts + status |
-| EmptyState | 105 lignes, composé (pas juste "Aucune donnée") |
-| Skeleton | 192 lignes + SkeletonList 106 lignes — vraies primitives loading |
-| PWA | Manifest + shortcuts POS/Kitchen, service worker, standalone |
-| Fonts (post taste-skill) | Outfit + Instrument Serif + JetBrains Mono, propagées aux 9 verticales |
-| Palette (post taste-skill) | Or `#C5A059` cohérent, plus d'AI purple `#6366f1` / `#8B5CF6` |
+| Tokens sémantiques CSS (`--color-action-*`, `--color-surface-*`, `--color-status-*`) | Bien structuré, dual-track `data-theme` + `prefers-color-scheme` |
+| Tokens de marque runtime (`--brand-*`, `--font-brand`, `--font-ui`, `--font-mono`) | Injectés par `BrandingProvider` par tenant |
+| Breakpoints métier | 4 tiers alignés JS + CSS (640 / 1024 / 1440 / kiosk) |
+| Safe area iOS · touch targets 44 px · motion tokens | En place |
+| `PageShell` | 728 l., 4 variants, kicker + tabs + alerts + status |
+| `Modal` (262 l.) · `BottomSheet` (155 l.) | Focus trap présent |
+| `EmptyState` (105 l.) · `Skeleton` (192 l.) | Vraies primitives, pas des placeholders |
+| `BentoGrid` (93 l.) | Partagé |
+| `/design-system` | Existe, 15,5 Ko, partiel |
+| Fonts | Outfit + Instrument Serif + JetBrains Mono, propagées aux 9 verticales |
+| PWA | Manifest + shortcuts, service worker, standalone |
 
-### Ce qui cloche
+### Ce qui cloche — avec les chiffres réels
 
-| Défaut | Impact | Cause racine |
+| Défaut | Mesure | Commande |
 |---|---|---|
-| **5 composants Card** (Card, PremiumCard, GlassCard, StatCard, SectionCard) | Développeurs choisissent au hasard, look incohérent | Croissance organique, jamais dédupliquée |
-| **2 conventions de nommage** (`bg-bg-primary` vs `bg-surface-bg`) | Grep hasardeux, refactor risqué | Migration inachevée |
-| **Ratchets figés** (dsAdoption 474/478 écrans hors DS) | 78 % des écrans OK, 22 % legacy | Pages écrites avant le DS, jamais migrées |
-| **Pages qui by-passent PageShell** (POS 275 l., KDS, Floor Plan…) | Le DS ne les protège pas | Layouts métier tactiles, PageShell pas adapté à leur contrainte |
-| **Design system sans vitrine** | Impossible de "voir" ce qui existe | `/design-system` existe mais partiel |
-| **Aucun invariant anti-hex-hardcodé** | `#hex` s'infiltre au fil de l'eau | Pas de garde-fou lint |
-| **Charte typo implicite** | Chaque page invente son échelle | Tokens `--text-*` définis mais pas usage-guidés |
+| **Couverture DS faible** | **26 / 87 pages** utilisent une primitive | `find src/app -name page.tsx \| xargs grep -l "<PageShell\|<Card\|<Modal\|..."` |
+| **Contrôles bruts massifs** | **1 111 `<button>`** contre 279 `<Button>` · **433 `<input>`** contre 54 | `.measures/latest.json` → `dsAdoption.extra` |
+| … répartis sur | **429 fichiers** : 241 dans `modules/`, 100 dans `shared/`, 88 dans `app/` | `grep -rlc "<button" src/<zone>` |
+| **6 composants Card** (pas 5) | `Card`, `PremiumCard`, `GlassCard`, `StatCard`, `SectionCard`, **`RoleCard`** | `find src/shared/components -name "*Card*.tsx"` |
+| **2 conventions de nommage** | **1 569** `bg-bg-*` contre **2 041** `bg-surface-*` | `grep -rho 'bg-bg-[a-z]*' src` |
+| **Or codé en dur** | **206 occurrences** de `rgba(197,160,89)` / `#C5A059` dans `src/` | voir §1 — c'est le défaut le plus grave |
+| **Pages hors PageShell** | `pos/page.tsx` **278 l. et 7 modals empilés** | `awk 'END{print NR}'` |
+| **Aucun invariant anti-hex** | 0 règle lint | `grep no-hardcoded-hex eslint.config.mjs` |
+| **Charte typo implicite** | Tokens `--text-*` définis, usage non guidé | — |
 
-**Diagnostic : DS grade B+.** Fondations solides, discipline manquante, dette accumulée par absence de garde-fous.
+### Une mesure morte, à ne plus utiliser
+
+La v1 pilotait sur *« dsAdoption 474/478 écrans hors DS »* et visait *« ≤ 400/478 »*.
+
+**Ce compteur est à 0 depuis le 2026-08-30.** Une campagne l'a effondré en une journée
+(485 → 471 → 87 → 37 → 19 → 6 → 1 → 0, cf. `.measures/history.jsonl`). La cible de la
+v1 était donc *moins bonne* que la réalité déjà atteinte.
+
+Mais le diagnostic de la v1 restait juste — **c'est la mesure qui a cessé de le voir** :
+
+```js
+// scripts/measure/measures.mjs — analyzeDsFile
+const fabrique = /<button\b|<input\b|rounded-(?:xl|2xl)/.test(src);
+if (fabrique && !adopteVraimentDs(src)) state.detail.push(c.rel(f));
+```
+
+Elle demande *« ce fichier touche-t-il le DS quelque part ? »*, pas *« l'utilise-t-il
+partout ? »*. Un fichier avec un `<Button>` et quinze `<button>` compte comme adoptant.
+
+**→ Le pilotage passe sur `boutonsBruts` / `champsBruts`, qui bougent encore.**
 
 ---
 
-## 1. Stratégie — Lever le DS, pas les 84 pages
+## 1. La contrainte qui prime — personnalisation tenant depuis le MCC
 
-### Principe
+**À lire avant tout lot.** Cette section n'existait pas en v1, et son absence rendait le
+Lot 2 dangereux.
 
-Toucher **10 composants partagés** > refaire 84 pages une par une.
+### Le mécanisme est en place
 
-**Effort réel : 3-4 sessions ciblées.**
+| Brique | Rôle |
+|---|---|
+| `brandingMode: 'default' \| 'custom'` | Un tenant peut porter sa propre charte |
+| `MccBrandingOverridePanel` (`admin/mcc/_tabs/branding-override/`) | Le MCC force ou réinitialise les tokens d'un tenant : nom, logo, couleurs |
+| `BrandingAccessSection` | Le MCC ouvre la personnalisation par capability : `mod_brand_basic`, `mod_brand_plus` |
+| `BrandingProvider` | Injecte `--brand-*`, `--font-brand`, `--font-ui`, `--font-mono` sur `:root` au runtime |
+| Verticale `custom` | Démarre volontairement en **zinc neutre** (`#18181B` / `#27272A` / `#3F3F46`) pour recevoir la charte du client |
 
-Le piège est de vouloir "refaire toutes les pages" — c'est une erreur de scope. Chaque page qui vit dans le DS remonte automatiquement. Les pages qui ont fui le DS (POS, KDS, Floor Plan, landings marketing) sont un chantier séparé, plus petit, et **à faire APRÈS avoir remonté le DS** — sinon on remonte deux fois.
+Autrement dit : **la couleur n'appartient pas au design system, elle appartient au
+tenant.** L'or `#C5A059` est la valeur *par défaut*, pas une constante.
 
-### Rentabilité mesurée
+### La fuite, mesurée
 
-| Levier | Pages impactées | Effort | Ratio |
+**206 occurrences** de l'or en dur dans `src/` — dont **dans les primitives du DS
+elles-mêmes** :
+
+```
+src/shared/components/ui/Card.tsx:14
+  shadow-[0_1px_2px_rgba(197,160,89,0.04)]
+src/shared/components/ui/PremiumCard.tsx:67
+  hover:shadow-[0_20px_40px_-16px_rgba(197,160,89,0.22)]
+```
+
+Répartition : `shared/components` 21 · `modules/commerce` 10 · `app/(marketing)` 10 ·
+`shared/nexus` 8 · `modules/ops` 6 · `modules/facility` 5 · `app/(client)` 5 …
+
+**Conséquence produit** : un tenant qui passe en `brandingMode: 'custom'` avec une charte
+bleue reçoit quand même des **ombres dorées**. La personnalisation MCC est contournée par
+le design system.
+
+### Ce que la v1 aurait fait
+
+Sa spécification CVA du Lot 2 écrivait, mot pour mot :
+
+```
+default:  'bg-surface-card border-border-default shadow-[0_1px_2px_rgba(197,160,89,0.04)]'
+elevated: 'shadow-[0_8px_24px_-12px_rgba(197,160,89,0.15)] hover:shadow-[...rgba(197,160,89,0.22)]'
+```
+
+Elle aurait **cimenté la fuite dans le composant unifié**, donc dans les 37 fichiers qui
+en dépendent.
+
+### Règle non négociable pour toute la refonte
+
+> **Aucune primitive du DS ne contient de valeur chromatique littérale.**
+> Toute couleur passe par un token. Les ombres teintées utilisent les tokens existants
+> `--shadow-glow-accent` et `--shadow-premium`, eux-mêmes dérivés de `--brand-accent-color`.
+
+Corollaires :
+
+- Le **Lot 0** (nouveau, ci-dessous) purge l'or des primitives **avant** tout restylage.
+- Le lint `no-hardcoded-hex` (§4.2) n'est pas une finition : c'est le garde-fou de la
+  personnalisation MCC. Il monte en priorité.
+- **Test de recette de chaque lot** : basculer un tenant de démo en `brandingMode: 'custom'`
+  avec une charte franchement non-dorée (bleu, vert) et vérifier qu'aucun or ne subsiste
+  à l'écran.
+
+---
+
+## 2. Stratégie — lever le DS **et** élargir sa couverture
+
+La v1 posait : *« toucher 10 composants partagés > refaire 84 pages »*. Vrai, mais
+incomplet : **61 pages sur 87 ne consomment aucune primitive**, donc ne reçoivent rien.
+
+La stratégie corrigée a deux jambes :
+
+1. **Lever** ce qui est partagé — c'est le levier, il reste le meilleur rapport.
+2. **Élargir** — convertir les contrôles bruts en primitives, par lots, sous cliquet.
+   C'est du travail de volume, mais c'est le seul chiffre qui bouge encore.
+
+### Rentabilité — mesurée, et donc réordonnée
+
+| Levier | Consommateurs **mesurés** | v1 annonçait | Fichiers à toucher |
 |---|---|---|---|
-| **PageShell** | ~50 pages | 1 fichier | ×50 |
-| **BentoGrid** | dashboards analytiques (~15 pages) | 1 fichier | ×15 |
-| **Modal / BottomSheet** | ~40 pages (tous les dialogs) | 2 fichiers | ×20 |
-| **Header / Sidebar** | 84 pages (shell global) | 3-5 fichiers | ×20 |
-| **EmptyState** | ~30 pages | 1 fichier | ×30 |
-| **Card dédup** | ~60 pages | Fusion 5→1 fichier | ×60 |
-| **Tokens globals.css** | 84 pages | 1 fichier | ×84 |
-| Refaire une page à la main | 1 page | 1 page | ×1 |
+| **Modal + BottomSheet** | **39** | ~40 (×20) | 2 |
+| **Famille Card** (6 composants) | **37** | ~60 (×60) | 6 → 1 |
+| **PageShell** | **21** | ~50 (×50) | 1 |
+| **BentoGrid** | **4** | ~15 (×15) | 1 |
+| **EmptyState** | **4** | ~30 (×30) | 1 |
+
+Deux lots de la v1 s'effondrent :
+
+- **EmptyState** — 2 h de code **et 8 illustrations SVG à dessiner**, pour **4 fichiers**.
+  Le plus gros effort du plan pour son plus petit levier.
+- **BentoGrid** — la v1 dit « déjà utilisé sur 6 pages », c'est **4**. Et elle propose
+  d'en refactorer 9 autres à la main : ce n'est pas du levier, c'est du page-par-page
+  déguisé en travail de DS.
+
+**Les deux descendent en fin de parcours et fusionnent** (§3, Lot 5).
 
 ---
 
-## 2. Plan par lots (ordre de rentabilité décroissant)
+## 3. Les lots, réordonnés
 
-### Lot 1 — PageShell éditorial (impact max, risque min)
+### Lot 0 — Purger l'or des primitives (prérequis, ~1 h 30)
 
-**Fichier** : `src/shared/components/ui/PageShell.tsx`
+Rien ne commence avant. C'est ce qui protège la personnalisation MCC.
 
-**Ce que fait déjà PageShell** : titre, kicker (petite majuscule serif italique), subtitle, icon/emoji, badges, breadcrumbs, actions, tabs, alertes (rush/critical/warning/info), status pulse, 4 variants (default/compact/flush/hero).
+- [ ] Remplacer les **21 occurrences** de `shared/components` par les tokens
+      `--shadow-glow-accent` / `--shadow-premium`, ou par une ombre neutre
+      `rgba(0,0,0,α)` quand la teinte n'apporte rien.
+- [ ] Étendre aux 8 de `shared/nexus`.
+- [ ] Poser le lint `no-hardcoded-hex` (§4.2) **dans le même lot**, avec cliquet
+      `HARDCODED_HEX_MAX` baseliné sur la valeur mesurée après purge.
+- **Recette** : tenant de démo en `brandingMode: 'custom'`, charte bleue → zéro or à l'écran.
+- **DoD** : `grep -c "197,\s*160,\s*89\|#C5A059" src/shared` = 0.
 
-**Ce qu'on améliore**
+### Lot 1 — PageShell éditorial (21 consommateurs, 1 fichier)
 
-| Élément | Avant | Après (taste-skill) |
-|---|---|---|
-| **Title** | `font-serif italic` variable selon usage | `font-serif italic text-3xl md:text-5xl leading-[1.02] tracking-tight`, `text-wrap: balance` systématique |
-| **Kicker** | Italic serif petit | `font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted` — plus éditorial, aligné hero landing |
-| **Tabs** | Underline statique | Underline animé (framer `layoutId` + spring) + active pulse dot |
-| **Actions cluster** | Boutons standards | Group avec button-in-button trailing arrow (`ArrowUpRight` nested dans cercle interne) |
-| **Alert ribbon** | Gradient statique | Gradient + shimmer subtil (loop 4s infini) pour rush critique |
-| **Status pulse** | `bg-emerald-400 animate-pulse` | Halo 2 couches (breathe outer + solid inner) — signal live sans crier |
-| **Hero variant** | H1 x4 | H1 masonry avec kicker mono + title Instrument Serif italique + subtitle 65ch + separator hairline or |
-| **Compact variant** | Padding réduit | + tabular-nums forcé sur toute la ligne d'actions (compteurs de tickets/tables) |
+Meilleur rapport une fois l'or purgé.
 
-**Migration** : aucune. Les 50 pages qui consomment PageShell reçoivent la mise à jour automatiquement.
+**Avant de modifier** : capturer `PageShell.test.tsx` en snapshot sur les 4 variants.
+La v1 plaçait ce test *après* la refonte — un snapshot pris après verrouille le nouveau
+rendu et ne détecte aucune régression.
 
-**Sécurité** : ajouter un test snapshot Vitest sur les 4 variants pour verrouiller le rendu (`PageShell.test.tsx`).
+| Élément | Après |
+|---|---|
+| Title | `font-serif italic text-3xl md:text-5xl leading-[1.02] tracking-tight`, `text-wrap: balance` |
+| Kicker | `font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted` |
+| Tabs | Underline animé (`layoutId` + spring) + pulse dot actif |
+| Actions | Group avec trailing arrow (`ArrowUpRight` en cercle interne) |
+| Alert ribbon | Gradient + shimmer 4 s **conditionné à `prefers-reduced-motion`** |
+| Status pulse | Halo 2 couches (breathe outer + solid inner) |
+| Hero variant | Kicker mono + title Instrument Serif + subtitle 65ch + hairline accent **tokenisé** |
+| Compact | `tabular-nums` forcé sur la ligne d'actions |
 
-### Lot 2 — Card unifié (dédup 5→1)
+**Migration** : aucune. Les 21 pages reçoivent la mise à jour.
 
-**Fichiers touchés** : `Card.tsx`, `PremiumCard.tsx`, `GlassCard.tsx`, `StatCard.tsx`, `SectionCard.tsx` → **un seul** `Card.tsx` avec variantes CVA.
+### Lot 2 — Card unifié — **en deux commits séparés** (37 consommateurs, 6 → 1)
 
-**Nouvelle API** :
+La v1 fusionnait ET restylait dans le même lot. Si le résultat déplaît, on ne sait pas si
+c'est la fusion ou le style. On sépare.
+
+**Commit A — fusion à rendu strictement identique.** `Card`, `PremiumCard`, `GlassCard`,
+`StatCard`, `SectionCard`, **`RoleCard`** (oublié par la v1) deviennent des alias qui
+forwardent vers un `Card` unique. Aucun pixel ne bouge — prouvable par snapshot.
+
+**Commit B — restylage**, une fois la structure validée.
 
 ```tsx
 <Card
-  intent="default | elevated | glass | premium | ghost | stat | section"
+  intent="default | elevated | glass | premium | ghost | stat | section | role"
   size="sm | md | lg"
-  interactive={boolean}   // active hover lift + focus ring
-  bezel={boolean}         // active la double-bezel (nested rounded)
-  tint="none | gold | success | warning | danger"
->
-  {children}
-</Card>
+  interactive={boolean}
+  bezel={boolean}
+  tint="none | accent | success | warning | danger"   // ← 'accent', pas 'gold'
+/>
 ```
 
-**Variantes CVA** (extrait) :
+`tint="accent"` et non `tint="gold"` : le nom du token ne présume pas de sa valeur, qui
+appartient au tenant (§1).
 
-| Intent | Rendu |
-|---|---|
-| `default` | `bg-surface-card border-border-default shadow-[0_1px_2px_rgba(197,160,89,0.04)]` |
-| `elevated` | `shadow-[0_8px_24px_-12px_rgba(197,160,89,0.15)] hover:shadow-[0_20px_40px_-15px_rgba(197,160,89,0.22)] hover:-translate-y-[1px]` |
-| `glass` | `bg-surface-card/40 backdrop-blur-xl border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]` |
-| `premium` | Double-bezel : outer `bg-white/5 ring-1 ring-black/5 p-1.5 rounded-[2rem]` + inner `rounded-[calc(2rem-0.375rem)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]` |
-| `stat` | `p-6 rounded-[2rem]` + slot icon top + slot value serif tabular + slot delta hint |
-| `section` | Titre serif italique + divider hairline + content padding |
+### Lot 3 — Modal + BottomSheet (39 consommateurs, 2 fichiers)
 
-**Migration** : les 5 anciens exports (`PremiumCard`, `GlassCard`, `StatCard`, `SectionCard`) deviennent des **alias mince** qui forwardent vers `Card` avec les bons props par défaut. Aucune page à modifier.
+Remonté en 3ᵉ position — la v1 le plaçait 4ᵉ alors que c'est le plus gros levier mesuré.
 
-**Bénéfice** : un seul endroit pour toucher les ombres, radius, hover, focus.
+- **Modal morphing** via `layoutId` — **opt-in** (`variant="morph"`), pas par défaut.
+  La v1 recommandait le morphing partout : 27 modals dont 7 sur le seul POS, chacune
+  exigeant que son déclencheur porte le même `layoutId`. Trop de transitions non testées
+  d'un coup.
+- **Garde `prefers-reduced-motion` obligatoire** — ce dépôt respecte WCAG 2.3.3 depuis le
+  lot taste-skill (`MotionProvider`). Un spring non gardé est une régression d'accessibilité.
+- **`variant="side"`** — panneau latéral 480 px pour formulaires longs. C'est lui qui
+  résout le POS-modal-hell (§5.2).
+- **BottomSheet drag-to-dismiss** — `useDragControls`, snap points 33 / 60 / 90 %.
+- **Backdrop** uniforme : `backdrop-blur-[6px] bg-black/50` mobile, `bg-black/70 backdrop-blur-sm` desktop.
 
-### Lot 3 — BentoGrid généralisé aux dashboards analytiques
+### Lot 4 — Résorber les contrôles bruts (**nouveau — le vrai chantier**)
 
-**Fichier** : `src/shared/components/ui/BentoGrid.tsx` (déjà partagé, déjà utilisé sur 6 pages).
+Absent de la v1, alors que c'est là que vit l'incohérence visuelle.
 
-**Pages cibles restantes** : Analytics, HACCP, Finance, CRM, Reservations groups, MCC dashboard, Audit portal, Blueprint, Design-system.
+**1 111 `<button>` bruts contre 279 `<Button>`. 433 `<input>` contre 54.** Sur 429 fichiers.
 
-**Ce qu'on ajoute au composant**
+- [ ] Poser le cliquet **`RAW_CONTROLS_MAX`** dans `preflight.sh`, baseliné sur la mesure
+      du jour (`dsAdoption.extra.boutonsBruts + champsBruts`).
+- [ ] Résorber **par lots de ~50 contrôles**, en commençant par `modules/` (241 fichiers,
+      la plus grosse poche) puis `app/`.
+- [ ] Faire descendre le cliquet à chaque lot.
 
-- **Preset masonry** (`variant="masonry"`) — pour listes hétérogènes (feedbacks, alertes)
-- **Preset dashboard** (`variant="dashboard"`) — 12-col grid avec span props par cell (`<BentoCell span={7}>`, `<BentoCell span={5}>`) qui collapse automatiquement en 1-col < md
-- **Preset hero-split** (`variant="hero-split"`) — 2 cells 7/5 pour marketing/landing internes
-- **Stagger auto** (`stagger={80}`) — `animation-delay: calc(var(--index) * 80ms)` sans dépendance React
+Ce n'est pas glorieux, c'est du volume — mais c'est mesurable, pilotable, et c'est le seul
+compteur qui bouge encore maintenant que `dsAdoption` est saturé à 0.
 
-**Migration** : refactor page-par-page des 9 pages cibles, mais chaque refactor est **local** (juste remplacer un `grid grid-cols-3` par `<BentoGrid variant="dashboard">`). ~15 min par page.
+### Lot 5 — BentoGrid + EmptyState (fusionnés, 8 consommateurs au total)
 
-### Lot 4 — Modal + BottomSheet morphing
+Les deux lots les moins rentables du plan, réunis et placés en fin de parcours — pas
+supprimés, mais nommés pour ce qu'ils sont : **du travail page par page**.
 
-**Fichiers** : `Modal.tsx`, `BottomSheet.tsx`.
-
-**Aujourd'hui** : Modal = overlay + card centrée statique. BottomSheet = slide-up mobile.
-
-**Après**
-
-- **Modal morphing** : entrée via `layoutId` framer — la modal *émerge* de son bouton déclencheur (spring `stiffness: 380, damping: 34`) au lieu de fade-in. Nécessite que le bouton déclencheur ait le même `layoutId`.
-- **Modal slide-over variant** (`variant="side"`) — panneau latéral droit 480px pour formulaires longs (au lieu d'empiler des modals au centre). Ferme le POS-modal-hell.
-- **BottomSheet drag-to-dismiss** — swipe down réel (framer `useDragControls`), snap points (peek 33% / half 60% / full 90%).
-- **Focus trap** — déjà présent, garder.
-- **Backdrop** : `backdrop-blur-[6px] bg-black/50` uniforme (mobile) + `bg-black/70 backdrop-blur-sm` (desktop).
-
-**Impact** : ~40 pages qui ouvrent des dialogs héritent du morphing sans changement de code. La refonte POS-modals (V21 du plan taste-skill) devient triviale : `<Modal variant="side">` au lieu de `<Modal>`.
-
-### Lot 5 — EmptyState éditorial
-
-**Fichier** : `src/shared/components/ui/EmptyState.tsx`.
-
-**Aujourd'hui** : icon Lucide dans cercle + titre + description + CTA.
-
-**Après**
-
-- **Illustration ligne** — SVG monochrome (line-art continu, style éditorial, `stroke="currentColor"` sur `text-text-muted/30`) au lieu d'icône générique. Bibliothèque de 6-8 illustrations sémantiques : `no-data`, `no-results`, `error`, `success`, `waiting`, `offline`, `permission`, `search`.
-- **Titre serif italique** — `font-serif italic text-2xl tracking-tight` + `text-wrap: balance`
-- **Description** — `text-sm text-text-muted leading-relaxed max-w-[42ch]`
-- **CTA plat** — pas rounded-full gradient, `rounded-xl bg-action-primary text-text-on-primary active:scale-[0.98]`
-- **Layout** — vertical center avec asymétrie légère (illustration -12px offset gauche du titre)
-
-**Migration** : les 30 pages qui utilisent `<EmptyState>` héritent. Pour les autres, un codemod grep-based (`grep -l "Aucun\|Aucune"` → suggestion migration) accompagne le PR.
+- **BentoGrid** : presets `masonry`, `dashboard` (12-col + span, collapse < md),
+  `hero-split`, `stagger` CSS pur. Puis refactor des dashboards analytiques, ~15 min/page.
+- **EmptyState** : titre serif italique, description 42ch, CTA plat.
+  **Les 8 illustrations SVG passent en option** — c'est une tâche de design, pas 2 h de
+  code, pour 4 fichiers. À arbitrer (§10).
 
 ---
 
-## 3. Hygiène du DS (parallèle aux 5 lots)
+## 4. Hygiène du DS
 
-### 3.1 Guide visible (`/design-system`)
+### 4.1 Guide visible (`/design-system`)
 
-Enrichir la page `src/app/(admin)/design-system/page.tsx` pour qu'elle devienne **la source unique**. Sections :
+Sections : Fondations (palette **avec le nom du token, pas le hex**) · Composants en 3 états
++ snippet + variantes CVA · Patterns · Do/Don't · Guide de migration.
 
-1. **Fondations** : palette (chips avec hex + rôle), typo (spécimens), spacing, radius, shadows, motion
-2. **Composants** : chaque composant en 3 états (repos/hover/active) + snippet code + variantes CVA
-3. **Patterns** : combinaisons (Hero, Bento, Form, Table, Filter bar…)
-4. **Do / Don't** : côté à côté, exemples concrets
-5. **Migration guide** : `PremiumCard` → `Card intent="premium"`, checklist page-refactor
+**Ajout v2** : une section « Personnalisation tenant » montrant le même écran sous 3
+chartes (défaut or, custom bleu, custom neutre). C'est la preuve visuelle que §1 tient.
 
-Cette page devient l'onboarding designer + le rappel dev + la garde qualité.
+### 4.2 Lint `no-hardcoded-hex` — **remonté en Lot 0**
 
-### 3.2 Lint anti-hex-hardcodé
+Bloque `#[0-9a-fA-F]{3,8}` et `rgba(` littéral dans className/style. Whitelist :
+`globals.css`, `tokens/*`, `blueprints/*`, `verticals/*/ui.ts`, `app/(marketing)/*`.
+Cliquet `HARDCODED_HEX_MAX` baseliné après la purge du Lot 0.
 
-Nouvelle règle ESLint custom : `no-hardcoded-hex` — bloque `#[0-9a-fA-F]{3,8}` dans les className/style, sauf whitelist (globals.css, tokens/*, blueprints/*).
+### 4.3 Invariant `PageShell` obligatoire
 
-Ratchet initial : `HARDCODED_HEX_MAX = <mesuré à la première run>`. Preflight bloque toute régression.
+Toute page sous `src/app/(client)/(ops)/*/page.tsx` importe `PageShell` ou `AutoSafeLayout`.
+Allowlist explicite : POS, KDS, Floor Plan, marketing.
+Cliquet `PAGES_WITHOUT_SHELL_MAX` baseliné à la mesure.
 
-### 3.3 Invariant `PageShell` obligatoire
+### 4.4 Charte typographique — **par script, pas seulement latine**
 
-Invariant Vitest : toute page dans `src/app/(client)/(ops)/*/page.tsx` doit importer soit `PageShell`, soit `AutoSafeLayout`. Exceptions déclarées dans un allowlist (POS, KDS, Floor Plan, marketing).
+La v1 déclarait la charte « loi » en ne prévoyant que le latin. Ce produit a **5 locales
+à parité 0**, sous gate. `Instrument Serif italique` avec `tracking: 0.24em` est illisible
+en japonais — **et le japonais n'a pas d'italique.**
 
-Ratchet initial : `PAGES_WITHOUT_SHELL_MAX = <mesuré>`. Force les nouvelles pages dans le DS.
+| Usage | Latin (fr/en/es/pt) | CJK (ja) |
+|---|---|---|
+| Hero H1 | Instrument Serif italic, 5xl→7xl, -0.02em, lh 1.02 | sans-serif, poids 600, tracking **0**, lh **1.4** |
+| Page title | Instrument Serif italic, 3xl→5xl | idem, poids 600 |
+| Kicker | JetBrains Mono, 10-11px, tracking 0.24em uppercase | Mono, tracking **0.05em**, pas d'uppercase |
+| Body | Outfit 14px, lh 1.6 | lh **1.8** |
+| KPI value | Instrument Serif, tabular-nums | Mono tabular-nums |
+| Data table | JetBrains Mono 12-13px, tabular-nums | idem |
 
-### 3.4 Charte typo écrite
+Implémentation : `:root:lang(ja)` surcharge les tokens `--font-*` et `--tracking-*`.
+Pas de branche JS.
 
-Ajouter dans `/design-system` une matrice claire :
+### 4.5 Pas de Storybook
 
-| Usage | Fonte | Taille | Weight | Tracking | Line-height |
-|---|---|---|---|---|---|
-| Hero H1 | Instrument Serif italique | 5xl → 7xl (clamp) | 400 | -0.02em | 1.02 |
-| Page title | Instrument Serif italique | 3xl → 5xl | 400 | -0.02em | 1.05 |
-| Section H2 | Instrument Serif italique | 2xl → 4xl | 400 | -0.02em | 1.1 |
-| Card title | Outfit | lg → 2xl | 600 | -0.01em | 1.2 |
-| Body | Outfit | base (14px) | 400 | 0 | 1.6 |
-| Kicker | JetBrains Mono | 10-11px | 500 | 0.24em uppercase | 1 |
-| KPI value | Instrument Serif | 4xl → 6xl | 400 | -0.02em, tabular-nums | 1 |
-| Data table | JetBrains Mono | 12-13px | 400 | 0, tabular-nums | 1.4 |
-| Button | Outfit | sm | 500 | -0.01em | 1 |
-| Micro/badge | JetBrains Mono | 10-11px | 500 | 0.18em uppercase | 1 |
-
-Cette matrice devient loi. Toute police ajoutée = revue design.
-
-### 3.5 Storybook léger (optionnel)
-
-Ne pas installer Storybook (dep lourde). À la place, **enrichir `/design-system`** avec un player interactif par composant (props toggleables). C'est plus léger, ça vit dans l'app, et ça sert de vitrine commerciale aussi (les prospects peuvent voir le socle).
+Enrichir `/design-system` avec un player de props. Plus léger, vit dans l'app, sert
+aussi de vitrine commerciale. (Inchangé v1 — bonne décision.)
 
 ---
 
-## 4. Ce qui nécessite quand même de toucher les pages
+## 5. Ce qui nécessite de toucher les pages
 
-Après avoir levé le DS via les 5 lots, il restera 3 chantiers ciblés :
+### 5.1 Pages hors PageShell (~10)
 
-### 4.1 Pages qui by-passent PageShell (~10 pages)
+`pos/page.tsx` (278 l., layout tactile — garder le shell custom, adopter les tokens et le
+Card unifié) · `kds/page.tsx` (refondre `KDSDashboard`) · `floor-plan/page.tsx` (canvas,
+layout custom) · `operations/page.tsx` (refondre `OperationsDashboard`) · landings
+`verticales/[slug]` (unifier via un `<VerticalHero>` partagé).
 
-- `pos/page.tsx` (275 lignes) — layout tactile spécifique, garder le shell custom mais **utiliser les nouveaux tokens** et composants Card unifiés
-- `kds/page.tsx` — délègue à `KDSDashboard`, refondre le composant lui-même
-- `floor-plan/page.tsx` — canvas interactif, garder le layout custom
-- `operations/page.tsx` — délègue à `OperationsDashboard`
-- Landings verticales `verticales/[slug]/page.tsx` — chacune a son hero, unifier via un `<VerticalHero>` partagé
+### 5.2 POS modal hell
 
-**Effort** : 1 session dédiée par famille (POS, KDS, Floor Plan).
+**7 modals confirmés** sur `pos/page.tsx` : `PaymentDialog`, `SplitBillDialog`,
+`VoidModal`, `PinModal`, `CashDrawerModal`, `SosCaisseModal`, `BottomSheet`.
 
-### 4.2 POS modals hell (V21 du plan taste-skill)
+Après Lot 3 : `variant="side"` pour Payment / Split / Sos, `variant="center"` pour Pin,
+BottomSheet conservé pour le panier mobile.
 
-Aujourd'hui : 7 modals empilés sur `pos/page.tsx` (Payment, Split, Void, Pin, CashDrawer, Sos, CourseView).
+### 5.3 Landings marketing (~5)
 
-Après Lot 4 : `<Modal variant="side">` pour Payment/Split/Sos, `<Modal variant="center">` pour Pin (court), garder BottomSheet pour Cart mobile. Charge cognitive réduite, transitions cohérentes.
-
-**Effort** : 1 session sur `pos/page.tsx` uniquement.
-
-### 4.3 Landings marketing (~5 pages)
-
-`HomeContent.tsx` déjà refait. Reste : `pricing/*`, `verticales/[slug]`, `pricing/roi-calculator`, `pricing/vs-lightspeed`, `pricing/vs-zelty`. Chacune reçoit la même grammaire (hero split + bento asymétrique + CTA plat).
-
-**Effort** : 1 session (patterns déjà écrits dans HomeContent).
+`HomeContent.tsx` fait. Reste `pricing/*`, `verticales/[slug]`, `roi-calculator`,
+`vs-lightspeed`, `vs-zelty`. Même grammaire : hero split + bento asymétrique + CTA plat.
 
 ---
 
-## 5. Métriques de succès (ground truth Loi 7)
+## 6. Métriques de succès — pilotage corrigé
 
-Avant / après doivent être mesurés en session avec commandes reproductibles.
-
-| Mesure | Baseline (2026-08-31) | Cible post-refonte | Commande |
+| Mesure | Baseline 2026-09-01 | Cible | Commande |
 |---|---|---|---|
-| Écrans hors DS (dsAdoption ratchet) | 474/478 | ≤ 400/478 | `npm run measure` |
-| Composants Card distincts | 5 | 1 (+ 4 alias) | `find src/shared/components/ui -name "*Card*.tsx" \| wc -l` |
-| `#hex` hardcodés dans className (hors tokens) | ? | 0 sauf whitelist | Nouveau lint |
-| Pages sans PageShell/AutoSafeLayout | ? | ≤ 10 (allowlist explicite) | Nouvel invariant Vitest |
-| Fichiers importés depuis `Modal` | ~40 | inchangé | `grep -r "from.*Modal" \| wc -l` |
-| Fichiers importés depuis `Card` (nouveau unifié) | 0 | > 60 | idem |
-| tsc | 0 | 0 | `npx tsc --noEmit` |
-| Tests | 2477/2477 | 2477+ | `npx vitest run` |
+| **Or en dur dans `src/shared`** | **21** | **0** | `grep -c "197,\s*160,\s*89\|#C5A059" src/shared` |
+| **Or en dur dans tout `src/`** | **206** | ≤ 30 (marketing + tokens) | idem sur `src/` |
+| **Boutons bruts** | **1 111** | ≤ 800 (1ʳᵉ passe) | `.measures/latest.json` |
+| **Champs bruts** | **433** | ≤ 300 | idem |
+| **Pages avec ≥ 1 primitive** | **26 / 87** | ≥ 45 / 87 | `find src/app -name page.tsx \| xargs grep -l ...` |
+| **Composants Card** | **6** | 1 (+ 5 alias) | `find src/shared/components -name "*Card*.tsx"` |
+| **`#hex` hors whitelist** | à mesurer | 0 | nouveau lint |
+| **Pages sans shell** | à mesurer | ≤ 10 (allowlist) | nouvel invariant |
+| `tsc` | 0 | 0 | `npx tsc --noEmit` |
+| Tests | **2 467** | ≥ 2 467 | `npx vitest run` |
+| **Cycles madge** | **0** | **0** | `node scripts/cycles-inspector.mjs --threshold=0` |
+
+⚠️ **`dsAdoption` n'est plus une cible** — saturé à 0 depuis le 2026-08-30, il ne mesure
+plus rien d'actionnable.
+
+⚠️ **Les cycles sont à 0 depuis le 2026-09-01** et le cliquet madge est à 0. La fusion Card
+touche 6 fichiers très importés : le moindre cycle fera rougir le preflight. C'est voulu —
+la gate mord enfin.
 
 ---
 
-## 6. Ordre d'exécution recommandé
+## 7. Ordre d'exécution
 
 ```
-Session 1 — Fondations
-├─ Lot 1 : PageShell éditorial (2h)
-└─ Charte typo écrite dans /design-system (30 min)
+Session 1 — Protéger la personnalisation
+├─ Lot 0 : purge de l'or dans les primitives        1 h 30
+└─ Lint no-hardcoded-hex + cliquet                    30 min
 
-Session 2 — Dédup structurelle
-├─ Lot 2 : Card unifié + alias forward (3h)
-└─ Lint no-hardcoded-hex + baseline ratchet (30 min)
+Session 2 — Fondations
+├─ Snapshot PageShell AVANT modification              15 min
+├─ Lot 1 : PageShell éditorial                          2 h
+└─ Charte typo par script dans /design-system         45 min
 
-Session 3 — Densité + interactions
-├─ Lot 3 : BentoGrid généralisé (2h — refactor 9 dashboards)
-└─ Lot 4 : Modal + BottomSheet morphing (2h)
+Session 3 — Dédup structurelle
+├─ Lot 2 commit A : fusion Card, rendu identique      2 h 30
+└─ Lot 2 commit B : restylage                           1 h
 
-Session 4 — Finitions + guide
-├─ Lot 5 : EmptyState éditorial + 6 illustrations SVG (2h)
-├─ Invariant PageShell obligatoire + allowlist (30 min)
-└─ Page /design-system enrichie (2h)
+Session 4 — Interactions
+├─ Lot 3 : Modal + BottomSheet (opt-in + reduced-motion) 2 h
+└─ Invariant PageShell + allowlist                    30 min
 
-Session 5 (optionnelle) — Pages qui by-passent le DS
-├─ POS modals hell → Modal variant="side" (2h)
-├─ Landings marketing restantes (2h)
-└─ KDSDashboard / OperationsDashboard refactor (2h)
+Sessions 5-N — Volume (le vrai chantier)
+└─ Lot 4 : contrôles bruts, lots de ~50, cliquet décroissant
+
+Session finale (optionnelle)
+├─ Lot 5 : BentoGrid + EmptyState                       3 h
+├─ POS modals → variant="side"                          2 h
+└─ /design-system enrichie + section personnalisation   2 h
 ```
 
-**Total : 4 sessions core + 1 optionnelle = ~18h de travail concentré.**
-
-Les 84 pages remontent d'un cran visuel sans en toucher 74.
+**Cœur : 4 sessions (~11 h).** Lot 4 est un chantier de volume, pas une session.
+L'estimation « ~18 h pour tout » de la v1 était optimiste : elle comptait 8 illustrations
+SVG comme 2 h de code.
 
 ---
 
-## 7. Pre-flight checklist (à cocher à chaque session)
+## 8. Checklist avant chaque PR
 
-Avant chaque PR :
-
-- [ ] Baseline `.measures/history.jsonl` capturée avant + après
-- [ ] `npx tsc --noEmit` → 0 erreur
+- [ ] Baseline `.measures/history.jsonl` capturée **avant** et après
+- [ ] `npx tsc --noEmit` → 0
 - [ ] `npx vitest run` → tous verts
-- [ ] `sentrux check .` → pas de nouveau cycle
-- [ ] `.measures/latest.json` : dsAdoption ne monte pas
-- [ ] Test snapshot ajouté si nouveau composant/variant
-- [ ] Screenshot avant/après joint au commit pour les changements PageShell/Card/Modal
-- [ ] Aucun `npm install` sans demande explicite utilisateur (préférer `next/font/google`, primitives existantes, CSS inline)
-- [ ] Ratchets pas relevés (Loi 2) — un cliquet se corrige à la source
+- [ ] `node scripts/cycles-inspector.mjs --threshold=0` → **0 cycle**
+- [ ] `boutonsBruts` / `champsBruts` ne montent pas
+- [ ] **Recette personnalisation** : tenant démo `brandingMode: 'custom'` en charte bleue → zéro or
+- [ ] Snapshot ajouté **avant** modification, pas après
+- [ ] Screenshot avant/après pour PageShell / Card / Modal
+- [ ] Aucun `npm install` sans demande explicite
+- [ ] **Aucun cliquet relevé** (Loi 2) — on corrige à la source
+- [ ] **Inscription dans `.claude/sessions.md`** avec les chemins touchés
 
 ---
 
-## 8. Ce qu'on ne fait PAS (scope discipline)
+## 9. Ce qu'on ne fait PAS
 
-- ❌ Réécrire les 84 pages une par une
-- ❌ Installer Storybook (trop lourd, `/design-system` interne suffit)
-- ❌ Migrer Lucide → Phosphor (87 fichiers, chantier séparé — refusé sans install)
-- ❌ Toucher aux blueprints non-restaurant (déjà harmonisés Phase 2)
-- ❌ Refaire les modales MCC internes (visible seulement en interne)
-- ❌ Ajouter des dépendances (règle mémoire projet)
-- ❌ Un design system parallèle (`shadcn/ui`, `radix-primitives` déjà là si besoin — on capitalise sur l'existant)
+- ❌ Réécrire les 87 pages une par une
+- ❌ Installer Storybook
+- ❌ Migrer Lucide → Phosphor (87 fichiers, refusé sans install)
+- ❌ Toucher aux blueprints non-restaurant
+- ❌ Refaire les modales MCC internes
+- ❌ Ajouter des dépendances
+- ❌ Un design system parallèle
+- ❌ **Écrire une couleur littérale dans une primitive** (§1)
+- ❌ **Piloter sur `dsAdoption`** — mesure saturée
 
 ---
 
-## 9. Décision produit à valider avant de lancer
+## 10. Décisions à valider avant de lancer
 
 | Question | Options | Reco |
 |---|---|---|
-| **Sidebar vs Topbar** | (a) Garder sidebar left classique en double-bezel · (b) Topbar flottante glass macOS-dock · (c) Hybride sidebar collapsable + topbar contextuelle | (a) — moins de risque, sidebar déjà bien intégrée aux workflows tactiles |
-| **Dédup Card** | (a) Alias forward (compat totale) · (b) Deprecation warning + migration 3 mois · (c) Breaking (rename) | (a) — zéro friction, alias supprimables à V2 |
-| **BentoGrid dans 84 pages** | (a) Refactor Analytics/HACCP/Finance/CRM · (b) Aussi les pages moyennes (Reservations, Inventory) · (c) Toutes | (a) — commencer par les dashboards analytiques à forte densité KPI |
-| **Modal morphing** | (a) Opt-in (`variant="morph"`) · (b) Défaut morphing partout | (b) — cohérence visuelle globale, opt-out possible si régression |
-| **EmptyState illustrations** | (a) 8 SVG maison line-art · (b) Réutiliser Lucide grands · (c) Illustrations photo | (a) — signature éditoriale, taille légère, dark/light natif |
+| **Ombres teintées** | (a) tokens `--shadow-glow-accent` dérivés de la marque tenant · (b) ombres neutres partout · (c) teinte or figée | **(a)** — respecte §1 sans perdre la signature |
+| **Sidebar vs Topbar** | (a) sidebar left double-bezel · (b) topbar glass · (c) hybride | (a) — inchangé, déjà intégrée aux workflows tactiles |
+| **Dédup Card** | (a) alias forward · (b) deprecation 3 mois · (c) breaking | (a) — mais **en 2 commits** (fusion puis style) |
+| **Modal morphing** | (a) opt-in `variant="morph"` · (b) défaut partout | **(a)** — la v1 disait (b) ; 27 modals non testées + risque reduced-motion |
+| **Illustrations EmptyState** | (a) 8 SVG maison · (b) Lucide agrandi · (c) rien | **(b) ou (c)** — 8 SVG pour 4 fichiers ne se justifie pas |
+| **Lot 4 (contrôles bruts)** | (a) chantier continu sous cliquet · (b) une grosse passe · (c) ignorer | **(a)** — 1 544 contrôles, personne ne fera (b) |
 
 ---
 
-## 10. Prochaine action
+## 11. Prochaine action
 
-Créer une branche `designup-lot-1-pageshell`, exécuter le **Lot 1 (PageShell éditorial)** en 2h, mesurer l'impact visuel sur 3 pages échantillon (Operations, Analytics, HACCP), ajuster, puis dérouler les lots 2 à 5 en séquence.
+**Lot 0**, sur branche `designup-lot-0-purge-or`.
 
-Une session par lot, un commit atomique par lot, ratchets vérifiés avant merge.
+C'est le prérequis de tout le reste : tant que les primitives portent l'or en dur, chaque
+lot suivant propage la fuite un peu plus loin, et la personnalisation MCC reste
+contournée.
+
+Recette de sortie : un tenant de démo en `brandingMode: 'custom'`, charte bleue, zéro or
+à l'écran.
+
+---
+
+> **Avertissement de coordination** — Antigravity travaille sur le dépôt et **ne s'est pas
+> inscrit** dans `.claude/sessions.md`. Ce plan touche `shared/components/ui/`, le
+> périmètre le plus partagé du dépôt. S'inscrire avant de commencer, et vérifier qu'aucune
+> autre session n'y est.
