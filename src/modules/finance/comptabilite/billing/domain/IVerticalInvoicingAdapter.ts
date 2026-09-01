@@ -118,7 +118,7 @@ export class HotelInvoicingAdapter implements IVerticalInvoicingAdapter {
 
   inferProductCategory(categoryId: string): { category: string; taxRate: number } {
     const lower = categoryId.toLowerCase();
-    if (/taxe.*séjour|city.*tax/.test(lower)) return { category: 'city_tax', taxRate: 0 };
+    if (/taxe.*s[eé]jour|city.*tax/.test(lower)) return { category: 'city_tax', taxRate: 0 };
     if (/resto|restaur|food|repas/.test(lower)) return { category: 'restaurant', taxRate: 10 };
     return { category: 'accommodation', taxRate: 10 };
   }
@@ -226,7 +226,7 @@ export class ClinicInvoicingAdapter implements IVerticalInvoicingAdapter {
 
   inferProductCategory(categoryId: string): { category: string; taxRate: number } {
     const lower = categoryId.toLowerCase();
-    if (/esthét|aesthetic|cosmét/.test(lower)) return { category: 'aesthetic', taxRate: 20 };
+    if (/esth[eé]t|aesthetic|cosm[eé]t/.test(lower)) return { category: 'aesthetic', taxRate: 20 };
     return { category: 'medical_act', taxRate: 0 };
   }
 }
@@ -335,9 +335,9 @@ export class RetailInvoicingAdapter implements IVerticalInvoicingAdapter {
 
   inferProductCategory(categoryId: string): { category: string; taxRate: number } {
     const lower = categoryId.toLowerCase();
-    if (/aliment|food|epicerie/.test(lower)) return { category: 'food', taxRate: 5.5 };
+    if (/aliment|food|[eé]picerie/.test(lower)) return { category: 'food', taxRate: 5.5 };
     if (/livre|book/.test(lower)) return { category: 'book', taxRate: 5.5 };
-    if (/pharma|médic|santé/.test(lower)) return { category: 'health', taxRate: 10 };
+    if (/pharma|m[eé]dic|sant[eé]/.test(lower)) return { category: 'health', taxRate: 10 };
     return { category: 'general', taxRate: 20 };
   }
 }
