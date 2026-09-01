@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { UserCheck, Award, Euro, Scissors, Sparkles, TrendingUp, Star } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -16,15 +17,16 @@ interface StylistPerf {
   rating: number;
 }
 
-const STYLISTS_DATA: StylistPerf[] = [
-  { id: 'sty-1', name: 'Élodie Renard', role: 'Maître Coloriste', servicesCount: 84, serviceRevenueMu: 8_400_000_000, productSalesMu: 1_250_000_000, commissionRatePct: 15, tipsMu: 320_000_000, rating: 4.9 },
-  { id: 'sty-2', name: 'Julien Mercier', role: 'Barbier / Coupe Homme', servicesCount: 112, serviceRevenueMu: 5_376_000_000, productSalesMu: 890_000_000, commissionRatePct: 12, tipsMu: 280_000_000, rating: 4.8 },
-  { id: 'sty-3', name: 'Sarah Benali', role: 'Praticienne Spa & Soins', servicesCount: 65, serviceRevenueMu: 6_825_000_000, productSalesMu: 1_840_000_000, commissionRatePct: 18, tipsMu: 410_000_000, rating: 5.0 },
-];
+
 
 export function StylistDashboard() {
   const { activeTenantId } = useTenant();
-  const [data, setData] = useState<StylistPerf[]>(STYLISTS_DATA);
+  const {
+    data: data,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<StylistPerf>('salonStylists', { tenantId: activeTenantId ?? undefined });
 
   const totalRevenueAllMu = data.reduce((s, st) => s + st.serviceRevenueMu + st.productSalesMu, 0);
 

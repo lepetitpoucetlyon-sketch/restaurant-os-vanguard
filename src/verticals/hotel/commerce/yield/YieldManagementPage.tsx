@@ -1,10 +1,13 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { TrendingUp, Calendar, ArrowUpRight, ArrowDownRight, Sparkles, Sliders, RefreshCw } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
 
 interface DayYield {
+  /** Identifiant souverain — la date est la clé naturelle d'une ligne de yield. */
+  id: string;
   date: string;
   dayOfWeek: string;
   occupancyRatePct: number;
@@ -15,19 +18,16 @@ interface DayYield {
   demandLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'PEAK';
 }
 
-const YIELD_DATA: DayYield[] = [
-  { date: '2026-09-01', dayOfWeek: 'Mardi', occupancyRatePct: 82.5, averageDailyRateMu: 165_000_000, revParMu: 136_125_000, baseRateMu: 140_000_000, recommendedRateMu: 175_000_000, demandLevel: 'HIGH' },
-  { date: '2026-09-02', dayOfWeek: 'Mercredi', occupancyRatePct: 88.0, averageDailyRateMu: 170_000_000, revParMu: 149_600_000, baseRateMu: 140_000_000, recommendedRateMu: 185_000_000, demandLevel: 'HIGH' },
-  { date: '2026-09-03', dayOfWeek: 'Jeudi', occupancyRatePct: 94.0, averageDailyRateMu: 195_000_000, revParMu: 183_300_000, baseRateMu: 140_000_000, recommendedRateMu: 210_000_000, demandLevel: 'PEAK' },
-  { date: '2026-09-04', dayOfWeek: 'Vendredi', occupancyRatePct: 96.5, averageDailyRateMu: 220_000_000, revParMu: 212_300_000, baseRateMu: 160_000_000, recommendedRateMu: 240_000_000, demandLevel: 'PEAK' },
-  { date: '2026-09-05', dayOfWeek: 'Samedi', occupancyRatePct: 98.0, averageDailyRateMu: 235_000_000, revParMu: 230_300_000, baseRateMu: 160_000_000, recommendedRateMu: 255_000_000, demandLevel: 'PEAK' },
-  { date: '2026-09-06', dayOfWeek: 'Dimanche', occupancyRatePct: 65.0, averageDailyRateMu: 145_000_000, revParMu: 94_250_000, baseRateMu: 130_000_000, recommendedRateMu: 135_000_000, demandLevel: 'MEDIUM' },
-  { date: '2026-09-07', dayOfWeek: 'Lundi', occupancyRatePct: 58.0, averageDailyRateMu: 135_000_000, revParMu: 78_300_000, baseRateMu: 130_000_000, recommendedRateMu: 125_000_000, demandLevel: 'LOW' },
-];
+
 
 export function YieldManagementPage() {
   const { activeTenantId } = useTenant();
-  const [data, setData] = useState<DayYield[]>(YIELD_DATA);
+  const {
+    data: data,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<DayYield>('yieldRates', { tenantId: activeTenantId ?? undefined });
 
   const avgOccupancy = (data.reduce((s, d) => s + d.occupancyRatePct, 0) / data.length).toFixed(1);
   const avgAdrEur = ((data.reduce((s, d) => s + d.averageDailyRateMu, 0) / data.length) / 1_000_000).toFixed(2);

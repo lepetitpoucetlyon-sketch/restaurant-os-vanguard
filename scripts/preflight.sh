@@ -93,7 +93,7 @@ A11Y_MUETS_MAX=0             # boutons sans nom accessible — 89→0 : 3 dernie
 A11Y_MODALES_MAX=0           # overlays sans role dialog — atteint 0
 A11Y_KEYBOARD_MAX=0          # conteneurs cliquables non focalisables — 67→0 : DraggableIngredient fixé via onKeyDown explicite après spread {...listeners} (merger dnd-kit + Enter/Space)
 VERTICAL_STUBS_MAX=0         # écrans de verticale rendus par VerticalPageStub — 21→0 : tous les 21 écrans métiers implémentés (2026-09-01)
-VERTICAL_SCREENS_UNWIRED_MAX=30  # ecrans de verticale sans acces donnees (Nexus/bus/adapter) — angle mort de
+VERTICAL_SCREENS_UNWIRED_MAX=10  # ecrans de verticale sans acces donnees (Nexus/bus/adapter) — angle mort de
                                  # VERTICAL_STUBS_MAX : remplacer un stub par une maquette a donnees locales
                                  # le fait passer a 0 sans rien livrer. Baseline mesuree le 2026-09-01.
 FR_HARDCODED_MAX=781         # chaînes FR en dur hors legal & verticals — 893→781 : lots 1 à 4 encapsulés (2026-09-01)

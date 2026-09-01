@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Package, Search, Plus, Tag, Barcode, Layers, ArrowUpDown, SlidersHorizontal } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -17,17 +18,16 @@ interface CatalogItem {
   marginPercent: number;
 }
 
-const INITIAL_CATALOG: CatalogItem[] = [
-  { id: 'cat-1', sku: 'TEX-TSH-01', ean: '3700123456789', name: 'T-Shirt Coton Bio Premium', category: 'Textile', variantsCount: 6, costPriceInMicrounits: 9_000_000, sellingPriceInMicrounits: 29_000_000, totalStock: 54, marginPercent: 68.9 },
-  { id: 'cat-2', sku: 'TEX-JEA-02', ean: '3700123456802', name: 'Jean Brut Selvedge 14oz', category: 'Textile', variantsCount: 8, costPriceInMicrounits: 42_000_000, sellingPriceInMicrounits: 120_000_000, totalStock: 32, marginPercent: 65.0 },
-  { id: 'cat-3', sku: 'SH-SNK-03', ean: '3700123456819', name: 'Sneakers Cuir Minimalistes', category: 'Chaussures', variantsCount: 7, costPriceInMicrounits: 55_000_000, sellingPriceInMicrounits: 145_000_000, totalStock: 21, marginPercent: 62.0 },
-  { id: 'cat-4', sku: 'ACC-CAS-04', ean: '3700123456826', name: 'Casquette Visière Broderie', category: 'Accessoires', variantsCount: 3, costPriceInMicrounits: 11_000_000, sellingPriceInMicrounits: 35_000_000, totalStock: 40, marginPercent: 68.5 },
-  { id: 'cat-5', sku: 'MAR-SAC-05', ean: '3700123456833', name: 'Sac Week-end Toile & Cuir', category: 'Maroquinerie', variantsCount: 2, costPriceInMicrounits: 65_000_000, sellingPriceInMicrounits: 190_000_000, totalStock: 14, marginPercent: 65.7 },
-];
+
 
 export function CatalogPage() {
   const { activeTenantId } = useTenant();
-  const [items, setItems] = useState<CatalogItem[]>(INITIAL_CATALOG);
+  const {
+    data: items,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<CatalogItem>('retailCatalog', { tenantId: activeTenantId ?? undefined });
   const [search, setSearch] = useState('');
 
   const filtered = items.filter(item =>

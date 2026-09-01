@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Calendar, ShoppingBag, Clock, CheckCircle2, User, Euro, Plus, AlertCircle } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -16,59 +17,22 @@ interface Preorder {
   specialNote?: string;
 }
 
-const INITIAL_PREORDERS: Preorder[] = [
-  {
-    id: 'cmd-101',
-    customerName: 'Mme Dupont',
-    phone: '06 12 34 56 78',
-    pickupTime: '11:30',
-    items: [
-      { name: 'Pièce montée 30 pers. (Choux vanille)', quantity: 1 },
-      { name: 'Pains surprises cocktail', quantity: 2 },
-    ],
-    totalInMicrounits: 145_000_000,
-    depositPaidInMicrounits: 50_000_000,
-    status: 'preparing',
-    specialNote: 'Écriture glaçage : "Joyeux Anniversaire Léa"',
-  },
-  {
-    id: 'cmd-102',
-    customerName: 'Entreprise Nexis',
-    phone: '04 72 00 11 22',
-    pickupTime: '08:00',
-    items: [
-      { name: 'Mini-croissants pur beurre', quantity: 40 },
-      { name: 'Mini-pains chocolat', quantity: 40 },
-      { name: 'Thermos café bio 5L', quantity: 1 },
-    ],
-    totalInMicrounits: 98_000_000,
-    depositPaidInMicrounits: 98_000_000,
-    status: 'ready',
-  },
-  {
-    id: 'cmd-103',
-    customerName: 'M. Laurent',
-    phone: '06 99 88 77 66',
-    pickupTime: '17:00',
-    items: [
-      { name: 'Baguettes tradition', quantity: 6 },
-      { name: 'Tarte citron meringuée 6 pers.', quantity: 1 },
-    ],
-    totalInMicrounits: 28_000_000,
-    depositPaidInMicrounits: 0,
-    status: 'pending',
-  },
-];
+
 
 export function PreorderManagement() {
   const { activeTenantId } = useTenant();
-  const [preorders, setPreorders] = useState<Preorder[]>(INITIAL_PREORDERS);
+  const {
+    data: preorders,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<Preorder>('bakeryPreorders', { tenantId: activeTenantId ?? undefined });
   const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const filtered = preorders.filter(p => statusFilter === 'all' || p.status === statusFilter);
 
-  const handleUpdateStatus = (id: string, newStatus: Preorder['status']) => {
-    setPreorders(prev => prev.map(p => p.id === id ? { ...p, status: newStatus } : p));
+  const handleUpdateStatus = async (id: string, newStatus: Preorder['status']) => {
+    await update(id, { status: newStatus } as Partial<Preorder>);
   };
 
   const totalRevenueMu = preorders.reduce((acc, p) => acc + p.totalInMicrounits, 0);

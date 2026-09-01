@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { BedDouble, CheckCircle2, AlertTriangle, Clock, Sparkles, User, RefreshCw } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
+import { HotelOpsAdapter } from '@/verticals/hotel/adapters';
 
 interface RoomHousekeeping {
   id: string;
@@ -16,17 +18,23 @@ interface RoomHousekeeping {
   notes?: string;
 }
 
-const INITIAL_ROOMS: RoomHousekeeping[] = [
-  { id: 'rm-101', roomNumber: '101', floor: 1, type: 'DOUBLE', serviceType: 'departure_clean', status: 'dirty', assignedTo: 'Fatou D.', priority: 'early_arrival', notes: 'Arrivée prévue à 13h00' },
-  { id: 'rm-102', roomNumber: '102', floor: 1, type: 'SINGLE', serviceType: 'stayover', status: 'in_progress', assignedTo: 'Fatou D.', priority: 'standard' },
-  { id: 'rm-201', roomNumber: '201', floor: 2, type: 'SUITE', serviceType: 'departure_clean', status: 'inspected_clean', assignedTo: 'Marie L.', priority: 'vip', notes: 'Champagne d\'accueil déposé' },
-  { id: 'rm-202', roomNumber: '202', floor: 2, type: 'DOUBLE', serviceType: 'stayover', status: 'dirty', assignedTo: 'Marie L.', priority: 'standard' },
-  { id: 'rm-301', roomNumber: '301', floor: 3, type: 'PENTHOUSE', serviceType: 'deep_clean', status: 'maintenance', assignedTo: 'Équipe Tech', priority: 'standard', notes: 'Vérification climatisation' },
-];
+/** Statut de ménage → statut de chambre du bus (`hotel.room_status_changed`). */
+const ROOM_STATUS_FOR_BUS: Record<RoomHousekeeping['status'], 'CLEAN' | 'DIRTY' | 'MAINTENANCE'> = {
+  dirty: 'DIRTY',
+  in_progress: 'DIRTY',       // tant que l'inspection n'a pas eu lieu, la chambre n'est pas vendable
+  inspected_clean: 'CLEAN',
+  maintenance: 'MAINTENANCE',
+};
+
 
 export function HousekeepingPage() {
   const { activeTenantId } = useTenant();
-  const [rooms, setRooms] = useState<RoomHousekeeping[]>(INITIAL_ROOMS);
+  const {
+    data: rooms,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<RoomHousekeeping>('housekeepingRooms', { tenantId: activeTenantId ?? undefined });
   const [floorFilter, setFloorFilter] = useState<string>('all');
 
   const filtered = rooms.filter(r => floorFilter === 'all' || String(r.floor) === floorFilter);
@@ -35,8 +43,16 @@ export function HousekeepingPage() {
   const inProgressCount = rooms.filter(r => r.status === 'in_progress').length;
   const dirtyCount = rooms.filter(r => r.status === 'dirty').length;
 
-  const handleUpdateStatus = (id: string, newStatus: RoomHousekeeping['status']) => {
-    setRooms(prev => prev.map(r => r.id === id ? { ...r, status: newStatus } : r));
+  const handleUpdateStatus = async (id: string, newStatus: RoomHousekeeping['status']) => {
+    // Écriture optimiste + enfilement outbox (offline-first), puis notification du PMS.
+    await update(id, { status: newStatus } as Partial<RoomHousekeeping>);
+    if (activeTenantId) {
+      HotelOpsAdapter.emitRoomStatusChanged({
+        tenantId: activeTenantId,
+        roomId: id,
+        status: ROOM_STATUS_FOR_BUS[newStatus],
+      });
+    }
   };
 
   return (
@@ -54,7 +70,7 @@ export function HousekeepingPage() {
         </div>
 
         <button
-          onClick={() => setRooms(INITIAL_ROOMS)}
+          onClick={() => void refresh()}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface-card hover:bg-surface-hover text-xs font-medium transition-colors"
         >
           <RefreshCw className="w-3.5 h-3.5 text-text-muted" />
@@ -120,6 +136,16 @@ export function HousekeepingPage() {
       </div>
 
       {/* Grille des Chambres */}
+      {isLoading && (
+        <p className="text-xs text-text-muted py-8 text-center">{"Chargement du plan de ménage…"}</p>
+      )}
+
+      {!isLoading && filtered.length === 0 && (
+        <p className="text-xs text-text-muted py-8 text-center">
+          {"Aucune chambre à traiter sur ce périmètre."}
+        </p>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {filtered.map(room => {
           const statusBadge = {

@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Package, AlertTriangle, ArrowUpRight, Search, Plus, Minus, RefreshCw } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -16,17 +17,16 @@ interface AutoPart {
   sellingPriceInMicrounits: number;
 }
 
-const INITIAL_PARTS: AutoPart[] = [
-  { id: 'prt-1', oemReference: 'BOSCH-0986479088', name: 'Jeu de 4 Plaquettes Frein AV', supplier: 'Bosch Automotive', category: 'FREINAGE', currentStock: 4, minThreshold: 6, unitCostInMicrounits: 28_000_000, sellingPriceInMicrounits: 65_000_000 },
-  { id: 'prt-2', oemReference: 'MANN-HU7020Z', name: 'Filtre à Huile Haute Efficacité', supplier: 'Mann-Filter', category: 'FILTRATION', currentStock: 18, minThreshold: 10, unitCostInMicrounits: 6_500_000, sellingPriceInMicrounits: 18_000_000 },
-  { id: 'prt-3', oemReference: 'MOTUL-8100-5W30', name: 'Huile Moteur 5W30 C3 (Bidon 5L)', supplier: 'Motul France', category: 'LUBRIFIANT', currentStock: 12, minThreshold: 8, unitCostInMicrounits: 32_000_000, sellingPriceInMicrounits: 75_000_000 },
-  { id: 'prt-4', oemReference: 'MICH-2055516-PS4', name: 'Pneu Pilot Sport 4 205/55 R16 91W', supplier: 'Michelin Pro', category: 'PNEUMATIQUE', currentStock: 2, minThreshold: 4, unitCostInMicrounits: 68_000_000, sellingPriceInMicrounits: 115_000_000 },
-  { id: 'prt-5', oemReference: 'GAT-K015678XS', name: 'Kit Distribution + Pompe à Eau', supplier: 'Gates Auto', category: 'DISTRIBUTION', currentStock: 3, minThreshold: 2, unitCostInMicrounits: 110_000_000, sellingPriceInMicrounits: 240_000_000 },
-];
+
 
 export function PartsInventoryPage() {
   const { activeTenantId } = useTenant();
-  const [parts, setParts] = useState<AutoPart[]>(INITIAL_PARTS);
+  const {
+    data: parts,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<AutoPart>('autoParts', { tenantId: activeTenantId ?? undefined });
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
 
@@ -39,11 +39,11 @@ export function PartsInventoryPage() {
   const lowStockCount = parts.filter(p => p.currentStock <= p.minThreshold).length;
   const totalValuationMu = parts.reduce((s, p) => s + (p.currentStock * p.unitCostInMicrounits), 0);
 
-  const handleAdjust = (id: string, delta: number) => {
-    setParts(prev => prev.map(p => {
-      if (p.id !== id) return p;
-      return { ...p, currentStock: Math.max(0, p.currentStock + delta) };
-    }));
+  const handleAdjust = async (id: string, delta: number) => {
+    const cible = parts.find(o => o.id === id);
+    if (!cible) return;
+    // Écriture optimiste + outbox : le stock survit au rafraîchissement et à l'offline.
+    await update(id, { currentStock: Math.max(0, cible.currentStock + delta) } as Partial<AutoPart>);
   };
 
   return (

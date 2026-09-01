@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Flame, Clock, CheckCircle2, AlertTriangle, Plus, Sparkles, ChefHat } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -15,17 +16,17 @@ interface BatchItem {
   tempCelsius: number;
 }
 
-const INITIAL_BATCHES: BatchItem[] = [
-  { id: 'b-1', recipeName: 'Baguette Tradition Label Rouge', category: 'boulangerie', quantity: 60, ovenId: 'Four Sole A1', status: 'baking', targetTime: '06:45', tempCelsius: 245 },
-  { id: 'b-2', recipeName: 'Croissant Beurre AOP Charentes', category: 'viennoiserie', quantity: 45, ovenId: 'Four Rotatif B', status: 'proofing', targetTime: '07:15', tempCelsius: 28 },
-  { id: 'b-3', recipeName: 'Pain de Campagne Levain Naturel', category: 'boulangerie', quantity: 30, ovenId: 'Four Sole A2', status: 'kneading', targetTime: '08:00', tempCelsius: 24 },
-  { id: 'b-4', recipeName: 'Pain au Chocolat Pur Beurre', category: 'viennoiserie', quantity: 40, ovenId: 'Four Rotatif B', status: 'cooling', targetTime: '06:30', tempCelsius: 40 },
-  { id: 'b-5', recipeName: 'Tartelette Framboise Pistache', category: 'patisserie', quantity: 18, ovenId: 'Labo Pâtisserie', status: 'ready', targetTime: '06:00', tempCelsius: 20 },
-];
+
 
 export function BatchProductionDashboard() {
   const { activeTenantId } = useTenant();
-  const [batches, setBatches] = useState<BatchItem[]>(INITIAL_BATCHES);
+  const {
+    data: batches,
+    isLoading,
+    set,
+    update,
+    refresh,
+  } = useSovereignCollection<BatchItem>('productionBatches', { tenantId: activeTenantId ?? undefined });
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [newRecipe, setNewRecipe] = useState('');
@@ -38,17 +39,16 @@ export function BatchProductionDashboard() {
   const proofingCount = batches.filter(b => b.status === 'proofing').length;
   const totalPiecesToday = batches.reduce((acc, b) => acc + b.quantity, 0);
 
-  const handleAdvanceStatus = (batchId: string) => {
-    setBatches(prev => prev.map(b => {
-      if (b.id !== batchId) return b;
-      const order: BatchItem['status'][] = ['kneading', 'proofing', 'baking', 'cooling', 'ready'];
-      const currentIdx = order.indexOf(b.status);
-      const nextStatus = currentIdx < order.length - 1 ? order[currentIdx + 1] : b.status;
-      return { ...b, status: nextStatus };
-    }));
+  const handleAdvanceStatus = async (batchId: string) => {
+    const batch = batches.find(b => b.id === batchId);
+    if (!batch) return;
+    const order: BatchItem['status'][] = ['kneading', 'proofing', 'baking', 'cooling', 'ready'];
+    const currentIdx = order.indexOf(batch.status);
+    if (currentIdx >= order.length - 1) return;   // 'ready' est terminal
+    await update(batchId, { status: order[currentIdx + 1] } as Partial<BatchItem>);
   };
 
-  const handleCreateBatch = (e: React.FormEvent) => {
+  const handleCreateBatch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newRecipe) return;
     const newB: BatchItem = {
@@ -61,7 +61,7 @@ export function BatchProductionDashboard() {
       targetTime: '08:30',
       tempCelsius: 24,
     };
-    setBatches(prev => [newB, ...prev]);
+    await set(newB);
     setNewRecipe('');
     setIsNewModalOpen(false);
   };

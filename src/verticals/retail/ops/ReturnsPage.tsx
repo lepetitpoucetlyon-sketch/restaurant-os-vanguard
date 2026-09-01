@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { RotateCcw, Search, CheckCircle2, AlertCircle, Receipt, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -17,40 +18,21 @@ interface ReturnedItem {
   status: 'processed' | 'inspected';
 }
 
-const INITIAL_RETURNS: ReturnedItem[] = [
-  {
-    id: 'ret-001',
-    originalTicketNumber: 'TK-2026-0814',
-    customerName: 'M. Thomas V.',
-    productName: 'Jean Brut Selvedge 14oz',
-    variant: 'Brut / 32-34',
-    amountInMicrounits: 120_000_000,
-    reason: 'size_mismatch',
-    actionType: 'exchange',
-    createdAt: '2026-09-01 10:15',
-    status: 'processed',
-  },
-  {
-    id: 'ret-002',
-    originalTicketNumber: 'TK-2026-0809',
-    customerName: 'Mme Sophie G.',
-    productName: 'Sneakers Cuir Minimalistes',
-    variant: 'Blanc / 42',
-    amountInMicrounits: 145_000_000,
-    reason: 'defective',
-    actionType: 'credit_note',
-    createdAt: '2026-08-31 16:40',
-    status: 'processed',
-  },
-];
+
 
 export function ReturnsPage() {
   const { activeTenantId } = useTenant();
-  const [returnsList, setReturnsList] = useState<ReturnedItem[]>(INITIAL_RETURNS);
+  const {
+    data: returnsList,
+    isLoading,
+    set,
+    update,
+    refresh,
+  } = useSovereignCollection<ReturnedItem>('retailReturns', { tenantId: activeTenantId ?? undefined });
   const [ticketSearch, setTicketSearch] = useState('');
   const [returnSuccess, setReturnSuccess] = useState(false);
 
-  const handleProcessReturn = (e: React.FormEvent) => {
+  const handleProcessReturn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!ticketSearch) return;
     const newReturn: ReturnedItem = {
@@ -65,7 +47,7 @@ export function ReturnsPage() {
       createdAt: new Date().toISOString().replace('T', ' ').slice(0, 16),
       status: 'processed',
     };
-    setReturnsList([newReturn, ...returnsList]);
+    await set(newReturn);
     setTicketSearch('');
     setReturnSuccess(true);
   };

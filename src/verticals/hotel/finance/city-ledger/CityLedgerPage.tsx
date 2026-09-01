@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Landmark, Building, FileText, CheckCircle2, Clock, Euro, ArrowUpRight, Search } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -17,16 +18,16 @@ interface CityLedgerAccount {
   status: 'active' | 'warning_limit' | 'blocked';
 }
 
-const INITIAL_ACCOUNTS: CityLedgerAccount[] = [
-  { id: 'cl-1', companyName: 'Booking.com B.V.', siret: 'NL805734958B01', accountType: 'OTA_BOOKING', outstandingBalanceInMicrounits: 14_250_000_000, creditLimitInMicrounits: 25_000_000_000, invoicesCount: 18, paymentTermsDays: 15, lastInvoiceDate: '2026-08-31', status: 'active' },
-  { id: 'cl-2', companyName: 'Expedia Partner Solutions', siret: 'GB893245671', accountType: 'OTA_EXPEDIA', outstandingBalanceInMicrounits: 8_120_000_000, creditLimitInMicrounits: 15_000_000_000, invoicesCount: 9, paymentTermsDays: 30, lastInvoiceDate: '2026-08-28', status: 'active' },
-  { id: 'cl-3', companyName: 'Capgemini France SAS', siret: '33070384400234', accountType: 'CORPORATE', outstandingBalanceInMicrounits: 4_890_000_000, creditLimitInMicrounits: 5_000_000_000, invoicesCount: 4, paymentTermsDays: 45, lastInvoiceDate: '2026-08-15', status: 'warning_limit' },
-  { id: 'cl-4', companyName: 'Sanofi Aventis R&D', siret: '40333590400012', accountType: 'CORPORATE', outstandingBalanceInMicrounits: 2_450_000_000, creditLimitInMicrounits: 10_000_000_000, invoicesCount: 3, paymentTermsDays: 30, lastInvoiceDate: '2026-08-20', status: 'active' },
-];
+
 
 export function CityLedgerPage() {
   const { activeTenantId } = useTenant();
-  const [accounts, setAccounts] = useState<CityLedgerAccount[]>(INITIAL_ACCOUNTS);
+  const {
+    data: accounts,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<CityLedgerAccount>('cityLedgerAccounts', { tenantId: activeTenantId ?? undefined });
   const [search, setSearch] = useState('');
 
   const filtered = accounts.filter(acc =>

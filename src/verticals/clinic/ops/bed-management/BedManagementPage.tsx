@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Bed, AlertTriangle, CheckCircle2, User, Clock, ShieldCheck, RefreshCw } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -15,17 +16,16 @@ interface ClinicBed {
   expectedDischarge?: string;
 }
 
-const INITIAL_BEDS: ClinicBed[] = [
-  { id: 'bed-1', roomNumber: 'Box 01', bedCode: 'AMB-01', unit: 'AMBULATOIRE', status: 'OCCUPIED', patientName: 'M. Jean D.', admissionDate: '07:30', expectedDischarge: '14:00' },
-  { id: 'bed-2', roomNumber: 'Box 02', bedCode: 'AMB-02', unit: 'AMBULATOIRE', status: 'AVAILABLE' },
-  { id: 'bed-3', roomNumber: 'Ch. 101', bedCode: 'HOSP-101A', unit: 'HOSPITALISATION', status: 'OCCUPIED', patientName: 'Mme Marie C.', admissionDate: 'Hier 16:00', expectedDischarge: 'Demain 10:00' },
-  { id: 'bed-4', roomNumber: 'Ch. 101', bedCode: 'HOSP-101B', unit: 'HOSPITALISATION', status: 'CLEANING_HDS' },
-  { id: 'bed-5', roomNumber: 'Box 03', bedCode: 'SURV-01', unit: 'SURVEILLANCE', status: 'RESERVED', patientName: 'Arrivée bloc 11h30' },
-];
+
 
 export function BedManagementPage() {
   const { activeTenantId } = useTenant();
-  const [beds, setBeds] = useState<ClinicBed[]>(INITIAL_BEDS);
+  const {
+    data: beds,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<ClinicBed>('clinicBeds', { tenantId: activeTenantId ?? undefined });
   const [unitFilter, setUnitFilter] = useState<string>('all');
 
   const filtered = beds.filter(b => unitFilter === 'all' || b.unit === unitFilter);
@@ -34,8 +34,8 @@ export function BedManagementPage() {
   const availableCount = beds.filter(b => b.status === 'AVAILABLE').length;
   const cleaningCount = beds.filter(b => b.status === 'CLEANING_HDS').length;
 
-  const handleUpdateStatus = (id: string, newStatus: ClinicBed['status']) => {
-    setBeds(prev => prev.map(b => b.id === id ? { ...b, status: newStatus } : b));
+  const handleUpdateStatus = async (id: string, newStatus: ClinicBed['status']) => {
+    await update(id, { status: newStatus } as Partial<ClinicBed>);
   };
 
   return (
@@ -53,7 +53,7 @@ export function BedManagementPage() {
         </div>
 
         <button
-          onClick={() => setBeds(INITIAL_BEDS)}
+          onClick={() => void refresh()}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface-card hover:bg-surface-hover text-xs font-medium transition-colors"
         >
           <RefreshCw className="w-3.5 h-3.5 text-text-muted" />

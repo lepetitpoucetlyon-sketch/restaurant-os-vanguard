@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { User, Clock, Stethoscope, CheckCircle2, AlertCircle, Plus, Search, ShieldCheck } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -15,16 +16,16 @@ interface PatientVisit {
   status: 'WAITING_ROOM' | 'IN_CONSULTATION' | 'EXAMS' | 'BILLING' | 'DISCHARGED';
 }
 
-const INITIAL_PATIENTS: PatientVisit[] = [
-  { id: 'pat-1', patientName: 'Mme Jeanne Moreau', nirMasked: '2 89 04 69 *** 12', practitioner: 'Dr. Martin (Généraliste)', specialty: 'Médecine Générale', arrivalTime: '08:45', consultationType: 'CONSULTATION', status: 'IN_CONSULTATION' },
-  { id: 'pat-2', patientName: 'M. Karim Belkacem', nirMasked: '1 92 11 75 *** 45', practitioner: 'Dr. Martin (Généraliste)', specialty: 'Médecine Générale', arrivalTime: '09:05', consultationType: 'URGENCE', status: 'WAITING_ROOM' },
-  { id: 'pat-3', patientName: 'Mme Sophie Garnier', nirMasked: '2 95 08 31 *** 89', practitioner: 'Dr. Vasseur (Cardiologue)', specialty: 'Cardiologie', arrivalTime: '08:30', consultationType: 'CONTROLE', status: 'EXAMS' },
-  { id: 'pat-4', patientName: 'M. Henri Dubois', nirMasked: '1 60 03 69 *** 01', practitioner: 'Dr. Vasseur (Cardiologue)', specialty: 'Cardiologie', arrivalTime: '08:15', consultationType: 'CONSULTATION', status: 'BILLING' },
-];
+
 
 export function PatientFlowPage() {
   const { activeTenantId } = useTenant();
-  const [patients, setPatients] = useState<PatientVisit[]>(INITIAL_PATIENTS);
+  const {
+    data: patients,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<PatientVisit>('patientVisits', { tenantId: activeTenantId ?? undefined });
   const [search, setSearch] = useState('');
 
   const filtered = patients.filter(p =>
@@ -37,8 +38,8 @@ export function PatientFlowPage() {
   const inConsultCount = patients.filter(p => p.status === 'IN_CONSULTATION').length;
   const inExamsCount = patients.filter(p => p.status === 'EXAMS').length;
 
-  const handleAdvanceStatus = (id: string, nextStatus: PatientVisit['status']) => {
-    setPatients(prev => prev.map(p => p.id === id ? { ...p, status: nextStatus } : p));
+  const handleAdvanceStatus = async (id: string, nextStatus: PatientVisit['status']) => {
+    await update(id, { status: nextStatus } as Partial<PatientVisit>);
   };
 
   return (

@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Layers, AlertTriangle, ArrowUpRight, ArrowDownRight, RefreshCw, Plus, Minus } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -14,18 +15,16 @@ interface DisplayProduct {
   lastBakeTime: string;
 }
 
-const INITIAL_STOCK: DisplayProduct[] = [
-  { id: 'dp-1', name: 'Baguette Tradition', category: 'pains', currentStock: 14, minThreshold: 10, priceInMicrounits: 1_300_000, lastBakeTime: '06:45' },
-  { id: 'dp-2', name: 'Flûte Campagne', category: 'pains', currentStock: 4, minThreshold: 6, priceInMicrounits: 1_600_000, lastBakeTime: '06:00' },
-  { id: 'dp-3', name: 'Croissant Beurre AOP', category: 'viennoiseries', currentStock: 22, minThreshold: 12, priceInMicrounits: 1_400_000, lastBakeTime: '06:30' },
-  { id: 'dp-4', name: 'Pain au Chocolat', category: 'viennoiseries', currentStock: 5, minThreshold: 12, priceInMicrounits: 1_500_000, lastBakeTime: '06:30' },
-  { id: 'dp-5', name: 'Sandwich Poulet Crudités', category: 'snacking', currentStock: 8, minThreshold: 5, priceInMicrounits: 5_200_000, lastBakeTime: '07:15' },
-  { id: 'dp-6', name: 'Éclair Chocolat Valrhona', category: 'patisserie', currentStock: 6, minThreshold: 4, priceInMicrounits: 3_800_000, lastBakeTime: '06:00' },
-];
+
 
 export function DisplayStockPage() {
   const { activeTenantId } = useTenant();
-  const [products, setProducts] = useState<DisplayProduct[]>(INITIAL_STOCK);
+  const {
+    data: products,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<DisplayProduct>('displayStock', { tenantId: activeTenantId ?? undefined });
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
 
   const filtered = products.filter(p => categoryFilter === 'all' || p.category === categoryFilter);
@@ -34,11 +33,11 @@ export function DisplayStockPage() {
   const totalItems = products.reduce((acc, p) => acc + p.currentStock, 0);
   const totalDisplayValueMu = products.reduce((acc, p) => acc + (p.currentStock * p.priceInMicrounits), 0);
 
-  const handleAdjust = (id: string, delta: number) => {
-    setProducts(prev => prev.map(p => {
-      if (p.id !== id) return p;
-      return { ...p, currentStock: Math.max(0, p.currentStock + delta) };
-    }));
+  const handleAdjust = async (id: string, delta: number) => {
+    const cible = products.find(o => o.id === id);
+    if (!cible) return;
+    // Écriture optimiste + outbox : le stock survit au rafraîchissement et à l'offline.
+    await update(id, { currentStock: Math.max(0, cible.currentStock + delta) } as Partial<DisplayProduct>);
   };
 
   return (
@@ -57,7 +56,7 @@ export function DisplayStockPage() {
 
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setProducts(INITIAL_STOCK)}
+            onClick={() => void refresh()}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface-card hover:bg-surface-hover text-xs font-medium transition-colors"
           >
             <RefreshCw className="w-3.5 h-3.5 text-text-muted" />

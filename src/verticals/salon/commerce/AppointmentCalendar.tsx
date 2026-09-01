@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Calendar as CalendarIcon, Clock, User, Scissors, Plus, CheckCircle2, Sparkles, Phone } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -17,24 +18,24 @@ interface Appointment {
   status: 'confirmed' | 'in_progress' | 'completed' | 'no_show';
 }
 
-const INITIAL_APPOINTMENTS: Appointment[] = [
-  { id: 'apt-1', clientName: 'Mme Clara Martin', clientPhone: '06 11 22 33 44', stylistName: 'Élodie (Coloriste)', service: 'Balayage Signature & Soin Olaplex', startTime: '09:00', durationMinutes: 120, priceInMicrounits: 145_000_000, cabin: 'Fauteuil 01', status: 'completed' },
-  { id: 'apt-2', clientName: 'M. Alexandre B.', clientPhone: '06 44 55 66 77', stylistName: 'Julien (Barbier)', service: 'Coupe Ciseaux & Taille Barbe Vapeur', startTime: '11:00', durationMinutes: 45, priceInMicrounits: 48_000_000, cabin: 'Espace Barbier', status: 'in_progress' },
-  { id: 'apt-3', clientName: 'Mme Camille D.', clientPhone: '07 88 99 00 11', stylistName: 'Sarah (Esthéticienne)', service: 'Soin Visage Hydrafacial & Modelage', startTime: '14:00', durationMinutes: 60, priceInMicrounits: 110_000_000, cabin: 'Cabine Spa 1', status: 'confirmed' },
-  { id: 'apt-4', clientName: 'Mme Inès K.', clientPhone: '06 77 66 55 44', stylistName: 'Élodie (Coloriste)', service: 'Brushing & Soin Botanique', startTime: '15:30', durationMinutes: 45, priceInMicrounits: 45_000_000, cabin: 'Fauteuil 02', status: 'confirmed' },
-];
+
 
 export function AppointmentCalendar() {
   const { activeTenantId } = useTenant();
-  const [appointments, setAppointments] = useState<Appointment[]>(INITIAL_APPOINTMENTS);
+  const {
+    data: appointments,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<Appointment>('salonAppointments', { tenantId: activeTenantId ?? undefined });
   const [selectedStylist, setSelectedStylist] = useState<string>('all');
 
   const filtered = appointments.filter(a => selectedStylist === 'all' || a.stylistName.includes(selectedStylist));
 
   const totalCAEstimateMu = appointments.reduce((s, a) => s + a.priceInMicrounits, 0);
 
-  const handleUpdateStatus = (id: string, newStatus: Appointment['status']) => {
-    setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: newStatus } : a));
+  const handleUpdateStatus = async (id: string, newStatus: Appointment['status']) => {
+    await update(id, { status: newStatus } as Partial<Appointment>);
   };
 
   return (

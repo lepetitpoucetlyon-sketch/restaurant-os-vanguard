@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Sparkles, AlertTriangle, Package, RefreshCw, Plus, Minus, Search } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -15,17 +16,16 @@ interface TechnicalProduct {
   lastUsedDate: string;
 }
 
-const CABIN_STOCK: TechnicalProduct[] = [
-  { id: 'cab-1', name: 'Majirel 7.1 Blond Cendré (50ml)', brand: "L'Oréal Professionnel", type: 'coloration', currentStock: 12, minThreshold: 6, unit: 'tubes', lastUsedDate: 'Aujourd\'hui 09:30' },
-  { id: 'cab-2', name: 'Oxydant Crème 20 Vol 6% (1000ml)', brand: "L'Oréal Professionnel", type: 'oxydant', currentStock: 3, minThreshold: 4, unit: 'flacons', lastUsedDate: 'Aujourd\'hui 09:30' },
-  { id: 'cab-3', name: 'Olaplex N°1 Bond Multiplier (525ml)', brand: 'Olaplex Pro', type: 'soin_technique', currentStock: 2, minThreshold: 2, unit: 'flacons', lastUsedDate: 'Hier 16:00' },
-  { id: 'cab-4', name: 'Shampoing Post-Color pH Neutre (1500ml)', brand: 'Kérastase Pro', type: 'shampoing_bac', currentStock: 5, minThreshold: 3, unit: 'bidons', lastUsedDate: 'Aujourd\'hui 11:15' },
-  { id: 'cab-5', name: 'Huile Essentielle Lavande Vraie Bio (50ml)', brand: 'AromaSpa Pro', type: 'soin_technique', currentStock: 1, minThreshold: 2, unit: 'flacons', lastUsedDate: 'Hier 14:30' },
-];
+
 
 export function CabinStockPage() {
   const { activeTenantId } = useTenant();
-  const [items, setItems] = useState<TechnicalProduct[]>(CABIN_STOCK);
+  const {
+    data: items,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<TechnicalProduct>('cabinStock', { tenantId: activeTenantId ?? undefined });
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
 
@@ -37,11 +37,10 @@ export function CabinStockPage() {
 
   const lowStockCount = items.filter(it => it.currentStock <= it.minThreshold).length;
 
-  const handleAdjust = (id: string, delta: number) => {
-    setItems(prev => prev.map(it => {
-      if (it.id !== id) return it;
-      return { ...it, currentStock: Math.max(0, it.currentStock + delta) };
-    }));
+  const handleAdjust = async (id: string, delta: number) => {
+    const cible = items.find(o => o.id === id);
+    if (!cible) return;
+    await update(id, { currentStock: Math.max(0, cible.currentStock + delta) } as Partial<TechnicalProduct>);
   };
 
   return (

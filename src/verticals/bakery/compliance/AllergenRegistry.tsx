@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { ShieldCheck, AlertCircle, FileText, Search, Download, Check } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -19,17 +20,16 @@ const INCO_ALLERGENS = [
   'Mollusques', 'Sulfites'
 ];
 
-const INITIAL_REGISTRY: AllergenItem[] = [
-  { id: 'al-1', recipeName: 'Baguette Tradition', category: 'pains', allergens: ['Gluten'], traces: ['Sésame'], lastAuditedDate: '2026-08-15' },
-  { id: 'al-2', recipeName: 'Croissant Beurre AOP', category: 'viennoiseries', allergens: ['Gluten', 'Lait', 'Œufs'], traces: ['Fruits à coque', 'Soja'], lastAuditedDate: '2026-08-15' },
-  { id: 'al-3', recipeName: 'Pain aux Noix du Périgord', category: 'pains', allergens: ['Gluten', 'Fruits à coque'], traces: ['Sésame'], lastAuditedDate: '2026-08-10' },
-  { id: 'al-4', recipeName: 'Éclair Chocolat', category: 'patisseries', allergens: ['Gluten', 'Lait', 'Œufs', 'Soja'], traces: ['Fruits à coque'], lastAuditedDate: '2026-08-12' },
-  { id: 'al-5', recipeName: 'Sandwich Jambon Emmental', category: 'snacking', allergens: ['Gluten', 'Lait', 'Moutarde'], traces: ['Œufs', 'Sésame'], lastAuditedDate: '2026-08-18' },
-];
+
 
 export function AllergenRegistry() {
   const { activeTenantId } = useTenant();
-  const [items, setItems] = useState<AllergenItem[]>(INITIAL_REGISTRY);
+  const {
+    data: items,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<AllergenItem>('allergenRecipes', { tenantId: activeTenantId ?? undefined });
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAllergen, setSelectedAllergen] = useState<string>('all');
 

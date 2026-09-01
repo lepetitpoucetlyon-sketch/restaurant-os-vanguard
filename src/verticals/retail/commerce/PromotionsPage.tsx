@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Tag, Calendar, Plus, CheckCircle2, Percent, Sparkles, TrendingUp } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -17,16 +18,16 @@ interface PromotionCampaign {
   status: 'active' | 'scheduled' | 'expired';
 }
 
-const INITIAL_PROMOS: PromotionCampaign[] = [
-  { id: 'pro-1', code: 'WELCOME10', name: 'Offre Nouveau Client', type: 'percentage', value: 10, startDate: '2026-01-01', endDate: '2026-12-31', usageCount: 142, status: 'active' },
-  { id: 'pro-2', code: 'ETE2026', name: 'Soldes d\'Été 2ᵉ Démarque', type: 'percentage', value: 30, startDate: '2026-06-25', endDate: '2026-07-31', usageCount: 489, status: 'expired' },
-  { id: 'pro-3', code: 'VIPPRIVILEGE', name: 'Vente Privée Automne', type: 'fixed_amount', value: 20_000_000, startDate: '2026-09-15', endDate: '2026-09-22', usageCount: 0, maxUsage: 100, status: 'scheduled' },
-  { id: 'pro-4', code: 'PACK3TSHIRTS', name: '3 T-Shirts pour 70€', type: 'bundle', value: 17_000_000, startDate: '2026-08-01', endDate: '2026-09-30', usageCount: 56, status: 'active' },
-];
+
 
 export function PromotionsPage() {
   const { activeTenantId } = useTenant();
-  const [promos, setPromos] = useState<PromotionCampaign[]>(INITIAL_PROMOS);
+  const {
+    data: promos,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<PromotionCampaign>('retailPromotions', { tenantId: activeTenantId ?? undefined });
   const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const filtered = promos.filter(p => statusFilter === 'all' || p.status === statusFilter);

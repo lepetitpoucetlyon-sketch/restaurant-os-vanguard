@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { FileText, CheckCircle2, AlertTriangle, Clock, Euro, ShieldCheck, Send, Search } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -18,15 +19,16 @@ interface FSEClaim {
   rejectionReason?: string;
 }
 
-const INITIAL_CLAIMS: FSEClaim[] = [
-  { id: 'FSE-2026-1045', patientName: 'Mme Jeanne Moreau', nirMasked: '2 89 04 69 *** 12', practitioner: 'Dr. Martin', actCode: 'G (Consultation)', totalAmountInMicrounits: 30_000_000, partAmoInMicrounits: 21_000_000, partAmcInMicrounits: 9_000_000, transmissionDate: '2026-09-01 09:30', status: 'TRANSMITTED' },
-  { id: 'FSE-2026-1044', patientName: 'M. Henri Dubois', nirMasked: '1 60 03 69 *** 01', practitioner: 'Dr. Vasseur', actCode: 'CSC + DEQP003 (Écho Cardio)', totalAmountInMicrounits: 96_490_000, partAmoInMicrounits: 67_543_000, partAmcInMicrounits: 28_947_000, transmissionDate: '2026-08-31 17:15', status: 'PAID' },
-  { id: 'FSE-2026-1043', patientName: 'Mme Sophie Garnier', nirMasked: '2 95 08 31 *** 89', practitioner: 'Dr. Martin', actCode: 'G (Consultation)', totalAmountInMicrounits: 30_000_000, partAmoInMicrounits: 21_000_000, partAmcInMicrounits: 9_000_000, transmissionDate: '2026-08-30 11:20', status: 'REJECTED', rejectionReason: 'Droits mutuelle AMC expirés au 31/08' },
-];
+
 
 export function InsuranceBillingPage() {
   const { activeTenantId } = useTenant();
-  const [claims, setClaims] = useState<FSEClaim[]>(INITIAL_CLAIMS);
+  const {
+    data: claims,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<FSEClaim>('insuranceClaims', { tenantId: activeTenantId ?? undefined });
   const [search, setSearch] = useState('');
 
   const filtered = claims.filter(c =>

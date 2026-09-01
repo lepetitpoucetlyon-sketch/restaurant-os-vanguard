@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { ShieldCheck, FileText, CheckCircle2, Clock, Euro, AlertTriangle, Plus, Search } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -16,15 +17,16 @@ interface WarrantyClaim {
   status: 'SUBMITTED' | 'APPROVED' | 'PAID' | 'REJECTED';
 }
 
-const INITIAL_CLAIMS: WarrantyClaim[] = [
-  { id: 'CLM-2026-0045', repairOrderId: 'OR-2026-0780', vehicle: 'Peugeot 3008 (GH-452-KL)', manufacturerOrInsurer: 'Stellantis Garantie FR', claimType: 'MANUFACTURER_WARRANTY', amountClaimedInMicrounits: 850_000_000, amountApprovedInMicrounits: 850_000_000, submissionDate: '2026-08-20', status: 'PAID' },
-  { id: 'CLM-2026-0046', repairOrderId: 'OR-2026-0802', vehicle: 'Renault Clio V (AB-891-CD)', manufacturerOrInsurer: 'Opteven Extension', claimType: 'EXTENDED_WARRANTY', amountClaimedInMicrounits: 420_000_000, amountApprovedInMicrounits: 420_000_000, submissionDate: '2026-08-25', status: 'APPROVED' },
-  { id: 'CLM-2026-0047', repairOrderId: 'OR-2026-0813', vehicle: 'Volkswagen Golf 8 (EF-123-GH)', manufacturerOrInsurer: 'Allianz IARD Sinistres', claimType: 'INSURANCE_ACCIDENT', amountClaimedInMicrounits: 1_250_000_000, amountApprovedInMicrounits: 0, submissionDate: '2026-08-30', status: 'SUBMITTED' },
-];
+
 
 export function WarrantyClaimsPage() {
   const { activeTenantId } = useTenant();
-  const [claims, setClaims] = useState<WarrantyClaim[]>(INITIAL_CLAIMS);
+  const {
+    data: claims,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<WarrantyClaim>('warrantyClaims', { tenantId: activeTenantId ?? undefined });
   const [search, setSearch] = useState('');
 
   const filtered = claims.filter(c =>

@@ -1,10 +1,13 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Package, AlertTriangle, ArrowDownRight, ArrowUpRight, Search, RefreshCw, Barcode } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
 
 interface StockRow {
+  /** Identifiant souverain — le SKU est la clé naturelle d'une ligne de stock. */
+  id: string;
   sku: string;
   ean: string;
   name: string;
@@ -17,17 +20,16 @@ interface StockRow {
   unitCostInMicrounits: number;
 }
 
-const STOCK_DATA: StockRow[] = [
-  { sku: 'TEX-TSH-01-N-M', ean: '3700123456789', name: 'T-Shirt Coton Bio', variant: 'Noir / M', category: 'Textile', stockStore: 6, stockReserve: 12, minThreshold: 8, reorderQty: 25, unitCostInMicrounits: 9_000_000 },
-  { sku: 'TEX-TSH-01-B-L', ean: '3700123456796', name: 'T-Shirt Coton Bio', variant: 'Blanc / L', category: 'Textile', stockStore: 2, stockReserve: 10, minThreshold: 5, reorderQty: 20, unitCostInMicrounits: 9_000_000 },
-  { sku: 'TEX-JEA-02-B-32', ean: '3700123456802', name: 'Jean Brut Selvedge', variant: 'Brut / 32-34', category: 'Textile', stockStore: 1, stockReserve: 7, minThreshold: 4, reorderQty: 15, unitCostInMicrounits: 42_000_000 },
-  { sku: 'SH-SNK-03-B-42', ean: '3700123456819', name: 'Sneakers Cuir Minimalistes', variant: 'Blanc / 42', category: 'Chaussures', stockStore: 1, stockReserve: 4, minThreshold: 3, reorderQty: 10, unitCostInMicrounits: 55_000_000 },
-  { sku: 'ACC-CAS-04-N-TU', ean: '3700123456826', name: 'Casquette Visière Broderie', variant: 'Navy / TU', category: 'Accessoires', stockStore: 14, stockReserve: 26, minThreshold: 10, reorderQty: 30, unitCostInMicrounits: 11_000_000 },
-];
+
 
 export function RetailStockPage() {
   const { activeTenantId } = useTenant();
-  const [data, setData] = useState<StockRow[]>(STOCK_DATA);
+  const {
+    data: data,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<StockRow>('retailStock', { tenantId: activeTenantId ?? undefined });
   const [search, setSearch] = useState('');
 
   const filtered = data.filter(row =>

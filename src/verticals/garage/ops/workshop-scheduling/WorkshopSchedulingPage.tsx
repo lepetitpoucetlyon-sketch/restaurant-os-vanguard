@@ -1,5 +1,6 @@
 'use client';
 
+import { useSovereignCollection } from '@/kernel/hooks/useSovereignCollection';
 import React, { useState } from 'react';
 import { Wrench, Car, Clock, CheckCircle2, AlertTriangle, User, Plus, Search } from 'lucide-react';
 import { useTenant } from '@/shared/hooks/useTenant';
@@ -17,16 +18,16 @@ interface RepairJob {
   status: 'SCHEDULED' | 'IN_PROGRESS' | 'WAITING_PARTS' | 'READY_DELIVERY' | 'COMPLETED';
 }
 
-const INITIAL_JOBS: RepairJob[] = [
-  { id: 'OR-2026-0811', licensePlate: 'GH-452-KL', vehicleModel: 'Peugeot 3008 1.5 BlueHDi', customerName: 'M. Eric Mercier', operationType: 'REVISION', bayId: 'Pont 01 (2 Colonnes)', mechanic: 'Karim (Chef Atelier)', scheduledTime: '08:30', durationHours: 2.0, status: 'IN_PROGRESS' },
-  { id: 'OR-2026-0812', licensePlate: 'AB-891-CD', vehicleModel: 'Renault Clio V TCe 90', customerName: 'Mme Nathalie Roux', operationType: 'BRAKES', bayId: 'Pont 02 (Ciseaux)', mechanic: 'David (Mécanicien)', scheduledTime: '10:30', durationHours: 1.5, status: 'SCHEDULED' },
-  { id: 'OR-2026-0813', licensePlate: 'EF-123-GH', vehicleModel: 'Volkswagen Golf 8 2.0 TDI', customerName: 'Flotte BTP Lyonnaise', operationType: 'DIAGNOSTIC', bayId: 'Zone Diagnostic Valise', mechanic: 'Karim (Chef Atelier)', scheduledTime: '14:00', durationHours: 1.0, status: 'WAITING_PARTS' },
-  { id: 'OR-2026-0814', licensePlate: 'IJ-456-KL', vehicleModel: 'Toyota Yaris Hybride', customerName: 'M. Patrick Simon', operationType: 'TIRES', bayId: 'Espace Pneumatiques', mechanic: 'David (Mécanicien)', scheduledTime: '15:30', durationHours: 0.75, status: 'READY_DELIVERY' },
-];
+
 
 export function WorkshopSchedulingPage() {
   const { activeTenantId } = useTenant();
-  const [jobs, setJobs] = useState<RepairJob[]>(INITIAL_JOBS);
+  const {
+    data: jobs,
+    isLoading,
+    update,
+    refresh,
+  } = useSovereignCollection<RepairJob>('repairOrders', { tenantId: activeTenantId ?? undefined });
   const [search, setSearch] = useState('');
 
   const filtered = jobs.filter(j =>
@@ -39,8 +40,8 @@ export function WorkshopSchedulingPage() {
   const readyCount = jobs.filter(j => j.status === 'READY_DELIVERY').length;
   const waitingPartsCount = jobs.filter(j => j.status === 'WAITING_PARTS').length;
 
-  const handleUpdateStatus = (id: string, newStatus: RepairJob['status']) => {
-    setJobs(prev => prev.map(j => j.id === id ? { ...j, status: newStatus } : j));
+  const handleUpdateStatus = async (id: string, newStatus: RepairJob['status']) => {
+    await update(id, { status: newStatus } as Partial<RepairJob>);
   };
 
   return (
