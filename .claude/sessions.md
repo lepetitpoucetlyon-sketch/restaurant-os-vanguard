@@ -14,6 +14,8 @@
 
 ## 🟢 Sessions Actives
 
+| `claude-secu-deps` (Claude Code) | **EN COURS** — remédiation des 29 alertes Dependabot. Périmètre : `functions/`, `docker/lightrag/requirements.txt`, `services/sovereign-rag/requirements.txt`. **NE TOUCHE PAS** `src/` — périmètre du run DESIGNUP d'Antigravity (`shared/components/ui/`). | 2026-09-01 | active |
+
 | `claude-cablage-verticales` (Claude Code) | **LIVRÉ** — mesure `verticalScreensUnwired` + câblage des écrans de verticale sur leurs adapters. Périmètre : `scripts/measure/`, `scripts/preflight.sh`, `src/verticals/` (hors `_shared/`). **NE TOUCHE PAS** `src/modules/finance/`, `src/lib/nexus/`, `src/kernel/`, `src/modules/intelligence/` — périmètre d'`antigravity-bloc2-cablage-dette`. | 2026-09-01 | terminée |
 
 | `antigravity-bloc2-cablage-dette` (Antigravity) | **ANNULÉE par l'utilisateur** — travail interrompu. Seul reliquat trouvé dans l'arbre : suppression de `FiscalSealWasm.ts` + son test, entérinée par `claude-cablage-verticales` après vérification (0 appelant, second protocole de scellement face à `FiscalSealer` qui en a 14). Les autres chantiers annoncés (EInvoicingTab hors @wip, dette lib→modules 37→0, réveil ServiceTicketService, RBAC ADR-019c) **n'ont PAS été faits** — ils restent ouverts. | 2026-09-01 | annulée |
