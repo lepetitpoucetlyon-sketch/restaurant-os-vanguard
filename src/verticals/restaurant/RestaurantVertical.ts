@@ -12,9 +12,7 @@ import {
   RestaurantIntelligenceAdapter,
   RestaurantMccAdapter,
   RestaurantCommerceAdapter,
-  RestaurantComplianceAdapter,
   RestaurantHumanAdapter,
-  RestaurantLogisticsAdapter,
 } from './adapters';
 import { toError } from "@/lib/toError";
 
@@ -149,11 +147,11 @@ export class RestaurantVertical implements IVerticalPlugin {
       },
     );
 
-    // No-show → CRM RFM trigger
+    // No-show → recalcul RFM du client (event DIFFÉRENT — ne pas ré-émettre
+    // 'reservation.no_show' depuis un handler de 'reservation.no_show' : boucle infinie).
     context.registerEventHandler<{ tenantId: string; reservationId: string; customerId?: string }>(
       'reservation.no_show',
-      ({ tenantId, reservationId, customerId }) => {
-        RestaurantCommerceAdapter.emitNoShow({ tenantId, reservationId, customerId });
+      ({ tenantId, customerId }) => {
         if (customerId) {
           RestaurantCommerceAdapter.emitCustomerRFMTrigger({ tenantId, customerId });
         }
@@ -167,7 +165,8 @@ export class RestaurantVertical implements IVerticalPlugin {
     context.registerEventHandler<{ v: 1; tenantId: string; sensorId: string; temperature: number; durationInMinutes: number }>(
       'sensor.temperature_anomaly',
       ({ tenantId, sensorId, temperature, durationInMinutes }) => {
-        RestaurantComplianceAdapter.emitTemperatureAnomaly({ tenantId, sensorId, temperature, durationInMinutes });
+        // Pas de ré-émission de 'sensor.temperature_anomaly' (boucle). On traduit
+        // vers 'haccp.alert' — event différent, consommé par les handlers HACCP.
         NexusEventBus.emit('haccp.alert', {
           v: 1,
           tenantId,
@@ -183,21 +182,17 @@ export class RestaurantVertical implements IVerticalPlugin {
       },
     );
 
-    // Compliance — contrôle HACCP enregistré
-    context.registerEventHandler<{ v: 1; tenantId: string; checkId: string; operatorId: string; timestamp: number }>(
-      'haccp.check.saved',
-      ({ tenantId, checkId, operatorId, timestamp }) => {
-        RestaurantComplianceAdapter.emitHaccpCheckSaved({ tenantId, checkId, operatorId, timestamp });
-      },
-    );
+    // Compliance — 'haccp.check.saved' est déjà émis par HACCPLogService et
+    // consommé par HaccpCheckArchiverHandler. Un handler ici qui le ré-émet =
+    // boucle infinie + doublon. Supprimé (aucune coordination verticale requise).
 
     // Human — shift démarré : pas de coordination cross-domaine nécessaire (boucle supprimée)
 
     // Logistics — DLC expiré → notif cuisine + logistique
     context.registerEventHandler<{ v: 1; tenantId: string; itemId: string; quantity: number; batchNumber: string }>(
       'dlc.expired',
-      ({ tenantId, itemId, quantity, batchNumber }) => {
-        RestaurantLogisticsAdapter.emitDlcExpiry({ tenantId, itemId, quantity, batchNumber });
+      ({ tenantId, itemId, quantity }) => {
+        // Pas de ré-émission de 'dlc.expired' (boucle). Traduction vers une notif cuisine.
         NexusEventBus.emit('notification.created', {
           v: 1,
           tenantId,

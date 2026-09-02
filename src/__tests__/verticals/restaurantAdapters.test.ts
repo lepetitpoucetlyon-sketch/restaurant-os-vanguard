@@ -2,8 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import {
   RestaurantFinanceAdapter,
-  RestaurantLogisticsAdapter,
-  RestaurantComplianceAdapter,
   RestaurantCommerceAdapter,
   RestaurantHumanAdapter,
   RestaurantIntelligenceAdapter,
@@ -11,7 +9,12 @@ import {
   RestaurantMccAdapter,
 } from '@/verticals/restaurant/adapters';
 
-describe('Restaurant Vertical Adapters (9 Adapters)', () => {
+// Compliance & Logistics : plus d'adapter restaurant dédié — les events
+// (haccp.check.saved, dlc.expired, sensor.temperature_anomaly, inventory.deducted)
+// sont émis directement par les modules compliance/logistics. Un adapter qui les
+// ré-émettait depuis un handler du MÊME event provoquait une boucle infinie.
+
+describe('Restaurant Vertical Adapters (6 Adapters)', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
@@ -21,29 +24,6 @@ describe('Restaurant Vertical Adapters (9 Adapters)', () => {
 
     RestaurantFinanceAdapter.emitOrderFiscalSeal({ tenantId: 't1', orderId: 'o1', totalInMicrounits: 5000, operatorId: 'op1' });
     expect(emitDurableSpy).toHaveBeenCalledWith('finance.order_sealed', { tenantId: 't1', orderId: 'o1', totalInMicrounits: 5000, operatorId: 'op1' });
-  });
-
-  it('RestaurantLogisticsAdapter emits waste events correctly', () => {
-    const emitDurableSpy = vi.spyOn(NexusEventBus, 'emitDurable').mockImplementation(async () => {});
-
-    RestaurantLogisticsAdapter.emitWasteLogged({ tenantId: 't1', wasteId: 'w1', items: [{ productId: 'p1', quantity: 2 }] });
-    expect(emitDurableSpy).toHaveBeenCalledWith('inventory.waste_logged', {
-      v: 1,
-      tenantId: 't1',
-      wasteId: 'w1',
-      items: [{ productId: 'p1', quantity: 2 }],
-    });
-  });
-
-  it('RestaurantComplianceAdapter emits haccp events correctly', () => {
-    const emitSpy = vi.spyOn(NexusEventBus, 'emit').mockImplementation(async () => {});
-    const emitDurableSpy = vi.spyOn(NexusEventBus, 'emitDurable').mockImplementation(async () => {});
-
-    RestaurantComplianceAdapter.emitHaccpCheckSaved({ tenantId: 't1', checkId: 'c1', operatorId: 'op1', timestamp: 1000 });
-    expect(emitDurableSpy).toHaveBeenCalledWith('haccp.check.saved', { v: 1, tenantId: 't1', checkId: 'c1', operatorId: 'op1', timestamp: 1000 });
-
-    RestaurantComplianceAdapter.emitTemperatureAnomaly({ tenantId: 't1', sensorId: 's1', temperature: 12, durationInMinutes: 30 });
-    expect(emitSpy).toHaveBeenCalledWith('sensor.temperature_anomaly', { v: 1, tenantId: 't1', sensorId: 's1', temperature: 12, durationInMinutes: 30 });
   });
 
   it('RestaurantCommerceAdapter emits reservation and loyalty events correctly', () => {

@@ -1,6 +1,4 @@
 export * from './RestaurantFinanceAdapter';
-export * from './RestaurantLogisticsAdapter';
-export * from './RestaurantComplianceAdapter';
 export * from './RestaurantCommerceAdapter';
 export * from './RestaurantHumanAdapter';
 export * from './RestaurantIntelligenceAdapter';

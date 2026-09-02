@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import {
     EpsonPrinter,
     PrinterFailoverRoutingService,
+    PrintJobQueueService,
     UniversalPrinterBridgeService,
     type ReceiptTicket,
     type TicketStyle,
@@ -149,7 +150,8 @@ export function usePrintReceipt(
         } catch (err) {
             const msg = err instanceof Error ? err.message : "Erreur impression";
             // Tentative de failover automatique vers l'imprimante de secours
-            const tenantId = tenantCfg?.id || 'default';
+            const tenantId = tenantCfg?.id;
+            if (!tenantId) { toast.error(`Impression échouée : ${msg}`); return; }
             const failover = PrinterFailoverRoutingService.resolvePrinter(
                 tenantId,
                 { primaryPrinterId: 'printer_caisse_1', backupPrinterId: 'printer_passe_plat', station: 'caisse' },
@@ -167,7 +169,20 @@ export function usePrintReceipt(
                     return;
                 }
             }
-            toast.error(`Impression échouée : ${msg}`);
+            // Failover impossible → file d'attente résiliente + justificatif dématérialisé
+            const resolution = await PrintJobQueueService.handlePrintFailure({
+                tenantId,
+                orderId: meta?.ticketNumber ?? ticket.ticketNumber ?? `ORDER_${Date.now()}`,
+                targetPrinterId: 'printer_caisse_1',
+                payload: { businessName: ticket.businessName, ticketNumber: ticket.ticketNumber, totalInMicrounits: ticket.totalInMicrounits },
+            }).catch(() => null);
+            if (resolution?.status === 'FALLBACK_GENERATED' && resolution.digitalReceiptUrl) {
+                toast.warning(`Impression indisponible — ticket dématérialisé : ${resolution.digitalReceiptUrl}`);
+            } else if (resolution) {
+                toast.warning(`Impression mise en file d'attente (#${resolution.queueId})`);
+            } else {
+                toast.error(`Impression échouée : ${msg}`);
+            }
         }
     }, [cartItems, cartTotal, receiptMeta, activeTenantConfig]);
 }
