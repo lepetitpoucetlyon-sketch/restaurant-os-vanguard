@@ -620,6 +620,15 @@ export const m16_hardcodedHex = {
   // Protège la personnalisation tenant MCC (DESIGNUP §1 & §4.2)
   // Bloque les couleurs littérales dans les classes CSS, styles et props JSX.
   run(c) {
+    // Générateurs de HTML email / fenêtre d'impression / rapport : le style est
+    // INLINE dans une string, envoyé à un client mail (Outlook/Gmail ne résolvent
+    // pas `var(--token)`) ou à `document.write` d'une fenêtre print. La couleur
+    // littérale y est obligatoire — même logique que globals.css / marketing.
+    const htmlGenerator = /(?:\/app\/api\/email\/|\/app\/api\/signup\/route|\/reports?\/|[Pp]rint[A-Za-z]*[Hh]elper|recipePrint)/;
+    // Couches de DÉFINITION de la palette : les valeurs littérales y sont la
+    // source (fallbacks `var(--x, #hex)`, table RGB des tokens, map rôle→couleur).
+    // Même statut que `/tokens/` déjà exclu.
+    const paletteSource = /(?:\/lib\/ui\.foundations\.ts$|\/lib\/constants\.ts$|StyleTokens\.ts$)/;
     const whitelist = /(?:globals\.css$|\/tokens\/|\/blueprints\/|\/verticals\/[^/]+\/ui\.ts$|\/app\/\(marketing\)\/|\/app\/\(client\)\/\(public\)\/|\.test\.[tj]sx?$|\/__tests__\/|\/tests\/|\/e2e\/)/;
     // Le motif vient du LINT (source unique) : la mesure et la gate doivent dire
     // la même chose. Avant, m16 ne comptait que `#hex` — les `rgba()` passaient au
@@ -629,7 +638,7 @@ export const m16_hardcodedHex = {
     for (const [f, src] of c.contenu) {
       const rel = c.rel(f);
       if (!/\.(tsx|ts|jsx|js)$/.test(rel)) continue;
-      if (whitelist.test(rel)) continue;
+      if (whitelist.test(rel) || htmlGenerator.test(rel) || paletteSource.test(rel)) continue;
       const lines = src.split('\n');
       let countInFile = 0;
       lines.forEach((l) => {
