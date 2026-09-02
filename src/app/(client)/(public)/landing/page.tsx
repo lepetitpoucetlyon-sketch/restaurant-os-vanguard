@@ -10,12 +10,12 @@ import { LandingFooter } from './components/LandingFooter';
 import { getBrandAsset } from '@/shared/nexus/tokens/assets';
 
 export const metadata: Metadata = {
-    title: "Restaurant OS | Le Système d'Exploitation Souverain pour la Restauration",
-    description: "Le premier OS Local-First, Stateless et Grade X pour les restaurateurs exigeants. Automatisation, Intelligence Artificielle et Souveraineté totale.",
-    keywords: ["Restaurant OS", "Stateless Restaurant", "Local-First ERP", "IA Restauration", "Vanguard Architecture"],
+    title: "Restaurant OS | Plateforme de Gestion pour la Restauration",
+    description: "Caisse tactile, cuisine KDS, gestion des stocks et conformité fiscale NF525 pour la restauration. Fonctionnement hors-ligne et multi-établissements.",
+    keywords: ["Restaurant OS", "Caisse Enregistreuse", "Local-First ERP", "Logiciel Restauration", "Gestion Restaurant NF525"],
     openGraph: {
-        title: "Restaurant OS - L'Empire Technologique",
-        description: "Reprenez le contrôle total de votre restaurant avec une technologie indestructible.",
+        title: "Restaurant OS - La Plateforme de Gestion pour la Restauration",
+        description: "Reprenez le contrôle de votre établissement avec une solution fiable, rapide et conforme NF525.",
         images: [getBrandAsset('banner')],
     },
     icons: {

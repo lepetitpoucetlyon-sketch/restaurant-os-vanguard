@@ -156,7 +156,7 @@ export function MCCTreasury() {
                 {/* Net Margin / Health */}
                 <div className="col-span-12 lg:col-span-5 flex flex-col gap-6">
                     <div className="flex-1 bg-surface-card border border-border-subtle rounded-3xl p-8 relative overflow-hidden">
-                        <h3 className="text-xs font-black text-secondary uppercase tracking-[0.3em] mb-6">Net Empire Margin</h3>
+                        <h3 className="text-xs font-black text-secondary uppercase tracking-[0.3em] mb-6">{"Marge Nette Consolidée"}</h3>
                         <div className="text-5xl font-black mb-4 tracking-tighter">
                             {hasStripe ? `€${Math.round(netMargin).toLocaleString()}` : '—'}
                         </div>

@@ -55,8 +55,8 @@ export function FleetTab({ instances, globalMetrics, onShowCloneModal }: FleetTa
                 <div className="flex flex-col items-center justify-center gap-4 py-12 border border-dashed border-border-subtle rounded-2xl bg-surface-card/50">
                     <FlaskConical className="w-10 h-10 text-brand/40" />
                     <div className="text-center">
-                        <p className="text-sm font-bold text-text-secondary mb-1">Aucune instance dans la flotte</p>
-                        <p className="text-xs text-secondary">Active l'instance démo pour tester toutes les fonctionnalités du MCC</p>
+                        <p className="text-sm font-bold text-text-secondary mb-1">{"Aucun établissement dans le réseau"}</p>
+                        <p className="text-xs text-secondary">{"Activez l'instance démo pour explorer la console réseau"}</p>
                     </div>
                     <button aria-label="Action flotte"
                         onClick={activateDemo}

@@ -26,7 +26,7 @@ export function OracleModal({ item, onClose }: OracleModalProps) {
             <div
                 role="dialog"
                 aria-modal="true"
-                aria-label={`Prédiction Oracle — ${itemName}`}
+                aria-label={`Prévision de stock — ${itemName}`}
                 className="w-full max-w-md"
                 onClick={(e) => e.stopPropagation()}
             >
@@ -37,7 +37,7 @@ export function OracleModal({ item, onClose }: OracleModalProps) {
                     </p>
                     <Button variant="ghost"
                         onClick={onClose}
-                        aria-label="Fermer la prédiction Oracle"
+                        aria-label="Fermer la prévision"
                         className="p-1 rounded hover:bg-surface-hover text-text-muted"
                     >
                         <X className="w-4 h-4" />
@@ -46,7 +46,7 @@ export function OracleModal({ item, onClose }: OracleModalProps) {
 
                 {loading && (
                     <div className="flex items-center justify-center h-48 text-text-muted text-sm">
-                        Analyse Monte-Carlo en cours…
+                        Calcul de l'estimation en cours…
                     </div>
                 )}
 

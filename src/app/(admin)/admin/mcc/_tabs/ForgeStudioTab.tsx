@@ -81,9 +81,9 @@ export function ForgeStudioTab() {
               Forge Stack P3 • Studio & Compilateur
             </span>
           </div>
-          <h2 className="text-xl font-black text-text-primary">Studio de Morphogenèse & Compilateur Blueprint</h2>
+          <h2 className="text-xl font-black text-text-primary">{"Studio de Conception & Compilateur Blueprint"}</h2>
           <p className="text-xs text-text-muted mt-0.5">
-            Compilation déterministe d'une étude sectorielle vers un Blueprint universel (Axe A & Axe B).
+            {"Génération déterministe d'un Blueprint universel à partir d'une étude sectorielle."}
           </p>
         </div>
 
@@ -183,7 +183,7 @@ export function ForgeStudioTab() {
             </div>
 
             <div className="p-3 rounded-2xl bg-surface-glass border border-border-default text-micro text-text-secondary space-y-1">
-              <span className="font-bold text-text-primary block">Justifications de Morphogenèse :</span>
+              <span className="font-bold text-text-primary block">{"Justifications Métier :"}</span>
               {proposal.rationale.slice(0, 3).map((r, i) => (
                 <p key={i}>• {r}</p>
               ))}

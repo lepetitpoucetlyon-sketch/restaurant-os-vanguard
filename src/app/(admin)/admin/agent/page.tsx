@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { authedFetch } from "@/lib/client/authedFetch";
 import {
-  Bot,
   ShieldCheck,
   Zap,
   Terminal,
@@ -14,7 +13,8 @@ import {
   Sparkles,
   RefreshCcw,
   FileCode,
-  ShieldAlert
+  ShieldAlert,
+  Activity
 } from "lucide-react";
 import { GlassCard } from "@ui/GlassCard";
 import { StatCard } from "@ui/StatCard";
@@ -55,7 +55,7 @@ export default function AgentIntelligencePage() {
         setReport(data);
       }
     } catch (err) {
-      console.error("Failed to fetch Sentinel report:", err);
+      console.error("Failed to fetch system report:", err);
     } finally {
       setLoading(false);
     }
@@ -76,16 +76,16 @@ export default function AgentIntelligencePage() {
     <div className="min-h-[100dvh] bg-bg-primary p-6 lg:p-12 space-y-8">
       <div className="flex items-center justify-between">
         <PageHeader
-          title="Antigravity Intelligence"
-          subtitle="Agentic Mission Control & Fleet Orchestration"
-          emoji="🛰️"
+          title="Service Supervisor"
+          subtitle="System Monitoring & Platform Health"
+          emoji="⚙️"
         />
         <button aria-label="Action agent" 
           onClick={fetchReport}
           className="flex items-center gap-2 px-4 py-2 bg-bg-secondary border border-border rounded-full text-chip-label hover:bg-action-primary transition-colors"
         >
           <RefreshCcw className={`w-3 h-3 ${loading ? 'animate-spin' : ''}`} />
-          Refresh Audit
+          Refresh Diagnostics
         </button>
       </div>
 
@@ -102,7 +102,7 @@ export default function AgentIntelligencePage() {
             <div className="flex items-center gap-6 mb-8">
               <div className="relative">
                 <div className="w-20 h-20 rounded-full bg-action-primary flex items-center justify-center border border-action-primary">
-                  <Bot className="w-10 h-10 text-action-primary animate-pulse" />
+                  <Activity className="w-10 h-10 text-action-primary animate-pulse" />
                 </div>
                 <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-4 border-bg-secondary flex items-center justify-center ${
                   report?.status === 'critical' ? 'bg-status-danger' : 'bg-status-success'
@@ -111,7 +111,7 @@ export default function AgentIntelligencePage() {
                 </div>
               </div>
               <div>
-                <h2 className="text-3xl font-brand italic text-text-primary">Antigravity Sentinel</h2>
+                <h2 className="text-3xl font-brand italic text-text-primary">System Monitor</h2>
                 <div className="flex items-center gap-2 mt-1">
                   <span className={`w-2 h-2 rounded-full animate-ping ${
                     report?.status === 'critical' ? 'bg-status-danger' : 'bg-status-success'
@@ -119,7 +119,7 @@ export default function AgentIntelligencePage() {
                   <p className={`text-xs font-black uppercase tracking-widest ${
                     report?.status === 'critical' ? 'text-status-danger' : 'text-status-success'
                   }`}>
-                    {report?.status === 'critical' ? 'Architectural Decay Detected' : 'System Optimized / Secure'}
+                    {report?.status === 'critical' ? 'Anomalies Detected' : 'Services Operational & Secure'}
                   </p>
                 </div>
               </div>
@@ -127,7 +127,7 @@ export default function AgentIntelligencePage() {
 
             <div className="space-y-4">
               <div className="flex items-center justify-between text-xs font-bold uppercase tracking-tighter text-text-muted">
-                <span>Cognitive Stability Index</span>
+                <span>Overall Stability Index</span>
                 <span>{displayStability.toFixed(1)}%</span>
               </div>
               <div className="w-full h-1 bg-border/30 rounded-full overflow-hidden">
@@ -145,7 +145,7 @@ export default function AgentIntelligencePage() {
                 report?.metrics.knowledgeSync === 'synced' ? 'bg-status-success border-emerald-500/20 text-status-success' : 'bg-action-primary border-action-primary text-action-primary'
               }`}>
                 <Network className="w-3 h-3" />
-                Nexus: {report?.metrics.knowledgeSync ?? 'Syncing...'}
+                Sync: {report?.metrics.knowledgeSync ?? 'In progress...'}
               </div>
               <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-nano font-bold uppercase tracking-wider border ${
                 (report?.metrics.typeSafety ?? 0) >= 100 ? 'bg-status-success border-emerald-500/20 text-status-success' : 'bg-action-primary border-focus/20 text-action-primary'
@@ -155,7 +155,7 @@ export default function AgentIntelligencePage() {
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-status-warning border border-action-primary/10 rounded-full text-nano font-bold text-status-warning uppercase tracking-wider">
                 <AlertTriangle className="w-3 h-3" />
-                Anomalies: {report?.complexity.godObjects.length ?? 0}
+                Complex Files: {report?.complexity.godObjects.length ?? 0}
               </div>
             </div>
           </div>
@@ -163,23 +163,23 @@ export default function AgentIntelligencePage() {
 
         <div className="space-y-6">
           <StatCard 
-            label="Empire Stability" 
+            label="System Stability" 
             value={`${displayStability.toFixed(1)}%`} 
             accentColor={displayStability < 70 ? "error" : "success"} 
             trend={{ value: 1.4, direction: displayStability < 70 ? "down" : "up" }}
-            emoji="🏛️"
+            emoji="📊"
           />
           <StatCard 
-            label="Logic Validation" 
+            label="Test Coverage" 
             value={`${(report?.metrics.testCoverage ?? 0).toFixed(0)}%`} 
             accentColor="info" 
             emoji="🧪"
           />
           <StatCard 
-            label="God Objects" 
+            label="Complex Files" 
             value={report?.complexity.godObjects.length ?? 0} 
             accentColor="warning" 
-            emoji="🏗️"
+            emoji="📦"
           />
         </div>
       </div>
@@ -190,7 +190,7 @@ export default function AgentIntelligencePage() {
            <div className="p-6 border-b border-border/40 flex items-center justify-between bg-bg-secondary/30">
               <h3 className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
                 <Terminal className="w-4 h-4 text-action-primary" />
-                Diagnostic Terminal
+                Diagnostics Terminal
               </h3>
               <div className="px-3 py-1 bg-bg-primary border border-border rounded-full text-nano font-bold text-text-muted uppercase">
                 {report ? `Audit: ${new Date(report.timestamp).toLocaleTimeString()}` : 'Initializing...'}
@@ -207,8 +207,8 @@ export default function AgentIntelligencePage() {
               ))}
               
               <div className="flex gap-3">
-                <span className="text-action-primary shrink-0">[SENTINEL]</span>
-                <p>Architectural audit complete. Scanning for "Cognitive Debt"...</p>
+                <span className="text-action-primary shrink-0">[SYSTEM]</span>
+                <p>Architectural audit complete. Scanning for technical debt...</p>
               </div>
 
               {report?.complexity.godObjects.slice(0, 10).map((obj, i) => (
@@ -232,13 +232,13 @@ export default function AgentIntelligencePage() {
               
               { (report?.complexity.godObjects.length ?? 0) > 10 && (
                  <div className="text-nano italic opacity-50 pl-8">
-                   ...and {(report?.complexity.godObjects.length ?? 0) - 10} more architectural violations.
+                   ...and {(report?.complexity.godObjects.length ?? 0) - 10} more files to monitor.
                  </div>
               )}
 
               <div className="flex gap-3 animate-pulse pt-4">
                 <span className="text-action-primary shrink-0">[_]</span>
-                <p>Awaiting refactoring commands to restore Empire Balance.</p>
+                <p>System listening and ready.</p>
               </div>
            </div>
         </GlassCard>
@@ -252,12 +252,12 @@ export default function AgentIntelligencePage() {
                  <div>
                     <h4 className="font-brand italic text-lg leading-tight">Complexity Debt Identified</h4>
                     <p className="text-sm text-text-muted mt-2 leading-relaxed">
-                       Sentinel a identifié <strong>{report?.complexity.godObjects.length ?? 0} violations</strong> de la règle des "500 lignes / 15 imports". Ces nœuds créent une friction cognitive élevée.
+                       System identified <strong>{report?.complexity.godObjects.length ?? 0} files</strong> exceeding the recommended 500 lines or 15 imports threshold.
                     </p>
                     <div className="mt-6 flex flex-col gap-2">
-                       <p className="text-nano font-black uppercase text-text-muted">Prochaine action recommandée :</p>
+                       <p className="text-nano font-black uppercase text-text-muted">Recommended action:</p>
                        <p className="text-sm font-bold text-action-primary italic">
-                          {report?.complexity.godObjects[0] ? `"${`Modulariser ${report.complexity.godObjects[0].path} (${report.complexity.godObjects[0].lines} lignes)`}"` : '"Empire Stable"'}
+                          {report?.complexity.godObjects[0] ? `"${`Modularize ${report.complexity.godObjects[0].path} (${report.complexity.godObjects[0].lines} lines)`}"` : '"System Stable"'}
                        </p>
                     </div>
                     <button
@@ -266,7 +266,7 @@ export default function AgentIntelligencePage() {
                        disabled={loading}
                     >
                        <FileCode className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                       {loading ? "Analyse en cours..." : "Lancer le Refactoring Automatisé"}
+                       {loading ? "Running analysis..." : "Run Detailed Diagnostics"}
                     </button>
                  </div>
               </div>
@@ -275,14 +275,14 @@ export default function AgentIntelligencePage() {
            <div className="grid grid-cols-2 gap-4">
               <GlassCard padding="md" variant="inset" className="flex flex-col items-center justify-center text-center">
                  <Cpu className="w-5 h-5 text-text-muted mb-2" />
-                 <span className="text-chip-label-sm text-text-muted">Sentinel Clock</span>
+                 <span className="text-chip-label-sm text-text-muted">System Clock</span>
                  <p className="font-brand italic text-sm mt-1">Real-time (Active)</p>
               </GlassCard>
               <GlassCard padding="md" variant="inset" className="flex flex-col items-center justify-center text-center">
                  <Sparkles className="w-5 h-5 text-action-primary mb-2" />
-                 <span className="text-chip-label-sm text-text-muted">Empire Health</span>
+                 <span className="text-chip-label-sm text-text-muted">System Health</span>
                  <p className={`font-serif italic text-sm mt-1 ${displayStability < 70 ? 'text-status-danger' : 'text-status-success'}`}>
-                    {displayStability < 50 ? 'Critique' : displayStability < 80 ? 'Instable' : 'Parfaite'}
+                    {displayStability < 50 ? 'Critical' : displayStability < 80 ? 'Warning' : 'Optimal'}
                  </p>
               </GlassCard>
            </div>

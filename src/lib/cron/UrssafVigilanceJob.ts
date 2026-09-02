@@ -1,7 +1,9 @@
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { logger } from '@/lib/logger';
-import { User, UrssafVigilanceService, URSSAF_CONSTANTS } from '@/modules/human';
+import type { User } from '@nexus/contracts';
+
+const URSSAF_ANNUAL_THRESHOLD_EUR = 5000;
 
 /**
  * 🛡️ UrssafVigilanceJob
@@ -26,9 +28,11 @@ export const UrssafVigilanceJob = {
         const profile = contractor.contractorProfile;
         if (!profile) continue;
 
-        const annualTotalMu = await UrssafVigilanceService.getContractorAnnualTotalMu(tenantId, contractor.id, currentYear);
+        const path = `tenants/${tenantId}/human/contractorAccumulators/${currentYear}_${contractor.id}`;
+        const doc = await Nexus.adapter.get<{ totalHtInMicrounits: number }>(path);
+        const annualTotalMu = doc?.totalHtInMicrounits ?? 0;
         const annualTotalEur = annualTotalMu / 1_000_000;
-        const isAboveThreshold = annualTotalEur >= URSSAF_CONSTANTS.ANNUAL_THRESHOLD_EUR;
+        const isAboveThreshold = annualTotalEur >= URSSAF_ANNUAL_THRESHOLD_EUR;
 
         // 1. Contrôle de date d'expiration de l'attestation
         if (profile.urssafVigilanceValidUntil) {

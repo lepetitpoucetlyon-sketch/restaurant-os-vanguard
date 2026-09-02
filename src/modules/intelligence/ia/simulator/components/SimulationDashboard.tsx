@@ -171,7 +171,7 @@ export function SimulationDashboard() {
                         <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
                             <div className="flex items-center gap-3">
                                 <Database size={16} className="text-secondary" />
-                                <h3 className="text-chip-label text-muted">Neural Shield Logs</h3>
+                                <h3 className="text-chip-label text-muted">{"Journal de Simulation"}</h3>
                             </div>
                             <div className="flex items-center gap-2">
                                 <div className="w-1.5 h-1.5 rounded-full bg-status-danger animate-pulse" />

@@ -25,14 +25,14 @@ import { useExtensions } from '@/shared/providers/hooks/useExtensions';
 import type { IntegrationsConfig, IntegrationSettings as IntegrationType } from "@nexus/contracts";
 
 const INTEGRATIONS_METADATA = [
-    { id: 'stripe', name: 'Stripe', category: 'Payment Gateway', icon: CreditCard, description: 'Neural Payment Processing', dashboardUrl: 'https://dashboard.stripe.com' },
-    { id: 'paypal', name: 'PayPal', category: 'Payment Gateway', icon: CreditCard, description: 'Global Alternative Rails', dashboardUrl: 'https://www.paypal.com/businessmanage' },
-    { id: 'thefork', name: 'TheFork', category: 'Reservation Grid', icon: Calendar, description: 'Bookings Synchronization', dashboardUrl: 'https://manager.thefork.com' },
-    { id: 'google', name: 'Google Business', category: 'Growth Matrix', icon: Globe, description: 'Global Maps Synchronization', dashboardUrl: 'https://business.google.com' },
-    { id: 'mailchimp', name: 'Mailchimp', category: 'Growth Matrix', icon: Mail, description: 'Outbound Signal Campaigns', dashboardUrl: 'https://admin.mailchimp.com' },
-    { id: 'twilio', name: 'Twilio', category: 'Signal Protocol', icon: MessageSquare, description: 'SMS & Signal Dispatch', dashboardUrl: 'https://console.twilio.com' },
-    { id: 'uber', name: 'Uber Eats', category: 'Logistics Node', icon: ShoppingCart, description: 'Remote Acquisitions', dashboardUrl: 'https://merchants.ubereats.com' },
-    { id: 'deliveroo', name: 'Deliveroo', category: 'Logistics Node', icon: ShoppingCart, description: 'Remote Acquisitions', dashboardUrl: 'https://restaurant-hub.deliveroo.net' },
+    { id: 'stripe', name: 'Stripe', category: 'Paiements', icon: CreditCard, description: 'Traitement des paiements par carte', dashboardUrl: 'https://dashboard.stripe.com' },
+    { id: 'paypal', name: 'PayPal', category: 'Paiements', icon: CreditCard, description: 'Paiements alternatifs & digitaux', dashboardUrl: 'https://www.paypal.com/businessmanage' },
+    { id: 'thefork', name: 'TheFork', category: 'Réservations', icon: Calendar, description: 'Synchronisation des réservations', dashboardUrl: 'https://manager.thefork.com' },
+    { id: 'google', name: 'Google Business', category: 'Marketing', icon: Globe, description: 'Fiche Google & visibilité locale', dashboardUrl: 'https://business.google.com' },
+    { id: 'mailchimp', name: 'Mailchimp', category: 'Marketing', icon: Mail, description: 'Campagnes d\'emails & newsletters', dashboardUrl: 'https://admin.mailchimp.com' },
+    { id: 'twilio', name: 'Twilio', category: 'Communications', icon: MessageSquare, description: 'Envoi de SMS & notifications', dashboardUrl: 'https://console.twilio.com' },
+    { id: 'uber', name: 'Uber Eats', category: 'Livraison', icon: ShoppingCart, description: 'Commandes en livraison', dashboardUrl: 'https://merchants.ubereats.com' },
+    { id: 'deliveroo', name: 'Deliveroo', category: 'Livraison', icon: ShoppingCart, description: 'Commandes en livraison', dashboardUrl: 'https://restaurant-hub.deliveroo.net' },
 ];
 
 export default function IntegrationSettings() {
@@ -93,9 +93,9 @@ export default function IntegrationSettings() {
                     </div>
                     <div>
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
-                            Neural Access Keys
+                            {"Clés d'Accès & Identifiants API"}
                         </h3>
-                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Global Secret Management</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">{"Gestion sécurisée des clés"}</p>
                     </div>
                 </div>
 
@@ -272,14 +272,14 @@ export default function IntegrationSettings() {
                         </div>
                         <div>
                             <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
-                                Neural Signals (Webhooks)
+                                {"Webhooks & Notifications"}
                             </h3>
-                            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Inbound & Outbound Data Projections</p>
+                            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">{"Flux d'événements entrants & sortants"}</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 px-4 py-2 bg-accent/10 rounded-full border border-accent/20">
                         <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                        <span className="text-nano font-bold text-accent uppercase tracking-widest">Active Dispatch</span>
+                        <span className="text-nano font-bold text-accent uppercase tracking-widest">Actif</span>
                     </div>
                 </div>
 

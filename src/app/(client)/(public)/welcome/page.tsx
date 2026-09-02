@@ -166,17 +166,17 @@ export default function WelcomePage() {
                  </div>
                  {/* Step B */}
                  <div className="bg-surface-card/5 border border-accent/30 p-10 rounded-3xl backdrop-blur-md relative transform lg:-translate-y-6 shadow-2xl shadow-accent/20">
-                     <div className="absolute top-0 right-10 -translate-y-1/2 bg-accent text-bg-primary px-4 py-1 rounded-full text-chip-label">
-                         {"L'Oracle Intervient"}
-                     </div>
-                     <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center mb-8">
-                         <div className="w-5 h-5 border-2 border-bg-primary border-t-transparent rounded-full animate-spin" />
-                     </div>
-                     <h3 className="text-2xl font-serif mb-4">2. OCR & IA Générative</h3>
-                     <p className="text-text-primary/60 mb-8 leading-relaxed">
-                         Le moteur Gemini 3.1 Pro lit, organise et classe intelligemment 100% des plats, descriptions et prix en quelques secondes.
-                     </p>
-                 </div>
+                      <div className="absolute top-0 right-10 -translate-y-1/2 bg-accent text-bg-primary px-4 py-1 rounded-full text-chip-label">
+                          {"Traitement Automatique"}
+                      </div>
+                      <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center mb-8">
+                          <div className="w-5 h-5 border-2 border-bg-primary border-t-transparent rounded-full animate-spin" />
+                      </div>
+                      <h3 className="text-2xl font-serif mb-4">2. Numérisation & Structuration</h3>
+                      <p className="text-text-primary/60 mb-8 leading-relaxed">
+                          Le module d'analyse extrait, organise et classe automatiquement l'ensemble des plats, descriptions et prix en quelques secondes.
+                      </p>
+                  </div>
                  {/* Step C */}
                  <div className="bg-surface-card/5 border border-subtle p-10 rounded-3xl backdrop-blur-md">
                      <div className="w-12 h-12 bg-success/20 rounded-xl flex items-center justify-center mb-8">

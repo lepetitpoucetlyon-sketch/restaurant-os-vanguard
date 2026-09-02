@@ -189,7 +189,7 @@ function InventoryPage() {
                                                             <button onClick={() => handleAdjustClick(item)} title={adjustPermission.allowed ? "Ajustement manuel" : "Accès insuffisant"} className={`p-1.5 rounded hover:bg-surface-hover ${adjustPermission.allowed ? "text-text-muted hover:text-text-primary" : "opacity-40 cursor-not-allowed"}`}>
                                                                 <SlidersHorizontal className="w-3.5 h-3.5" />
                                                             </button>
-                                                            <button onClick={() => setOracleItem(item)} title="Prévision Oracle" className="p-1.5 rounded hover:bg-surface-hover text-accent-gold hover:text-accent-gold/80">
+                                                            <button onClick={() => setOracleItem(item)} title="Prévision de rupture" className="p-1.5 rounded hover:bg-surface-hover text-accent-gold hover:text-accent-gold/80">
                                                                 <Sparkles className="w-3.5 h-3.5" />
                                                             </button>
                                                             <button onClick={() => handleDeleteClick(item)} title={deletePermission.allowed ? "Supprimer" : "Accès insuffisant"} className={`p-1.5 rounded hover:bg-surface-hover ${deletePermission.allowed ? "text-status-danger hover:text-red-600" : "opacity-40 cursor-not-allowed text-text-muted"}`}>

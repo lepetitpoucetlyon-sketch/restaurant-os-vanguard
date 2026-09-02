@@ -38,7 +38,7 @@ function ScanContent({ isScanning, onScan }: { isScanning: boolean; onScan: () =
                 className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-status-success to-transparent z-10 shadow-[0_0_20px_rgba(52,211,153,0.5)]"
             />
             <ScanLine className="w-20 h-20 text-status-success animate-pulse mb-4" />
-            <span className="text-status-success font-black tracking-[0.3em] uppercase animate-pulse">Analyse Empire Vision...</span>
+            <span className="text-status-success font-black tracking-[0.3em] uppercase animate-pulse">{"Numérisation du Bon..."}</span>
         </>
     ) : (
         <>
@@ -181,7 +181,7 @@ export function InventoryReceptionDashboard() {
                     </div>
                     <div className="space-y-1">
                         <p className="text-nano font-black text-text-muted uppercase tracking-[0.32em]">
-                            Flux Empire • Ingestion Intelligente
+                            {"Contrôle des Livraisons • Entrées de Stock"}
                         </p>
                         <h1 className="text-3xl md:text-[34px] font-serif font-black italic text-text-primary tracking-tight leading-none">
                             Réception<span className="text-accent-gold not-italic">.</span>
@@ -324,7 +324,7 @@ export function InventoryReceptionDashboard() {
                                     <AdviceSaveButton isSaving={isSaving} onSave={handleSaveToStock} />
                                 </div>
                                 <div className="bg-surface-card border border-border p-6 rounded-3xl">
-                                    <h4 className="text-nano font-black text-text-secondary uppercase mb-4 tracking-widest">Impact sur l'Empire</h4>
+                                    <h4 className="text-nano font-black text-text-secondary uppercase mb-4 tracking-widest">{"Impact sur le Stock"}</h4>
                                     <div className="space-y-3">
                                         <LogItem label="Marge & Stock" value="Synchronisé (FIFO)" trend="ok" />
                                         <LogItem label="Fiscalité" value="Signé" trend="ok" />

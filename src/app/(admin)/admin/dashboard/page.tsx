@@ -132,11 +132,11 @@ export default function VibecodingDashboard() {
         >
           <div>
             <h1 className="text-4xl font-light tracking-tight text-text-primary/90">
-              Restaurant <span className="font-semibold text-text-primary">Vanguard</span>
+              Restaurant <span className="font-semibold text-text-primary">OS Core</span>
             </h1>
             <p className="text-text-secondary mt-2 flex items-center gap-2">
               <Activity className="w-4 h-4 text-status-success animate-pulse" />
-              Pulse en temps réel — Grade X Souveraineté
+              {"Supervision en temps réel — État du Système"}
             </p>
           </div>
           <div className="text-right">
@@ -250,7 +250,7 @@ export default function VibecodingDashboard() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="rounded-3xl bg-gradient-to-b from-action-primary/10 to-transparent border border-focus/20 p-8 backdrop-blur-xl flex flex-col"
           >
-            <h2 className="text-xl font-medium text-text-primary/90 mb-6">Souveraineté & État</h2>
+            <h2 className="text-xl font-medium text-text-primary/90 mb-6">{"Conformité & État"}</h2>
             
             <div className="flex-1 space-y-6">
               <div className="p-4 rounded-2xl bg-status-success/10 border border-emerald-500/20">

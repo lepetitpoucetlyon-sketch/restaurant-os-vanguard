@@ -118,7 +118,7 @@ export function CertificationCenter() {
       for (const fc of fleetCerts) {
         if (primaryIds.has(fc.id)) continue;
         const digitalCert: DigitalCertificate = {
-          id: fc.id, instanceId: '__FLEET__', instanceName: 'Empire Fleet',
+          id: fc.id, instanceId: '__FLEET__', instanceName: 'Réseau Global',
           year: new Date(fc.issuedAt).getFullYear(), type: fc.status,
           issuedAt: fc.issuedAt, issuer: fc.issuedBy,
         };
@@ -179,7 +179,7 @@ export function CertificationCenter() {
                       value={selectedInstanceId}
                       onChange={(e) => { setSelectedInstanceId(e.target.value); setAuditStatus('idle'); setAuditReport(null); }}
                     >
-                      <option value="">Choisir une instance dans l'Empire...</option>
+                      <option value="">{"Sélectionner un établissement..."}</option>
                       {instances.map(instance => (
                         <option key={instance.id} value={instance.id}>{instance.name} ({instance.id})</option>
                       ))}

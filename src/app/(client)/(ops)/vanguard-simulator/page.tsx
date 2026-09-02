@@ -59,7 +59,7 @@ export default function SimulatorPage() {
         try {
             await runSimulation?.({
                 name: newSimConfig.name,
-                description: `Simulation manuelle: Prix ${newSimConfig.priceChange > 0 ? '+' : ''}${newSimConfig.priceChange}%, Main d'œuvre ${newSimConfig.laborChange}%`,
+                description: `Scénario: Prix ${newSimConfig.priceChange > 0 ? '+' : ''}${newSimConfig.priceChange}%, Masse salariale ${newSimConfig.laborChange}%`,
                 inputs: {
                     priceChange: newSimConfig.priceChange / 100
                 }
@@ -83,8 +83,8 @@ export default function SimulatorPage() {
             {/* Header */}
             <div className="bg-bg-secondary px-10 pt-10 pb-6 flex justify-between items-end border-b border-border shadow-sm">
                 <div>
-                    <h1 className="text-4xl font-serif font-black italic text-text-primary tracking-tighter">Business Simulator<span className="text-accent-gold not-italic">.</span></h1>
-                    <p className="text-nano font-black text-text-muted uppercase tracking-[0.4em] mt-2 italic">{"Digital Twin • Scénarios • Prédictions"}</p>
+                    <h1 className="text-4xl font-serif font-black italic text-text-primary tracking-tighter">Simulateur de Rentabilité<span className="text-accent-gold not-italic">.</span></h1>
+                    <p className="text-nano font-black text-text-muted uppercase tracking-[0.4em] mt-2 italic">{"Prévisions de Ventes • Scénarios de Prix & Coûts"}</p>
                 </div>
 
                 <Button
@@ -103,7 +103,7 @@ export default function SimulatorPage() {
                         <div className="p-8 rounded-[2rem] bg-bg-tertiary/20 border border-border">
                             <h3 className="text-nano font-black text-text-muted uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
                                 <BarChart3 className="w-3 h-3" />
-                                {"Performance Actuelle (Baseline)"}
+                                {"Performance Actuelle"}
                             </h3>
 
                             <div className="space-y-6">
@@ -139,7 +139,7 @@ export default function SimulatorPage() {
                                 {/* Master Inflation Controller */}
                                 <div className="p-6 bg-surface-glass rounded-[2rem] border border-border backdrop-blur-xl">
                                     <div className="flex justify-between items-center mb-6">
-                                        <h4 className="text-nano font-black text-text-muted uppercase tracking-[0.2em]">Master Inflation Simulation</h4>
+                                        <h4 className="text-nano font-black text-text-muted uppercase tracking-[0.2em]">Simulation Inflation & Coûts</h4>
                                         <div className="px-3 py-1 bg-accent-gold/20 rounded-full text-nano font-black text-accent-gold italic">
                                             {globalInflationRate}%
                                         </div>
@@ -156,12 +156,12 @@ export default function SimulatorPage() {
                                     />
                                     
                                     <div className="flex justify-between mt-3 text-nano font-black text-text-muted tracking-widest uppercase">
-                                        <span>Stable</span>
+                                        <span>Stable (0%)</span>
                                         <span>Crisis (20%)</span>
                                     </div>
 
                                     <p className="text-nano text-text-muted mt-6 italic opacity-70">
-                                        {"Impact global sur les marges POS et scores de signature Customer."}
+                                        {"Impact estimé sur les marges et la rentabilité."}
                                     </p>
                                 </div>
                             </div>
@@ -169,7 +169,7 @@ export default function SimulatorPage() {
 
                         <div className="p-6 rounded-[2rem] bg-gradient-to-br from-surface-sidebar to-surface-sidebar text-text-primary relative overflow-hidden">
                             <Cpu className="w-32 h-32 absolute -right-6 -bottom-6 text-text-primary/5 rotate-12" />
-                            <h3 className="text-xl font-serif font-bold italic z-10 relative">I.A. Insights</h3>
+                            <h3 className="text-xl font-serif font-bold italic z-10 relative">Recommandations & Marges</h3>
                             <p className="text-sm text-text-primary/70 mt-2 z-10 relative leading-relaxed">
                                 {'"Augmenter vos prix de 5% sur la gamme \'Vins\' pourrait générer +1,2k€ de marge nette sans impacter la demande, selon les tendances actuelles."'}
                             </p>
@@ -190,7 +190,7 @@ export default function SimulatorPage() {
                                 <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
                                     <Cpu className="w-20 h-20 mb-4" strokeWidth={1} />
                                     <p className="font-serif italic text-xl">{"Aucune simulation active"}</p>
-                                    <p className="text-sm">{"Lancez votre première simulation pour voir l'avenir."}</p>
+                                    <p className="text-sm">{"Créez un scénario pour projeter vos marges et votre résultat."}</p>
                                 </div>
                             ) : (
                                 (scenarios ?? []).map((scenario: Scenario) => (
@@ -207,13 +207,13 @@ export default function SimulatorPage() {
                                             </div>
                                             <div className="px-3 py-1 bg-bg-tertiary rounded-full text-chip-label-sm text-text-muted flex items-center gap-2">
                                                 <div className="w-1.5 h-1.5 rounded-full bg-success" />
-                                                {"Confiance "}{(scenario.confidenceScore * 100).toFixed(0)}%
+                                                {"Indice de confiance "}{(scenario.confidenceScore * 100).toFixed(0)}%
                                             </div>
                                         </div>
 
                                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                                             <div className="p-4 rounded-2xl bg-success/5 border border-success/10">
-                                                <p className="text-nano text-success/80 font-black uppercase tracking-wider mb-2">{"Impact Revenu"}</p>
+                                                <p className="text-nano text-success/80 font-black uppercase tracking-wider mb-2">{"Impact CA"}</p>
                                                 <div className="text-2xl font-black text-success flex items-center gap-2">
                                                     {scenario.projections.revenueImpact > 0 ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
                                                     {Math.abs(scenario.projections.revenueImpact).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })}
@@ -231,7 +231,7 @@ export default function SimulatorPage() {
                                                 "p-4 rounded-2xl border",
                                                 scenario.projections.netProfitChange > 0 ? "bg-accent-gold text-text-primary border-accent-gold" : "bg-error text-text-primary border-error"
                                             )}>
-                                                <p className="text-nano opacity-80 font-black uppercase tracking-wider mb-2">{"Profit Net Est."}</p>
+                                                <p className="text-nano opacity-80 font-black uppercase tracking-wider mb-2">{"Marge Nette Est."}</p>
                                                 <div className="text-2xl font-black">
                                                     {scenario.projections.netProfitChange > 0 ? '+' : ''}{scenario.projections.netProfitChange.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })}
                                                 </div>
@@ -239,7 +239,7 @@ export default function SimulatorPage() {
                                         </div>
 
                                         <div className="mt-6 pt-4 border-t border-border flex justify-end gap-3 opacity-50 group-hover:opacity-100 transition-opacity">
-                                            <Button variant="ghost" className="h-9 text-xs">{"Détails Complets"}</Button>
+                                            <Button variant="ghost" className="h-9 text-xs">{"Détails"}</Button>
                                             <Button variant="outline" className="h-9 text-xs border-dashed">{"Archiver"}</Button>
                                         </div>
                                     </motion.div>
@@ -254,7 +254,7 @@ export default function SimulatorPage() {
             <Modal
                 isOpen={showNewSimModal}
                 onClose={() => setShowNewSimModal(false)}
-                title="Lancer une Simulation"
+                title="Créer un Scénario"
             >
                 <div className="space-y-8 p-6">
                     <div className="space-y-4">
@@ -263,7 +263,7 @@ export default function SimulatorPage() {
                             type="text"
                             value={newSimConfig.name}
                             onChange={e => setNewSimConfig({ ...newSimConfig, name: e.target.value })}
-                            placeholder="ex: Hausse Prix Été 2026"
+                            placeholder="ex: Ajustement Prix Carte Saisonnière"
                             className="w-full h-14 px-6 bg-surface-bg dark:bg-surface-card/5 border-2 border-transparent focus:border-accent-gold rounded-xl text-lg text-text-primary focus:outline-none transition-all"
                         />
                     </div>
@@ -308,7 +308,7 @@ export default function SimulatorPage() {
                         ) : (
                             <>
                                 <Cpu className="w-5 h-5" />
-                                {"Exécuter la Simulation I.A."}
+                                {"Calculer le Scénario"}
                             </>
                         )}
                     </Button>

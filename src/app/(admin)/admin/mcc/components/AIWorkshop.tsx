@@ -65,8 +65,8 @@ export const AIWorkshop: React.FC = () => {
             <BrainCircuit className="w-5 h-5 text-brand" />
           </div>
           <div>
-            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted">NAM Workshop</h3>
-            <p className="text-sm font-bold text-text-primary">Neural Patches</p>
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted">{"Atelier IA"}</h3>
+            <p className="text-sm font-bold text-text-primary">{"Recommandations & Patches"}</p>
           </div>
         </div>
         <button
@@ -79,10 +79,10 @@ export const AIWorkshop: React.FC = () => {
       </div>
 
       {loading ? (
-        <div className="text-center py-8 text-secondary text-xs font-bold uppercase tracking-widest">Chargement…</div>
+        <div className="text-center py-8 text-secondary text-xs font-bold uppercase tracking-widest">{"Chargement…"}</div>
       ) : patches.length === 0 ? (
         <div className="text-center py-8 border border-dashed border-border-subtle rounded-2xl">
-          <p className="text-secondary text-xs italic">Aucun patch NAM en attente.</p>
+          <p className="text-secondary text-xs italic">{"Aucune recommandation en attente."}</p>
         </div>
       ) : (
         <div className="space-y-4">

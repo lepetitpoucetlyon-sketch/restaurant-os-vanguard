@@ -89,14 +89,14 @@ function AnalyticsPage() {
         { id: "profitability", label: "Rentabilité", icon: TrendingUp },
         { id: "reputation", label: "Réputation", icon: Star },
         { id: "compliance", label: "Conformité", icon: ShieldCheck },
-        { id: "oracle", label: "Oracle", icon: Brain },
+        { id: "oracle", label: "Prévisions", icon: Brain },
     ] as const).filter(tab => tab.id !== "oracle" || canSeeOracle);
 
     return (
         <PageShell
             kicker="Intelligence"
             title="Analytique & Intelligence"
-            subtitle="Rentabilité, réputation, conformité et prédictions Oracle."
+            subtitle={"Rentabilité, réputation, conformité et prévisions d'activité."}
             icon={BarChart2}
             breadcrumbs={[{ label: "Opérations" }, { label: "Analytics" }]}
             tabs={

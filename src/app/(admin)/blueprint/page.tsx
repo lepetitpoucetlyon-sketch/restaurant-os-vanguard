@@ -32,26 +32,26 @@ export default function BlueprintPage() {
                     <BlueprintHeader />
                 </section>
 
-                {/* 1. ADN des Dépendances & Mind Map */}
+                {/* 1. Dépendances & Schéma Technique */}
                 <section id="dna" className="space-y-8">
                     <div className="flex items-center gap-4 mb-2">
                         <div className="w-12 h-12 rounded-2xl bg-action-primary border border-border flex items-center justify-center">
                             <Network className="w-6 h-6 text-action-primary" />
                         </div>
-                        <h2 className="text-3xl font-brand">ADN du <span className="text-action-primary italic">Projet</span> & Dépendances</h2>
+                        <h2 className="text-3xl font-brand">Architecture & <span className="text-action-primary italic">Dépendances</span></h2>
                     </div>
                     <GlassCard className="p-0 overflow-hidden bg-bg-secondary/40 border-border/50">
                         <MindMapDependencies />
                     </GlassCard>
                 </section>
 
-                {/* 2. Ondes de Choc & Impacts d'Actions */}
+                {/* 2. Matrice d'Impacts & Événements */}
                 <section id="impacts" className="space-y-8">
                     <div className="flex items-center gap-4 mb-2">
                         <div className="w-12 h-12 rounded-2xl bg-status-success border border-border flex items-center justify-center">
                             <Database className="w-6 h-6 text-status-success" />
                         </div>
-                        <h2 className="text-3xl font-brand">Ondes de Choc & <span className="text-status-success italic">Impacts</span></h2>
+                        <h2 className="text-3xl font-brand">Matrice des <span className="text-status-success italic">Impacts</span></h2>
                     </div>
                     <ActionImpactMap />
                 </section>
@@ -68,13 +68,13 @@ export default function BlueprintPage() {
                         <StructureOverview />
                     </section>
 
-                    {/* 4. Marque & Guide de Prompt IA */}
+                    {/* 4. Charte Graphique & Tokens */}
                     <section id="brand" className="space-y-8">
                         <div className="flex items-center gap-4 mb-2">
                             <div className="w-12 h-12 rounded-2xl bg-action-primary/10 border border-border flex items-center justify-center">
                                 <Cpu className="w-6 h-6 text-brand" />
                             </div>
-                            <h2 className="text-3xl font-brand">ADN de Marque & <span className="text-brand italic">Oracle IA</span></h2>
+                            <h2 className="text-3xl font-brand">Charte Graphique & <span className="text-brand italic">Design Tokens</span></h2>
                         </div>
                         <BrandPromptGuide />
                     </section>
@@ -83,7 +83,7 @@ export default function BlueprintPage() {
                 {/* Footer Insight */}
                 <motion.footer variants={fadeInUp} className="pt-20 border-t border-border/50 text-center">
                     <p className="text-text-muted text-sm font-mono tracking-widest uppercase">
-                        RESTAURANT OS — BluePrint v12.0 "L'Architecte" &bull; Architecture Cloud-Native &bull; 2026
+                        RESTAURANT OS — Blueprint Technique &bull; Architecture Modulaire &bull; 2026
                     </p>
                 </motion.footer>
             </motion.main>

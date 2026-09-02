@@ -52,12 +52,12 @@ export function MenuAestheticSection({ menuSettings, setMenuSettings }: MenuAest
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                    { key: 'showImages', label: 'Visual Synthesis', sub: 'Photo projection', icon: FileImageIcon },
-                    { key: 'showDescriptions', label: 'Semantic Data', sub: 'Detailed descriptions', icon: FileText },
-                    { key: 'showAllergens', label: 'Bioshield Intel', sub: 'Allergen signaling', icon: AlertTriangle },
-                    { key: 'showCalories', label: 'Thermal Units', sub: 'Calorie projection', icon: Flame },
-                    { key: 'seasonalLabels', label: 'Cycle Logic', sub: 'Seasonal identifiers', icon: Leaf },
-                    { key: 'suggestionsEnabled', label: 'Neural Recs', sub: 'AI upselling engine', icon: Sparkles },
+                    { key: 'showImages', label: 'Photos des Plats', sub: 'Affichage des photos sur la carte', icon: FileImageIcon },
+                    { key: 'showDescriptions', label: 'Descriptions des Plats', sub: 'Textes et détails des recettes', icon: FileText },
+                    { key: 'showAllergens', label: 'Allergènes Obligatoires', sub: 'Signalétique des 14 allergènes légaux', icon: AlertTriangle },
+                    { key: 'showCalories', label: 'Valeurs Nutritionnelles', sub: 'Affichage des calories & nutriscore', icon: Flame },
+                    { key: 'seasonalLabels', label: 'Plats de Saison', sub: 'Badges produits frais & saisonniers', icon: Leaf },
+                    { key: 'suggestionsEnabled', label: 'Suggestions & Vente Additionnelle', sub: 'Recommandations automatiques de plats', icon: Sparkles },
                 ].map((setting) => {
                     const Icon = setting.icon;
                     const isEnabled = menuSettings[setting.key as keyof MenuAestheticSettings];

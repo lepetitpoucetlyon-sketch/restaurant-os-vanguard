@@ -111,7 +111,7 @@ export function useMccPage() {
 
             timers.forEach(clearTimeout);
             setProvisionStep(PROV_STEPS.length);
-            setProvisioningStatus('Clone Actif · Déploiement terminé ✓');
+            setProvisioningStatus('Établissement Actif · Déploiement terminé ✓');
             refreshFleet();
             setTimeout(() => {
                 setShowCloneModal(false);

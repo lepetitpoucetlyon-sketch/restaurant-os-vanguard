@@ -92,17 +92,17 @@ export default function ShowcasePage() {
         </div>
         
         <h1 className="text-7xl md:text-8xl font-black tracking-tighter mb-8 leading-tight">
-          L'Os de votre <br />
-          <span className="bg-gradient-to-r from-[#c5a358] via-[#e6cc8d] to-[#c5a358] bg-clip-text text-transparent">Empire Gastronomique</span>
+          L'OS de votre <br />
+          <span className="bg-gradient-to-r from-[#c5a358] via-[#e6cc8d] to-[#c5a358] bg-clip-text text-transparent">Réseau de Restaurants</span>
         </h1>
         
         <p className="text-xl text-muted max-w-2xl mx-auto mb-12 leading-relaxed">
-          Propulsez votre chaîne de restaurants à une échelle industrielle avec une plateforme certifiée NF525, pilotée par l'Intelligence Artificielle et sécurisée par la blockchain.
+          Gérez votre groupe de restauration avec une plateforme certifiée NF525, ultra-rapide, résiliente hors-ligne et pensée pour le terrain.
         </p>
 
         <div className="flex flex-wrap justify-center gap-6">
           <Link href="/onboarding" className="px-10 py-5 bg-accent text-primary font-bold rounded-2xl hover:bg-accent transition-all flex items-center gap-3 text-lg shadow-[0_10px_30px_rgba(197,163,88,0.2)] cursor-pointer">
-            Déployer la Flotte <ChevronRight size={20} />
+            Déployer un Établissement <ChevronRight size={20} />
           </Link>
           <button
             onClick={() => setShowDemoModal(true)}
@@ -119,8 +119,8 @@ export default function ShowcasePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <FeatureCard 
             icon={<Globe size={28} />}
-            title="Master Control Center"
-            description="Pilotez 50+ instances en temps réel. Gérez vos menus, vos prix et votre personnel depuis une interface unifiée."
+            title="Console Réseau Multi-Sites"
+            description="Pilotez l'ensemble de vos établissements en temps réel. Gérez vos menus, vos prix et votre personnel depuis une interface unifiée."
           />
           <FeatureCard 
             icon={<ShieldCheck size={28} />}
@@ -129,13 +129,13 @@ export default function ShowcasePage() {
           />
           <FeatureCard 
             icon={<Cpu size={28} />}
-            title="Oracle Stratégique AI"
-            description="Le cerveau Gemini 3.1 Flash analyse votre flotte et génère des SITREPs quotidiens pour optimiser vos marges."
+            title="Analyses & Prévisions Métier"
+            description="Analyse intelligente de votre activité et synthèses de gestion automatiques pour optimiser vos marges."
           />
           <FeatureCard 
             icon={<Database size={28} />}
-            title="Inventaire Fédéré"
-            description="Gestion de stock prédictive et alertes de rupture mondiales. Optimisation des approvisionnements fournisseurs."
+            title="Inventaire & Approvisionnement"
+            description="Gestion de stock prédictive et alertes de réapprovisionnement. Optimisation des commandes fournisseurs."
           />
           <FeatureCard 
             icon={<Users size={28} />}

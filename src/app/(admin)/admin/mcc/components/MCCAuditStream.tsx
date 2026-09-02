@@ -51,8 +51,8 @@ export function MCCAuditStream() {
                         <Terminal className="w-4 h-4 text-brand" />
                     </div>
                     <div>
-                        <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Empire Audit Stream</h3>
-                        <p className="text-nano text-secondary font-medium">Real-time Telemetry • Secure Channel</p>
+                        <h3 className="text-sm font-bold uppercase tracking-widest text-muted">{"Journal d'Audit Réseau"}</h3>
+                        <p className="text-nano text-secondary font-medium">{"Télémétrie en temps réel • Canal Sécurisé"}</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2">

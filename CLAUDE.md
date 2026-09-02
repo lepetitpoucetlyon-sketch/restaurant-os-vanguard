@@ -59,6 +59,10 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 
 ## Conventions critiques
 
+### Zéro AI Slop — Vocabulaire B2B Métier Strict (Loi 11)
+- **Interdiction formelle** de tout jargon sci-fi, cyberpunk, lore fantasque ou pseudo-sacré (`Empire`, `Oracle mystique`, `DNA Crawler`, `Morphogenèse`, `Convive Esprit`, `Compendium`, `Cognitive Stability Index`, `Vanguard Simulator`).
+- Utiliser **exclusivement** le vocabulaire métier réel de la restauration et du SaaS B2B (*Analyses & Prévisions, Assistant de Gestion, Réseau & Multi-Établissements, Personnalisation Graphique, Client / Couvert, Clôture Z, Scellement NF525*).
+
 ### Monnaie — MICROUNITS OBLIGATOIRE
 - **1 microunit = 0,000 001 €** (1 000 000 µ = 1 €)
 - Tous les prix en champs `*InMicrounits` (jamais `*InCents` dans le nouveau code)

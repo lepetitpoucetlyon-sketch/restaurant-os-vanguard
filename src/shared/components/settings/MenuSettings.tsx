@@ -14,14 +14,14 @@ import {
 } from "./menu-settings/MenuCategorySection";
 
 const defaultCategories: MenuCategory[] = [
-    { id: '1', name: 'Neural Starters', color: '#22C55E', order: 1, isActive: true, productCount: 12 },
-    { id: '2', name: 'Core Circuits', color: '#3B82F6', order: 2, isActive: true, productCount: 18 },
-    { id: '3', name: 'Oceanic Nodes', color: '#06B6D4', order: 3, isActive: true, productCount: 6 },
-    { id: '4', name: 'Proteine Vectors', color: '#EF4444', order: 4, isActive: true, productCount: 8 },
-    { id: '5', name: 'Final Decoders', color: '#EC4899', order: 5, isActive: true, productCount: 10 },
-    { id: '6', name: 'Liquid Refresh', color: '#F59E0B', order: 6, isActive: true, productCount: 24 },
-    { id: '7', name: 'Vineyard Layers', color: '#8B5CF6', order: 7, isActive: true, productCount: 32 },
-    { id: '8', name: 'Strategic Menus', color: '#14B8A6', order: 8, isActive: true, productCount: 4 },
+    { id: '1', name: 'Entrées', color: '#22C55E', order: 1, isActive: true, productCount: 12 },
+    { id: '2', name: 'Plats Principaux', color: '#3B82F6', order: 2, isActive: true, productCount: 18 },
+    { id: '3', name: 'Poissons & Fruits de Mer', color: '#06B6D4', order: 3, isActive: true, productCount: 6 },
+    { id: '4', name: 'Viandes & Grillades', color: '#EF4444', order: 4, isActive: true, productCount: 8 },
+    { id: '5', name: 'Desserts', color: '#EC4899', order: 5, isActive: true, productCount: 10 },
+    { id: '6', name: 'Boissons & Softs', color: '#F59E0B', order: 6, isActive: true, productCount: 24 },
+    { id: '7', name: 'Vins & Spiritueux', color: '#8B5CF6', order: 7, isActive: true, productCount: 32 },
+    { id: '8', name: 'Formules & Menus', color: '#14B8A6', order: 8, isActive: true, productCount: 4 },
 ];
 
 export default function MenuSettings() {

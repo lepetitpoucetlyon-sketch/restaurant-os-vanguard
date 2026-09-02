@@ -209,9 +209,9 @@ export default function ReviewsSettings() {
                         </div>
                         <div>
                             <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
-                                Neural Response Engine
+                                {"Réponses Automatiques aux Avis"}
                             </h3>
-                            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Automated Semantic Acknowledgement</p>
+                            <p className="text-nano font-bold text-text-muted uppercase tracking-widest">{"Génération de réponses personnalisées"}</p>
                         </div>
                     </div>
                     <button

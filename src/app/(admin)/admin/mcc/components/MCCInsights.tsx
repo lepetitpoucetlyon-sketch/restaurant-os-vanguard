@@ -24,7 +24,7 @@ export function MCCInsights() {
         <div className="space-y-4">
             <div className="flex items-center gap-2 mb-2">
                 <Zap className="w-4 h-4 text-status-warning" />
-                <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Empire Intelligence</h3>
+                <h3 className="text-sm font-bold uppercase tracking-widest text-muted">Synthèse du Réseau</h3>
             </div>
             
             {macroInsights.map((insight: FleetInsight, idx: number) => (

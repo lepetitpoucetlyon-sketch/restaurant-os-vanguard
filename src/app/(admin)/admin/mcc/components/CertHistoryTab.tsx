@@ -71,8 +71,8 @@ export function CertHistoryTab({ certificates, isSyncing, onDownload, onPrint, o
             <FileText className="w-10 h-10" />
           </div>
           <div className="text-center">
-            <h3 className="text-sm font-black text-text-primary uppercase tracking-widest mb-1">Archive Légale</h3>
-            <p className="text-xs text-secondary font-medium">Aucun duplicata ou attestation d'instance trouvée dans l'Empire.</p>
+            <h3 className="text-sm font-black text-text-primary uppercase tracking-widest mb-1">{"Archive Légale"}</h3>
+            <p className="text-xs text-secondary font-medium">{"Aucune attestation trouvée dans le réseau."}</p>
           </div>
         </div>
       )}

@@ -8,12 +8,7 @@ import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 import { PageShell } from "@/shared/components/ui/PageShell";
 
 /**
- * Hub /intelligence — passerelle vers les surfaces d'analyse et d'IA du produit.
- *
- * Cette route existe parce que MobileNavBar la référence : sans page, le lien renvoyait
- * une 404 (constat pendant l'audit Vanguard). Le hub évite le lien mort et rassemble
- * en un seul endroit les entrées IA : agent conversationnel, cartographie 3D du système,
- * analytics métier et rapports d'usage.
+ * Hub /intelligence — passerelle vers les surfaces d'analyse et de pilotage du produit.
  */
 
 interface HubCard {
@@ -21,34 +16,34 @@ interface HubCard {
     description: string;
     href: string;
     icon: typeof Sparkles;
-    accent: string; // classe Tailwind pour le badge
+    accent: string;
 }
 
 const CARDS: HubCard[] = [
     {
-        title: "Intelligence Exécutive",
-        description: "Agent conversationnel IA — analyse, décisions, exports. Piloté par Hermes/LightRAG.",
+        title: "Monitoring & Tâches",
+        description: "Supervision des services, synchronisation et diagnostic de l'application.",
         href: "/admin/agent",
         icon: MessageSquare,
         accent: "text-accent-gold bg-accent-gold/10",
     },
     {
-        title: "Analytics métier",
-        description: "Menu Engineering, rentabilité, réputation, conformité. Vue multi-tabs par pilier.",
+        title: "Analytics Métier",
+        description: "Menu Engineering, rentabilité des plats, productivité horaire et prévisions de ventes.",
         href: "/analytics",
         icon: BarChart3,
         accent: "text-status-success bg-status-success/10",
     },
     {
-        title: "Cartographie 3D",
-        description: "System Map — vue mentale 3D du système Restaurant OS et des dépendances Nexus.",
+        title: "Cartographie Système",
+        description: "Visualisation interactive de la structure et des modules de l'application.",
         href: "/system-map",
         icon: Map,
         accent: "text-blue-500 bg-status-info/10",
     },
     {
-        title: "Registre & Prévisionnel",
-        description: "Prévisions d'affluence, historique conformité, journal AI-assisté.",
+        title: "Registres & Conformité",
+        description: "Historique de conformité, registres obligatoires et traçabilité légale.",
         href: "/registre",
         icon: TrendingUp,
         accent: "text-purple-500 bg-purple-500/10",
@@ -58,11 +53,11 @@ const CARDS: HubCard[] = [
 function IntelligenceHubPage() {
     return (
         <PageShell
-            kicker="Intelligence"
-            title="Intelligence IA"
-            subtitle="Point d'entrée unique vers les surfaces d'analyse et d'automatisation du système. Ouvrez un module pour l'utiliser en pleine surface."
+            kicker="Analyses"
+            title="Analyses & Pilotage"
+            subtitle="Point d'entrée vers les outils d'analyse, de prévision et de pilotage de votre établissement."
             icon={Sparkles}
-            breadcrumbs={[{ label: "Opérations" }, { label: "Intelligence" }]}
+            breadcrumbs={[{ label: "Opérations" }, { label: "Analyses" }]}
         >
             <section className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl">
                 {CARDS.map((card, i) => {
@@ -100,3 +95,4 @@ function IntelligenceHubPage() {
 }
 
 export default withPageGuard(IntelligenceHubPage, "intelligence");
+

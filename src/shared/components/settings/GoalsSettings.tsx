@@ -235,9 +235,9 @@ export default function GoalsSettings() {
                     </div>
                     <div>
                         <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">
-                            Threshold Logic
+                            {"Seuils d'Alerte"}
                         </h3>
-                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Automatic Neural Signal Triggers</p>
+                        <p className="text-nano font-bold text-text-muted uppercase tracking-widest">{"Déclenchement automatique des notifications"}</p>
                     </div>
                 </div>
 

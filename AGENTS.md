@@ -165,8 +165,28 @@ Pour toute tâche de calcul intensif, d'analyse statique, de cryptographie fisca
 - **Cœur Fiscal & Chaînage NF525** : Module WebAssembly/Rust (`@nexus/fiscal-seal-wasm`) pour les calculs de hachage SHA-256 et l'inaltérabilité des tickets/factures.
 - **Pilotes Matériels & IoT** : Démons natifs pour les communications série ESC/POS et tireuses SmartSpout (latence sub-milliseconde, 0% CPU).
 
-### 2. Règle pour tout agent :
-Avant d'écrire un script d'analyse lourd en Node.js, l'agent doit vérifier s'il existe une solution native ou utiliser les commandes rapides (`npm run lint:fast`, `node scripts/gate-last-mile.mjs`, `sentrux check`).
+---
+
+## Loi 11 — Zéro AI Slop & Vocabulaire B2B Métier Strict (Anti-Slop Law)
+
+Tout agent qui écrit du code, de l'UI, des dictionnaires i18n (`src/i18n/locales/`), des descriptions de pages, des routes ou de la documentation sur ce repo doit impérativement respecter la **sobriété et le réalisme opérationnel d'un logiciel B2B professionnel pour la restauration**.
+
+### 1. Interdiction absolue du jargon Sci-Fi, Cyberpunk, Lore Fantasque & AI Slop
+Sont **strictement interdits** dans toute interface, libellé, clé i18n, composant, message d'erreur ou documentation :
+- **Le lore pseudo-impérial / mystique** : `Empire`, `Imperial`, `Sceau Sacré`, `L'Archive`, `Aura`, `Vanguard`, `Master Control Console` ;
+- **Le jargon pseudo-mystique / sci-fi** : `Oracle` (en tant qu'entité mystique), `Convive Esprit`, `Compendium d'Occupation Heureuse`, `Cognitive Stability Index`, `Neural Density`, `Digital Twin` ;
+- **Le vocabulaire pseudo-biologique / délirant** : `DNA Crawler`, `Morphogenèse`, `Naissance d'un Clone`, `Injection ADN`.
+
+### 2. Remplacement systématique par le vocabulaire métier réel :
+- `Oracle / IA` $\rightarrow$ **Analyses & Prévisions, Assistant de Gestion, Recommandations Métier** ;
+- `Empire / Flotte` $\rightarrow$ **Réseau, Multi-Établissements, Parc de Restaurants** ;
+- `DNA Crawler / Morphogenèse` $\rightarrow$ **Import de Charte Graphique, Personnalisation Thème, Détection Logo** ;
+- `Naissance de Clone` $\rightarrow$ **Nouvel Établissement, Déploiement de Restaurant** ;
+- `Convive Esprit / Sceau` $\rightarrow$ **Client / Couvert / Place, Facture / Scellement Fiscal NF525** ;
+- `Vanguard Simulator` $\rightarrow$ **Simulateur d'Activité & Rentabilité, Scénarios de Prix & Coûts**.
+
+### 3. Règle du Restaurateur Terrain (Test du Réalisme)
+Chaque texte affiché doit pouvoir être lu et compris immédiatement par un restaurateur, un chef de cuisine, un serveur, un gérant ou un comptable sans la moindre perplexité ou sensation de gadget IA. Toute formulation ampoulée, pseudo-sacrée ou générée sans contexte métier réel est **strictement proscrite**.
 
 ---
 

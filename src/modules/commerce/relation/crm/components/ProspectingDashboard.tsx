@@ -94,12 +94,12 @@ export function ProspectingDashboard() {
       <div className="space-y-4">
         <div className="flex items-center gap-3 text-accent">
           <Sparkles className="w-6 h-6" />
-          <span className="text-xs font-black uppercase tracking-[0.4em]">Propulsion Commerciale</span>
+          <span className="text-xs font-black uppercase tracking-[0.4em]">Personnalisation Graphique</span>
         </div>
-        <h1 className="text-5xl font-serif italic">Mettre à sa sauce.</h1>
+        <h1 className="text-5xl font-serif italic">Personnaliser l'interface.</h1>
         <p className="text-text-muted max-w-xl">
-          Entre l'URL du site ou l'Instagram du prospect. L'IA capture la charte graphique
-          et transforme l'app en sa propre interface en moins de 60 secondes.
+          Entrez l'URL du site ou du compte Instagram du restaurant. Le studio extrait les couleurs et le logo
+          pour adapter automatiquement votre application.
         </p>
       </div>
 

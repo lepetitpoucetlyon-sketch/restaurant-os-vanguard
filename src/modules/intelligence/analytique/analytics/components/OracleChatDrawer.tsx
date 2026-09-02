@@ -56,7 +56,7 @@ export function OracleChatDrawer({
           <motion.div
             role="dialog"
             aria-modal="true"
-            aria-label="Oracle AI Assistant Analytique"
+            aria-label="Assistant d'Analyse Métier"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -71,16 +71,17 @@ export function OracleChatDrawer({
                 </div>
                 <div>
                   <h3 className="text-sm font-black uppercase tracking-widest">
-                    Oracle NEXUS
+                    Assistant d'Analyse
                   </h3>
                   <p className="text-nano text-text-muted uppercase tracking-widest">
-                    IA contextuelle · RAG souverain
+                    Aide au pilotage opérationnel
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-1">
                 <button
                   onClick={startNewSession}
+                  aria-label="Nouvelle conversation"
                   className="p-2 rounded-lg hover:bg-bg-tertiary transition-colors text-text-muted"
                   title="Nouvelle conversation"
                 >
@@ -102,11 +103,10 @@ export function OracleChatDrawer({
                   <MessageSquare className="w-12 h-12 opacity-20" />
                   <div className="text-center">
                     <p className="text-xs font-bold">
-                      Posez une question à Oracle
+                      Posez une question sur vos opérations
                     </p>
                     <p className="text-nano mt-1 max-w-[240px]">
-                      Menu, stock, finance, planning, conformité... Oracle
-                      connaît votre restaurant.
+                      Menu, stocks, finances, planning, conformité... Accédez rapidement aux indicateurs clés.
                     </p>
                   </div>
                   <div className="flex flex-wrap gap-2 justify-center mt-2">
@@ -168,7 +168,7 @@ export function OracleChatDrawer({
                   <div className="bg-bg-secondary border border-border rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-2">
                     <Loader2 className="w-3.5 h-3.5 animate-spin text-accent" />
                     <span className="text-nano text-text-muted">
-                      Oracle réfléchit...
+                      Analyse des données en cours...
                     </span>
                   </div>
                 </div>
@@ -197,14 +197,15 @@ export function OracleChatDrawer({
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Posez votre question..."
+                  placeholder="Posez une question sur votre restaurant..."
                   disabled={isProcessing}
-                  className="flex-1 bg-bg-primary border border-border rounded-xl px-4 py-2.5 text-xs placeholder:text-text-muted focus:outline-none focus:border-accent transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-2.5 bg-bg-tertiary rounded-xl text-xs text-text-primary placeholder:text-text-muted border border-transparent focus:border-accent focus:outline-none transition-colors disabled:opacity-50"
                 />
-                <button aria-label="Envoyer"
+                <button
                   type="submit"
+                  aria-label="Envoyer le message"
                   disabled={!input.trim() || isProcessing}
-                  className="w-10 h-10 rounded-xl bg-accent text-white flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="p-2.5 rounded-xl bg-accent text-white hover:bg-accent/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
                   <Send className="w-4 h-4" />
                 </button>
