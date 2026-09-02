@@ -96,7 +96,7 @@ export function NewChangelogEntryModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title-changelog"
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[rgba(0,0,0,0.7)] backdrop-blur-md"
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 10 }}

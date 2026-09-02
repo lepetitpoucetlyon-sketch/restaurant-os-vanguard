@@ -14,7 +14,7 @@ export { PayrollConnectorFactory } from './connectors/payroll/PayrollConnectorFa
 export type { ClockEventType, ClockEntry, ITimeclockProvider } from './connectors/timeclock/types';
 export { NexusStaffingOracle } from './services/NexusStaffingOracle';
 export { TipDistributionService } from './effectifs/hr/services/tipDistribution';
-export { TipsDistributionEngine, DEFAULT_TIPS_SETTINGS, type TipsDistributionSettings, type TipDistributionMethod } from './remuneration/services/TipsDistributionEngine';
+export { TipsDistributionEngine, DEFAULT_TIPS_SETTINGS, type TipsDistributionSettings, type TipDistributionMethod, type StaffShiftParticipation, type StaffTipShare } from './remuneration/services/TipsDistributionEngine';
 export { LaborCostAnalyzer } from './effectifs/hr/services/LaborCostAnalyzer';
 export { LaborCostService } from './effectifs/hr/services/laborCost';
 export { PrepaieBuilder } from './remuneration/payroll/PrepaieBuilder';

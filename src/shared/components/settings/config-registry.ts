@@ -162,4 +162,60 @@ export const PAGE_SETTINGS: Record<PageKey, { title: string; settings: PageSetti
         title: "Paramètres Système",
         settings: [], // Settings page has its own interface
     },
+    pos_mobile: {
+        title: "Paramètres Caisse Mobile",
+        settings: [],
+    },
+    crm: {
+        title: "Paramètres Fidélité & CRM",
+        settings: [],
+    },
+    timeclock: {
+        title: "Paramètres Pointage & Horaires",
+        settings: [],
+    },
+    recruitment: {
+        title: "Paramètres Recrutement",
+        settings: [],
+    },
+    marketing: {
+        title: "Paramètres Marketing & Réseaux",
+        settings: [],
+    },
+    intelligence: {
+        title: "Paramètres IA & Analyse",
+        settings: [],
+    },
+    menu_builder: {
+        title: "Paramètres Concepteur de Menus",
+        settings: [],
+    },
+    operations: {
+        title: "Paramètres Opérations",
+        settings: [],
+    },
+    facility: {
+        title: "Paramètres Équipements & Locaux",
+        settings: [],
+    },
+    mon_espace: {
+        title: "Paramètres Espace Collaborateur",
+        settings: [],
+    },
+    welcome_staff: {
+        title: "Paramètres Onboarding Collaborateurs",
+        settings: [],
+    },
+    accounting_portal: {
+        title: "Paramètres Portail Comptable",
+        settings: [],
+    },
+    migration: {
+        title: "Paramètres Migration & Reprise d'Antériorité",
+        settings: [],
+    },
+    vanguard_simulator: {
+        title: "Paramètres Simulateur Financier",
+        settings: [],
+    },
 };

@@ -30,7 +30,7 @@ describe('⚡ OpenPencil — Code Generator & Serialization', () => {
 
         const parsed = PageSceneGraphCompiler.parse(json);
         expect(parsed.version).toBe('1.0.0');
-        expect(parsed.pages.length).toBe(84);
+        expect(parsed.pages.length).toBe(87);
         expect(parsed.pages[0].id).toBe(fullDoc.pages[0].id);
     });
 

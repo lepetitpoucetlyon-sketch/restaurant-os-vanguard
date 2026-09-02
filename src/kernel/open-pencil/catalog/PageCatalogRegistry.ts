@@ -115,6 +115,9 @@ export const RESTAURANT_OS_PAGES_META: readonly RegisteredPageMeta[] = [
     { id: 'page-legal-mentions', route: '/legal/mentions', name: 'Mentions Légales', category: 'public', description: 'Informations juridiques de l éditeur et hébergeur', icon: 'ScrollText', devicePreset: 'desktop', widgets: ['LEGAL_TEXT_VIEW'] },
     { id: 'page-legal-rgpd', route: '/legal/rgpd', name: 'Politique de Confidentialité RGPD', category: 'public', description: 'Droits des utilisateurs et cookies', icon: 'Shield', devicePreset: 'desktop', widgets: ['LEGAL_TEXT_VIEW'] },
     { id: 'page-offline', route: '/offline', name: 'Mode Hors-Ligne & Secours', category: 'public', description: 'Page de secours lors des coupures internet', icon: 'Activity', devicePreset: 'tablet', widgets: ['OFFLINE_INDICATOR'] },
+    { id: 'page-admin-studio', route: '/admin/studio', name: 'Studio OpenPencil MCC', category: 'admin', description: 'Atelier de modélisation UI et édition de thèmes pour la flotte', icon: 'Palette', devicePreset: 'desktop', widgets: ['OPEN_PENCIL_CANVAS', 'INSPECTOR'] },
+    { id: 'page-automations', route: '/automations', name: 'Automatisations & Déclencheurs', category: 'operations', description: 'Règles autonomes et réactions aux événements du service', icon: 'Zap', devicePreset: 'desktop', widgets: ['AUTOMATIONS_LIST', 'TRIGGER_BUILDER'] },
+    { id: 'page-studio-public', route: '/studio', name: 'Studio Expérimentation Client', category: 'public', description: 'Portail interactif de démonstration visuelle pour les prospects', icon: 'Sparkles', devicePreset: 'desktop', widgets: ['PUBLIC_PREVIEW_CANVAS'] },
 ];
 
 export class PageCatalogRegistry {

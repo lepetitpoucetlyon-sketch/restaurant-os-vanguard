@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { PageCatalogRegistry } from '@/kernel/open-pencil/catalog/PageCatalogRegistry';
 
-describe('📚 OpenPencil — 84 Pages Catalog Registry', () => {
-    it('indexe exactement 84 pages pour Restaurant OS Core', () => {
+describe('📚 OpenPencil — 87 Pages Catalog Registry', () => {
+    it('indexe exactement 87 pages pour Restaurant OS Core', () => {
         const allPages = PageCatalogRegistry.getAllPages();
-        expect(allPages.length).toBe(84);
+        expect(allPages.length).toBe(87);
     });
 
     it('garantit l unicité de tous les IDs et routes', () => {
@@ -20,9 +20,9 @@ describe('📚 OpenPencil — 84 Pages Catalog Registry', () => {
         }
     });
 
-    it('génère un document .pen complet contenant les 84 pages modélisées', () => {
+    it('génère un document .pen complet contenant les 87 pages modélisées', () => {
         const fullDoc = PageCatalogRegistry.createFullPenDocument('_demo_restaurant');
-        expect(fullDoc.pages.length).toBe(84);
+        expect(fullDoc.pages.length).toBe(87);
 
         for (const page of fullDoc.pages) {
             expect(page.id).toBeDefined();

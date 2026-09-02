@@ -135,7 +135,7 @@ export function BottomSheet({
                                 <button
                                     onClick={onClose}
                                     aria-label="Fermer"
-                                    className="w-10 h-10 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+                                    className="w-11 h-11 rounded-full bg-bg-tertiary flex items-center justify-center text-text-muted hover:text-text-primary transition-colors cursor-pointer"
                                 >
                                     <X className="w-5 h-5" aria-hidden="true" />
                                 </button>

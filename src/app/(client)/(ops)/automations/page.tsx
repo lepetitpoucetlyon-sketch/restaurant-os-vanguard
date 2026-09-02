@@ -1,25 +1,24 @@
 "use client";
 
 import { AutomationsPanel } from '@/modules/intelligence';
-import { usePageAccess } from '@/shared/hooks/usePageAccess';
+import { withPageGuard } from '@/shared/components/rbac/PageGuard';
+import { PageShell } from '@/shared/components/ui/PageShell';
+import { Zap } from 'lucide-react';
 
-export default function AutomationsPage() {
-    const canAccess = usePageAccess('automations');
-    if (!canAccess) {
-        return (
-            <div className="p-8">
-                <h1 className="text-2xl font-black text-text-primary mb-4">Automatisations</h1>
-                <p className="text-text-muted">{"Accès réservé au directeur ou à l'administrateur."}</p>
-            </div>
-        );
-    }
+function AutomationsPage() {
     return (
-        <div className="p-8">
-            <header className="mb-8">
-                <h1 className="text-3xl font-black text-text-primary">Automatisations</h1>
-                <p className="text-text-muted mt-2">{"Faites réagir le socle tout seul aux événements du service."}</p>
-            </header>
-            <AutomationsPanel />
-        </div>
+        <PageShell
+            kicker="Règles & Triggers"
+            title="Automatisations"
+            subtitle="Faites réagir le socle tout seul aux événements du service."
+            icon={Zap}
+            breadcrumbs={[{ label: "Opérations" }, { label: "Automatisations" }]}
+        >
+            <div className="p-6">
+                <AutomationsPanel />
+            </div>
+        </PageShell>
     );
 }
+
+export default withPageGuard(AutomationsPage, 'automations');

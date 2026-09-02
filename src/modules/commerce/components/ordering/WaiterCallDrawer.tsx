@@ -108,7 +108,7 @@ export function WaiterCallDrawer({ isOpen, onClose, tenantId, tableNumber }: Wai
           type="button"
           aria-label={UI_STRINGS.backdropAria}
           onClick={onClose}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm cursor-default"
+          className="fixed inset-0 bg-[rgba(0,0,0,0.6)] backdrop-blur-sm cursor-default"
         />
 
         {/* Modal / Drawer content */}

@@ -13,12 +13,12 @@ describe('⚡ OpenPencil — MCP Server & AI Agent Tools', () => {
         expect(tools.map(t => t.name)).toContain('openpencil_lint_design');
     });
 
-    it('exécute openpencil_list_pages et retourne les 84 pages', async () => {
+    it('exécute openpencil_list_pages et retourne les 87 pages', async () => {
         const res = await OpenPencilMcpServer.executeTool('openpencil_list_pages', {});
         expect(res.isError).toBeFalsy();
         const data = JSON.parse(res.content[0].text);
-        expect(data.total).toBe(84);
-        expect(data.pages.length).toBe(84);
+        expect(data.total).toBe(87);
+        expect(data.pages.length).toBe(87);
     });
 
     it('exécute openpencil_get_page par ID ou par route', async () => {
@@ -33,14 +33,14 @@ describe('⚡ OpenPencil — MCP Server & AI Agent Tools', () => {
         expect(doc2.pages[0].route).toBe('/floor-plan');
     });
 
-    it('exécute openpencil_apply_client_branding sur les 84 pages', async () => {
+    it('exécute openpencil_apply_client_branding sur les 87 pages', async () => {
         const res = await OpenPencilMcpServer.executeTool('openpencil_apply_client_branding', {
             tenantId: 'resto-test-mcp',
             restaurantName: 'Brasserie Bellecour',
             primaryColor: '#D97706',
         });
         expect(res.isError).toBeFalsy();
-        expect(res.content[0].text).toContain('84 pages');
+        expect(res.content[0].text).toContain('87 pages');
     });
 
     it('exécute openpencil_export_code et produit du code React TSX', async () => {

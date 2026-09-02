@@ -17,8 +17,9 @@ import { cn } from "@/lib/ui.foundations";
 import { motion } from "framer-motion";
 import { useNotifications } from "@/shared/contexts/NotificationsContext";
 import { Modal } from "@ui/Modal";
+import { withPageGuard } from "@/shared/components/rbac/PageGuard";
 
-export default function SimulatorPage() {
+function SimulatorPage() {
 
     const { addNotification } = useNotifications();
 
@@ -317,3 +318,5 @@ export default function SimulatorPage() {
         </div>
     );
 }
+
+export default withPageGuard(SimulatorPage, "vanguard_simulator");

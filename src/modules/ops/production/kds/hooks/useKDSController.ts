@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useAtomValue } from 'jotai';
 import { useKitchen } from '../../../providers/hooks/kitchenHooks';

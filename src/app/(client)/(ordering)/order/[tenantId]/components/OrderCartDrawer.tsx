@@ -59,7 +59,7 @@ export function OrderCartDrawer({
             className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-semibold px-5 py-3.5 rounded-2xl shadow-xl shadow-amber-500/20 flex items-center justify-between transition-all active:scale-[0.98]"
           >
             <div className="flex items-center gap-3">
-              <div className="w-7 h-7 rounded-lg bg-black/20 flex items-center justify-center font-bold text-xs">
+              <div className="w-7 h-7 rounded-lg bg-[rgba(0,0,0,0.2)] flex items-center justify-center font-bold text-xs">
                 {totalItemsCount}
               </div>
               <span className="text-sm tracking-tight font-bold">Voir mon panier</span>
@@ -83,7 +83,7 @@ export function OrderCartDrawer({
               exit={{ opacity: 0 }}
               onClick={onClose}
               aria-hidden="true"
-              className="absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity"
+              className="absolute inset-0 bg-[rgba(0,0,0,0.7)] backdrop-blur-md transition-opacity"
             />
 
             <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">

@@ -62,7 +62,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     return (
         <ToastContext.Provider value={{ showToast }}>
             {children}
-            <div className="fixed bottom-8 right-8 z-[1000] flex flex-col gap-3 pointer-events-none">
+            <div className="fixed top-4 inset-x-4 sm:top-auto sm:inset-x-auto sm:bottom-8 sm:right-8 z-[1000] flex flex-col gap-3 pointer-events-none items-center sm:items-end">
                 <AnimatePresence mode="popLayout">
                     {toasts.map(toast => (
                         <motion.div
@@ -73,7 +73,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                             animate="visible"
                             exit="exit"
                             className={cn(
-                                "pointer-events-auto rounded-2xl shadow-2xl border min-w-[340px] backdrop-blur-xl overflow-hidden",
+                                "pointer-events-auto rounded-2xl shadow-2xl border w-full sm:w-auto sm:min-w-[340px] max-w-md backdrop-blur-xl overflow-hidden",
                                 toast.type === 'success' ? "bg-bg-primary/95 dark:bg-bg-secondary/95 border-green-100 dark:border-green-900/30" :
                                     toast.type === 'error' ? "bg-bg-primary/95 dark:bg-bg-secondary/95 border-red-100 dark:border-red-900/30" :
                                         toast.type === 'premium' ? "bg-text-primary/95 border-default" :

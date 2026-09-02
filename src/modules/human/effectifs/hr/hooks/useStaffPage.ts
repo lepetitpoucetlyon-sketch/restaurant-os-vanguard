@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useAtomValue } from "jotai";
 import { toast } from "sonner";
 import type { User, LeaveRequest, Candidate, UserRole } from "@nexus/contracts";
@@ -37,10 +37,26 @@ function nextWeekId(): string {
 
 export function useStaffPage() {
     const { tenantId } = useTenant();
+    const router = useRouter();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
     const tabParam = searchParams.get("tab") as StaffTab | null;
 
-    const [activeTab, setActiveTab] = useState<StaffTab>(computeInitialTab(tabParam));
+    const [activeTab, setActiveTabState] = useState<StaffTab>(computeInitialTab(tabParam));
+
+    const setActiveTab = useCallback((tab: StaffTab) => {
+        setActiveTabState(tab);
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("tab", tab);
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }, [router, pathname, searchParams]);
+
+    useEffect(() => {
+        const computed = computeInitialTab(tabParam);
+        if (computed !== activeTab) {
+            setActiveTabState(computed);
+        }
+    }, [tabParam]);
     const [editingUser, setEditingUser] = useState<User | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
