@@ -7,17 +7,34 @@
 
 ---
 
-## MàJ 2026-09-02 — Lot 1 déjà en cours + 4 décisions actées
+## MàJ 2026-09-02 — Exécution `claude-exec-plan-structure` (branche `chore/exec-plan-structure`)
 
-### Le Lot 1 est **déjà exécuté dans l'arbre de travail** (non commité)
+### Fait ✅
 
-`git status` : `RegistreContext.tsx` **supprimé**, `HACCPTelemetryBridge` / `QualityEngine` /
-`MonkeyChaos` / `provisioningSteps` modifiés, `src/shared/hooks/index.ts` + `registre.contracts.ts`
-ajustés. **`node scripts/cycles-inspector.mjs --threshold=0` → 0 cycles** (3 runs stables).
+| Commit | Contenu |
+|---|---|
+| `5d76257` | docs: audit + plan + carte d'archi |
+| `aa70861` | **fix(arch): résorption des 8 cycles (8 → 0)** — travail d'`antigravity-remediation-structure-cycles` regroupé + vérifié (shim `RegistreContext` supprimé → `useRegistre` canonique + contrat neutre ; compliance↔facility et intelligence↔finance découplés ; `provisioningSteps` DI ; 2 doublons de fichiers supprimés). ⚠️ `Slayer.ts` change le scellement — à revoir. |
+| `ad57580` | fix(ui): 13 tables scrollables + h-screen mobile (travail `-responsive-layout-gris`) |
+| `b5184fa` | chore(i18n): nettoyage AI-slop (5 dicos, écrans MCC, prompts, Loi 11) |
+| `9f5b369` | **#4** refactor(intelligence): `MonkeyChaos.attackLedger` + `OracleEngine.superviseChaos` supprimés (code mort, 0 appelant) |
+| `c3a8ad5` | **#2** chore(forge): 13 derivers gelés (`@wip 2026-12-31`) + exemptés de m17 + ratchet 36→28 |
+| *(en cours)* | **#3 partiel** : `bistrolyon`/`urbanburger` purgés de `InstanceGuard.ts` + `.githooks/pre-commit` seuil cycles 430→0 |
 
-→ Il reste à : (a) résorber `frHardcoded` 773→≤772, (b) committer, (c) appliquer le
-seuil `pre-commit` 430→0 (§1.1), (d) **remplacer les pansements par les vraies coupes**
-(cf. décision #4 : MonkeyChaos supprimé, pas juste « import profondi »).
+**État gates** : `tsc` 0 · `cycles` 0 · `eslint` 0/0 · `gate-integrity` OK · `gate-last-mile` 28/28.
+
+### Reste à faire — non fait cette session (raisons)
+
+| Item | Raison |
+|---|---|
+| **#4** retrait du backdoor `_monkeyPatch` dans `SovereignLedger.recordTransfer` | 🔒 **collision** : `src/modules/finance/` est le périmètre déclaré de `claude-plan-firestore-b3e` (active). 1 edit trivial, à faire par cette session ou après libération. |
+| **#3** suppression complète de `src/instances/` + repointage `getTenantConfig`/`getAllTenants` | Refactor réel : `useNexusTenantLogic.switchTenant` (sync → chargement réactif de la config, chemin chaud tenant), `FranchiseService.getOwnerSites` + `FleetComplianceService` (bouclent sur `getAllTenants`), **`franchise.test.ts` couplé aux 3 fixtures** (`expect(sites.length).toBeGreaterThan(0)`). Nécessite vérif navigateur du switch tenant. → **tâche scopée à part.** |
+| **#1** déplacer les 7 `*Section` vers `compliance/reglementaire/` | Antigravity a résolu le cycle par un **contrat neutre** (`useRegistre` dans `shared/hooks/`) — défendable. Le déplacement physique reste optionnel. |
+| **Lot 2.1** réécrire `CLAUDE.md` kernel/lib/infra | pas fait |
+| **Lot 2.3** `lib/mcc/fiscal` → `lib/fiscal` | pas fait |
+| **Lot 2.4** dissoudre `src/modules/system/` | pas fait (⚠️ `PlatformVariant` y transite — à vérifier) |
+| **Lot 3** rangement `lib/` 59 f. + ADR-020 159 handlers | chantier multi-jours, hors périmètre de cette session |
+| **Lot 4** archive doc, promesses flottantes | pas fait |
 
 ### Décisions actées (Mohammed-ali, 2026-09-02)
 
