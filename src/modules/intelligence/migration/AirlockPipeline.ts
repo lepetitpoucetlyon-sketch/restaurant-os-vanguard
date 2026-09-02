@@ -291,7 +291,8 @@ export class AirlockPipeline {
                             originalDate: entry.originalDate,
                             ingestedAt: entry.archivedAt,
                         },
-                        totalInCents: (entry.data.amountInCents as number) || 0,
+                        totalInMicrounits: (((entry.data.amountInCents as number) || 0) * 10_000) as import('@/shared/schemas/primitives').Microunits,
+                        totalAmount: ((entry.data.amountInCents as number) || 0) / 100,
                         data: entry.data,
                         createdAt: entry.originalDate,
                     });

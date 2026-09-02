@@ -45,7 +45,7 @@ export function extractOpeningBalances(archiveEntries: LegacyArchiveEntry[]): Op
         balances.push({
             accountCode:    mapping.code,
             accountName:    mapping.name,
-            balanceInCents: Math.abs(totalCents),
+            balanceInMicrounits: Math.abs(totalCents) * 10_000,
             side: totalCents >= 0 ? mapping.side : (mapping.side === 'debit' ? 'credit' : 'debit'),
             source: 'legacy_import',
         });
@@ -55,8 +55,8 @@ export function extractOpeningBalances(archiveEntries: LegacyArchiveEntry[]): Op
 
 export function generateOpeningEntry(archiveEntries: LegacyArchiveEntry[], config: LegacyImportConfig): OpeningEntry {
     const balances    = extractOpeningBalances(archiveEntries);
-    const totalDebit  = balances.filter(b => b.side === 'debit').reduce((s, b) => s + b.balanceInCents, 0);
-    const totalCredit = balances.filter(b => b.side === 'credit').reduce((s, b) => s + b.balanceInCents, 0);
+    const totalDebit  = balances.filter(b => b.side === 'debit').reduce((s, b) => s + b.balanceInMicrounits, 0);
+    const totalCredit = balances.filter(b => b.side === 'credit').reduce((s, b) => s + b.balanceInMicrounits, 0);
 
     const payload = JSON.stringify({
         sessionId: config.sessionId,
@@ -77,18 +77,18 @@ export function generateOpeningEntry(archiveEntries: LegacyArchiveEntry[], confi
     }
 
     return {
-        id:                 `opening_${config.sessionId}`,
-        asOfDate:           config.genesisDate,
-        lines:              balances,
-        totalDebitInCents:  totalDebit,
-        totalCreditInCents: totalCredit,
-        isBalanced:         totalDebit === totalCredit,
-        fiscalSealHash:     sealHash,
-        migrationSessionId: config.sessionId,
-        sealedAt:           new Date().toISOString(),
-        sealedBy:           config.initiatedBy,
-        sequence:           1,
-        previousHash:       'GENESIS_ROOT',
+        id:                     `opening_${config.sessionId}`,
+        asOfDate:               config.genesisDate,
+        lines:                  balances,
+        totalDebitInMicrounits:  totalDebit,
+        totalCreditInMicrounits: totalCredit,
+        isBalanced:             totalDebit === totalCredit,
+        fiscalSealHash:         sealHash,
+        migrationSessionId:     config.sessionId,
+        sealedAt:               new Date().toISOString(),
+        sealedBy:               config.initiatedBy,
+        sequence:               1,
+        previousHash:           'GENESIS_ROOT',
     };
 }
 

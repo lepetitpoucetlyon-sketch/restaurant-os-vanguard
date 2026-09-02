@@ -62,7 +62,12 @@ vi.mock('@/modules/intelligence/ia/ai', () => ({
   },
 }));
 vi.mock('@/lib/mcc/ChangelogService', () => ({
-  ChangelogService: { getRecentChanges: vi.fn(async () => []) },
+  ChangelogService: {
+    getRecentChanges: vi.fn(async () => []),
+    getRecentContextForAI: vi.fn(async () => ''),
+    getForTenant: vi.fn(async () => []),
+    record: vi.fn(async () => ({})),
+  },
 }));
 vi.mock('@/kernel/ai/mcc/MCCAIRegistry', () => ({
   MCCAIRegistry: {

@@ -2,7 +2,7 @@
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
     "files": 3738,
-    "loc": 360899,
+    "loc": 360905,
     "pages": 87,
     "apiRoutes": 218
   },
@@ -154,7 +154,7 @@
     },
     {
       "file": "src/__tests__/helpers/saga.intelligence.test.ts",
-      "loc": 602
+      "loc": 607
     },
     {
       "file": "src/__tests__/helpers/saga.ops2.test.ts",

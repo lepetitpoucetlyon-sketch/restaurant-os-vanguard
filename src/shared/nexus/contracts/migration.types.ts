@@ -113,7 +113,7 @@ export interface FiscalValidationResult {
 export interface OpeningBalance {
     accountCode: string; // '701', '607', '512'...
     accountName: string;
-    balanceInCents: number;
+    balanceInMicrounits: number;
     side: 'debit' | 'credit';
     source: string;
 }
@@ -122,8 +122,8 @@ export interface OpeningEntry {
     id: string;
     asOfDate: string; // ISO 8601 (Genesis Date)
     lines: OpeningBalance[];
-    totalDebitInCents: number;
-    totalCreditInCents: number;
+    totalDebitInMicrounits: number;
+    totalCreditInMicrounits: number;
     isBalanced: boolean;
     fiscalSealHash: string;
     migrationSessionId: string;
