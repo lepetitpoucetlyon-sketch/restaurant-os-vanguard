@@ -96,9 +96,10 @@ VERTICAL_STUBS_MAX=0         # écrans de verticale rendus par VerticalPageStub 
 VERTICAL_SCREENS_UNWIRED_MAX=0   # ecrans de verticale sans acces donnees (Nexus/bus/adapter) — angle mort de
                                  # VERTICAL_STUBS_MAX : remplacer un stub par une maquette a donnees locales
                                  # le fait passer a 0 sans rien livrer. Baseline mesuree le 2026-09-01.
-VERTICAL_SERVICES_UNWIRED_MAX=36 # services de verticale/ops non câblés. 142→36 (2026-09-02). 0 dans le
-                                 # périmètre verticale RESTAURANT (les 36 restants = ops/service/core,
-                                 # production/kitchen, verticals/_shared forge, adapters d'autres verticales).
+VERTICAL_SERVICES_UNWIRED_MAX=28 # services de verticale/ops non câblés. 142→36→28 (2026-09-02) : les 8
+                                 # `_shared/derivation/*Deriver.ts` du Vertical Forge sont GELÉS (décision #2,
+                                 # @wip 2026-12-31) et exemptés de m17. Les 28 restants = ops/service/core,
+                                 # production/kitchen, adapters des verticales non-restaurant.
                                  # la mesure m17
                                  # ne comptait un service « câblé » que si un fichier applicatif nommait son
                                  # symbole — un hook dont le handler n'est jamais appelé passait. m17 durcie :

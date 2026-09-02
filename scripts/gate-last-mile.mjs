@@ -55,7 +55,7 @@ const CLIQUETS = {
   verticalScreensUnwired: seuil('VERTICAL_SCREENS_UNWIRED_MAX', 0),
   frHardcoded:      seuil('FR_HARDCODED_MAX', 893),
   hardcodedHex:     seuil('HARDCODED_HEX_MAX', 958),
-  verticalServicesUnwired: seuil('VERTICAL_SERVICES_UNWIRED_MAX', 36),
+  verticalServicesUnwired: seuil('VERTICAL_SERVICES_UNWIRED_MAX', 28),
 };
 
 const corpus = chargerCorpus('src');

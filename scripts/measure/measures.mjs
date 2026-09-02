@@ -715,6 +715,11 @@ export const m17_verticalServicesUnwired = {
       if (rel.endsWith('.d.ts')) continue;
       if (/\.(test|spec)\.tsx?$/.test(rel)) continue;
       if (/@wip\b/.test(src)) continue;
+      // Moteur de dérivation Vertical Forge — GELÉ (décision #2 du
+      // PLAN-CORRECTIF-STRUCTURE-2026-09-02) : les 13 *Deriver.ts sont écrits mais
+      // pas encore branchés dans provisioningSteps.ts. À câbler le jour de
+      // l'onboarding d'une verticale n°3, sinon supprimer. index.ts porte le @wip.
+      if (rel.startsWith('src/verticals/_shared/derivation/')) continue;
 
       const names = exportsOf(src).filter(n => n.length >= 3);
       if (!names.length) continue;
