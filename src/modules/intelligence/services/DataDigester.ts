@@ -37,7 +37,15 @@ export const ExternalOrderSchema = z.object({
   currency: z.string().default('EUR'),
   status: z.enum(['PENDING', 'ACCEPTED', 'READY', 'DELIVERED', 'CANCELLED', 'PAID']),
   createdAt: z.string().datetime(),
-  tenantId: z.string(),
+  origin: z.enum(['live', 'legacy', 'seeded']).default('live'),
+  legacyMeta: z.object({
+    source: z.string(),
+    migrationSessionId: z.string(),
+    originalId: z.string().optional(),
+    originalDate: z.string(),
+    ingestedAt: z.string(),
+    rawChecksum: z.string().optional(),
+  }).optional(),
   _metadata: z.object({
     isLegacy: z.boolean().optional(),
     ingestedAt: z.string().optional(),

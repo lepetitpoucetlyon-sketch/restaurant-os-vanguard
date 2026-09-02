@@ -49,6 +49,8 @@ export const SovereignGuard = {
         'fiscalArchives',
         'journalEntries',
         'wormArchives',
+        'legacyArchive',
+        'legacyOrders',
     ]),
 
     /**

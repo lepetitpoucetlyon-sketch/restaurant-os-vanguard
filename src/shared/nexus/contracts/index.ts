@@ -58,6 +58,7 @@ export * from "./finance.types";
 export * from "./hr.types";
 export * from "./logistics";
 export * from "./oracle.types";
+export * from "./migration.types";
 export * from "./customer.types";
 export * from "./settings";
 export * from "./ops.types";

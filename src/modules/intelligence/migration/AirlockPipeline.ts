@@ -63,7 +63,10 @@ export class AirlockPipeline {
                 issues: [],
             };
 
-            const hasData = Object.values(doc.rawFields).some(v => v !== null && v !== '');
+            const dataFields = { ...doc.rawFields };
+            delete dataFields.id;
+            delete dataFields.sourceRowIndex;
+            const hasData = Object.values(dataFields).some(v => v !== null && v !== '');
             if (!hasData) {
                 doc.status = 'REJECTED';
                 doc.issues.push({ stage: 'PARSE', severity: 'ERROR', code: 'EMPTY_ROW', message: `Row ${i} is completely empty` });
@@ -222,5 +225,88 @@ export class AirlockPipeline {
 
     getArchiveEntries(): LegacyArchiveEntry[] {
         return [...this.archiveEntries];
+    }
+
+    /**
+     * 💾 Persistance canonique du résultat de migration selon le mode choisi (Loi 12 & ADR-015).
+     * - TABULA_RASA : Aucune écriture (page blanche).
+     * - PONT : Écriture de l'archive dans legacyArchive/ + écriture d'ouverture seq=1 dans journalEntries/.
+     * - SUTURE_TOTALE : Archive + écriture d'ouverture + miroir dans legacyOrders/ (origin: 'legacy').
+     */
+    async commit(mode: import('@nexus/contracts').IntegrationMode = this.config.integrationMode): Promise<{
+        openingEntry?: OpeningEntry;
+        archiveSaved: number;
+        legacyOrdersSaved: number;
+    }> {
+        if (mode === 'TABULA_RASA') {
+            logger.info(`[Airlock] Mode TABULA_RASA pour ${this.config.tenantId} — pas de persistance.`);
+            return { archiveSaved: 0, legacyOrdersSaved: 0 };
+        }
+
+        const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+        const batch = Nexus.adapter.batch();
+        let archiveSaved = 0;
+        let legacyOrdersSaved = 0;
+
+        // 1. Sauvegarde dans legacyArchive/
+        for (const entry of this.archiveEntries) {
+            const path = `${Nexus.getTenantPath('legacyArchive', this.config.tenantId)}/${entry.id}`;
+            batch.set(path, {
+                ...entry,
+                tenantId: this.config.tenantId,
+                origin: 'legacy',
+            });
+            archiveSaved++;
+        }
+
+        // 2. Génération et scellement de l'OpeningEntry pour PONT et SUTURE_TOTALE
+        let openingEntry: OpeningEntry | undefined;
+        if (mode === 'PONT' || mode === 'SUTURE_TOTALE') {
+            openingEntry = this.generateOpeningEntry();
+            const path = `${Nexus.getTenantPath('journalEntries', this.config.tenantId)}/${openingEntry.id}`;
+            batch.set(path, {
+                ...openingEntry,
+                origin: 'legacy',
+                tenantId: this.config.tenantId,
+                sequence: 1,
+                previousHash: 'GENESIS_ROOT',
+                type: 'OPENING_ENTRY',
+                createdAt: this.config.genesisDate,
+            });
+        }
+
+        // 3. Pour SUTURE_TOTALE, écriture dans legacyOrders/ (JAMAIS dans orders/ live)
+        if (mode === 'SUTURE_TOTALE') {
+            for (const entry of this.archiveEntries) {
+                if (entry.entityType === 'transaction') {
+                    const legacyOrderId = `legacy_order_${entry.id}`;
+                    const path = `${Nexus.getTenantPath('legacyOrders', this.config.tenantId)}/${legacyOrderId}`;
+                    batch.set(path, {
+                        id: legacyOrderId,
+                        tenantId: this.config.tenantId,
+                        origin: 'legacy',
+                        legacyMeta: {
+                            source: this.config.sourceSystem,
+                            migrationSessionId: this.config.sessionId,
+                            originalDate: entry.originalDate,
+                            ingestedAt: entry.archivedAt,
+                        },
+                        totalInCents: (entry.data.amountInCents as number) || 0,
+                        data: entry.data,
+                        createdAt: entry.originalDate,
+                    });
+                    legacyOrdersSaved++;
+                }
+            }
+        }
+
+        await batch.commit();
+
+        logger.info(
+            `[Airlock] Migration validée et commitée: mode=${mode}, archiveSaved=${archiveSaved}, ` +
+            `legacyOrdersSaved=${legacyOrdersSaved}, openingEntry=${openingEntry?.id || 'none'}`
+        );
+
+        return { openingEntry, archiveSaved, legacyOrdersSaved };
     }
 }

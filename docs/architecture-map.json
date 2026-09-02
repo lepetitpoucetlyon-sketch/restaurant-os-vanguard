@@ -1,15 +1,15 @@
 {
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
-    "files": 3736,
-    "loc": 360686,
+    "files": 3738,
+    "loc": 360899,
     "pages": 87,
     "apiRoutes": 218
   },
   "layers": {
     "kernel": 39,
     "lib": 231,
-    "shared": 735,
+    "shared": 736,
     "modules": 1615,
     "app": 466,
     "verticals": 253,
@@ -31,7 +31,7 @@
     "eventBus": 223,
     "hooks": 52,
     "layout-builder": 3,
-    "nexus": 139,
+    "nexus": 140,
     "plugins": 9,
     "providers": 31,
     "schemas": 7,

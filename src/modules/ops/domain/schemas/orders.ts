@@ -72,7 +72,15 @@ const OrderBaseSchema = z.object({
   updatedAt:     TimestampSchema.default(() => Date.now()),
   paidAt:        TimestampSchema.nullable().optional(),
   covers:        z.number().int().min(1).max(50).optional(),
-  notes:         z.string().max(500).pipe(SanitizedStringSchema).optional(),
+  origin:        z.enum(['live', 'legacy', 'seeded']).default('live'),
+  legacyMeta:    z.object({
+    source: z.string(),
+    migrationSessionId: z.string(),
+    originalId: z.string().optional(),
+    originalDate: z.string(),
+    ingestedAt: z.string(),
+    rawChecksum: z.string().optional(),
+  }).optional(),
   schemaVersion: z.literal(2).default(2),
 }).catchall(z.any());
 

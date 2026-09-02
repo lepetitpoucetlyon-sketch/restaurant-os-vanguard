@@ -50,8 +50,9 @@ export class Slayer {
     }
 
     /**
-     * Ingestion d'un flux massif avec scellage cryptographique à la volée.
-     * GRADE VI: Isolation totale et compliance NF525.
+     * Ingestion d'un flux massif d'antériorité (Mode SUTURE_TOTALE).
+     * GRADE VI / Loi 12 : Les commandes sont stockées dans `legacyOrders/` (origin: 'legacy')
+     * sans jamais polluer la chaîne fiscale live `orders/` ni le KDS.
      */
     static async ingestMassive(
         stream: LegacyOrder[], 
@@ -59,11 +60,12 @@ export class Slayer {
         onProgress?: (processed: number) => void
     ): Promise<{ ingested: number; errors: number }> {
         
-        logger.info(`[Slayer] OMEGA INGESTION: Initiating phase for ${stream.length} entries on ${tenantId}`);
+        logger.info(`[Slayer] SUTURE INGESTION: Initiating phase for ${stream.length} legacy entries on ${tenantId}`);
         
         let ingested = 0;
         let errors = 0;
         const chunkSize = 100; // Batch processing pour performance Firestore
+        const sessionId = `slayer_${Date.now()}`;
 
         for (let i = 0; i < stream.length; i += chunkSize) {
             const chunk = stream.slice(i, i + chunkSize);
@@ -87,28 +89,34 @@ export class Slayer {
                                 const nexusOrder = await DataDigester.digestOrder(rawOrder as import("@/shared/nexus/contracts").SovereignMap, { isLegacy: true });
                                 if (!nexusOrder) throw new Error("Validation Failed");
 
-                                // 2. SCELLAGE FISCAL (SHA-256 Post-Quantum via QuantumCrypto)
-                                const { QuantumCrypto } = await import("@/lib/QuantumCrypto");
-                                const secret = process.env.FISCAL_SIGNING_SECRET || 'legacy-slayer-seal';
-                                const qSeal = await QuantumCrypto.generateQuantumSeal(JSON.stringify(nexusOrder), secret);
-                                const seal = {
-                                    hash: qSeal.hash,
-                                    previousHash: '0',
-                                    sequence: 1,
-                                    signedPayload: qSeal.latticeSignature,
-                                    algorithm: 'SLH-DSA-SHAKE-256',
-                                    updatedAt: new Date().toISOString()
-                                };
-                                
-                                // Extension du type pour inclure le scellage fiscal sans cast "unknown"
-                                const sealedOrder = {
+                                // 2. CHECKSUM D'INTÉGRITÉ
+                                const payloadStr = JSON.stringify(nexusOrder);
+                                let checksum = `chk_${Date.now().toString(16)}`;
+                                try {
+                                    const { createHash } = require('node:crypto');
+                                    checksum = createHash('sha256').update(payloadStr).digest('hex');
+                                } catch {
+                                    // Fallback
+                                }
+
+                                // 3. STRUCTURE D'ANTÉRIORITÉ CANONIQUE (origin: 'legacy')
+                                const legacyOrderDoc = {
                                     ...nexusOrder,
-                                    _fiscalSeal: seal
+                                    origin: 'legacy' as const,
+                                    legacyMeta: {
+                                        source: String((legacy as JsonObject).source || 'SLAYER_LEGACY'),
+                                        migrationSessionId: sessionId,
+                                        originalId: nexusOrder.id,
+                                        originalDate: nexusOrder.createdAt,
+                                        ingestedAt: new Date().toISOString(),
+                                        rawChecksum: checksum,
+                                    },
+                                    status: 'PAID' as const,
                                 };
 
-                                // 3. PERSISTANCE NEXUS
-                                const path = `${Nexus.getTenantPath('orders', tenantId)}/${nexusOrder.id}`;
-                                batch.set(path, sealedOrder);
+                                // 4. PERSISTANCE DANS legacyOrders/ (JAMAIS dans orders/ live)
+                                const path = `${Nexus.getTenantPath('legacyOrders', tenantId)}/${nexusOrder.id}`;
+                                batch.set(path, legacyOrderDoc);
                                 
                                 ingested++;
                             } catch (itemError) {
@@ -126,7 +134,7 @@ export class Slayer {
             }
         }
 
-        logger.info(`[Slayer] OMEGA COMPLETED: Ingested=${ingested}, Errors=${errors}`);
+        logger.info(`[Slayer] SUTURE COMPLETED: Ingested=${ingested}, Errors=${errors}`);
         return { ingested, errors };
     }
 }

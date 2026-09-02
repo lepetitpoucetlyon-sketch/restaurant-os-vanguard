@@ -7,12 +7,12 @@ import type {
 } from './types';
 
 export const ENTITY_KEYWORDS: Array<{ keywords: string[]; type: NormalizedLegacyRecord['entityType'] }> = [
-    { keywords: ['facture', 'invoice', 'vente'],  type: 'transaction' },
-    { keywords: ['fournisseur', 'supplier'],       type: 'supplier' },
-    { keywords: ['produit', 'product', 'article'], type: 'product' },
-    { keywords: ['ingredient', 'matière'],         type: 'ingredient' },
-    { keywords: ['employé', 'employee', 'staff'],  type: 'employee' },
-    { keywords: ['client', 'customer'],            type: 'customer' },
+    { keywords: ['facture', 'invoice', 'vente', 'sales', 'sale', 'transaction', 'ticket', 'order', 'commande'],  type: 'transaction' },
+    { keywords: ['fournisseur', 'supplier', 'achat', 'achats', 'purchase', 'purchases'],       type: 'supplier' },
+    { keywords: ['produit', 'product', 'article', 'item', 'menu'], type: 'product' },
+    { keywords: ['ingredient', 'matière', 'stock', 'ingrédient'],         type: 'ingredient' },
+    { keywords: ['employé', 'employee', 'staff', 'serveur', 'salarie'],  type: 'employee' },
+    { keywords: ['client', 'customer', 'guest'],            type: 'customer' },
 ];
 
 export function levenshteinDistance(a: string, b: string): number {
@@ -37,8 +37,9 @@ export function levenshteinDistance(a: string, b: string): number {
 }
 
 export function computeSimilarity(a: RawLegacyDocument, b: RawLegacyDocument): number {
-    const keysA = Object.keys(a.rawFields);
-    const keysB = Object.keys(b.rawFields);
+    const ignoredKeys = new Set(['id', '_id', 'sourceRowIndex']);
+    const keysA = Object.keys(a.rawFields).filter(k => !ignoredKeys.has(k));
+    const keysB = Object.keys(b.rawFields).filter(k => !ignoredKeys.has(k));
     const commonKeys = keysA.filter(k => keysB.includes(k));
 
     if (commonKeys.length === 0) return 0;
