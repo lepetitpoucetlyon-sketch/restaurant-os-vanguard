@@ -5,13 +5,13 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3741** · LOC : **359 012**
+- Fichiers `.ts/.tsx` : **3745** · LOC : **359 573**
 - Pages : **87** · Routes API : **218**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1611 |
+| `src/modules/` | 1615 |
 | `src/shared/` | 734 |
 | `src/app/` | 465 |
 | `src/verticals/` | 255 |
@@ -62,12 +62,12 @@
 | Pilier | Fichiers | Barrel `index.ts` |
 |---|---:|:---:|
 | `commerce` | 348 | ✅ |
-| `ops` | 290 | ✅ |
+| `ops` | 293 | ✅ |
 | `finance` | 245 | ✅ |
 | `compliance` | 184 | ✅ |
 | `intelligence` | 174 | ✅ |
 | `logistics` | 149 | ✅ |
-| `human` | 140 | ✅ |
+| `human` | 141 | ✅ |
 | `facility` | 74 | ✅ |
 | `system` ⚠️ | 6 | ✅ |
 
@@ -80,9 +80,9 @@
 | Fichier | LOC |
 |---|---:|
 | `src/shared/components/ui/PageShell.tsx` | 734 |
-| `src/i18n/locales/fr.ts` | 692 |
 | `src/i18n/locales/en.ts` | 687 |
 | `src/i18n/locales/es.ts` | 687 |
+| `src/i18n/locales/fr.ts` | 687 |
 | `src/i18n/locales/ja.ts` | 687 |
 | `src/i18n/locales/pt.ts` | 687 |
 | `src/__tests__/handlers/saga-handlers.test.ts` | 675 |

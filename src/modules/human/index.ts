@@ -27,6 +27,8 @@ export { HcrLegalContractService, type GeneratedLegalDocument, type ContractGene
 export { InvoiceSequenceService } from './services/InvoiceSequenceService';
 export { UrssafVigilanceService, UrssafVigilanceError, URSSAF_CONSTANTS } from './services/UrssafVigilanceService';
 
+export { computePayroll, computeContractorBilling } from './effectifs/hr/staffComputations';
+export type { StaffTab, PayrollRow, ContractorRow, StaffDocument } from './effectifs/hr/staffComputations';
 export { useStaffPage } from './effectifs/hr/hooks';
 export { RecruitmentBoard } from './effectifs/hr/components/RecruitmentBoard';
 export { QuickAddStaffModal } from './effectifs/hr/components/QuickAddStaffModal';

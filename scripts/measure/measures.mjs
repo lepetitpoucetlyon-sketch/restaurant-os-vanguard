@@ -671,58 +671,55 @@ export const m17_verticalServicesUnwired = {
     const appBodies = new Map();
     for (const [f, src] of c.contenu) {
       if (c.estBarrel(f)) continue;
+      if (/\.(test|spec)\.tsx?$/.test(f) || /(__tests__|\/tests\/)/.test(f)) continue;
       appFiles.push(f);
       appBodies.set(f, src);
     }
 
-    const registerFiles = appFiles
-      .filter(p => /registerHandlers|register.*Handler|eventBus\/register|Vertical\.ts$|CoreInfraProviders|bootstrap/i.test(p));
-    const registerBlob = registerFiles.map(p => appBodies.get(p)).join('\n');
+    // ── Passe 1 : atteignabilité transitive depuis les RACINES ──────────────────
+    // Racine = route/page/layout `src/app/**` OU registre de handlers/bootstrap.
+    // Un fichier est « atteint » s'il est racine, ou si un fichier déjà atteint
+    // mentionne l'un de ses symboles exportés (import + usage). On câble donc
+    // seulement ce qui remonte, de proche en proche, à un point rendu/monté/enregistré.
+    const isRoot = (rel) =>
+      /^src\/app\//.test(rel) ||
+      /registerHandlers|register.*Handler|eventBus\/register|Vertical\.ts$|CoreInfraProviders|bootstrap/i.test(rel);
 
+    const exportsByFile = new Map();
+    for (const f of appFiles) {
+      exportsByFile.set(f, exportsOf(appBodies.get(f)).filter(n => n.length >= 3));
+    }
+
+    const reached = new Set(appFiles.filter(f => isRoot(c.rel(f))));
+    let grew = true;
+    while (grew) {
+      grew = false;
+      for (const f of appFiles) {
+        if (reached.has(f)) continue;
+        const names = exportsByFile.get(f);
+        if (!names.length) continue;
+        const rxs = names.map(n => new RegExp('\\b' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b'));
+        for (const r of reached) {
+          const body = appBodies.get(r);
+          if (rxs.some(rx => rx.test(body))) { reached.add(f); grew = true; break; }
+        }
+      }
+    }
+
+    // ── Passe 2 : un service du périmètre est « non câblé » s'il n'est pas atteint ──
     const unwired = [];
     for (const [f, src] of c.contenu) {
       const rel = c.rel(f);
       if (!targetPrefixes.some(d => rel.startsWith(d))) continue;
       if (c.estBarrel(f)) continue;
       if (rel.endsWith('.d.ts')) continue;
+      if (/\.(test|spec)\.tsx?$/.test(rel)) continue;
       if (/@wip\b/.test(src)) continue;
-
-      const isComponent = rel.endsWith('.tsx') && /export\s+(default\s+)?function\s+[A-Z]/.test(src);
-      if (isComponent) continue;
 
       const names = exportsOf(src).filter(n => n.length >= 3);
       if (!names.length) continue;
 
-      const bn = basename(f);
-      const isHandler = /Handler|Notifier/.test(bn);
-      if (isHandler) {
-        const registered = names.some(n => new RegExp('\\b' + n + '\\b').test(registerBlob)) ||
-          new RegExp('\\b' + basename(f, '.ts') + '\\b').test(registerBlob);
-        if (registered) continue;
-      }
-
-      const callers = new Set();
-      for (const name of names) {
-        const rx = new RegExp('\\b' + name.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&') + '\\b');
-        for (const af of appFiles) {
-          if (af === f) continue;
-          const body = appBodies.get(af);
-          if (rx.test(body)) {
-            const relCaller = c.rel(af);
-            if (basename(af) === 'index.ts') continue;
-            callers.add(relCaller);
-          }
-        }
-      }
-
-      if (callers.size === 0) {
-        unwired.push(rel);
-      } else if (callers.size === 1) {
-        const onlyCaller = [...callers][0];
-        if (targetPrefixes.some(d => onlyCaller.startsWith(d))) {
-          unwired.push(rel);
-        }
-      }
+      if (!reached.has(f)) unwired.push(rel);
     }
 
     return { valeur: unwired.length, detail: unwired.sort() };

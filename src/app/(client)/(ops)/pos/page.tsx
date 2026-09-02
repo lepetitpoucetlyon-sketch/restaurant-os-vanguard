@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus } from "lucide-react";
 
 import dynamic from "next/dynamic";
-import { ProductGrid, Cart, TableSelector, PosHeader } from "@/modules/ops";
+import { ProductGrid, Cart, TableSelector, PosHeader, TableActionsMenu } from "@/modules/ops";
 import { BottomSheet } from "@ui/BottomSheet";
 import { useLanguage } from "@/shared/hooks";
 import { cn } from "@/lib/ui.foundations";
@@ -39,7 +39,7 @@ function POSPage() {
         isMobileCartOpen, setIsMobileCartOpen,
         isPaymentOpen, setIsPaymentOpen,
         isSplitOpen, setIsSplitOpen,
-        cartItems, cartTotal, cartGrandTotal, cartCount, cartTvaInCents,
+        cartItems, cartTotal, cartGrandTotal, cartCount, cartTvaInMicrounits,
         currentTable,
         handleAddToCart,
         handleUpdateQuantity, handleClearCart,
@@ -68,6 +68,10 @@ function POSPage() {
         handleItemContextMenu,
         handleDiscountPreset,
         handleDiscountCustom,
+        handleTransferTable,
+        handleMergeTable,
+        handleHandoffTable,
+        handleScanDineAndDash,
     } = usePosPage();
 
     if (!selectedTableId) {
@@ -118,6 +122,17 @@ function POSPage() {
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
             />
+
+            <div className="absolute right-3 top-3 z-30">
+                <TableActionsMenu
+                    currentTable={currentTable as never}
+                    allTables={allTables as never}
+                    onTransferTable={handleTransferTable}
+                    onMergeTable={handleMergeTable}
+                    onHandoffTable={handleHandoffTable}
+                    onScanDineAndDash={handleScanDineAndDash}
+                />
+            </div>
 
             {/* Responsive Main Layout */}
             <ResponsiveShell
@@ -260,7 +275,7 @@ function POSPage() {
                 onToggleDoggyBag={handleToggleDoggyBag}
             />
 
-            <PaymentDialog isOpen={isPaymentOpen} total={SovereignMath.toCents(BigInt(Math.round(cartGrandTotal)))} tvaInCents={cartTvaInCents} onClose={() => setIsPaymentOpen(false)} onPaymentComplete={handlePaymentComplete} />
+            <PaymentDialog isOpen={isPaymentOpen} total={SovereignMath.toCents(BigInt(Math.round(cartGrandTotal)))} tvaInMicrounits={cartTvaInMicrounits} tenantId={activeTenantId ?? undefined} operatorId={posUser?.id} onClose={() => setIsPaymentOpen(false)} onPaymentComplete={handlePaymentComplete} />
             <SplitBillDialog isOpen={isSplitOpen} items={cartItems} totalInMicrounits={cartTotal} coverCount={currentTable?.seats || 1} onClose={() => setIsSplitOpen(false)} onPaySplit={(amountInMicrounits: number, guestIndex: number) => handlePaySplit(amountInMicrounits, guestIndex)} onSplitComplete={handleSplitComplete} />
             <PinModal isOpen={pendingAction !== null} title={pinModalTitle} onConfirm={handlePinConfirm} onClose={handlePinClose} error={pinError} />
             <CashDrawerModal isOpen={isCashDrawerOpen} onClose={() => setIsCashDrawerOpen(false)} tenantId={activeTenantId ?? ""} userId={posUser?.id ?? "unknown"} />

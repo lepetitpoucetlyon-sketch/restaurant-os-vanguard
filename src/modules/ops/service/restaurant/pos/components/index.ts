@@ -12,6 +12,7 @@ export * from './ProductDetailsDialog';
 export * from './ProductFormModal';
 export * from './ProductGrid';
 export * from './SplitBillDialog';
+export * from './TableActionsMenu';
 export * from './TableSelector';
 export * from './bar';
 

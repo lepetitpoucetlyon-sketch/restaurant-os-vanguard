@@ -105,11 +105,9 @@ export class RestaurantVertical implements IVerticalPlugin {
           totalInMicrounits,
           covers: 1,
         });
-        RestaurantLogisticsAdapter.emitStockDeducted({
-          tenantId,
-          orderId,
-          lines: [],
-        });
+        // Déstockage : `registerStockDeductionHandler` (shared/eventBus/handlers/StockDeductionHandler)
+        // écoute déjà `order.paid` et fait l'explosion BOM au gramme (product.recipeId → recipe.ingredients)
+        // à partir du payload `items`. Ne pas ré-émettre `inventory.deducted` ici — double déduction.
         if (tipInMicrounits && tipInMicrounits > 0) {
           RestaurantHumanAdapter.emitTipDistributed({
             tenantId,

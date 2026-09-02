@@ -35,7 +35,7 @@ import {
     hasPermission,
     resolveServerName,
     getSplitInfo,
-    computeCartTva,
+    computeCartTvaInMicrounits,
 } from "./posHelpers";
 
 // Orchestration async (Nexus + NF525 + EventBus)
@@ -90,7 +90,7 @@ export function usePOSController() {
 
     const cartCount = useMemo(() => cartItems.reduce((sum, item) => sum + item.quantity, 0), [cartItems]);
 
-    const cartTvaInCents = useMemo(() => computeCartTva(cartItems), [cartItems]);
+    const cartTvaInMicrounits = useMemo(() => computeCartTvaInMicrounits(cartItems), [cartItems]);
 
     // Sync vers activeCartAtom pour posCartCountSelector / posCartTotalSelector
     useEffect(() => {
@@ -372,7 +372,7 @@ export function usePOSController() {
         cartTotal,
         cartGrandTotal,
         cartCount,
-        cartTvaInCents,
+        cartTvaInMicrounits,
 
         // Actions
         handleAddToCart,

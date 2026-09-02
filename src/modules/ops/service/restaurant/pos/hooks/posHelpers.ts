@@ -92,14 +92,14 @@ export function markCourseAsSent(items: CartItem[], course: CourseType, sentAt: 
 
 // ── Calculs ───────────────────────────────────────────────────────────────────
 
-export function computeCartTva(cartItems: CartItem[]): number {
+export function computeCartTvaInMicrounits(cartItems: CartItem[]): number {
     let tvaMu = 0;
     for (const item of cartItems) {
         const rate = parseFloat(String(item.taxRate ?? '0.10'));
         const ttcMu = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
         tvaMu += ttcMu - Math.round(ttcMu / (1 + rate));
     }
-    return Math.round(tvaMu / 10_000);
+    return tvaMu;
 }
 
 // ── Guards ────────────────────────────────────────────────────────────────────

@@ -29,6 +29,7 @@ export { CashCounterModal } from './service/restaurant/pos/components/CashCounte
 export { ProductGrid } from './service/restaurant/pos/components/ProductGrid';
 export { Cart } from './service/restaurant/pos/components/Cart';
 export { TableSelector } from './service/restaurant/pos/components/TableSelector';
+export { TableActionsMenu } from './service/restaurant/pos/components/TableActionsMenu';
 export { PosHeader } from './service/restaurant/pos/components/PosHeader';
 
 // Domaine : production (KDS, kitchen, recipes)

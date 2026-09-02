@@ -15,7 +15,7 @@ import { useAuth } from "@/shared/providers/NexusCoreContext";
 import { useTenant } from "@/shared/hooks/useTenant";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { pushToUser, pushToRole } from "@/lib/push/pushClient";
-import { computePayroll, computeContractorBilling, type StaffTab } from "@/app/(client)/(ops)/staff/staffUtils";
+import { computePayroll, computeContractorBilling, type StaffTab } from "../staffComputations";
 import type { JsonObject } from "@/shared/types/json";
 
 const VALID_STAFF_TABS: StaffTab[] = ["team", "planning", "timesheet", "payroll", "freelance", "skills", "leaves", "recruitment"];

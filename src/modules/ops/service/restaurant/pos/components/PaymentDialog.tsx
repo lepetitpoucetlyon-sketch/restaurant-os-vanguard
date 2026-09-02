@@ -22,8 +22,10 @@ import { MealVoucherLimitGuard } from "../services/MealVoucherLimitGuard";
 interface PaymentDialogProps {
     isOpen: boolean;
     total: number;
-    tvaInCents?: number;
+    tvaInMicrounits?: number;
     orderId?: string;
+    tenantId?: string;
+    operatorId?: string;
     onClose: () => void;
     onPaymentComplete: () => Promise<string | void>;
 }
@@ -32,13 +34,15 @@ function applyHashIfPresent(hash: string | void, setCertifiedHash: (h: string) =
     if (hash) setCertifiedHash(hash);
 }
 
-export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onPaymentComplete }: PaymentDialogProps) {
+export function PaymentDialog({ isOpen, total, tvaInMicrounits, orderId, tenantId, operatorId, onClose, onPaymentComplete }: PaymentDialogProps) {
     const [method, setMethod] = useState<PaymentMethod | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [certifiedHash, setCertifiedHash] = useState<string | null>(null);
     const [terminalState, setTerminalState] = useState<TerminalState>("idle");
     const [terminalError, setTerminalError] = useState<string | null>(null);
+    const [cashReceived, setCashReceived] = useState("");
+    const [changeAsTip, setChangeAsTip] = useState(false);
     const { t } = useLanguage();
 
     const manualAdapterRef = useRef<ReturnType<typeof terminalService.getManualAdapter>>(null);
@@ -46,7 +50,15 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
 
     if (!isOpen) return null;
 
+    const tid = tenantId || 'unknown';
     const amountInMicrounits = total * 10_000;
+
+    // Rendu de monnaie réel — calculé sur le montant effectivement reçu.
+    const receivedMicrounits = Math.round((parseFloat(cashReceived.replace(",", ".")) || 0) * 1_000_000);
+    const changeResult = ExactChangeAssistanceService.computeChange(
+        amountInMicrounits,
+        receivedMicrounits > 0 ? receivedMicrounits : amountInMicrounits,
+    );
 
     const handleProcessPayment = async () => {
         if (method === "card") {
@@ -109,21 +121,33 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
         setIsProcessing(true);
         try {
             if (method === "cash") {
+                if (changeResult.isUnderpaid) {
+                    setIsProcessing(false);
+                    setTerminalError("Montant reçu insuffisant");
+                    return;
+                }
                 printerService.openCashDrawer();
                 await CashDrawerTriggerService.triggerOpen({
-                    tenantId: 'default',
-                    adminId: 'pos-operator',
+                    tenantId: tid,
+                    adminId: operatorId || 'pos-operator',
                     terminalId: 'POS-MAIN',
                     reason: 'cash_payment',
                     orderId,
                 }).catch(() => null);
 
-                // Calcul du rendu exact pour vérification arithmétique
-                ExactChangeAssistanceService.computeChange(amountInMicrounits, amountInMicrounits);
+                if (changeAsTip && changeResult.changeDueInMicrounits > 0) {
+                    await ChangeAsTipService.record({
+                        tenantId: tid,
+                        orderId: orderId ?? `ORDER_${Date.now()}`,
+                        operatorId: operatorId || 'pos-operator',
+                        changeInMicrounits: changeResult.changeDueInMicrounits,
+                        tipInMicrounits: changeResult.changeDueInMicrounits,
+                    }).catch(() => null);
+                }
             }
             if (method === "conecs") {
                 await MealVoucherLimitGuard.validate({
-                    tenantId: 'default',
+                    tenantId: tid,
                     orderId: orderId ?? `ORDER_${Date.now()}`,
                     requestedVoucherAmountInMicrounits: amountInMicrounits,
                     items: [{
@@ -208,10 +232,10 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                                 <span className="text-nano font-bold uppercase tracking-widest text-text-primary/40 mb-1">Montant à régler</span>
                                 <span className="text-4xl md:text-5xl font-serif font-black text-accent-gold italic drop-shadow-sm">{formatCurrency(total)}</span>
                             </div>
-                            {tvaInCents !== undefined && (
+                            {tvaInMicrounits !== undefined && (
                                 <div className="flex flex-col items-center">
                                     <span className="text-nano font-bold uppercase tracking-widest text-text-primary/40 mb-1">TVA incluse</span>
-                                    <span className="text-xl md:text-2xl font-serif font-black text-text-primary italic">{formatCurrency(tvaInCents)}</span>
+                                    <span className="text-xl md:text-2xl font-serif font-black text-text-primary italic">{formatCurrency(Math.round(tvaInMicrounits / 10_000))}</span>
                                 </div>
                             )}
                         </div>
@@ -234,6 +258,46 @@ export function PaymentDialog({ isOpen, total, tvaInCents, orderId, onClose, onP
                                     onSelectMethod={(m) => { setTerminalState("idle"); setTerminalError(null); setMethod(m); }}
                                     total={total}
                                 />
+                            )}
+
+                            {/* Cash — montant reçu & rendu de monnaie */}
+                            {!isTerminalBusy && method === "cash" && (
+                                <div className="rounded-2xl border border-border/50 bg-bg-tertiary/30 p-5 space-y-3">
+                                    <label className="block text-nano font-bold uppercase tracking-widest text-text-muted">
+                                        Montant reçu (€)
+                                    </label>
+                                    <input
+                                        value={cashReceived}
+                                        onChange={(e) => setCashReceived(e.target.value)}
+                                        inputMode="decimal"
+                                        placeholder={formatCurrency(total)}
+                                        className="w-full rounded-xl border border-border/50 bg-bg-secondary px-4 py-3 text-2xl font-serif tabular-nums text-text-primary"
+                                    />
+                                    {receivedMicrounits > 0 && (
+                                        <div className="space-y-2 pt-1">
+                                            {changeResult.isUnderpaid ? (
+                                                <p className="text-sm font-semibold text-error">Insuffisant — manque {formatCurrency(Math.round((amountInMicrounits - receivedMicrounits) / 10_000))}</p>
+                                            ) : (
+                                                <>
+                                                    <p className="text-lg font-serif tabular-nums text-text-primary">
+                                                        Rendu : <span className="font-black text-accent-gold">{formatCurrency(Math.round(changeResult.changeDueInMicrounits / 10_000))}</span>
+                                                    </p>
+                                                    {changeResult.breakdown.length > 0 && (
+                                                        <p className="text-xs text-text-muted">
+                                                            {changeResult.breakdown.map((d) => `${d.count}× ${d.name}`).join(" · ")}
+                                                        </p>
+                                                    )}
+                                                    {changeResult.changeDueInMicrounits > 0 && (
+                                                        <label className="flex items-center gap-2 text-sm text-text-primary">
+                                                            <input type="checkbox" checked={changeAsTip} onChange={(e) => setChangeAsTip(e.target.checked)} />
+                                                            Laisser le rendu en pourboire (compte 426)
+                                                        </label>
+                                                    )}
+                                                </>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
                             )}
 
                             {/* Confirm button */}

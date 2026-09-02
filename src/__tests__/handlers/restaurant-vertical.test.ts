@@ -65,8 +65,25 @@ vi.mock('@/modules/commerce', async (importOriginal) => {
 vi.mock('@/verticals/restaurant/adapters', () => ({
   RestaurantFinanceAdapter:     { emitOrderFiscalSeal:     mocks.emitOrderFiscalSeal },
   RestaurantIntelligenceAdapter:{ emitSalesDataReady:      mocks.emitSalesDataReady  },
-  RestaurantComplianceAdapter:  { emitHaccpAlert:          vi.fn() },
-  RestaurantLogisticsAdapter:   { emitStockDeducted:       vi.fn() },
+  RestaurantComplianceAdapter:  {
+    emitHaccpAlert:          vi.fn(),
+    emitTemperatureAnomaly:  vi.fn(),
+    emitHaccpCheckSaved:     vi.fn(),
+  },
+  RestaurantLogisticsAdapter:   {
+    emitStockDeducted:       vi.fn(),
+    emitDlcExpiry:           vi.fn(),
+  },
+  RestaurantCommerceAdapter:    {
+    emitNoShow:              vi.fn(),
+    emitCustomerRFMTrigger:  vi.fn((payload) => mocks.emit('crm.rfm_trigger', payload)),
+    emitReservationConfirmed:vi.fn(),
+    emitLoyaltyPointsEarned: vi.fn(),
+  },
+  RestaurantHumanAdapter:       {
+    emitTipDistributed:      vi.fn(),
+    emitShiftClockIn:        vi.fn(),
+  },
   RestaurantFacilityAdapter:    {
     emitTableLayoutChanged:  mocks.emitTableLayoutChanged,
     emitMaintenanceRequired: mocks.emitMaintenanceRequired,

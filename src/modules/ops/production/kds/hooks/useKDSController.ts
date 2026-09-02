@@ -1,13 +1,12 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useAtomValue } from 'jotai';
 import { useKitchen } from '../../../providers/hooks/kitchenHooks';
 import { KitchenStation, resolveStation } from '../contracts/kds-constants';
 import type { Order, OrderItem } from '@nexus/contracts';
 import { useAuth } from '@/infrastructure/auth/hooks/useAuth';
+import { tenantIdAtom } from '@/store/pillars/sovereign';
 import { KDSPacingEngine } from '../services/KDSPacingEngine';
 import { KDSStationRecoveryService } from '../services/KDSStationRecoveryService';
-import { HotColdSyncKdsService, type CoursePreparationSpec } from '../services/HotColdSyncKdsService';
-import { MeatRestingTimerService, type MeatRestingPlanRequest } from '../services/MeatRestingTimerService';
-import { PassPickupReminderService, type PassOrderState } from '../services/PassPickupReminderService';
 
 function resolveLockedStation(role?: string): KitchenStation | null {
     if (!role) return null;
@@ -54,6 +53,7 @@ function filterOrdersByStationAndSearch(orders: Order[], station: KitchenStation
 export const useKDSController = () => {
     const { nodes: orders, updateOrderStatus, getPendingModifications, isLoading, error } = useKitchen();
     const { currentUser } = useAuth();
+    const activeTenantId = useAtomValue(tenantIdAtom) as string | undefined;
 
     
     // RBAC Station Locking
@@ -104,28 +104,17 @@ export const useKDSController = () => {
             return Math.floor((Date.now() - new Date(base).getTime()) / 60_000);
         });
         const avgDelay = delays.length > 0 ? Math.round(delays.reduce((a, b) => a + b, 0) / delays.length) : 0;
-        return KDSPacingEngine.evaluatePacing('default', avgDelay);
-    }, [orders]);
+        return KDSPacingEngine.evaluatePacing(activeTenantId ?? 'unknown', avgDelay);
+    }, [orders, activeTenantId]);
 
+    // Reprise de poste après déconnexion : rejoue le buffer local vs le serveur.
     const handleRecoverStation = useCallback((incomingBufferedOrders: string[] = []) => {
         return KDSStationRecoveryService.recoverStation(
-            'default',
+            activeTenantId ?? 'unknown',
             { stationId: activeStation, lastPingTimestamp: Date.now(), unacknowledgedOrderIds: [] },
-            incomingBufferedOrders
+            incomingBufferedOrders,
         );
-    }, [activeStation]);
-
-    const handlePlanCourseSync = useCallback((orderId: string, items: CoursePreparationSpec[]) => {
-        return HotColdSyncKdsService.planCourseSync('default', orderId, items);
-    }, []);
-
-    const handleCalculateMeatResting = useCallback((req: MeatRestingPlanRequest) => {
-        return MeatRestingTimerService.calculateRestingPlan(req);
-    }, []);
-
-    const handleEvaluatePassPickup = useCallback((order: PassOrderState) => {
-        return PassPickupReminderService.evaluatePassStatus('default', order);
-    }, []);
+    }, [activeStation, activeTenantId]);
 
     return {
         // Data
@@ -152,9 +141,7 @@ export const useKDSController = () => {
         updateOrderStatus,
         getPendingModifications,
         handleRecoverStation,
-        handlePlanCourseSync,
-        handleCalculateMeatResting,
-        handleEvaluatePassPickup,
+        activeTenantId,
     };
 };
 

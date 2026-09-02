@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import type { User } from "@nexus/contracts";
 
 import { Nexus } from "@/lib/nexus/NexusAdapter";
-import type { StaffDocument } from "@/app/(client)/(ops)/staff/staffUtils";
+import type { StaffDocument } from "../staffComputations";
 import { DigitalEmployeeVault } from "../../../services/DigitalEmployeeVault";
 
 export interface UseStaffDocsInput {

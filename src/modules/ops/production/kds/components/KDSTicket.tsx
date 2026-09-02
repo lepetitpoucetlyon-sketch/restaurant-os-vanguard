@@ -24,6 +24,7 @@ import { KDSContextDrawer } from './kds-ticket/KDSContextDrawer';
 import { KDSTicketHeader } from './kds-ticket/KDSTicketHeader';
 import { KDSTicketFooter } from './kds-ticket/KDSTicketFooter';
 import { KDSCoursingAnimationIndicator } from './KDSCoursingAnimationIndicator';
+import { KDSTicketTimers } from './kds-ticket/KDSTicketTimers';
 export { hasAllergens };
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -55,6 +56,7 @@ type FlatItem = OrderItem & { _key: string };
 export function KDSTicket({
     ticket,
     fullOrder,
+    tenantId,
     gridColumns,
     rushMode,
     updateOrderStatus,
@@ -202,6 +204,8 @@ export function KDSTicket({
                     />
                 </div>
             )}
+
+            <KDSTicketTimers ticket={ticket} tenantId={tenantId} />
 
             {/* ── Item List with DnD (kds-4) ─────────────────────────────── */}
             <div className={cn(

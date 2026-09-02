@@ -14,6 +14,7 @@ import { tenantIdAtom } from "@/store/pillars/sovereign";
 import { toast } from "sonner";
 
 import { KDSHeader } from "./KDSHeader";
+import { KDSPacingBanner } from "./KDSPacingBanner";
 import { hasAllergens } from "./kds-ticket/kdsTicketHelpers";
 import { KDSRecallSection } from "./kds-dashboard/KDSRecallSection";
 import { KDSProductionGrid } from "./kds-dashboard/KDSProductionGrid";
@@ -35,6 +36,8 @@ export function KDSDashboard() {
         setSearchQuery,
         preparingOrdersCount,
         pendingModificationsCount,
+        pacingStatus,
+        handleRecoverStation,
     } = useKDSController();
 
     const { data: recipes } = useRecipes();
@@ -161,6 +164,18 @@ export function KDSDashboard() {
                 setShowModificationAlerts={setShowModificationAlerts}
                 isRecallMode={isRecallMode}
                 setIsRecallMode={setIsRecallMode}
+            />
+
+            <KDSPacingBanner
+                status={pacingStatus}
+                onRecoverStation={() => {
+                    const res = handleRecoverStation();
+                    toast.info(
+                        res.replayedCount > 0
+                            ? `Poste resynchronisé — ${res.replayedCount} ticket(s) rejoué(s)`
+                            : 'Poste déjà à jour',
+                    );
+                }}
             />
 
             <div className="flex-1 p-3 md:p-6 lg:p-10 overflow-auto relative custom-scrollbar bg-surface-bg">
