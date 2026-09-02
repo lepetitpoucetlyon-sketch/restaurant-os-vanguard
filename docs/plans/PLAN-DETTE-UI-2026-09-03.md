@@ -103,6 +103,26 @@ Les générateurs qui émettent du **HTML email / PDF / SVG rasterisé** ne peuv
 
 ---
 
+## 4bis. État d'avancement (2026-09-03)
+
+| Lot | Compteur | Avant → Après | Commit | Statut |
+|---|---|---|---|---|
+| **A** | m4 responsive | **108 → 0** | `db56c2e31` | ✅ fait (px→rem ×129, 12 grilles) |
+| **B** | m7 erreurs avalées | **199 → 23** | `f3be6ea57` | ✅ fait (mesure durcie -157 faux positifs code-split + 19 vrais `.catch()`) |
+| **C** | m16 couleurs | **945 → 803** | `8c491d13d` | ✅ mesure durcie (whitelist HTML-generators + palette-source). **Reste 803 = vraie tokenisation UI** |
+| **D** | m14 chaînes FR | 767 | — | ⏳ **pas commencé** — voir constats ci-dessous |
+
+### Constats m14 (bloquants pour un lot rapide)
+- `fr.ts` a une section `"pos"` (grosse) mais **pas de section `"kds"`**.
+- Les composants KDS (`KDSHeader`, `KDSDashboard`, …) **n'importent pas `useLanguage`** — zéro `t()`. i18n à câbler depuis zéro sur ce pilier.
+- Périmètre coup de feu (POS/KDS) : ~40 chaînes sur ~20 fichiers, 1-3 par fichier — dispersé, beaucoup de cérémonie par chaîne.
+- Chaque chaîne = `t()` + entrée dans **5 fichiers de locale** + cliquet `missingI18n` doit rester 0.
+
+### Recommandation m14
+Session dédiée. Décider d'abord la **taxonomie de clés** (`ops.pos.*`, `ops.kds.*`, `finance.accounting.*`…) puis attaquer pilier par pilier. Ne pas faire en fin de session — le risque de casser `missingI18n` (cliquet dur) ou d'introduire des clés mal nommées est réel.
+
+---
+
 ## 5. Ordre d'exécution & critères de sortie
 
 | Lot | Compteur | Effort | Sortie |
