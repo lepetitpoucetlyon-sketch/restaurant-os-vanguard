@@ -5,22 +5,40 @@ export function registerLogisticsProcurementHandlers(): Array<() => void> {
   return [
     NexusEventBus.on("stock.mercuriale_price_compared", async (payload) => {
       try {
-        const { MercurialePriceComparisonService } = await import("@/modules/logistics/approvisionnement/procurement/services/MercurialePriceComparisonService");
-        if (typeof (MercurialePriceComparisonService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).compareInvoice === "function") {
-          await (MercurialePriceComparisonService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).compareInvoice(payload);
-        }
+        const { empireAudit } = await import("@/lib/audit");
+        empireAudit.log({
+          module: 'logistics',
+          action: 'MERCURIALE_PRICE_COMPARED',
+          details: {
+            sku: payload.sku,
+            lowestSupplierId: payload.lowestSupplierId,
+            bestPriceInMicrounits: payload.bestPriceInMicrounits,
+            potentialSavingsInMicrounits: payload.potentialSavingsInMicrounits,
+          },
+          timestamp: new Date(),
+          instanceId: payload.tenantId,
+        });
       } catch (err) {
-        logger.error("[stock.mercuriale_price_compared] Mercuriale compare error:", err);
+        logger.error("[stock.mercuriale_price_compared] Mercuriale compare audit error:", err);
       }
     }),
     NexusEventBus.on("stock.free_shipping_optimized", async (payload) => {
       try {
-        const { FreeShippingThresholdOptimizerService } = await import("@/modules/logistics/approvisionnement/procurement/services/FreeShippingThresholdOptimizerService");
-        if (typeof (FreeShippingThresholdOptimizerService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).optimizeOrder === "function") {
-          await (FreeShippingThresholdOptimizerService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).optimizeOrder(payload);
-        }
+        const { empireAudit } = await import("@/lib/audit");
+        empireAudit.log({
+          module: 'logistics',
+          action: 'FREE_SHIPPING_OPTIMIZED',
+          details: {
+            supplierId: payload.supplierId,
+            currentCartInMicrounits: payload.currentCartInMicrounits,
+            francoThresholdInMicrounits: payload.francoThresholdInMicrounits,
+            suggestedBufferSkus: payload.suggestedBufferSkus,
+          },
+          timestamp: new Date(),
+          instanceId: payload.tenantId,
+        });
       } catch (err) {
-        logger.error("[stock.free_shipping_optimized] Free shipping optimizer error:", err);
+        logger.error("[stock.free_shipping_optimized] Free shipping optimizer audit error:", err);
       }
     })
   ];

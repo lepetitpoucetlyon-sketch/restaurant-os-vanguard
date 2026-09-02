@@ -5,12 +5,20 @@ export function registerFinanceTreasuryHandlers(): Array<() => void> {
   return [
     NexusEventBus.on("finance.cash_pool_balanced", async (payload) => {
       try {
-        const { CrossTenantCashPoolTreasuryService } = await import("@/modules/finance/tresorerie/CrossTenantCashPoolTreasuryService");
-        if (typeof (CrossTenantCashPoolTreasuryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).balancePool === "function") {
-          await (CrossTenantCashPoolTreasuryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).balancePool(payload);
-        }
+        const { empireAudit } = await import("@/lib/audit");
+        empireAudit.log({
+          module: 'finance',
+          action: 'CASH_POOL_TRANSFER_RECORDED',
+          details: {
+            fromTenantId: payload.fromTenantId,
+            toTenantId: payload.toTenantId,
+            transferAmountInMicrounits: payload.transferAmountInMicrounits,
+          },
+          timestamp: new Date(),
+          instanceId: payload.groupTenantId,
+        });
       } catch (err) {
-        logger.error("[finance.cash_pool_balanced] Cash pool error:", err);
+        logger.error("[finance.cash_pool_balanced] Cash pool audit error:", err);
       }
     })
   ];

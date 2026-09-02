@@ -6,21 +6,34 @@ export function registerComplianceEnvironmentalHandlers(): Array<() => void> {
     NexusEventBus.on("haccp.nonconform", async (payload) => {
       try {
         const { BiodechetsRegistryService } = await import("@/modules/compliance/qualite/biodechets/BiodechetsRegistryService");
-        if (typeof (BiodechetsRegistryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).recordWaste === "function") {
-          await (BiodechetsRegistryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).recordWaste(payload);
-        }
+        await BiodechetsRegistryService.recordDailyWeighing({
+          tenantId: payload.tenantId,
+          dateIso: new Date().toISOString().split('T')[0],
+          category: 'expired_raw',
+          quantityKg: ((payload as Record<string, unknown>).quantityKg as number) || 1.0,
+          destination: 'methanization',
+          weighedBy: ((payload as Record<string, unknown>).operatorId as string) || 'SYSTEM_HACCP',
+          notes: ((payload as Record<string, unknown>).reason as string) || 'HACCP Nonconformity auto-record',
+        });
       } catch (err) {
         logger.error("[haccp.nonconform] Biodechets handler error:", err);
       }
     }),
     NexusEventBus.on("compliance.deadline_approaching", async (payload) => {
       try {
-        const { BsddWasteOilService } = await import("@/modules/compliance/qualite/biodechets/BsddWasteOilService");
-        if (typeof (BsddWasteOilService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).recordOilCheck === "function") {
-          await (BsddWasteOilService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).recordOilCheck(payload);
-        }
+        const { empireAudit } = await import("@/lib/audit");
+        empireAudit.log({
+          module: 'compliance',
+          action: 'COMPLIANCE_DEADLINE_APPROACHING',
+          details: {
+            deadlineType: (payload as Record<string, unknown>).deadlineType,
+            targetDate: (payload as Record<string, unknown>).targetDate,
+          },
+          timestamp: new Date(),
+          instanceId: payload.tenantId,
+        });
       } catch (err) {
-        logger.error("[compliance.deadline_approaching] Bsdd handler error:", err);
+        logger.error("[compliance.deadline_approaching] Compliance deadline audit error:", err);
       }
     })
   ];

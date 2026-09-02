@@ -8,6 +8,8 @@ import { registerPrinterMappingHandler } from '../handlers/PrinterMappingHandler
 import { registerProformaHandler } from '../handlers/ProformaHandler';
 import { registerKDSTicketDoneNotifier } from '@/modules/ops';
 import { registerKDSRushAlertNotifier } from '@/modules/ops';
+
+import { registerWaiterCallHandler } from '../handlers/WaiterCallHandler';
 import { registerSplitBillRegisteredHandler } from '../handlers/SplitBillRegisteredHandler';
 
 export function registerOpsServiceHandlers(): Array<() => void> {
@@ -22,6 +24,7 @@ export function registerOpsServiceHandlers(): Array<() => void> {
     registerHRClockInGuardHandler(),
     registerPrinterMappingHandler(),
     registerProformaHandler(),
+    registerWaiterCallHandler(),
     registerSplitBillRegisteredHandler(),
   ];
 }

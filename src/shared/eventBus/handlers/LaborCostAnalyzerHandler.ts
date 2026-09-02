@@ -19,14 +19,15 @@ interface LaborBudget {
   updatedAt?: number;
 }
 
-export function registerLaborCostAnalyzerHandler() {
+import { LaborCostAnalyzer } from '@/modules/human';
+
+export function registerLaborCostAnalyzerHandler(): () => void {
   const unsubStarted = NexusEventBus.on(
     'hr.shift_started',
     async (payload) => {
       const { tenantId: _tenantId, shiftId, employeeId, startedAt: _startedAt } = payload;
       
       logger.info(`[LaborCostAnalyzer] Début du shift ${shiftId} pour employé ${employeeId}`);
-      // L'initialisation du coût peut se faire ici ou simplement tracer le début.
       
       empireAudit.log({
         module: 'human',
@@ -39,37 +40,36 @@ export function registerLaborCostAnalyzerHandler() {
     { id: 'labor-cost-shift-started', priority: 'BACKGROUND' }
   );
 
+  const handleShiftCompleted = async (tenantId: string, employeeId: string, employeeName?: string, endedAt?: number) => {
+    const effectiveEndedAt = endedAt || Date.now();
+    const dateStr = new Date(effectiveEndedAt).toISOString().split('T')[0];
+
+    try {
+      // Analyse en temps réel croisant les pointages et les contrats
+      const metrics = await LaborCostAnalyzer.analyzeDailyLaborCost(tenantId, 0);
+
+      if (metrics.alertStatus === 'CRITICAL') {
+        await NexusEventBus.emitDurable('notification.urgent', {
+          v: 1,
+          tenantId,
+          message: `Alerte Masse Salariale : Ratio personnel/CA critique (${metrics.laborCostPercentage.toFixed(1)}%)`,
+          roles: ['manager', 'directeur', 'admin'],
+          priority: 'HIGH',
+          metadata: { dateStr, employeeId, employeeName, metrics },
+        });
+      }
+
+      logger.info(`[LaborCostAnalyzer] Dépointage ${employeeName || employeeId} : Coût salarial cumulé = ${(metrics.currentLaborCostInCents / 100).toFixed(2)}€`);
+    } catch (err) {
+      logger.warn(`[LaborCostAnalyzer] Impossible de recalculer le coût salarial après dépointage: ${(err as Error).message}`);
+    }
+  };
+
   const unsubEnded = NexusEventBus.on(
     'hr.shift_ended',
     async (payload) => {
       const { tenantId, shiftId, employeeId, endedAt } = payload;
-      
-      const shift = await Nexus.adapter.get<ShiftRecord>(`tenants/${tenantId}/shifts/${shiftId}`);
-      
-      if (shift && shift.startedAt) {
-        const durationHours = (endedAt - shift.startedAt) / 3600000;
-        
-        // En vrai: récupérer le taux horaire de l'employé depuis son profil
-        const hourlyRate = shift.hourlyRate ?? 15000000; // 15 euros par défaut (en microunits)
-        
-        const costInMicrounits = durationHours * hourlyRate;
-        
-        // Ajouter ce coût au budget salarial de la journée
-        const dateStr = new Date(endedAt).toISOString().split('T')[0];
-        const budgetPath = `tenants/${tenantId}/analytics/laborCost_${dateStr}`;
-        
-        await Nexus.adapter.runTransaction(async (_tx) => {
-          const budget = await Nexus.adapter.get<LaborBudget>(budgetPath) ?? { totalCostInMicrounits: 0, totalHours: 0 };
-          
-          await Nexus.adapter.set(budgetPath, {
-            totalCostInMicrounits: budget.totalCostInMicrounits + costInMicrounits,
-            totalHours: budget.totalHours + durationHours,
-            updatedAt: Date.now()
-          });
-        });
-        
-        logger.info(`[LaborCostAnalyzer] Fin de shift ${shiftId}. Coût salarial ajouté: ${costInMicrounits / 1000000} EUR.`);
-      }
+      await handleShiftCompleted(tenantId, employeeId, undefined, endedAt);
 
       empireAudit.log({
         module: 'human',
@@ -82,8 +82,20 @@ export function registerLaborCostAnalyzerHandler() {
     { id: 'labor-cost-shift-ended', priority: 'BACKGROUND' }
   );
 
+  // Suture Nœud 4 : Écoute du dépointage réel depuis le kiosque de pointage
+  const unsubStaffClockOut = NexusEventBus.on(
+    'staff.clock_out',
+    async (payload) => {
+      const { tenantId, userId, userName, timestamp } = payload;
+      const endedAt = new Date(timestamp).getTime();
+      await handleShiftCompleted(tenantId, userId, userName, endedAt);
+    },
+    { id: 'labor-cost-staff-clock-out', priority: 'BACKGROUND' }
+  );
+
   return () => {
     unsubStarted();
     unsubEnded();
+    unsubStaffClockOut();
   };
 }

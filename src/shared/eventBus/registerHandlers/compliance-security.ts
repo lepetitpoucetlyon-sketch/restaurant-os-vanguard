@@ -5,16 +5,21 @@ export function registerComplianceSecurityHandlers(): Array<() => void> {
   return [
     NexusEventBus.on("security.pin_locked", async (payload) => {
       try {
-        const { EmergencyExitOpeningChecklistService } = await import("@/modules/compliance/qualite/haccp/services/EmergencyExitOpeningChecklistService");
-        if (typeof (EmergencyExitOpeningChecklistService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).triggerDailyCheck === "function") {
-          await (EmergencyExitOpeningChecklistService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).triggerDailyCheck(payload);
-        }
-        const { GdprDataAnonymizerService } = await import("@/modules/compliance/securite/GdprDataAnonymizerService");
-        if (typeof (GdprDataAnonymizerService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).anonymize === "function") {
-          await (GdprDataAnonymizerService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).anonymize(payload);
-        }
+        const { empireAudit } = await import("@/lib/audit");
+        empireAudit.log({
+          module: 'security',
+          action: 'PIN_LOCKED_MAX_ATTEMPTS',
+          details: {
+            terminalId: (payload as Record<string, unknown>).terminalId,
+            lockedAt: Date.now(),
+          },
+          severity: 'high',
+          timestamp: new Date(),
+          instanceId: payload.tenantId,
+          userId: ((payload as Record<string, unknown>).operatorId as string) || 'SYSTEM_PIN_GUARD',
+        });
       } catch (err) {
-        logger.error("[security.pin_locked] Security handler error:", err);
+        logger.error("[security.pin_locked] Security audit error:", err);
       }
     })
   ];

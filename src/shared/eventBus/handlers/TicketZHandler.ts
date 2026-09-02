@@ -62,11 +62,12 @@ export function registerTicketZHandler(): () => void {
         // Ne pas accumuler si déjà clôturé (protection post-clôture Z)
         if (existing.closed) return;
 
+        // Import dynamique : casse le cycle shared/eventBus → modules/finance.
         const { TaxCalculator } = await import('@/modules/finance/fiscalite/TaxCalculator');
         const taxBreakdown = { ...existing.taxBreakdown };
         for (const item of items) {
           const rate = item.taxRate ?? '0.10';
-          const lineTotal = item.unitPriceInMicrounits * item.quantity - (item.discountInMicrounits ?? 0);
+          const lineTotal = (item.unitPriceInMicrounits ?? 0) * (item.quantity || 1) - (item.discountInMicrounits ?? 0);
           const tva = TaxCalculator.applyRate(lineTotal, rate);
           taxBreakdown[rate] = (taxBreakdown[rate] ?? 0) + tva;
         }
