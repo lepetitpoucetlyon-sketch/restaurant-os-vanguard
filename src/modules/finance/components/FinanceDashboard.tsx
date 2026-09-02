@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 import { useFinance } from "../hooks/useFinance";
 import { TabGuard } from "@/shared/components/rbac/TabGuard";
@@ -56,10 +56,26 @@ function computeInitialTab(tabParam: string | null): FinanceTab {
  * Le dashboard ne fait plus que : lire params URL, orchestrer tabs, câbler hooks aux enfants.
  */
 export function FinanceDashboard() {
+    const router = useRouter();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
     const tabParam = searchParams.get("tab");
-    const [activeTab, setActiveTab] = useState<FinanceTab>(computeInitialTab(tabParam));
+    const [activeTab, setActiveTabState] = useState<FinanceTab>(computeInitialTab(tabParam));
     const [claimOpen, setClaimOpen] = useState(false);
+
+    const handleTabChange = useCallback((tab: FinanceTab) => {
+        setActiveTabState(tab);
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("tab", tab);
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }, [router, pathname, searchParams]);
+
+    useEffect(() => {
+        const computed = computeInitialTab(tabParam);
+        if (computed !== activeTab) {
+            setActiveTabState(computed);
+        }
+    }, [tabParam]);
 
     const canSeeTreasury = useTabAccess("finance", "treasury");
     const canSeeAudit = useTabAccess("finance", "audit");
@@ -118,7 +134,7 @@ export function FinanceDashboard() {
                 <PageShell.Tab
                     key={tab.id}
                     active={activeTab === tab.id}
-                    onClick={() => setActiveTab(tab.id)}
+                    onClick={() => handleTabChange(tab.id)}
                     icon={tab.icon}
                 >
                     {tab.label}

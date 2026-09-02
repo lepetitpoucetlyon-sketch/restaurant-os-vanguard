@@ -27,7 +27,8 @@ export async function createServerAdapter(): Promise<INexusAdapter | null> {
     if (!process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
       return null;
     }
-    const { FirestoreServerAdapter } = await import('@/lib/adapters/FirestoreServerAdapter');
+    const adapterPath = '@/lib/adapters/FirestoreServerAdapter';
+    const { FirestoreServerAdapter } = await import(/* webpackIgnore: true */ adapterPath);
     return new FirestoreServerAdapter();
   }
   if (p === 'memory' || p === 'sqlite') {

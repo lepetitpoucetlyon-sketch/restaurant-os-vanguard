@@ -206,4 +206,42 @@ export class WormArchiveStorageService {
       );
     }
   }
+
+  /**
+   * Enregistre le scellement du Grand Total périodique dans l'archive WORM
+   */
+  static async recordGrandTotalSeal(payload: {
+    tenantId: string;
+    period: 'monthly' | 'annual';
+    periodLabel: string;
+    totalInMicrounits: number;
+    hash: string;
+    sealedAt: number;
+  }): Promise<void> {
+    const year = new Date(payload.sealedAt).getUTCFullYear();
+    const month = payload.period === 'monthly' ? new Date(payload.sealedAt).getUTCMonth() + 1 : undefined;
+    const id = `worm_gt_${payload.tenantId}_${payload.period}_${payload.periodLabel.replace(/\s+/g, '_')}`;
+
+    const record: WormArchiveRecord = {
+      id,
+      tenantId: payload.tenantId,
+      year,
+      month,
+      periodType: payload.period === 'monthly' ? 'MONTHLY' : 'ANNUAL',
+      totalTransactions: 1,
+      totalAmountInMicrounits: payload.totalInMicrounits,
+      firstTransactionHash: payload.hash,
+      lastTransactionHash: payload.hash,
+      masterSha256Hash: payload.hash,
+      sealedAtUtc: new Date(payload.sealedAt).toISOString(),
+      sealedAtTimestamp: payload.sealedAt,
+      sealedBy: 'SYSTEM_CRON_GRAND_TOTAL',
+      retentionYears: LEGAL_FISCAL_RETENTION_YEARS,
+      immutableUntilTimestamp: payload.sealedAt + LEGAL_FISCAL_RETENTION_YEARS * MS_PER_YEAR,
+      wormStatus: 'ACTIVE_LOCKED',
+      storageBackend: 'FIREBASE_IMMUTABLE_VAULT',
+    };
+
+    await Nexus.adapter.set(`tenants/${payload.tenantId}/wormArchives/${id}`, record);
+  }
 }

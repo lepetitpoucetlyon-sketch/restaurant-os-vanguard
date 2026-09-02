@@ -53,13 +53,22 @@ export class StatementIngestionService {
             try {
                 const date = new Date(fields[0]);
                 const label = fields[1].replace(/["']/g, '').trim();
-                const amount = parseFloat(fields[2].replace(',', '.').replace(/\s/g, ''));
+                
+                // Conversion arithmétique déterministe sans flottant IEEE-754
+                const cleanAmount = fields[2].replace(/\s/g, '').replace(',', '.');
+                const isNegative = cleanAmount.startsWith('-');
+                const unsigned = isNegative ? cleanAmount.slice(1) : (cleanAmount.startsWith('+') ? cleanAmount.slice(1) : cleanAmount);
+                const [eurosPart, centsPart = ''] = unsigned.split('.');
+                const euros = parseInt(eurosPart, 10) || 0;
+                const centsPadded = (centsPart + '00').slice(0, 2);
+                const cents = parseInt(centsPadded, 10) || 0;
+                const totalCents = euros * 100 + cents;
 
                 const transaction: Omit<BankTransaction, 'id'> = {
                     date,
                     label,
-                    amountInCents: Math.round(Math.abs(amount) * 100),
-                    type: amount >= 0 ? 'credit' : 'debit',
+                    amountInCents: totalCents,
+                    type: !isNegative ? 'credit' : 'debit',
                     isReconciled: false,
                     updatedAt: new Date().toISOString()
                 };

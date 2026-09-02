@@ -68,4 +68,13 @@ export class TicketZEnforcementService {
       );
     }
   }
+
+  /** Enregistre la fermeture d'un ticket Z dans le registre persistant */
+  static async recordZClosed(tenantId: string, dateIso: string): Promise<void> {
+    await Nexus.adapter.set(`tenants/${tenantId}/zReports/${dateIso}`, {
+      dateIso,
+      status: 'closed',
+      closedAt: Date.now(),
+    });
+  }
 }

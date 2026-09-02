@@ -1,9 +1,22 @@
 import type { CartItem } from '@nexus/contracts';
 
 export class TaxCalculator {
+  static getRateBps(rate: string | number): number {
+    if (typeof rate === 'number') {
+      return Math.round(rate * 10000);
+    }
+    const clean = rate.trim();
+    if (clean.includes('%')) {
+      return Math.round(parseFloat(clean.replace('%', '')) * 100);
+    }
+    const [intPart, decPart = ''] = clean.split('.');
+    const padded = (decPart + '0000').slice(0, 4);
+    return (parseInt(intPart, 10) || 0) * 10000 + (parseInt(padded, 10) || 0);
+  }
+
   static applyRate(ttc: number, rate: string | number): number {
-    const rateNum = typeof rate === 'string' ? parseFloat(rate) : rate;
-    return Math.round(ttc * rateNum / (1 + rateNum));
+    const bps = this.getRateBps(rate);
+    return Math.round((ttc * bps) / (10000 + bps));
   }
 
   static computeTvaBreakdown(items: CartItem[]): Record<string, number> {
