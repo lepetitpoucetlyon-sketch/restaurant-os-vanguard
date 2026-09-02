@@ -39,17 +39,19 @@ export default function DpaPage() {
         </ul>
 
         <h2>4. Sous-traitants ultérieurs</h2>
-        <table>
-          <thead>
-            <tr><th>Sous-traitant</th><th>Finalité</th><th>Localisation</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Google Cloud (Firebase)</td><td>Hébergement base de données et authentification</td><td>europe-west1 (Belgique)</td></tr>
-            <tr><td>Vercel</td><td>Hébergement application web</td><td>cdg1 (Paris)</td></tr>
-            <tr><td>Stripe</td><td>Traitement des paiements</td><td>UE</td></tr>
-            <tr><td>Sentry</td><td>Monitoring erreurs (données anonymisées)</td><td>UE</td></tr>
-          </tbody>
-        </table>
+        <div className="w-full overflow-x-auto custom-scrollbar my-4">
+          <table className="w-full min-w-[550px]">
+            <thead>
+              <tr><th>Sous-traitant</th><th>Finalité</th><th>Localisation</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Google Cloud (Firebase)</td><td>Hébergement base de données et authentification</td><td>europe-west1 (Belgique)</td></tr>
+              <tr><td>Vercel</td><td>Hébergement application web</td><td>cdg1 (Paris)</td></tr>
+              <tr><td>Stripe</td><td>Traitement des paiements</td><td>UE</td></tr>
+              <tr><td>Sentry</td><td>Monitoring erreurs (données anonymisées)</td><td>UE</td></tr>
+            </tbody>
+          </table>
+        </div>
 
         <h2>5. Transferts internationaux</h2>
         <p>

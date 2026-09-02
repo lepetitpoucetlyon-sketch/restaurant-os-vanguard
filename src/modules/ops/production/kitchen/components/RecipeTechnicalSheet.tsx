@@ -82,10 +82,12 @@ export function RecipeTechnicalSheet({
     <button class="no-print" onclick="window.print()" style="padding:8px 16px; background:#1a1a1a; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">Imprimer / PDF</button>
   </div>
   <h2>{t('recipe_sheet.ingredients')}</h2>
-  <table>
-    <thead><tr><th>{t('recipe_sheet.quantity')}</th><th>{t('recipe_sheet.ingredient')}</th></tr></thead>
-    <tbody>${ingredientRows}</tbody>
-  </table>
+  <div style="overflow-x: auto;">
+    <table>
+      <thead><tr><th>{t('recipe_sheet.quantity')}</th><th>{t('recipe_sheet.ingredient')}</th></tr></thead>
+      <tbody>${ingredientRows}</tbody>
+    </table>
+  </div>
   <h2>{t('recipe_sheet.allergens')}</h2>
   <div style="margin-bottom: 16px;">${allergenBadges}</div>
   <h2>{t('recipe_sheet.prep_steps')}</h2>

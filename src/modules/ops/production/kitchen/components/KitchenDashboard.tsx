@@ -111,11 +111,11 @@ export function KitchenDashboard() {
                         exit={performanceMode ? undefined : { opacity: 0, x: -320 }}
                         transition={performanceMode ? { duration: 0 } : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                         className={cn(
-                            "hidden md:flex w-[320px] bg-bg-secondary border-r border-border flex-col p-8 elegant-scrollbar overflow-hidden shrink-0",
+                            "hidden md:flex md:w-[320px] bg-bg-secondary border-r border-border flex-col p-8 elegant-scrollbar overflow-hidden shrink-0",
                             performanceMode ? "" : "backdrop-blur-xl"
                         )}
                     >
-                        <div className="mb-10 min-w-[260px]">
+                        <div className="mb-10 md:min-w-[260px]">
                             <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 shrink-0" /> {/* Spacer for floating button */}
                                 <div className="flex-1">
@@ -143,7 +143,7 @@ export function KitchenDashboard() {
                             variants={cinematicContainer}
                             initial="hidden"
                             animate="visible"
-                            className="space-y-1.5 flex-1 min-w-[260px]"
+                            className="space-y-1.5 flex-1 md:min-w-[260px]"
                         >
                             {(['mise-en-place', 'prep-journalier', 'recipes', 'ingredients', 'margins', 'waste', 'suppliers', 'allergens', 'cooking-times'] as const).map((tab) => {
                                 const icons: Record<KitchenTab, LucideIcon> = {

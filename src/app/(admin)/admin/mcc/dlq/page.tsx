@@ -123,8 +123,8 @@ export default function DLQDashboard() {
         </button>
       </div>
 
-      <div className="rounded-2xl border border-border-subtle overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="rounded-2xl border border-border-subtle overflow-hidden overflow-x-auto custom-scrollbar">
+        <table className="w-full text-sm min-w-[700px]">
           <thead className="bg-surface-card text-xs font-bold uppercase tracking-widest text-secondary">
             <tr>
               <th className="text-left px-4 py-3">Event</th>

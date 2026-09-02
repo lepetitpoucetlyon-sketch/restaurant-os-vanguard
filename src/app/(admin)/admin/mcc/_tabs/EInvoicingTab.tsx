@@ -62,7 +62,7 @@ export function EInvoicingTab() {
 
                 <div className="space-y-2">
                     <p className="text-xs font-bold text-secondary uppercase tracking-widest">Tenants de la flotte</p>
-                    <div className="rounded-xl border border-border-subtle overflow-hidden">
+                    <div className="rounded-xl border border-border-subtle overflow-hidden overflow-x-auto custom-scrollbar">
                         <table className="w-full text-sm">
                             <thead className="bg-bg-tertiary text-secondary">
                                 <tr>

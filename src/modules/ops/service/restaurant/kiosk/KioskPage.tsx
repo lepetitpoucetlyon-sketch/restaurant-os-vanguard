@@ -81,7 +81,7 @@ export function KioskPage() {
 
   if (orderStep === 'welcome') {
     return (
-      <div className="h-screen w-full bg-surface-bg flex flex-col items-center justify-center p-8 text-center select-none">
+      <div className="min-h-screen min-h-dvh w-full bg-surface-bg flex flex-col items-center justify-center p-8 text-center select-none">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -128,7 +128,7 @@ export function KioskPage() {
 
   if (orderStep === 'success') {
     return (
-      <div className="h-screen w-full bg-surface-bg flex flex-col items-center justify-center p-8 text-center select-none">
+      <div className="min-h-screen min-h-dvh w-full bg-surface-bg flex flex-col items-center justify-center p-8 text-center select-none">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -157,7 +157,7 @@ export function KioskPage() {
   }
 
   return (
-    <div className="h-screen w-full bg-surface-bg flex overflow-hidden select-none">
+    <div className="min-h-screen min-h-dvh h-dvh w-full bg-surface-bg flex overflow-hidden select-none">
       {/* Category Sidebar */}
       <div className="w-64 bg-surface-card border-r border-border-default flex flex-col p-4 shrink-0 justify-between">
         <div className="space-y-2">

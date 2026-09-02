@@ -46,18 +46,20 @@ export default function SecurityPage() {
         </ul>
 
         <h2>Infrastructure</h2>
-        <table>
-          <thead>
-            <tr><th>Service</th><th>Fournisseur</th><th>Localisation</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Base de données</td><td>Firebase (Google Cloud)</td><td>europe-west1 (Belgique)</td></tr>
-            <tr><td>Application web</td><td>Vercel</td><td>cdg1 (Paris)</td></tr>
-            <tr><td>Paiements</td><td>Stripe</td><td>UE</td></tr>
-            <tr><td>Monitoring</td><td>Sentry</td><td>UE</td></tr>
-            <tr><td>Sauvegardes</td><td>Cloud Storage</td><td>europe-west1</td></tr>
-          </tbody>
-        </table>
+        <div className="w-full overflow-x-auto custom-scrollbar my-4">
+          <table className="w-full min-w-[550px]">
+            <thead>
+              <tr><th>Service</th><th>Fournisseur</th><th>Localisation</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Base de données</td><td>Firebase (Google Cloud)</td><td>europe-west1 (Belgique)</td></tr>
+              <tr><td>Application web</td><td>Vercel</td><td>cdg1 (Paris)</td></tr>
+              <tr><td>Paiements</td><td>Stripe</td><td>UE</td></tr>
+              <tr><td>Monitoring</td><td>Sentry</td><td>UE</td></tr>
+              <tr><td>Sauvegardes</td><td>Cloud Storage</td><td>europe-west1</td></tr>
+            </tbody>
+          </table>
+        </div>
 
         <h2>Conformité</h2>
         <ul>

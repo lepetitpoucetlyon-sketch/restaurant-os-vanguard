@@ -35,8 +35,8 @@ export default function VsZeltyPage() {
           Les deux solutions sont certifiées NF525. Voici ce qui les distingue.
         </p>
 
-        <div className="rounded-2xl border border-white/[0.06] overflow-hidden">
-          <table className="w-full text-sm">
+        <div className="rounded-2xl border border-white/[0.06] overflow-hidden overflow-x-auto custom-scrollbar">
+          <table className="w-full text-sm min-w-[600px]">
             <thead>
               <tr className="bg-white/[0.03]">
                 <th className="text-left px-6 py-4 font-medium text-white/60">Fonctionnalité</th>

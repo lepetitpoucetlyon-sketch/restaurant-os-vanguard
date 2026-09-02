@@ -1,0 +1,4980 @@
+{
+  "summary": {
+    "totalFilesScanned": 3743,
+    "totalCatalogPages": 84,
+    "foundPagesCount": 84,
+    "tokensUsage": {
+      "surfaces": 3630,
+      "texts": 13584,
+      "borders": 3695,
+      "totalTokenOccurrences": 20909
+    },
+    "hardcodedGrays": {
+      "total": 1616,
+      "byFamily": {
+        "slate": 30,
+        "gray": 529,
+        "zinc": 29,
+        "neutral": 34,
+        "stone": 0,
+        "black_white": 994
+      }
+    },
+    "m4ResponsiveCounts": {
+      "gridsFiges": 11,
+      "largeursFigees": 88,
+      "microTypo": 259,
+      "hScreenStrict": 4,
+      "tablesSansOverflow": 13,
+      "totalMetricM4": 112
+    },
+    "categorySummary": {
+      "operations": {
+        "count": 14,
+        "pages": [
+          "Caisse Tactile POS",
+          "POS Mobile / Pad Serveur",
+          "KDS Cuisine & Production",
+          "Vue Cuisine & Fiches Recettes",
+          "Poste Bar & Tireuses Connectées",
+          "Borne de Commande Kiosque",
+          "Plan de Salle & Tables",
+          "Gestion des Stocks & Inventaire",
+          "Réception & Contrôle Fournisseurs",
+          "Hub Fournisseurs & Mercuriale",
+          "Pointeuse & Pointage Staff",
+          "Hub Équipements & Maintenance",
+          "Conformité Sanitaire HACCP",
+          "Plans de Nettoyage & Hygiène"
+        ],
+        "totalLines": 1627,
+        "totalTokenDensity": 225,
+        "totalHardcodedGrays": 6,
+        "totalBreakpoints": 16,
+        "devicePresets": {
+          "tablet": 4,
+          "mobile": 1,
+          "kds": 1,
+          "desktop": 8
+        }
+      },
+      "commerce": {
+        "count": 14,
+        "pages": [
+          "Cahier de Réservations",
+          "Fichier Clients & CRM Fidélité",
+          "Campagnes & Marketing",
+          "Référencement Local & Google Maps",
+          "Éditeur de Menus & Carte",
+          "Menu Engineering & Marges",
+          "Menu Digital sur Table",
+          "Click & Collect / Livraison",
+          "Vitrine Restaurant",
+          "Privatisations & Groupes",
+          "Portail Bienvenue Public",
+          "Accueil Expérience Client",
+          "Page Restaurant Sur-Mesure",
+          "Module Réservation Dédié"
+        ],
+        "totalLines": 2311,
+        "totalTokenDensity": 335,
+        "totalHardcodedGrays": 10,
+        "totalBreakpoints": 31,
+        "devicePresets": {
+          "desktop": 11,
+          "mobile": 3
+        }
+      },
+      "management": {
+        "count": 22,
+        "pages": [
+          "Cockpit & Tableau de Bord",
+          "Analytique & Rapports Financiers",
+          "Analyses & Recommandations",
+          "Finance & Trésorerie",
+          "Portail Comptable & FEC",
+          "Intégration Hôtelière PMS",
+          "Conformité Fiscale NF525",
+          "Registre Légal & Sanitaire",
+          "Équipe & Gestion du Personnel",
+          "Planning & Grilles Horaires",
+          "Congés & Absences",
+          "Recrutement & Candidatures",
+          "Portail Salarié Mon Espace",
+          "Parcours Onboarding Équipe",
+          "Console Réseau & Franchise",
+          "Simulateur d Activité & Prix",
+          "Identité Visuelle & Thème",
+          "Sécurité & Accès",
+          "Connecteurs & Intégrations",
+          "Assistant d Import & Migration",
+          "Guide de Mise en Route",
+          "Centre d Aide & Documentation"
+        ],
+        "totalLines": 2812,
+        "totalTokenDensity": 428,
+        "totalHardcodedGrays": 13,
+        "totalBreakpoints": 35,
+        "devicePresets": {
+          "desktop": 21,
+          "mobile": 1
+        }
+      },
+      "admin": {
+        "count": 14,
+        "pages": [
+          "Admin Cockpit Général",
+          "Console Réseau & Multi-Sites",
+          "File d Attente des Erreurs (DLQ)",
+          "Superviseur des Tâches & Services",
+          "Import de Charte & Personnalisation",
+          "Générateur de Données Démo",
+          "Architecture & Schémas Techniques",
+          "Design System & Primitives UI",
+          "Cartographie des Modules",
+          "Simulateur d Événements",
+          "Paramètres Globaux Admin",
+          "Gestion du Compte & Facturation",
+          "Portail d Audit Légal",
+          "Documentation Interactive"
+        ],
+        "totalLines": 2066,
+        "totalTokenDensity": 451,
+        "totalHardcodedGrays": 5,
+        "totalBreakpoints": 30,
+        "devicePresets": {
+          "desktop": 14
+        }
+      },
+      "marketing": {
+        "count": 11,
+        "pages": [
+          "Page d Accueil Marketing",
+          "Grille Tarifaire & Abonnements",
+          "Calculateur de Rentabilité ROI",
+          "Comparatif vs Lightspeed",
+          "Comparatif vs Zelty",
+          "Création de Compte Restaurant",
+          "Confirmation d Inscription",
+          "Pages Métiers Dédiées",
+          "Accord Traitement Données (DPA)",
+          "Certificat de Conformité Fiscale",
+          "Engagements de Sécurité & Cloud"
+        ],
+        "totalLines": 876,
+        "totalTokenDensity": 0,
+        "totalHardcodedGrays": 77,
+        "totalBreakpoints": 38,
+        "devicePresets": {
+          "desktop": 11
+        }
+      },
+      "public": {
+        "count": 9,
+        "pages": [
+          "Démonstration Interactive Gratuite",
+          "Statut du Réseau & Disponibilité",
+          "Connexion Espace Restaurant",
+          "Déconnexion Sécurisée",
+          "Conditions Générales d Utilisation",
+          "Conditions Générales de Vente",
+          "Mentions Légales",
+          "Politique de Confidentialité RGPD",
+          "Mode Hors-Ligne & Secours"
+        ],
+        "totalLines": 1531,
+        "totalTokenDensity": 66,
+        "totalHardcodedGrays": 272,
+        "totalBreakpoints": 5,
+        "devicePresets": {
+          "desktop": 8,
+          "tablet": 1
+        }
+      }
+    }
+  },
+  "responsiveDetails": {
+    "gridsFiges": [
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 127,
+        "code": "<div className=\"grid grid-cols-3 gap-2\">"
+      },
+      {
+        "file": "src/modules/commerce/relation/reservations/components/ReservationCalendarPopup.tsx",
+        "line": 74,
+        "code": "<div className=\"grid grid-cols-7 gap-1 mb-2\">"
+      },
+      {
+        "file": "src/modules/commerce/relation/reservations/components/ReservationCalendarPopup.tsx",
+        "line": 82,
+        "code": "<div className=\"grid grid-cols-7 gap-1\">"
+      },
+      {
+        "file": "src/modules/commerce/relation/reservations/components/WeeklyView.tsx",
+        "line": 39,
+        "code": "<div className=\"grid grid-cols-7 gap-2 flex-1 overflow-hidden\">"
+      },
+      {
+        "file": "src/modules/human/effectifs/hr/components/PlanningDashboard.tsx",
+        "line": 223,
+        "code": "<div className=\"grid grid-cols-7 gap-1 h-2\">"
+      },
+      {
+        "file": "src/modules/human/effectifs/hr/components/PlanningDashboard.tsx",
+        "line": 282,
+        "code": "<div className=\"grid grid-cols-7 gap-1.5 h-3\">"
+      },
+      {
+        "file": "src/modules/human/effectifs/hr/components/leaves/TeamCalendar.tsx",
+        "line": 89,
+        "code": "<div className=\"grid grid-cols-7 gap-2\">"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 139,
+        "code": "<div className=\"grid grid-cols-3 gap-1 bg-bg-tertiary/40 p-1 rounded-xl border border-white/5\">"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 210,
+        "code": "<div className=\"grid grid-cols-6 gap-1.5\">"
+      },
+      {
+        "file": "src/shared/components/ui/SecurityPinModal.tsx",
+        "line": 97,
+        "code": "<div className=\"grid grid-cols-3 gap-4 max-w-[280px] mx-auto\">"
+      },
+      {
+        "file": "src/shared/nexus/guards/PinLogin.tsx",
+        "line": 159,
+        "code": "<div className=\"grid grid-cols-3 gap-4 max-w-xs mx-auto w-full px-4\">"
+      }
+    ],
+    "largeursFigees": [
+      {
+        "file": "src/app/(admin)/admin/mcc/_tabs/SectorStudyTab.tsx",
+        "line": 55,
+        "code": "<div className=\"relative min-w-[240px]\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/EventBusHealthPanel.tsx",
+        "line": 124,
+        "code": "<div className=\"truncate max-w-[250px] text-red-400\" title={entry.error}>"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/LifecycleTreePanel.tsx",
+        "line": 202,
+        "code": "<div className=\"flex items-center gap-2 min-w-[120px]\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/StrategyOracle.tsx",
+        "line": 134,
+        "code": "<p className=\"text-nano font-medium max-w-[200px] leading-relaxed\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/TaxAuditPanel.tsx",
+        "line": 212,
+        "code": "<td className=\"px-4 py-2.5 max-w-[200px] truncate\">{je.label}</td>"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/TenantChangelogPanel.tsx",
+        "line": 95,
+        "code": "<div className=\"relative flex-1 min-w-[160px]\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/TenantUsersPanel.tsx",
+        "line": 159,
+        "code": "<div className=\"absolute right-0 top-full mt-1 z-50 bg-surface-bg border border-border-subtle rounded-xl overflow-hidden shadow-xl min-w-[120px]\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/page.tsx",
+        "line": 90,
+        "code": "<div className=\"absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-action-primary/8 blur-[140px] rounded-full pointer-events-none\" />"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/page.tsx",
+        "line": 91,
+        "code": "<div className=\"absolute bottom-0 right-0 w-[600px] h-[400px] bg-action-primary/5 blur-[120px] rounded-full pointer-events-none\" />"
+      },
+      {
+        "file": "src/app/(admin)/audit-portal/page.tsx",
+        "line": 68,
+        "code": "<div className=\"absolute top-0 right-0 w-[800px] h-[800px] bg-action-primary blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none\" />"
+      },
+      {
+        "file": "src/app/(admin)/simulator/page.tsx",
+        "line": 41,
+        "code": "<div className=\"flex flex-col gap-10 p-8 max-w-[1400px] mx-auto animate-in fade-in duration-1000\">"
+      },
+      {
+        "file": "src/app/(client)/(ops)/analytics/page.tsx",
+        "line": 141,
+        "code": "<div className=\"flex items-end gap-[3px] min-w-[520px]\" style={{ height: \"140px\" }}>"
+      },
+      {
+        "file": "src/app/(client)/(ops)/leaves/page.tsx",
+        "line": 164,
+        "code": "className=\"appearance-none pl-5 pr-12 py-3 rounded-xl bg-bg-secondary border border-border text-xs font-bold uppercase tracking-widest text-text-primary focus:border-accent outline-none cursor-pointer shadow-sm min-w-[200px]\""
+      },
+      {
+        "file": "src/app/(client)/(ops)/pos/page.tsx",
+        "line": 150,
+        "code": "<div className=\"w-[340px] shrink-0 border-l border-border-default bg-surface-card overflow-auto elegant-scrollbar\">"
+      },
+      {
+        "file": "src/app/(client)/(ops)/staff/_tabs/TimesheetTab.tsx",
+        "line": 66,
+        "code": "<td className=\"px-4 py-2.5 font-mono text-nano text-text-muted truncate max-w-[160px]\">"
+      },
+      {
+        "file": "src/app/(client)/(public)/landing/components/CTASection.tsx",
+        "line": 14,
+        "code": "<div className=\"absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-action-primary/10 rounded-full blur-[150px]\" />"
+      },
+      {
+        "file": "src/app/(client)/(public)/landing/components/HeroSection.tsx",
+        "line": 23,
+        "code": "<div className=\"absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-action-primary/10 rounded-full blur-[150px] opacity-50\" />"
+      },
+      {
+        "file": "src/app/(client)/(public)/landing/components/HeroSection.tsx",
+        "line": 24,
+        "code": "<div className=\"absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-action-accent/10 rounded-full blur-[120px] opacity-30\" />"
+      },
+      {
+        "file": "src/app/(client)/(public)/landing/components/PricingSection.tsx",
+        "line": 12,
+        "code": "<div className=\"absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-action-primary/5 rounded-full blur-[150px]\" />"
+      },
+      {
+        "file": "src/app/(client)/(public)/showcase/page.tsx",
+        "line": 84,
+        "code": "<div className=\"fixed top-0 left-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] -z-10\" />"
+      },
+      {
+        "file": "src/app/(client)/(public)/showcase/page.tsx",
+        "line": 85,
+        "code": "<div className=\"fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-action-primary/5 rounded-full blur-[120px] -z-10\" />"
+      },
+      {
+        "file": "src/modules/commerce/acquisition/marketing/components/crm/CRMDetailView.tsx",
+        "line": 86,
+        "code": "className=\"fixed right-0 top-[70px] h-[calc(100vh-70px)] w-[450px] bg-bg-secondary border-l border-border z-40 shadow-2xl overflow-auto elegant-scrollbar\""
+      },
+      {
+        "file": "src/modules/commerce/acquisition/marketing/components/crm/RFMSegmentation.tsx",
+        "line": 162,
+        "code": "<table className=\"w-full text-xs min-w-[540px]\">"
+      },
+      {
+        "file": "src/modules/commerce/acquisition/marketing/components/quotes/dialog/QuoteCatalogSidebar.tsx",
+        "line": 32,
+        "code": "className=\"absolute top-0 right-0 w-[400px] h-full bg-bg-secondary border-l border-border z-50 shadow-2xl p-8 flex flex-col\""
+      },
+      {
+        "file": "src/modules/commerce/acquisition/onboarding/migration/components/ImportPreviewTable.tsx",
+        "line": 74,
+        "code": "<td key={h} className=\"px-3 py-1.5 whitespace-nowrap max-w-[160px] truncate text-foreground/80\">{row[h]}</td>"
+      },
+      {
+        "file": "src/modules/commerce/acquisition/onboarding/migration/customer-import/CustomerImportPreview.tsx",
+        "line": 108,
+        "code": "className=\"px-3 py-1.5 text-text-primary truncate max-w-[120px]\""
+      },
+      {
+        "file": "src/modules/commerce/acquisition/onboarding/migration/fec-import/FECPreviewSection.tsx",
+        "line": 110,
+        "code": "<td className=\"px-3 py-2 text-text-primary max-w-[160px] truncate\">"
+      },
+      {
+        "file": "src/modules/commerce/acquisition/onboarding/migration/floor-plan/SingleTableForm.tsx",
+        "line": 49,
+        "code": "<label className=\"space-y-1 flex-1 min-w-[100px]\">"
+      },
+      {
+        "file": "src/modules/commerce/acquisition/onboarding/wizard/PreviewTable.tsx",
+        "line": 63,
+        "code": "className=\"px-3 py-1.5 max-w-[200px] truncate cursor-pointer\""
+      },
+      {
+        "file": "src/modules/commerce/relation/reservations/components/FloorPlanView.tsx",
+        "line": 21,
+        "code": "<div className=\"max-w-[1800px] mx-auto space-y-12\">"
+      },
+      {
+        "file": "src/modules/commerce/relation/reservations/components/ReservationCalendarPopup.tsx",
+        "line": 60,
+        "code": "className=\"absolute top-full mt-4 left-1/2 -translate-x-1/2 w-[350px] bg-bg-secondary backdrop-blur-2xl border border-border shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[2.5rem] p-6 z-[60] overflow-hidden\""
+      },
+      {
+        "file": "src/modules/commerce/relation/reservations/components/ReservationsHeader.tsx",
+        "line": 100,
+        "code": "<span className=\"text-sm font-serif italic text-text-primary capitalize min-w-[150px] text-center tracking-tight\">{displayDate}</span>"
+      },
+      {
+        "file": "src/modules/commerce/relation/reservations/components/ReservationsHeader.tsx",
+        "line": 120,
+        "code": "<span className=\"text-sm font-serif italic text-text-primary min-w-[190px] text-center tracking-tight\">{weekLabel}</span>"
+      },
+      {
+        "file": "src/modules/commerce/relation/reservations/components/TableGrid.tsx",
+        "line": 27,
+        "code": "<div className=\"max-w-[1800px] mx-auto space-y-12\">"
+      },
+      {
+        "file": "src/modules/commerce/relation/reservations/components/reservation-create/ResaSummaryPanel.tsx",
+        "line": 35,
+        "code": "<div className=\"w-[300px] bg-bg-secondary p-10 flex flex-col justify-between shrink-0 border-l border-border\">"
+      },
+      {
+        "file": "src/modules/commerce/relation/reservations/components/reservation-create/ResaSummaryPanel.tsx",
+        "line": 77,
+        "code": "<p className=\"text-micro font-black uppercase tracking-widest text-text-muted max-w-[160px] mx-auto leading-relaxed italic\">"
+      },
+      {
+        "file": "src/modules/commerce/relation/reservations/components/settings/ReservationNotificationSection.tsx",
+        "line": 319,
+        "code": "<div className=\"w-full max-w-[280px] bg-neutral-900 border-4 border-neutral-700 rounded-[2.5rem] p-3 shadow-2xl space-y-3 text-white\">"
+      },
+      {
+        "file": "src/modules/commerce/ui/pos/PinModal.tsx",
+        "line": 176,
+        "code": "className=\"bg-surface-card border border-border rounded-[2rem] p-8 w-[340px] shadow-2xl\""
+      },
+      {
+        "file": "src/modules/commerce/ui/pos/void-modal/VoidSuccessView.tsx",
+        "line": 19,
+        "code": "<p className=\"text-micro text-text-muted max-w-[260px]\">"
+      },
+      {
+        "file": "src/modules/compliance/qualite/haccp/components/DLCTracker.tsx",
+        "line": 153,
+        "code": "<table className=\"w-full text-sm border-collapse min-w-[640px]\">"
+      },
+      {
+        "file": "src/modules/compliance/qualite/haccp/components/cleaning-plan/CleaningGridTable.tsx",
+        "line": 21,
+        "code": "<table className=\"w-full text-xs border-collapse min-w-[720px]\">"
+      },
+      {
+        "file": "src/modules/compliance/qualite/haccp/components/non-conformity/NCListItem.tsx",
+        "line": 76,
+        "code": "className=\"max-w-[200px] rounded-lg border border-border object-cover\""
+      },
+      {
+        "file": "src/modules/facility/spaces/components/FloorPlanHeader.tsx",
+        "line": 115,
+        "code": "className=\"absolute top-full left-0 mt-3 w-[260px] bg-surface-card border border-border/60 rounded-xl shadow-2xl z-50 p-1 overflow-hidden\""
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/BankTab.tsx",
+        "line": 134,
+        "code": "<table className=\"w-full text-sm min-w-[560px]\">"
+      },
+      {
+        "file": "src/modules/finance/components/accounting/views/GeneralLedgerView.tsx",
+        "line": 40,
+        "code": "<p className=\"text-sm font-medium text-text-primary truncate max-w-[180px]\">{account.name}</p>"
+      },
+      {
+        "file": "src/modules/human/effectifs/hr/components/RecruitmentBoard.tsx",
+        "line": 150,
+        "code": "<div className=\"flex flex-col w-[240px] flex-shrink-0\">"
+      },
+      {
+        "file": "src/modules/human/effectifs/hr/components/TimeclockDashboard.tsx",
+        "line": 202,
+        "code": "<div className=\"absolute top-0 left-1/4 w-[600px] h-[600px] bg-emerald-900/10 rounded-full blur-[120px]\" />"
+      },
+      {
+        "file": "src/modules/human/effectifs/hr/components/TimeclockDashboard.tsx",
+        "line": 203,
+        "code": "<div className=\"absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-sky-900/10 rounded-full blur-[120px]\" />"
+      },
+      {
+        "file": "src/modules/human/effectifs/hr/components/planning/PlanningWeekView.tsx",
+        "line": 110,
+        "code": "<div className=\"flex items-center gap-2 min-w-[220px]\">"
+      },
+      {
+        "file": "src/modules/human/effectifs/hr/components/planning/PlanningWeekView.tsx",
+        "line": 242,
+        "code": "<span className=\"px-3 text-sm font-serif font-medium text-text-primary min-w-[170px] text-center\">"
+      },
+      {
+        "file": "src/modules/human/effectifs/hr/components/staff/BadgeControl.tsx",
+        "line": 149,
+        "code": "<p className=\"text-nano font-mono font-bold text-accent truncate max-w-[120px] ml-auto\">"
+      },
+      {
+        "file": "src/modules/intelligence/analytique/analytics/components/OracleChatDrawer.tsx",
+        "line": 108,
+        "code": "<p className=\"text-nano mt-1 max-w-[240px]\">"
+      },
+      {
+        "file": "src/modules/intelligence/analytique/analytics/components/ProfitabilityView.tsx",
+        "line": 88,
+        "code": "<div className=\"max-w-[280px]\">"
+      },
+      {
+        "file": "src/modules/logistics/approvisionnement/ui/supplier-hub/MercurialeTab.tsx",
+        "line": 248,
+        "code": "<table className=\"w-full text-left text-xs min-w-[720px]\">"
+      },
+      {
+        "file": "src/modules/logistics/approvisionnement/ui/supplier-hub/RfaTab.tsx",
+        "line": 273,
+        "code": "<table className=\"w-full text-left text-xs min-w-[420px]\">"
+      },
+      {
+        "file": "src/modules/logistics/stock/inventory/components/inventory/InvoiceReviewModal.tsx",
+        "line": 86,
+        "code": "<table className=\"w-full min-w-[580px] border-separate border-spacing-y-4\">"
+      },
+      {
+        "file": "src/modules/logistics/stock/inventory/components/storage-map/DraggingIngredientOverlay.tsx",
+        "line": 9,
+        "code": "<div className=\"flex items-center gap-3 p-4 bg-surface-card dark:bg-bg-secondary rounded-2xl border-2 border-emerald-500 shadow-2xl shadow-emerald-500/20 min-w-[220px]\">"
+      },
+      {
+        "file": "src/modules/logistics/stock/inventory/components/storage-map/StorageDetailBubble.tsx",
+        "line": 55,
+        "code": "className=\"fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] max-h-[85vh] bg-bg-secondary/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/20 z-50 flex flex-col overflow-hidden border border-border\""
+      },
+      {
+        "file": "src/modules/ops/production/kitchen/components/KitchenDashboard.tsx",
+        "line": 118,
+        "code": "<div className=\"mb-10 min-w-[260px]\">"
+      },
+      {
+        "file": "src/modules/ops/production/kitchen/components/KitchenDashboard.tsx",
+        "line": 146,
+        "code": "className=\"space-y-1.5 flex-1 min-w-[260px]\""
+      },
+      {
+        "file": "src/modules/ops/production/kitchen/components/KitchenDashboard.tsx",
+        "line": 200,
+        "code": "className=\"p-6 bg-bg-tertiary/40 rounded-xl border border-border/50 mt-10 min-w-[260px]\""
+      },
+      {
+        "file": "src/modules/ops/production/kitchen/components/ModificationAlerts.tsx",
+        "line": 270,
+        "code": "<p className=\"text-secondary max-w-[200px] leading-relaxed\">"
+      },
+      {
+        "file": "src/modules/ops/production/kitchen/components/RecipeTechnicalSheet.tsx",
+        "line": 101,
+        "code": "<div className=\"w-[380px] bg-bg-primary dark:bg-bg-secondary border-r border-subtle dark:border-border flex flex-col h-full overflow-y-auto elegant-scrollbar\">"
+      },
+      {
+        "file": "src/modules/ops/production/kitchen/components/tabs/MarginsTab.tsx",
+        "line": 103,
+        "code": "<span className=\"text-nano font-black uppercase text-text-muted tracking-[0.2em] leading-tight max-w-[100px]\">{kpi.label}</span>"
+      },
+      {
+        "file": "src/modules/ops/production/kitchen/components/tabs/MarginsTab.tsx",
+        "line": 218,
+        "code": "\"px-4 py-2 rounded-xl text-nano font-black uppercase tracking-[0.2em] shadow-sm inline-block min-w-[120px] text-center\","
+      },
+      {
+        "file": "src/modules/ops/service/restaurant/pos/components/split/SplitByItemPanel.tsx",
+        "line": 35,
+        "code": "<span className=\"text-xs font-semibold text-text-primary/80 truncate max-w-[140px]\">"
+      },
+      {
+        "file": "src/shared/components/SplashScreen.tsx",
+        "line": 66,
+        "code": "className=\"absolute w-[600px] h-[600px] rounded-full pointer-events-none transition-all duration-1000\""
+      },
+      {
+        "file": "src/shared/components/SplashScreen.tsx",
+        "line": 99,
+        "code": "className=\"relative z-10 max-h-20 max-w-[200px] object-contain drop-shadow-2xl\""
+      },
+      {
+        "file": "src/shared/components/TutorialBubble.tsx",
+        "line": 190,
+        "code": "className=\"absolute w-[320px] bg-surface-card rounded-[2.5rem] shadow-premium shadow-glow-accent/10 dark:shadow-black/80 border border-border-default p-7 pointer-events-auto overflow-hidden ring-1 ring-black/5\""
+      },
+      {
+        "file": "src/shared/components/blueprint/BlueprintHeader.tsx",
+        "line": 10,
+        "code": "<div className=\"absolute -top-10 left-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-accent/10 blur-[100px] rounded-full -z-10\" />"
+      },
+      {
+        "file": "src/shared/components/blueprint/MindMapDependencies.tsx",
+        "line": 60,
+        "code": "<div className=\"flex items-center gap-5 min-w-[160px]\">"
+      },
+      {
+        "file": "src/shared/components/fleet/DeviceFleetInventoryModal.tsx",
+        "line": 156,
+        "code": "<h4 className=\"text-sm font-bold text-text-primary truncate max-w-[150px]\">"
+      },
+      {
+        "file": "src/shared/components/layout/DesktopSidebar.tsx",
+        "line": 50,
+        "code": "isSidebarCollapsed ? \"w-[80px]\" : \"w-[300px]\""
+      },
+      {
+        "file": "src/shared/components/layout/LaunchpadStatusHub.tsx",
+        "line": 78,
+        "code": "className=\"absolute top-full mt-4 left-1/2 -translate-x-1/2 min-w-[160px] bg-surface-card backdrop-blur-xl rounded-2xl shadow-premium border border-border-default overflow-hidden z-[60]\""
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 28,
+        "code": "<span className=\"text-[11px] text-text-muted mt-1 max-w-[200px]\">"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 51,
+        "code": "<span className=\"text-xs font-semibold text-text-primary truncate max-w-[160px]\">"
+      },
+      {
+        "file": "src/shared/components/settings/BrandingPanel.tsx",
+        "line": 532,
+        "code": "<img src={draft.logoUrl} alt=\"Logo\" className=\"max-h-8 max-w-[120px] object-contain\" />"
+      },
+      {
+        "file": "src/shared/components/settings/CashDrawerSettings.tsx",
+        "line": 171,
+        "code": "<div className=\"max-w-[200px]\">"
+      },
+      {
+        "file": "src/shared/components/settings/ProfileSettings.tsx",
+        "line": 101,
+        "code": "<div className=\"absolute top-0 right-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[100px] -mr-64 -mt-64 pointer-events-none\" />"
+      },
+      {
+        "file": "src/shared/components/settings/RBACTenantMatrix.tsx",
+        "line": 280,
+        "code": "<th className=\"p-4 font-serif font-bold text-text-primary min-w-[220px] sticky left-0 bg-surface-elevated z-10\">"
+      },
+      {
+        "file": "src/shared/components/settings/hours/TimeInput.tsx",
+        "line": 34,
+        "code": "<div ref={containerRef} className=\"relative group/time flex-1 min-w-[124px]\">"
+      },
+      {
+        "file": "src/shared/components/ui/DateNavigator.tsx",
+        "line": 49,
+        "code": "<span className=\"text-sm font-serif font-medium italic text-text-primary capitalize min-w-[140px] text-center\">"
+      },
+      {
+        "file": "src/shared/components/ui/FilterBar.tsx",
+        "line": 76,
+        "code": "<div className=\"relative flex-1 min-w-[200px]\">"
+      },
+      {
+        "file": "src/shared/components/ui/FilterBar.tsx",
+        "line": 118,
+        "code": "\"absolute top-full left-0 mt-2 min-w-[180px] bg-bg-secondary border border-border shadow-xl z-50 overflow-hidden\","
+      },
+      {
+        "file": "src/shared/components/ui/SecurityPinModal.tsx",
+        "line": 79,
+        "code": "<p className=\"text-sm text-text-muted mb-8 max-w-[280px] mx-auto\">{description}</p>"
+      },
+      {
+        "file": "src/shared/components/ui/SecurityPinModal.tsx",
+        "line": 97,
+        "code": "<div className=\"grid grid-cols-3 gap-4 max-w-[280px] mx-auto\">"
+      },
+      {
+        "file": "src/shared/components/ui/Toast.tsx",
+        "line": 76,
+        "code": "\"pointer-events-auto rounded-2xl shadow-2xl border min-w-[340px] backdrop-blur-xl overflow-hidden\","
+      },
+      {
+        "file": "src/shared/nexus/components/mind-map/MindMapSidebar.tsx",
+        "line": 26,
+        "code": "\"w-[400px] border-l border-border bg-bg-primary dark:bg-bg-secondary shadow-[-20px_0_40px_rgba(0,0,0,0.05)] transition-transform duration-500 ease-in-out absolute right-0 top-0 bottom-0 z-30 p-10 flex flex-col\","
+      }
+    ],
+    "microTypo": [
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 22,
+        "matches": [
+          "text-[7px]"
+        ],
+        "code": "className=\"aspect-[1/1.414] bg-white text-black rounded-sm shadow-2xl overflow-hidden flex flex-col font-serif text-[7px] leading-relaxed border border-border-default\""
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 25,
+        "matches": [
+          "text-[5px]"
+        ],
+        "code": "<p className=\"text-[5px] uppercase tracking-widest text-gray-500 mb-0.5\">Direction Générale des Finances Publiques</p>"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 27,
+        "matches": [
+          "text-[5.5px]"
+        ],
+        "code": "<p className=\"text-[5.5px] italic text-gray-600\">Art. 286, I-3° bis du CGI · Réf. BOI-LETTRE-000242</p>"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 32,
+        "matches": [
+          "text-[5px]"
+        ],
+        "code": "<div className=\"absolute -top-[7px] left-2 bg-white px-1 text-[5px] font-bold uppercase tracking-wide\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 35,
+        "matches": [
+          "text-[6px]"
+        ],
+        "code": "<p className=\"mt-1 text-[6px] text-gray-700 leading-snug\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 44,
+        "matches": [
+          "text-[6px]"
+        ],
+        "code": "<ul className=\"ml-3 mt-1 space-y-0.5 text-[6px]\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 49,
+        "matches": [
+          "text-[5.5px]"
+        ],
+        "code": "<p className=\"text-[5.5px] text-gray-600\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 54,
+        "matches": [
+          "text-[4.5px]"
+        ],
+        "code": "<span className=\"text-[4.5px] text-gray-400 italic\">Signature + cachet</span>"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 60,
+        "matches": [
+          "text-[5px]"
+        ],
+        "code": "<div className=\"absolute -top-[7px] left-2 bg-white px-1 text-[5px] font-bold uppercase tracking-wide\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 63,
+        "matches": [
+          "text-[6px]"
+        ],
+        "code": "<p className=\"mt-1 text-[6px] text-gray-700 leading-snug\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 69,
+        "matches": [
+          "text-[5.5px]"
+        ],
+        "code": "<p className=\"text-[5.5px] text-gray-600\">Fait à ________________, le ___________</p>"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 71,
+        "matches": [
+          "text-[4.5px]"
+        ],
+        "code": "<span className=\"text-[4.5px] text-gray-400 italic\">Lu et approuvé</span>"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 76,
+        "matches": [
+          "text-[5px]"
+        ],
+        "code": "<div className=\"bg-surface-card border border-border-default p-1.5 text-[5px] italic text-gray-600 leading-snug\">"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/components/CertPreviewPanel.tsx",
+        "line": 83,
+        "matches": [
+          "text-[4.5px]"
+        ],
+        "code": "<div className=\"text-center text-[4.5px] text-gray-400 border-t border-border-default py-1 px-4\">"
+      },
+      {
+        "file": "src/app/(admin)/design-system/page.tsx",
+        "line": 193,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted\">{\"Script Latin (fr, en, es, pt)\"}</span>"
+      },
+      {
+        "file": "src/app/(admin)/design-system/page.tsx",
+        "line": 206,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"font-mono text-[10px] uppercase tracking-[0.05em] text-text-muted\">{\"Script CJK / 日本語 (:root:lang(ja))\"}</span>"
+      },
+      {
+        "file": "src/app/(client)/(ordering)/error.tsx",
+        "line": 44,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-mono text-text-muted truncate\">"
+      },
+      {
+        "file": "src/app/(client)/(public)/error.tsx",
+        "line": 45,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-mono text-text-muted truncate\">"
+      },
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 56,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<div className=\"inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.02] text-[10px] uppercase tracking-[0.22em] font-mono text-white/55 mb-8\">"
+      },
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 93,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<span key={badge} className=\"px-2.5 py-1 rounded-md bg-white/[0.03] border border-white/[0.06] text-[11px] font-mono text-white/40 tracking-tight\">"
+      },
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 114,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"ml-3 text-[10px] font-mono uppercase tracking-[0.18em] text-white/35\">Tableau · en direct</span>"
+      },
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 119,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<div className=\"text-[10px] uppercase tracking-[0.22em] font-mono text-white/40 mb-2\">Chiffre du jour</div>"
+      },
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 134,
+        "matches": [
+          "text-[9px]"
+        ],
+        "code": "<div className=\"text-[9px] uppercase font-mono tracking-[0.18em] text-white/35\">{tile.k}</div>"
+      },
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 136,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<div className=\"text-[10px] text-white/40 mt-1\">{tile.hint}</div>"
+      },
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 158,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<div className=\"inline-block text-[10px] uppercase tracking-[0.24em] font-mono text-white/45 mb-4\">"
+      },
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 202,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<div className=\"inline-block text-[10px] uppercase tracking-[0.24em] font-mono text-white/45 mb-4\">"
+      },
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 230,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<div className=\"mt-1 text-[10px] font-mono uppercase tracking-[0.18em] text-white/35\">"
+      },
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 252,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<div className=\"inline-block text-[10px] uppercase tracking-[0.24em] font-mono text-white/45 mb-4\">"
+      },
+      {
+        "file": "src/app/(marketing)/HomeContent.tsx",
+        "line": 271,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<div className=\"absolute -top-2.5 left-8 px-2.5 py-0.5 rounded-md bg-[#C5A059] text-[#0B0B0C] text-[10px] font-mono uppercase tracking-[0.18em]\">"
+      },
+      {
+        "file": "src/app/error.tsx",
+        "line": 49,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-[10px] font-mono text-text-muted/60 mt-1\">"
+      },
+      {
+        "file": "src/modules/commerce/acquisition/landing/components/dashboard/LandingExecutiveHeader.tsx",
+        "line": 35,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<div className=\"flex items-center gap-3 text-accent-gold text-nano md:text-[10px] font-black uppercase tracking-[0.3em]\">"
+      },
+      {
+        "file": "src/modules/commerce/acquisition/landing/components/dashboard/LandingKpiCard.tsx",
+        "line": 42,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-nano md:text-[10px] font-black text-accent-gold uppercase tracking-[0.25em]\">{title}</p>"
+      },
+      {
+        "file": "src/modules/commerce/acquisition/landing/components/dashboard/LandingKpiCard.tsx",
+        "line": 57,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "\"text-nano md:text-[10px] font-bold px-1.5 py-0.5 rounded-full\","
+      },
+      {
+        "file": "src/modules/commerce/acquisition/landing/components/dashboard/LandingKpiCard.tsx",
+        "line": 63,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-nano md:text-[10px] text-text-muted font-medium italic mt-1 md:mt-2 truncate\">"
+      },
+      {
+        "file": "src/modules/commerce/acquisition/marketing/components/crm/CRMList.tsx",
+        "line": 95,
+        "matches": [
+          "text-[9px]"
+        ],
+        "code": "<p className=\"text-nano md:text-[9px] font-black text-text-muted/40 uppercase tracking-widest\">VISITES</p>"
+      },
+      {
+        "file": "src/modules/commerce/acquisition/marketing/components/crm/CRMList.tsx",
+        "line": 99,
+        "matches": [
+          "text-[9px]"
+        ],
+        "code": "<p className=\"text-nano md:text-[9px] font-black text-text-muted/40 uppercase tracking-widest\">TOTAL</p>"
+      },
+      {
+        "file": "src/modules/commerce/acquisition/marketing/components/seo/GoogleProfileCard.tsx",
+        "line": 40,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<span className=\"text-[11px] text-text-muted italic\">Intégration en cours de déploiement</span>"
+      },
+      {
+        "file": "src/modules/commerce/relation/customers/components/detail-panel/CustomerDetailHeader.tsx",
+        "line": 35,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-nano md:text-[10px] font-black uppercase tracking-[0.3em] text-text-muted mb-2\">"
+      },
+      {
+        "file": "src/modules/commerce/relation/customers/components/detail-panel/CustomerDetailHeader.tsx",
+        "line": 45,
+        "matches": [
+          "text-[9px]"
+        ],
+        "code": "className=\"text-nano md:text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-accent text-bg-primary shadow-lg shadow-amber-500/20\""
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 77,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-sans font-medium border border-emerald-500/20\">"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 110,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted leading-relaxed\">"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 127,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted leading-relaxed\">"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 136,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<label className=\"block text-[11px] font-medium text-text-muted mb-1\">{\"SIRET Établissement\"}</label>"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 147,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<label className=\"block text-[11px] font-medium text-text-muted mb-1\">{\"Raison Sociale\"}</label>"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 159,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<label className=\"block text-[11px] font-medium text-text-muted mb-1\">{\"Endpoint API PDP\"}</label>"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 169,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<label className=\"block text-[11px] font-medium text-text-muted mb-1\">{\"Clé API / Token\"}</label>"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 221,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted/70\">"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 241,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted\">"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 247,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-medium\">"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 279,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted/70\">"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 294,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted\">"
+      },
+      {
+        "file": "src/modules/finance/components/_tabs/EInvoicingTab.tsx",
+        "line": 300,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] px-2 py-0.5 rounded bg-surface-base border border-border text-text-secondary font-medium\">"
+      },
+      {
+        "file": "src/modules/ops/service/restaurant/pos/components/Cart.tsx",
+        "line": 69,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"block text-[10px] font-bold uppercase text-status-success bg-status-success/10 px-1.5 py-0.5 rounded\">"
+      },
+      {
+        "file": "src/modules/ops/service/restaurant/pos/components/Cart.tsx",
+        "line": 74,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"block text-[10px] font-bold uppercase text-action-primary bg-action-primary/10 px-1.5 py-0.5 rounded\">"
+      },
+      {
+        "file": "src/modules/ops/service/restaurant/pos/components/PaymentDialog.tsx",
+        "line": 340,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-[10px] text-text-muted/30 text-center tracking-tight\">"
+      },
+      {
+        "file": "src/modules/ops/service/restaurant/pos/components/payment-dialog/PaymentMethodSelector.tsx",
+        "line": 53,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={cn(\"font-bold text-nano md:text-[10px] uppercase tracking-wider text-center transition-colors\", method === meth.id ? \"text-text-primary\" : \"text-text-muted\")}>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/AgentPrompt/DesignAgentBar.tsx",
+        "line": 55,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] font-mono uppercase tracking-wider text-amber-400/80 flex items-center gap-1 shrink-0\">"
+      },
+      {
+        "file": "src/shared/components/open-pencil/AgentPrompt/DesignAgentBar.tsx",
+        "line": 63,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"text-[11px] px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-text-muted hover:text-white border border-white/5 whitespace-nowrap transition-colors\""
+      },
+      {
+        "file": "src/shared/components/open-pencil/AgentPrompt/DesignAgentBar.tsx",
+        "line": 87,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<div className=\"flex items-center gap-1 text-[11px] text-emerald-400 font-medium\">"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/ClientBrandingSelector.tsx",
+        "line": 117,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] font-mono uppercase tracking-wider text-text-muted\">Nouveau Client</span>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 28,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<span className=\"text-[11px] text-text-muted mt-1 max-w-[200px]\">"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 55,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] px-2 py-0.5 rounded bg-white/5 text-amber-400 font-mono uppercase\">"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 63,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] font-mono uppercase tracking-wider text-text-muted\">Dimensions</span>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 89,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] font-mono uppercase tracking-wider text-text-muted\">Typographie</span>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 92,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<label className=\"text-[11px] text-text-secondary\">Contenu du Texte</label>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 137,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] font-mono uppercase tracking-wider text-text-muted\">Auto-Layout</span>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 142,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className={`py-1 rounded text-[11px] font-medium transition-all ${"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 152,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className={`py-1 rounded text-[11px] font-medium transition-all ${"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 162,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className={`py-1 rounded text-[11px] font-medium transition-all ${"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 207,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] font-mono uppercase tracking-wider text-text-muted\">Couleur & Remplissage</span>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 236,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] font-mono uppercase tracking-wider text-text-muted\">Liaisons & Sécurité</span>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Inspector/PropertyInspector.tsx",
+        "line": 238,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<label className=\"text-[11px] text-text-secondary\">Rôle RBAC Minimum</label>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/OpenPencilStudio.tsx",
+        "line": 174,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono font-medium\">"
+      },
+      {
+        "file": "src/shared/components/open-pencil/OpenPencilStudio.tsx",
+        "line": 178,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-secondary\">"
+      },
+      {
+        "file": "src/shared/components/open-pencil/OpenPencilStudio.tsx",
+        "line": 188,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<span className=\"text-[11px] text-text-muted font-mono\">({activePage.route})</span>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Sidebar/ComponentsLibrary.tsx",
+        "line": 140,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] font-mono uppercase tracking-wider text-neutral-500\">Primitives</span>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Sidebar/ComponentsLibrary.tsx",
+        "line": 168,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] font-mono uppercase tracking-wider text-neutral-500\">Widgets Métiers</span>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Sidebar/LayersTree.tsx",
+        "line": 135,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<span className=\"truncate text-[11px] font-sans ml-1\">{node.name}</span>"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Sidebar/PageNavigator.tsx",
+        "line": 82,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className={`px-2.5 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap transition-all ${"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Sidebar/PageNavigator.tsx",
+        "line": 125,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] font-mono text-text-muted truncate\">"
+      },
+      {
+        "file": "src/shared/components/open-pencil/Sidebar/PageNavigator.tsx",
+        "line": 128,
+        "matches": [
+          "text-[9px]"
+        ],
+        "code": "<span className=\"text-[9px] px-1.5 py-0.2 rounded bg-bg-tertiary/40 text-text-muted font-mono uppercase\">"
+      },
+      {
+        "file": "src/shared/components/ui/AdaptiveActionHub.tsx",
+        "line": 112,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-white/20 text-current\">"
+      },
+      {
+        "file": "src/shared/components/ui/AdaptiveActionHub.tsx",
+        "line": 118,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<kbd className=\"hidden sm:inline-block text-[10px] font-mono opacity-60 bg-black/10 dark:bg-white/10 px-1 rounded ml-1\">"
+      },
+      {
+        "file": "src/shared/components/ui/FiscalReceiptSealZone.tsx",
+        "line": 64,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "\"before:text-[10px] before:font-mono before:text-amber-500/80\","
+      },
+      {
+        "file": "src/shared/components/ui/NotificationPanel.tsx",
+        "line": 127,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-nano md:text-[10px] font-black text-muted dark:text-accent-gold/60 uppercase tracking-[0.3em] md:tracking-[0.4em] mt-2 md:mt-3\">"
+      },
+      {
+        "file": "src/shared/components/ui/PageShell.tsx",
+        "line": 166,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted/80 shrink-0\">"
+      },
+      {
+        "file": "src/shared/components/ui/PageShell.tsx",
+        "line": 194,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "\"font-mono text-[10px] tracking-[0.20em] uppercase\","
+      },
+      {
+        "file": "src/shared/components/ui/PageShell.tsx",
+        "line": 475,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"font-mono text-[10px] uppercase tracking-[0.24em] text-text-muted/80 shrink-0\">"
+      },
+      {
+        "file": "src/shared/components/ui/PageShell.tsx",
+        "line": 518,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "\"font-mono text-[10px] tracking-[0.20em] uppercase\","
+      },
+      {
+        "file": "src/shared/components/ui/StatCard.tsx",
+        "line": 72,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "\"font-mono text-[10px] font-medium text-text-muted uppercase tracking-[0.20em] mt-1\","
+      },
+      {
+        "file": "src/shared/components/ui/StatCard.tsx",
+        "line": 76,
+        "matches": [
+          "text-[9px]"
+        ],
+        "code": "compact: \"text-[9px]\","
+      },
+      {
+        "file": "src/shared/components/ui/StatCard.tsx",
+        "line": 77,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "default: \"text-[10px]\","
+      },
+      {
+        "file": "src/shared/components/ui/StatCard.tsx",
+        "line": 79,
+        "matches": [
+          "text-[9px]"
+        ],
+        "code": "minimal: \"text-[9px]\","
+      },
+      {
+        "file": "src/verticals/bakery/commerce/PreorderManagement.tsx",
+        "line": 65,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/commerce/PreorderManagement.tsx",
+        "line": 75,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/commerce/PreorderManagement.tsx",
+        "line": 85,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/commerce/PreorderManagement.tsx",
+        "line": 95,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/commerce/PreorderManagement.tsx",
+        "line": 146,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<span className=\"text-[11px] font-mono font-medium text-text-muted\">{order.id}</span>"
+      },
+      {
+        "file": "src/verticals/bakery/commerce/PreorderManagement.tsx",
+        "line": 147,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusBadge.bg}`}>"
+      },
+      {
+        "file": "src/verticals/bakery/commerce/PreorderManagement.tsx",
+        "line": 161,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-[10px] font-medium text-text-muted uppercase\">{\"Contenu de la commande :\"}</p>"
+      },
+      {
+        "file": "src/verticals/bakery/commerce/PreorderManagement.tsx",
+        "line": 173,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-amber-700 dark:text-amber-300 bg-amber-500/10 border border-amber-500/20 rounded p-2 flex items-start gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/commerce/PreorderManagement.tsx",
+        "line": 186,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<div className=\"flex items-center justify-between text-[11px] text-text-muted\">"
+      },
+      {
+        "file": "src/verticals/bakery/compliance/AllergenRegistry.tsx",
+        "line": 68,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/compliance/AllergenRegistry.tsx",
+        "line": 76,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/compliance/AllergenRegistry.tsx",
+        "line": 84,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/compliance/AllergenRegistry.tsx",
+        "line": 92,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/compliance/AllergenRegistry.tsx",
+        "line": 118,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${"
+      },
+      {
+        "file": "src/verticals/bakery/compliance/AllergenRegistry.tsx",
+        "line": 130,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "className={`px-2 py-0.5 rounded text-[10px] font-medium transition-colors ${"
+      },
+      {
+        "file": "src/verticals/bakery/compliance/AllergenRegistry.tsx",
+        "line": 146,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<thead className=\"bg-surface-base/60 text-text-muted uppercase font-medium border-b border-border text-[10px]\">"
+      },
+      {
+        "file": "src/verticals/bakery/compliance/AllergenRegistry.tsx",
+        "line": 163,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span key={a} className=\"px-2 py-0.5 rounded bg-rose-500/10 text-rose-700 dark:text-rose-400 font-medium text-[10px] border border-rose-500/20\">"
+      },
+      {
+        "file": "src/verticals/bakery/compliance/AllergenRegistry.tsx",
+        "line": 172,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span key={t} className=\"px-2 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 text-[10px] border border-amber-500/20\">"
+      },
+      {
+        "file": "src/verticals/bakery/logistics/DisplayStockPage.tsx",
+        "line": 71,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/logistics/DisplayStockPage.tsx",
+        "line": 79,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/logistics/DisplayStockPage.tsx",
+        "line": 89,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/logistics/DisplayStockPage.tsx",
+        "line": 99,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/logistics/DisplayStockPage.tsx",
+        "line": 148,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted mt-0.5 capitalize\">"
+      },
+      {
+        "file": "src/verticals/bakery/logistics/DisplayStockPage.tsx",
+        "line": 153,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1 shrink-0\">"
+      },
+      {
+        "file": "src/verticals/bakery/logistics/DisplayStockPage.tsx",
+        "line": 162,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-[10px] uppercase font-medium text-text-muted\">{\"En rayon\"}</p>"
+      },
+      {
+        "file": "src/verticals/bakery/logistics/DisplayStockPage.tsx",
+        "line": 184,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<div className=\"flex items-center justify-between text-[11px] text-text-muted pt-1\">"
+      },
+      {
+        "file": "src/verticals/bakery/ops/BatchProductionDashboard.tsx",
+        "line": 95,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/ops/BatchProductionDashboard.tsx",
+        "line": 103,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/ops/BatchProductionDashboard.tsx",
+        "line": 111,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/ops/BatchProductionDashboard.tsx",
+        "line": 119,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/bakery/ops/BatchProductionDashboard.tsx",
+        "line": 153,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<thead className=\"bg-surface-base/60 text-text-muted uppercase font-medium border-b border-border text-[10px]\">"
+      },
+      {
+        "file": "src/verticals/bakery/ops/BatchProductionDashboard.tsx",
+        "line": 186,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-medium ${s.bg} ${s.text}`}>"
+      },
+      {
+        "file": "src/verticals/bakery/ops/BatchProductionDashboard.tsx",
+        "line": 194,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-2.5 py-1 rounded bg-surface-base hover:bg-surface-hover border border-border text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/bakery/ops/BatchProductionDashboard.tsx",
+        "line": 199,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<span className=\"text-[11px] text-emerald-600 flex items-center justify-end gap-1 font-medium\">"
+      },
+      {
+        "file": "src/verticals/bakery/ops/BatchProductionDashboard.tsx",
+        "line": 220,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<label className=\"block text-[11px] font-medium text-text-muted mb-1\">{\"Nom de la recette\"}</label>"
+      },
+      {
+        "file": "src/verticals/bakery/ops/BatchProductionDashboard.tsx",
+        "line": 233,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<label className=\"block text-[11px] font-medium text-text-muted mb-1\">{\"Catégorie\"}</label>"
+      },
+      {
+        "file": "src/verticals/bakery/ops/BatchProductionDashboard.tsx",
+        "line": 245,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<label className=\"block text-[11px] font-medium text-text-muted mb-1\">{\"Nombre de pièces\"}</label>"
+      },
+      {
+        "file": "src/verticals/clinic/finance/insurance-billing/InsuranceBillingPage.tsx",
+        "line": 69,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/finance/insurance-billing/InsuranceBillingPage.tsx",
+        "line": 77,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/finance/insurance-billing/InsuranceBillingPage.tsx",
+        "line": 87,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/finance/insurance-billing/InsuranceBillingPage.tsx",
+        "line": 97,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/finance/insurance-billing/InsuranceBillingPage.tsx",
+        "line": 121,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<thead className=\"bg-surface-base/60 text-text-muted uppercase font-medium border-b border-border text-[10px]\">"
+      },
+      {
+        "file": "src/verticals/clinic/finance/insurance-billing/InsuranceBillingPage.tsx",
+        "line": 150,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"font-mono text-[10px] text-text-muted\">{claim.nirMasked}</span>"
+      },
+      {
+        "file": "src/verticals/clinic/finance/insurance-billing/InsuranceBillingPage.tsx",
+        "line": 154,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] text-text-muted\">{claim.actCode}</span>"
+      },
+      {
+        "file": "src/verticals/clinic/finance/insurance-billing/InsuranceBillingPage.tsx",
+        "line": 160,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={`text-[10px] px-2.5 py-0.5 rounded-full font-medium ${statusBadge.bg}`}>"
+      },
+      {
+        "file": "src/verticals/clinic/finance/insurance-billing/InsuranceBillingPage.tsx",
+        "line": 164,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-[10px] text-rose-600 mt-1\">{claim.rejectionReason}</p>"
+      },
+      {
+        "file": "src/verticals/clinic/ops/bed-management/BedManagementPage.tsx",
+        "line": 67,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/ops/bed-management/BedManagementPage.tsx",
+        "line": 75,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/ops/bed-management/BedManagementPage.tsx",
+        "line": 83,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/ops/bed-management/BedManagementPage.tsx",
+        "line": 91,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/ops/bed-management/BedManagementPage.tsx",
+        "line": 142,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-[10px] text-text-muted uppercase tracking-wider\">{bed.unit}</p>"
+      },
+      {
+        "file": "src/verticals/clinic/ops/bed-management/BedManagementPage.tsx",
+        "line": 145,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusBadge.bg}`}>"
+      },
+      {
+        "file": "src/verticals/clinic/ops/bed-management/BedManagementPage.tsx",
+        "line": 153,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted\">"
+      },
+      {
+        "file": "src/verticals/clinic/ops/bed-management/BedManagementPage.tsx",
+        "line": 164,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-2.5 py-1 rounded bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/clinic/ops/bed-management/BedManagementPage.tsx",
+        "line": 172,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/clinic/ops/patient-flow/PatientFlowPage.tsx",
+        "line": 71,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/ops/patient-flow/PatientFlowPage.tsx",
+        "line": 79,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/ops/patient-flow/PatientFlowPage.tsx",
+        "line": 87,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/ops/patient-flow/PatientFlowPage.tsx",
+        "line": 95,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/clinic/ops/patient-flow/PatientFlowPage.tsx",
+        "line": 132,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"font-mono text-[11px] text-text-muted\">{pat.nirMasked}</p>"
+      },
+      {
+        "file": "src/verticals/clinic/ops/patient-flow/PatientFlowPage.tsx",
+        "line": 135,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusBadge.bg}`}>"
+      },
+      {
+        "file": "src/verticals/clinic/ops/patient-flow/PatientFlowPage.tsx",
+        "line": 145,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted\">"
+      },
+      {
+        "file": "src/verticals/clinic/ops/patient-flow/PatientFlowPage.tsx",
+        "line": 155,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/clinic/ops/patient-flow/PatientFlowPage.tsx",
+        "line": 163,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-2.5 py-1 rounded bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/clinic/ops/patient-flow/PatientFlowPage.tsx",
+        "line": 171,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-2.5 py-1 rounded bg-accent text-text-on-accent text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/garage/finance/warranty-claims/WarrantyClaimsPage.tsx",
+        "line": 67,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/finance/warranty-claims/WarrantyClaimsPage.tsx",
+        "line": 75,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/finance/warranty-claims/WarrantyClaimsPage.tsx",
+        "line": 85,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/finance/warranty-claims/WarrantyClaimsPage.tsx",
+        "line": 95,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/finance/warranty-claims/WarrantyClaimsPage.tsx",
+        "line": 119,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<thead className=\"bg-surface-base/60 text-text-muted uppercase font-medium border-b border-border text-[10px]\">"
+      },
+      {
+        "file": "src/verticals/garage/finance/warranty-claims/WarrantyClaimsPage.tsx",
+        "line": 147,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"font-mono text-[10px] text-text-muted\">{claim.repairOrderId}</span>"
+      },
+      {
+        "file": "src/verticals/garage/finance/warranty-claims/WarrantyClaimsPage.tsx",
+        "line": 151,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] px-2 py-0.5 rounded bg-surface-base border border-border\">"
+      },
+      {
+        "file": "src/verticals/garage/finance/warranty-claims/WarrantyClaimsPage.tsx",
+        "line": 158,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={`text-[10px] px-2.5 py-0.5 rounded-full font-medium ${statusBadge.bg}`}>"
+      },
+      {
+        "file": "src/verticals/garage/logistics/parts-inventory/PartsInventoryPage.tsx",
+        "line": 75,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/logistics/parts-inventory/PartsInventoryPage.tsx",
+        "line": 83,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/logistics/parts-inventory/PartsInventoryPage.tsx",
+        "line": 93,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/logistics/parts-inventory/PartsInventoryPage.tsx",
+        "line": 103,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/logistics/parts-inventory/PartsInventoryPage.tsx",
+        "line": 167,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-mono text-text-muted mt-0.5\">{part.oemReference}</p>"
+      },
+      {
+        "file": "src/verticals/garage/logistics/parts-inventory/PartsInventoryPage.tsx",
+        "line": 170,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1 shrink-0\">"
+      },
+      {
+        "file": "src/verticals/garage/logistics/parts-inventory/PartsInventoryPage.tsx",
+        "line": 179,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-[10px] uppercase font-medium text-text-muted\">{\"En stock atelier\"}</p>"
+      },
+      {
+        "file": "src/verticals/garage/logistics/parts-inventory/PartsInventoryPage.tsx",
+        "line": 201,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<div className=\"flex items-center justify-between text-[11px] text-text-muted pt-1\">"
+      },
+      {
+        "file": "src/verticals/garage/ops/workshop-scheduling/WorkshopSchedulingPage.tsx",
+        "line": 73,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/ops/workshop-scheduling/WorkshopSchedulingPage.tsx",
+        "line": 81,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/ops/workshop-scheduling/WorkshopSchedulingPage.tsx",
+        "line": 89,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/ops/workshop-scheduling/WorkshopSchedulingPage.tsx",
+        "line": 97,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/garage/ops/workshop-scheduling/WorkshopSchedulingPage.tsx",
+        "line": 136,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<span className=\"font-mono text-[11px] text-text-muted\">{job.id}</span>"
+      },
+      {
+        "file": "src/verticals/garage/ops/workshop-scheduling/WorkshopSchedulingPage.tsx",
+        "line": 139,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusBadge.bg}`}>"
+      },
+      {
+        "file": "src/verticals/garage/ops/workshop-scheduling/WorkshopSchedulingPage.tsx",
+        "line": 158,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted\">"
+      },
+      {
+        "file": "src/verticals/garage/ops/workshop-scheduling/WorkshopSchedulingPage.tsx",
+        "line": 174,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-2.5 py-1 rounded bg-orange-600 hover:bg-orange-700 text-white text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/garage/ops/workshop-scheduling/WorkshopSchedulingPage.tsx",
+        "line": 182,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/garage/ops/workshop-scheduling/WorkshopSchedulingPage.tsx",
+        "line": 190,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/hotel/commerce/yield/YieldManagementPage.tsx",
+        "line": 62,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/commerce/yield/YieldManagementPage.tsx",
+        "line": 70,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/commerce/yield/YieldManagementPage.tsx",
+        "line": 78,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/commerce/yield/YieldManagementPage.tsx",
+        "line": 86,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/commerce/yield/YieldManagementPage.tsx",
+        "line": 98,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<thead className=\"bg-surface-base/60 text-text-muted uppercase font-medium border-b border-border text-[10px]\">"
+      },
+      {
+        "file": "src/verticals/hotel/commerce/yield/YieldManagementPage.tsx",
+        "line": 124,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "{day.dayOfWeek} <span className=\"font-mono text-[10px] text-text-muted font-normal\">({day.date})</span>"
+      },
+      {
+        "file": "src/verticals/hotel/commerce/yield/YieldManagementPage.tsx",
+        "line": 127,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${demandBadge.bg}`}>"
+      },
+      {
+        "file": "src/verticals/hotel/finance/city-ledger/CityLedgerPage.tsx",
+        "line": 66,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/finance/city-ledger/CityLedgerPage.tsx",
+        "line": 74,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/finance/city-ledger/CityLedgerPage.tsx",
+        "line": 84,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/finance/city-ledger/CityLedgerPage.tsx",
+        "line": 92,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/finance/city-ledger/CityLedgerPage.tsx",
+        "line": 116,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<thead className=\"bg-surface-base/60 text-text-muted uppercase font-medium border-b border-border text-[10px]\">"
+      },
+      {
+        "file": "src/verticals/hotel/finance/city-ledger/CityLedgerPage.tsx",
+        "line": 136,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"block font-mono text-[10px] text-text-muted font-normal\">{acc.siret}</span>"
+      },
+      {
+        "file": "src/verticals/hotel/finance/city-ledger/CityLedgerPage.tsx",
+        "line": 139,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] px-2 py-0.5 rounded bg-surface-base border border-border font-medium\">"
+      },
+      {
+        "file": "src/verticals/hotel/ops/housekeeping/HousekeepingPage.tsx",
+        "line": 84,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/ops/housekeeping/HousekeepingPage.tsx",
+        "line": 92,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/ops/housekeeping/HousekeepingPage.tsx",
+        "line": 100,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/ops/housekeeping/HousekeepingPage.tsx",
+        "line": 108,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/hotel/ops/housekeeping/HousekeepingPage.tsx",
+        "line": 174,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] text-text-muted uppercase\">({room.type})</span>"
+      },
+      {
+        "file": "src/verticals/hotel/ops/housekeeping/HousekeepingPage.tsx",
+        "line": 177,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusBadge.bg}`}>"
+      },
+      {
+        "file": "src/verticals/hotel/ops/housekeeping/HousekeepingPage.tsx",
+        "line": 191,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] bg-surface-base p-2 rounded border border-border/70 text-text-secondary\">"
+      },
+      {
+        "file": "src/verticals/hotel/ops/housekeeping/HousekeepingPage.tsx",
+        "line": 201,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-3 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/hotel/ops/housekeeping/HousekeepingPage.tsx",
+        "line": 209,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/retail/commerce/CatalogPage.tsx",
+        "line": 65,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/commerce/CatalogPage.tsx",
+        "line": 73,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/commerce/CatalogPage.tsx",
+        "line": 83,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/commerce/CatalogPage.tsx",
+        "line": 91,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/commerce/CatalogPage.tsx",
+        "line": 117,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<thead className=\"bg-surface-base/60 text-text-muted uppercase font-medium border-b border-border text-[10px]\">"
+      },
+      {
+        "file": "src/verticals/retail/commerce/CatalogPage.tsx",
+        "line": 138,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"block font-mono text-[10px] text-text-muted font-normal\">{it.ean}</span>"
+      },
+      {
+        "file": "src/verticals/retail/commerce/PromotionsPage.tsx",
+        "line": 61,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/commerce/PromotionsPage.tsx",
+        "line": 71,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/commerce/PromotionsPage.tsx",
+        "line": 81,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/commerce/PromotionsPage.tsx",
+        "line": 89,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/commerce/PromotionsPage.tsx",
+        "line": 142,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusBadge.bg}`}>"
+      },
+      {
+        "file": "src/verticals/retail/commerce/PromotionsPage.tsx",
+        "line": 154,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<div className=\"flex items-center justify-between text-[11px] text-text-muted pt-2 border-t border-border/60\">"
+      },
+      {
+        "file": "src/verticals/retail/logistics/RetailStockPage.tsx",
+        "line": 72,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/logistics/RetailStockPage.tsx",
+        "line": 80,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/logistics/RetailStockPage.tsx",
+        "line": 88,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/logistics/RetailStockPage.tsx",
+        "line": 96,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/logistics/RetailStockPage.tsx",
+        "line": 122,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<thead className=\"bg-surface-base/60 text-text-muted uppercase font-medium border-b border-border text-[10px]\">"
+      },
+      {
+        "file": "src/verticals/retail/logistics/RetailStockPage.tsx",
+        "line": 144,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<span className=\"text-[11px] text-text-muted\">{row.variant}</span>"
+      },
+      {
+        "file": "src/verticals/retail/ops/RetailPOSPage.tsx",
+        "line": 141,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted\">{\"Ticket Z mis à jour et déduction immédiate des stocks boutique effectuée.\"}</p>"
+      },
+      {
+        "file": "src/verticals/retail/ops/RetailPOSPage.tsx",
+        "line": 171,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<div className=\"flex items-center justify-between text-[10px] text-text-muted\">"
+      },
+      {
+        "file": "src/verticals/retail/ops/RetailPOSPage.tsx",
+        "line": 178,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"inline-block text-[10px] px-2 py-0.5 rounded bg-surface-base border border-border font-medium\">"
+      },
+      {
+        "file": "src/verticals/retail/ops/RetailPOSPage.tsx",
+        "line": 185,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] text-emerald-600 font-medium\">"
+      },
+      {
+        "file": "src/verticals/retail/ops/RetailPOSPage.tsx",
+        "line": 221,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted\">{item.variant}</p>"
+      },
+      {
+        "file": "src/verticals/retail/ops/ReturnsPage.tsx",
+        "line": 77,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted\">{\"Le journal fiscal NF525 a scellé l'écriture d'annulation et généré le justificatif client.\"}</p>"
+      },
+      {
+        "file": "src/verticals/retail/ops/ReturnsPage.tsx",
+        "line": 85,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/ops/ReturnsPage.tsx",
+        "line": 93,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/ops/ReturnsPage.tsx",
+        "line": 103,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/ops/ReturnsPage.tsx",
+        "line": 111,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/retail/ops/ReturnsPage.tsx",
+        "line": 148,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<thead className=\"bg-surface-base/60 text-text-muted uppercase font-medium border-b border-border text-[10px]\">"
+      },
+      {
+        "file": "src/verticals/retail/ops/ReturnsPage.tsx",
+        "line": 179,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "{ret.productName} <span className=\"font-normal text-text-muted text-[11px]\">({ret.variant})</span>"
+      },
+      {
+        "file": "src/verticals/retail/ops/ReturnsPage.tsx",
+        "line": 183,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] px-2 py-0.5 rounded bg-surface-base border border-border\">"
+      },
+      {
+        "file": "src/verticals/retail/ops/ReturnsPage.tsx",
+        "line": 188,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] px-2 py-0.5 rounded bg-pink-500/10 text-pink-600 font-medium\">"
+      },
+      {
+        "file": "src/verticals/salon/commerce/AppointmentCalendar.tsx",
+        "line": 67,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/commerce/AppointmentCalendar.tsx",
+        "line": 75,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/commerce/AppointmentCalendar.tsx",
+        "line": 85,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/commerce/AppointmentCalendar.tsx",
+        "line": 93,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/commerce/AppointmentCalendar.tsx",
+        "line": 144,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${statusBadge.bg}`}>"
+      },
+      {
+        "file": "src/verticals/salon/commerce/AppointmentCalendar.tsx",
+        "line": 158,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted\">{\"Espace :\"} {apt.cabin}</p>"
+      },
+      {
+        "file": "src/verticals/salon/commerce/AppointmentCalendar.tsx",
+        "line": 168,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-2.5 py-1 rounded bg-purple-600 hover:bg-purple-700 text-white text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/salon/commerce/AppointmentCalendar.tsx",
+        "line": 176,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "className=\"px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-medium transition-colors\""
+      },
+      {
+        "file": "src/verticals/salon/human/StylistDashboard.tsx",
+        "line": 51,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/human/StylistDashboard.tsx",
+        "line": 59,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/human/StylistDashboard.tsx",
+        "line": 69,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/human/StylistDashboard.tsx",
+        "line": 79,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/logistics/CabinStockPage.tsx",
+        "line": 72,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/logistics/CabinStockPage.tsx",
+        "line": 80,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/logistics/CabinStockPage.tsx",
+        "line": 90,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/logistics/CabinStockPage.tsx",
+        "line": 98,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] font-medium text-text-muted flex items-center gap-1.5\">"
+      },
+      {
+        "file": "src/verticals/salon/logistics/CabinStockPage.tsx",
+        "line": 159,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<p className=\"text-[11px] text-text-muted mt-0.5\">{product.brand}</p>"
+      },
+      {
+        "file": "src/verticals/salon/logistics/CabinStockPage.tsx",
+        "line": 162,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<span className=\"text-[10px] px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 font-medium flex items-center gap-1 shrink-0\">"
+      },
+      {
+        "file": "src/verticals/salon/logistics/CabinStockPage.tsx",
+        "line": 171,
+        "matches": [
+          "text-[10px]"
+        ],
+        "code": "<p className=\"text-[10px] uppercase font-medium text-text-muted\">{\"Disponible cabine\"}</p>"
+      },
+      {
+        "file": "src/verticals/salon/logistics/CabinStockPage.tsx",
+        "line": 193,
+        "matches": [
+          "text-[11px]"
+        ],
+        "code": "<div className=\"flex items-center justify-between text-[11px] text-text-muted pt-1\">"
+      }
+    ],
+    "hScreenStrict": [
+      {
+        "file": "src/modules/ops/service/restaurant/kiosk/KioskPage.tsx",
+        "line": 84,
+        "code": "<div className=\"h-screen w-full bg-surface-bg flex flex-col items-center justify-center p-8 text-center select-none\">"
+      },
+      {
+        "file": "src/modules/ops/service/restaurant/kiosk/KioskPage.tsx",
+        "line": 131,
+        "code": "<div className=\"h-screen w-full bg-surface-bg flex flex-col items-center justify-center p-8 text-center select-none\">"
+      },
+      {
+        "file": "src/modules/ops/service/restaurant/kiosk/KioskPage.tsx",
+        "line": 160,
+        "code": "<div className=\"h-screen w-full bg-surface-bg flex overflow-hidden select-none\">"
+      },
+      {
+        "file": "src/shared/components/layout/DesktopSidebar.tsx",
+        "line": 49,
+        "code": "\"h-screen sticky top-0 border-r border-border/40 bg-bg-primary/80 backdrop-blur-3xl transition-all duration-700 ease-[0.16, 1, 0.3, 1] z-50 flex flex-col group/sidebar\","
+      }
+    ],
+    "tablesSansOverflow": [
+      {
+        "file": "src/app/(admin)/admin/mcc/_tabs/EInvoicingTab.tsx"
+      },
+      {
+        "file": "src/app/(admin)/admin/mcc/dlq/page.tsx"
+      },
+      {
+        "file": "src/app/(marketing)/legal/dpa/page.tsx"
+      },
+      {
+        "file": "src/app/(marketing)/legal/security/page.tsx"
+      },
+      {
+        "file": "src/app/(marketing)/pricing/vs-lightspeed/page.tsx"
+      },
+      {
+        "file": "src/app/(marketing)/pricing/vs-zelty/page.tsx"
+      },
+      {
+        "file": "src/modules/facility/components/equipment/detail-modal/DetailInvoiceTab.tsx"
+      },
+      {
+        "file": "src/modules/facility/maintenance/registre/DUERPSection.tsx"
+      },
+      {
+        "file": "src/modules/facility/maintenance/registre/IncendieSection.tsx"
+      },
+      {
+        "file": "src/modules/finance/components/accounting/views/GeneralLedgerView.tsx"
+      },
+      {
+        "file": "src/modules/finance/components/accounting/views/JournalEntriesView.tsx"
+      },
+      {
+        "file": "src/modules/finance/components/accounting/views/PlaceholderViews.tsx"
+      },
+      {
+        "file": "src/modules/ops/production/kitchen/components/RecipeTechnicalSheet.tsx"
+      }
+    ]
+  },
+  "pageAudits": [
+    {
+      "id": "page-pos",
+      "route": "/pos",
+      "name": "Caisse Tactile POS",
+      "category": "operations",
+      "devicePreset": "tablet",
+      "file": "src/app/(client)/(ops)/pos/page.tsx",
+      "lines": 294,
+      "tokenDensity": 29,
+      "hardcodedGraysCount": 4,
+      "hardcodedGraysSample": [
+        "text-white",
+        "bg-white/15",
+        "text-white",
+        "bg-black/70"
+      ],
+      "breakpointsTotal": 9,
+      "breakpoints": {
+        "sm": 3,
+        "md": 0,
+        "lg": 4,
+        "xl": 2,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [
+        "w-[400px]",
+        "w-[420px]"
+      ],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-pos-mobile",
+      "route": "/pos-mobile",
+      "name": "POS Mobile / Pad Serveur",
+      "category": "operations",
+      "devicePreset": "mobile",
+      "file": "src/app/(client)/(ops)/pos-mobile/page.tsx",
+      "lines": 199,
+      "tokenDensity": 40,
+      "hardcodedGraysCount": 1,
+      "hardcodedGraysSample": [
+        "bg-white/20"
+      ],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-kds",
+      "route": "/kds",
+      "name": "KDS Cuisine & Production",
+      "category": "operations",
+      "devicePreset": "kds",
+      "file": "src/app/(client)/(ops)/kds/page.tsx",
+      "lines": 11,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-kitchen",
+      "route": "/kitchen",
+      "name": "Vue Cuisine & Fiches Recettes",
+      "category": "operations",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/kitchen/page.tsx",
+      "lines": 11,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-bar",
+      "route": "/bar",
+      "name": "Poste Bar & Tireuses Connectées",
+      "category": "operations",
+      "devicePreset": "tablet",
+      "file": "src/app/(client)/(ops)/bar/page.tsx",
+      "lines": 214,
+      "tokenDensity": 1,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 1,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-kiosk",
+      "route": "/kiosk",
+      "name": "Borne de Commande Kiosque",
+      "category": "operations",
+      "devicePreset": "tablet",
+      "file": "src/app/(client)/(ops)/kiosk/page.tsx",
+      "lines": 12,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-floor-plan",
+      "route": "/floor-plan",
+      "name": "Plan de Salle & Tables",
+      "category": "operations",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/floor-plan/page.tsx",
+      "lines": 297,
+      "tokenDensity": 52,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 5,
+      "breakpoints": {
+        "sm": 0,
+        "md": 1,
+        "lg": 4,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-inventory",
+      "route": "/inventory",
+      "name": "Gestion des Stocks & Inventaire",
+      "category": "operations",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/inventory/page.tsx",
+      "lines": 246,
+      "tokenDensity": 35,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-inventory-reception",
+      "route": "/admin/inventory/reception",
+      "name": "Réception & Contrôle Fournisseurs",
+      "category": "operations",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/admin/inventory/reception/page.tsx",
+      "lines": 6,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-suppliers",
+      "route": "/suppliers",
+      "name": "Hub Fournisseurs & Mercuriale",
+      "category": "operations",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/suppliers/page.tsx",
+      "lines": 24,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-timeclock",
+      "route": "/timeclock",
+      "name": "Pointeuse & Pointage Staff",
+      "category": "operations",
+      "devicePreset": "tablet",
+      "file": "src/app/(client)/(ops)/timeclock/page.tsx",
+      "lines": 11,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-facility",
+      "route": "/facility",
+      "name": "Hub Équipements & Maintenance",
+      "category": "operations",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/facility/page.tsx",
+      "lines": 50,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-haccp",
+      "route": "/haccp",
+      "name": "Conformité Sanitaire HACCP",
+      "category": "operations",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/haccp/page.tsx",
+      "lines": 240,
+      "tokenDensity": 68,
+      "hardcodedGraysCount": 1,
+      "hardcodedGraysSample": [
+        "text-white"
+      ],
+      "breakpointsTotal": 1,
+      "breakpoints": {
+        "sm": 1,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-hygiene",
+      "route": "/hygiene",
+      "name": "Plans de Nettoyage & Hygiène",
+      "category": "operations",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/hygiene/page.tsx",
+      "lines": 12,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-reservations",
+      "route": "/reservations",
+      "name": "Cahier de Réservations",
+      "category": "commerce",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/reservations/page.tsx",
+      "lines": 154,
+      "tokenDensity": 22,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 5,
+      "breakpoints": {
+        "sm": 0,
+        "md": 3,
+        "lg": 1,
+        "xl": 1,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [
+        "w-[420px]"
+      ],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-crm",
+      "route": "/crm",
+      "name": "Fichier Clients & CRM Fidélité",
+      "category": "commerce",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/crm/page.tsx",
+      "lines": 217,
+      "tokenDensity": 6,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-marketing",
+      "route": "/marketing",
+      "name": "Campagnes & Marketing",
+      "category": "commerce",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/marketing/page.tsx",
+      "lines": 196,
+      "tokenDensity": 42,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 4,
+      "breakpoints": {
+        "sm": 0,
+        "md": 2,
+        "lg": 2,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-marketing-seo",
+      "route": "/marketing/seo",
+      "name": "Référencement Local & Google Maps",
+      "category": "commerce",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/marketing/seo/page.tsx",
+      "lines": 122,
+      "tokenDensity": 24,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 1,
+      "breakpoints": {
+        "sm": 0,
+        "md": 1,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-menu-builder",
+      "route": "/menu-builder",
+      "name": "Éditeur de Menus & Carte",
+      "category": "commerce",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/menu-builder/page.tsx",
+      "lines": 210,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-menu-engineering",
+      "route": "/menu-engineering",
+      "name": "Menu Engineering & Marges",
+      "category": "commerce",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/menu-engineering/page.tsx",
+      "lines": 11,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-public-menu",
+      "route": "/menu/[tenantId]/[tableId]",
+      "name": "Menu Digital sur Table",
+      "category": "commerce",
+      "devicePreset": "mobile",
+      "file": "src/app/(client)/(public)/menu/[tenantId]/[tableId]/page.tsx",
+      "lines": 240,
+      "tokenDensity": 44,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-public-order",
+      "route": "/order/[tenantId]",
+      "name": "Click & Collect / Livraison",
+      "category": "commerce",
+      "devicePreset": "mobile",
+      "file": "src/app/(client)/(ordering)/order/[tenantId]/page.tsx",
+      "lines": 247,
+      "tokenDensity": 33,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 2,
+      "breakpoints": {
+        "sm": 2,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-showcase",
+      "route": "/showcase",
+      "name": "Vitrine Restaurant",
+      "category": "commerce",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(public)/showcase/page.tsx",
+      "lines": 163,
+      "tokenDensity": 36,
+      "hardcodedGraysCount": 1,
+      "hardcodedGraysSample": [
+        "bg-black/70"
+      ],
+      "breakpointsTotal": 3,
+      "breakpoints": {
+        "sm": 0,
+        "md": 2,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [
+        "w-[500px]",
+        "w-[500px]"
+      ],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-groups",
+      "route": "/groups",
+      "name": "Privatisations & Groupes",
+      "category": "commerce",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(public)/groups/page.tsx",
+      "lines": 147,
+      "tokenDensity": 26,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 3,
+      "breakpoints": {
+        "sm": 0,
+        "md": 2,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-landing-public",
+      "route": "/landing",
+      "name": "Portail Bienvenue Public",
+      "category": "commerce",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(public)/landing/page.tsx",
+      "lines": 39,
+      "tokenDensity": 1,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-welcome",
+      "route": "/welcome",
+      "name": "Accueil Expérience Client",
+      "category": "commerce",
+      "devicePreset": "mobile",
+      "file": "src/app/(client)/(public)/welcome/page.tsx",
+      "lines": 286,
+      "tokenDensity": 71,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 10,
+      "breakpoints": {
+        "sm": 0,
+        "md": 8,
+        "lg": 2,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-dynamic-slug",
+      "route": "/[slug]",
+      "name": "Page Restaurant Sur-Mesure",
+      "category": "commerce",
+      "devicePreset": "desktop",
+      "file": "src/app/[slug]/page.tsx",
+      "lines": 197,
+      "tokenDensity": 28,
+      "hardcodedGraysCount": 8,
+      "hardcodedGraysSample": [
+        "text-gray-600",
+        "text-gray-900",
+        "text-gray-700",
+        "text-gray-900",
+        "text-gray-600"
+      ],
+      "breakpointsTotal": 3,
+      "breakpoints": {
+        "sm": 0,
+        "md": 2,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-dynamic-slug-resa",
+      "route": "/[slug]/reservations",
+      "name": "Module Réservation Dédié",
+      "category": "commerce",
+      "devicePreset": "desktop",
+      "file": "src/app/[slug]/reservations/page.tsx",
+      "lines": 82,
+      "tokenDensity": 2,
+      "hardcodedGraysCount": 1,
+      "hardcodedGraysSample": [
+        "text-gray-900"
+      ],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-operations",
+      "route": "/operations",
+      "name": "Cockpit & Tableau de Bord",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/operations/page.tsx",
+      "lines": 11,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-analytics",
+      "route": "/analytics",
+      "name": "Analytique & Rapports Financiers",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/analytics/page.tsx",
+      "lines": 238,
+      "tokenDensity": 54,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 1,
+      "breakpoints": {
+        "sm": 0,
+        "md": 1,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [
+        "w-[520px]"
+      ],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-intelligence",
+      "route": "/intelligence",
+      "name": "Analyses & Recommandations",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/intelligence/page.tsx",
+      "lines": 99,
+      "tokenDensity": 8,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 1,
+      "breakpoints": {
+        "sm": 0,
+        "md": 1,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-finance",
+      "route": "/finance",
+      "name": "Finance & Trésorerie",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/finance/page.tsx",
+      "lines": 11,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-accounting-portal",
+      "route": "/accounting-portal",
+      "name": "Portail Comptable & FEC",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/accounting-portal/page.tsx",
+      "lines": 165,
+      "tokenDensity": 4,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 1,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-pms",
+      "route": "/pms",
+      "name": "Intégration Hôtelière PMS",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/pms/page.tsx",
+      "lines": 12,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-nf525",
+      "route": "/nf525",
+      "name": "Conformité Fiscale NF525",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/nf525/page.tsx",
+      "lines": 51,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-registre",
+      "route": "/registre",
+      "name": "Registre Légal & Sanitaire",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/registre/page.tsx",
+      "lines": 247,
+      "tokenDensity": 34,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 9,
+      "breakpoints": {
+        "sm": 0,
+        "md": 8,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-staff",
+      "route": "/staff",
+      "name": "Équipe & Gestion du Personnel",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/staff/page.tsx",
+      "lines": 202,
+      "tokenDensity": 4,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 2,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 2,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-planning",
+      "route": "/planning",
+      "name": "Planning & Grilles Horaires",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/planning/page.tsx",
+      "lines": 11,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-leaves",
+      "route": "/leaves",
+      "name": "Congés & Absences",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/leaves/page.tsx",
+      "lines": 304,
+      "tokenDensity": 40,
+      "hardcodedGraysCount": 1,
+      "hardcodedGraysSample": [
+        "bg-black"
+      ],
+      "breakpointsTotal": 11,
+      "breakpoints": {
+        "sm": 0,
+        "md": 9,
+        "lg": 2,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-recruitment",
+      "route": "/recruitment",
+      "name": "Recrutement & Candidatures",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/recruitment/page.tsx",
+      "lines": 23,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-mon-espace",
+      "route": "/mon-espace",
+      "name": "Portail Salarié Mon Espace",
+      "category": "management",
+      "devicePreset": "mobile",
+      "file": "src/app/(client)/(ops)/mon-espace/page.tsx",
+      "lines": 295,
+      "tokenDensity": 62,
+      "hardcodedGraysCount": 8,
+      "hardcodedGraysSample": [
+        "border-zinc-800",
+        "border-zinc-800",
+        "border-zinc-800",
+        "border-zinc-800",
+        "border-zinc-800"
+      ],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-welcome-staff",
+      "route": "/welcome-staff",
+      "name": "Parcours Onboarding Équipe",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/welcome-staff/page.tsx",
+      "lines": 286,
+      "tokenDensity": 48,
+      "hardcodedGraysCount": 1,
+      "hardcodedGraysSample": [
+        "border-white/30"
+      ],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-franchise",
+      "route": "/franchise",
+      "name": "Console Réseau & Franchise",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/franchise/page.tsx",
+      "lines": 21,
+      "tokenDensity": 1,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-vanguard-simulator",
+      "route": "/vanguard-simulator",
+      "name": "Simulateur d Activité & Prix",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/vanguard-simulator/page.tsx",
+      "lines": 320,
+      "tokenDensity": 95,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 8,
+      "breakpoints": {
+        "sm": 1,
+        "md": 3,
+        "lg": 4,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-settings-branding",
+      "route": "/settings/branding",
+      "name": "Identité Visuelle & Thème",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/settings/branding/page.tsx",
+      "lines": 27,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-settings-security",
+      "route": "/settings/security",
+      "name": "Sécurité & Accès",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/settings/security/page.tsx",
+      "lines": 303,
+      "tokenDensity": 46,
+      "hardcodedGraysCount": 1,
+      "hardcodedGraysSample": [
+        "bg-white"
+      ],
+      "breakpointsTotal": 2,
+      "breakpoints": {
+        "sm": 1,
+        "md": 1,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-integrations",
+      "route": "/integrations",
+      "name": "Connecteurs & Intégrations",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/integrations/page.tsx",
+      "lines": 7,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-migration",
+      "route": "/migration",
+      "name": "Assistant d Import & Migration",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/migration/page.tsx",
+      "lines": 68,
+      "tokenDensity": 20,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-onboarding",
+      "route": "/onboarding",
+      "name": "Guide de Mise en Route",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/onboarding/page.tsx",
+      "lines": 12,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-aide",
+      "route": "/aide",
+      "name": "Centre d Aide & Documentation",
+      "category": "management",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(ops)/aide/page.tsx",
+      "lines": 99,
+      "tokenDensity": 12,
+      "hardcodedGraysCount": 2,
+      "hardcodedGraysSample": [
+        "bg-slate-500",
+        "border-slate-500"
+      ],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": true,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-dashboard",
+      "route": "/admin/dashboard",
+      "name": "Admin Cockpit Général",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/admin/dashboard/page.tsx",
+      "lines": 284,
+      "tokenDensity": 64,
+      "hardcodedGraysCount": 1,
+      "hardcodedGraysSample": [
+        "bg-neutral-500"
+      ],
+      "breakpointsTotal": 4,
+      "breakpoints": {
+        "sm": 0,
+        "md": 1,
+        "lg": 3,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-mcc",
+      "route": "/admin/mcc",
+      "name": "Console Réseau & Multi-Sites",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/admin/mcc/page.tsx",
+      "lines": 437,
+      "tokenDensity": 115,
+      "hardcodedGraysCount": 2,
+      "hardcodedGraysSample": [
+        "bg-black/80",
+        "bg-white"
+      ],
+      "breakpointsTotal": 7,
+      "breakpoints": {
+        "sm": 4,
+        "md": 0,
+        "lg": 3,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [
+        "w-[900px]",
+        "w-[600px]"
+      ],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-mcc-dlq",
+      "route": "/admin/mcc/dlq",
+      "name": "File d Attente des Erreurs (DLQ)",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/admin/mcc/dlq/page.tsx",
+      "lines": 186,
+      "tokenDensity": 26,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-agent",
+      "route": "/admin/agent",
+      "name": "Superviseur des Tâches & Services",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/admin/agent/page.tsx",
+      "lines": 294,
+      "tokenDensity": 41,
+      "hardcodedGraysCount": 1,
+      "hardcodedGraysSample": [
+        "fill-white"
+      ],
+      "breakpointsTotal": 4,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 4,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-prospecting",
+      "route": "/admin/prospecting",
+      "name": "Import de Charte & Personnalisation",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/admin/prospecting/page.tsx",
+      "lines": 6,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-simulation",
+      "route": "/admin/simulation",
+      "name": "Générateur de Données Démo",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/admin/simulation/page.tsx",
+      "lines": 6,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-blueprint",
+      "route": "/blueprint",
+      "name": "Architecture & Schémas Techniques",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/blueprint/page.tsx",
+      "lines": 93,
+      "tokenDensity": 14,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 1,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-design-system",
+      "route": "/design-system",
+      "name": "Design System & Primitives UI",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/design-system/page.tsx",
+      "lines": 419,
+      "tokenDensity": 148,
+      "hardcodedGraysCount": 1,
+      "hardcodedGraysSample": [
+        "bg-zinc-500"
+      ],
+      "breakpointsTotal": 10,
+      "breakpoints": {
+        "sm": 0,
+        "md": 6,
+        "lg": 4,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [
+        "w-[1600px]"
+      ],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-system-map",
+      "route": "/system-map",
+      "name": "Cartographie des Modules",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/system-map/page.tsx",
+      "lines": 15,
+      "tokenDensity": 1,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-simulator",
+      "route": "/simulator",
+      "name": "Simulateur d Événements",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/simulator/page.tsx",
+      "lines": 169,
+      "tokenDensity": 19,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 1,
+      "breakpoints": {
+        "sm": 0,
+        "md": 1,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [
+        "w-[1400px]"
+      ],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-settings",
+      "route": "/settings",
+      "name": "Paramètres Globaux Admin",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/settings/page.tsx",
+      "lines": 13,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-account-settings",
+      "route": "/account-settings",
+      "name": "Gestion du Compte & Facturation",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/account-settings/page.tsx",
+      "lines": 6,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-audit-portal",
+      "route": "/audit-portal",
+      "name": "Portail d Audit Légal",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(admin)/audit-portal/page.tsx",
+      "lines": 123,
+      "tokenDensity": 23,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 3,
+      "breakpoints": {
+        "sm": 0,
+        "md": 3,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [
+        "w-[800px]"
+      ],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-admin-docs-category",
+      "route": "/docs/[category]",
+      "name": "Documentation Interactive",
+      "category": "admin",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(public)/docs/[category]/page.tsx",
+      "lines": 15,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-marketing-home",
+      "route": "/",
+      "name": "Page d Accueil Marketing",
+      "category": "marketing",
+      "devicePreset": "desktop",
+      "file": "src/app/(marketing)/page.tsx",
+      "lines": 11,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-pricing",
+      "route": "/pricing",
+      "name": "Grille Tarifaire & Abonnements",
+      "category": "marketing",
+      "devicePreset": "desktop",
+      "file": "src/app/(marketing)/pricing/page.tsx",
+      "lines": 140,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 24,
+      "hardcodedGraysSample": [
+        "text-white/50",
+        "bg-white",
+        "border-white",
+        "text-black",
+        "text-white/40"
+      ],
+      "breakpointsTotal": 8,
+      "breakpoints": {
+        "sm": 5,
+        "md": 1,
+        "lg": 2,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-pricing-roi",
+      "route": "/pricing/roi-calculator",
+      "name": "Calculateur de Rentabilité ROI",
+      "category": "marketing",
+      "devicePreset": "desktop",
+      "file": "src/app/(marketing)/pricing/roi-calculator/page.tsx",
+      "lines": 168,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 22,
+      "hardcodedGraysSample": [
+        "text-white/50",
+        "bg-white",
+        "border-white",
+        "text-white/90",
+        "text-white/70"
+      ],
+      "breakpointsTotal": 8,
+      "breakpoints": {
+        "sm": 6,
+        "md": 1,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-vs-lightspeed",
+      "route": "/pricing/vs-lightspeed",
+      "name": "Comparatif vs Lightspeed",
+      "category": "marketing",
+      "devicePreset": "desktop",
+      "file": "src/app/(marketing)/pricing/vs-lightspeed/page.tsx",
+      "lines": 83,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 12,
+      "hardcodedGraysSample": [
+        "text-white/50",
+        "border-white",
+        "bg-white",
+        "text-white/60",
+        "text-white/60"
+      ],
+      "breakpointsTotal": 5,
+      "breakpoints": {
+        "sm": 4,
+        "md": 0,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-vs-zelty",
+      "route": "/pricing/vs-zelty",
+      "name": "Comparatif vs Zelty",
+      "category": "marketing",
+      "devicePreset": "desktop",
+      "file": "src/app/(marketing)/pricing/vs-zelty/page.tsx",
+      "lines": 83,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 12,
+      "hardcodedGraysSample": [
+        "text-white/50",
+        "border-white",
+        "bg-white",
+        "text-white/60",
+        "text-white/60"
+      ],
+      "breakpointsTotal": 5,
+      "breakpoints": {
+        "sm": 4,
+        "md": 0,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-signup",
+      "route": "/signup",
+      "name": "Création de Compte Restaurant",
+      "category": "marketing",
+      "devicePreset": "desktop",
+      "file": "src/app/(marketing)/signup/page.tsx",
+      "lines": 11,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-signup-success",
+      "route": "/signup/success",
+      "name": "Confirmation d Inscription",
+      "category": "marketing",
+      "devicePreset": "desktop",
+      "file": "src/app/(marketing)/signup/success/page.tsx",
+      "lines": 74,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 7,
+      "hardcodedGraysSample": [
+        "text-white",
+        "text-white/50",
+        "text-white/20",
+        "bg-white/5",
+        "border-white/10"
+      ],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-verticales-slug",
+      "route": "/verticales/[slug]",
+      "name": "Pages Métiers Dédiées",
+      "category": "marketing",
+      "devicePreset": "desktop",
+      "file": "src/app/(marketing)/verticales/[slug]/page.tsx",
+      "lines": 45,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-legal-dpa",
+      "route": "/legal/dpa",
+      "name": "Accord Traitement Données (DPA)",
+      "category": "marketing",
+      "devicePreset": "desktop",
+      "file": "src/app/(marketing)/legal/dpa/page.tsx",
+      "lines": 83,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 4,
+      "breakpoints": {
+        "sm": 3,
+        "md": 0,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-legal-nf525-mkt",
+      "route": "/legal/nf525",
+      "name": "Certificat de Conformité Fiscale",
+      "category": "marketing",
+      "devicePreset": "desktop",
+      "file": "src/app/(marketing)/legal/nf525/page.tsx",
+      "lines": 90,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 4,
+      "breakpoints": {
+        "sm": 3,
+        "md": 0,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-legal-security-mkt",
+      "route": "/legal/security",
+      "name": "Engagements de Sécurité & Cloud",
+      "category": "marketing",
+      "devicePreset": "desktop",
+      "file": "src/app/(marketing)/legal/security/page.tsx",
+      "lines": 88,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 4,
+      "breakpoints": {
+        "sm": 3,
+        "md": 0,
+        "lg": 1,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-public-demo",
+      "route": "/demo",
+      "name": "Démonstration Interactive Gratuite",
+      "category": "public",
+      "devicePreset": "desktop",
+      "file": "src/app/(public)/demo/page.tsx",
+      "lines": 11,
+      "tokenDensity": 0,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-public-status",
+      "route": "/status",
+      "name": "Statut du Réseau & Disponibilité",
+      "category": "public",
+      "devicePreset": "desktop",
+      "file": "src/app/(public)/status/page.tsx",
+      "lines": 142,
+      "tokenDensity": 11,
+      "hardcodedGraysCount": 7,
+      "hardcodedGraysSample": [
+        "bg-gray-50",
+        "text-gray-900",
+        "border-gray-200",
+        "text-gray-900",
+        "border-gray-200"
+      ],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-login",
+      "route": "/login",
+      "name": "Connexion Espace Restaurant",
+      "category": "public",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(public)/login/page.tsx",
+      "lines": 38,
+      "tokenDensity": 1,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-logout",
+      "route": "/auth/logout",
+      "name": "Déconnexion Sécurisée",
+      "category": "public",
+      "devicePreset": "desktop",
+      "file": "src/app/(client)/(public)/auth/logout/page.tsx",
+      "lines": 127,
+      "tokenDensity": 19,
+      "hardcodedGraysCount": 0,
+      "hardcodedGraysSample": [],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-legal-cgu",
+      "route": "/legal/cgu",
+      "name": "Conditions Générales d Utilisation",
+      "category": "public",
+      "devicePreset": "desktop",
+      "file": "src/app/(public)/legal/cgu/page.tsx",
+      "lines": 267,
+      "tokenDensity": 2,
+      "hardcodedGraysCount": 47,
+      "hardcodedGraysSample": [
+        "text-gray-900",
+        "text-gray-900",
+        "text-gray-700",
+        "text-gray-700",
+        "text-gray-900"
+      ],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-legal-cgv",
+      "route": "/legal/cgv",
+      "name": "Conditions Générales de Vente",
+      "category": "public",
+      "devicePreset": "desktop",
+      "file": "src/app/(public)/legal/cgv/page.tsx",
+      "lines": 222,
+      "tokenDensity": 5,
+      "hardcodedGraysCount": 53,
+      "hardcodedGraysSample": [
+        "text-gray-900",
+        "text-gray-900",
+        "text-gray-700",
+        "text-gray-900",
+        "text-gray-700"
+      ],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-legal-mentions",
+      "route": "/legal/mentions",
+      "name": "Mentions Légales",
+      "category": "public",
+      "devicePreset": "desktop",
+      "file": "src/app/(public)/legal/mentions/page.tsx",
+      "lines": 214,
+      "tokenDensity": 2,
+      "hardcodedGraysCount": 50,
+      "hardcodedGraysSample": [
+        "text-gray-900",
+        "text-gray-700",
+        "text-gray-900",
+        "bg-gray-50",
+        "border-gray-200"
+      ],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-legal-rgpd",
+      "route": "/legal/rgpd",
+      "name": "Politique de Confidentialité RGPD",
+      "category": "public",
+      "devicePreset": "desktop",
+      "file": "src/app/(public)/legal/rgpd/page.tsx",
+      "lines": 441,
+      "tokenDensity": 22,
+      "hardcodedGraysCount": 110,
+      "hardcodedGraysSample": [
+        "text-gray-900",
+        "text-gray-700",
+        "text-gray-900",
+        "text-gray-700",
+        "text-gray-900"
+      ],
+      "breakpointsTotal": 5,
+      "breakpoints": {
+        "sm": 0,
+        "md": 5,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    },
+    {
+      "id": "page-offline",
+      "route": "/offline",
+      "name": "Mode Hors-Ligne & Secours",
+      "category": "public",
+      "devicePreset": "tablet",
+      "file": "src/app/offline/page.tsx",
+      "lines": 69,
+      "tokenDensity": 4,
+      "hardcodedGraysCount": 5,
+      "hardcodedGraysSample": [
+        "border-white/10",
+        "text-white",
+        "text-white/60",
+        "border-white/5",
+        "text-white/40"
+      ],
+      "breakpointsTotal": 0,
+      "breakpoints": {
+        "sm": 0,
+        "md": 0,
+        "lg": 0,
+        "xl": 0,
+        "2xl": 0
+      },
+      "hScreenCount": 0,
+      "fixedWidths": [],
+      "usesPageShell": false,
+      "hasTouchTargets": false
+    }
+  ]
+}

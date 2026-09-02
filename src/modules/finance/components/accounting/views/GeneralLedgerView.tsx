@@ -65,8 +65,8 @@ export function GeneralLedgerView() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex-1 overflow-auto p-6">
-                            <table className="w-full">
+                        <div className="flex-1 overflow-auto overflow-x-auto custom-scrollbar p-6">
+                            <table className="w-full min-w-[650px]">
                                 <thead>
                                     <tr className="border-b border-border">
                                         <th className="text-left py-3 text-nano font-black text-text-muted uppercase">Date</th>
