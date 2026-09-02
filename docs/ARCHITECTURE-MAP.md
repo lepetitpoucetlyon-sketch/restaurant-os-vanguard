@@ -5,17 +5,17 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3746** · LOC : **359 978**
+- Fichiers `.ts/.tsx` : **3745** · LOC : **359 874**
 - Pages : **87** · Routes API : **218**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1617 |
-| `src/shared/` | 733 |
+| `src/modules/` | 1616 |
+| `src/shared/` | 734 |
 | `src/app/` | 465 |
 | `src/verticals/` | 253 |
-| `src/lib/` | 238 |
+| `src/lib/` | 237 |
 | `src/infrastructure/` | 46 |
 | `src/kernel/` | 39 |
 | `src/store/` | 24 |
@@ -37,12 +37,12 @@
 |---|---:|
 | `shared/eventBus/` | 223 |
 | `shared/components/` | 203 |
-| `shared/nexus/` | 138 |
-| `shared/hooks/` | 51 |
+| `shared/nexus/` | 139 |
+| `shared/hooks/` | 52 |
 | `shared/providers/` | 31 |
 | `shared/seeds/` | 15 |
 | `shared/connector-manifest/` | 12 |
-| `shared/contexts/` | 10 |
+| `shared/contexts/` | 9 |
 | `shared/plugins/` | 9 |
 | `shared/schemas/` | 7 |
 | `shared/utils/` | 7 |
@@ -65,7 +65,7 @@
 | `ops` | 295 | ✅ |
 | `finance` | 245 | ✅ |
 | `compliance` | 184 | ✅ |
-| `intelligence` | 174 | ✅ |
+| `intelligence` | 173 | ✅ |
 | `logistics` | 149 | ✅ |
 | `human` | 141 | ✅ |
 | `facility` | 74 | ✅ |
