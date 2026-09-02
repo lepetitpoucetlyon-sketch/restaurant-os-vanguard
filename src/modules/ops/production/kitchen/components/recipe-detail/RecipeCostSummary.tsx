@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import type { Recipe } from "@nexus/contracts";
-import { RecipeBOMCostService } from "@/modules/ops";
+import { RecipeBOMCostService } from "../../../kds/services/RecipeBOMCostService";
 import { cn } from "@/lib/ui.foundations";
 
 interface Props {
