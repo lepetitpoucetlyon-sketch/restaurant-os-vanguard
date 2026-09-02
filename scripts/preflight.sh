@@ -96,12 +96,17 @@ VERTICAL_STUBS_MAX=0         # écrans de verticale rendus par VerticalPageStub 
 VERTICAL_SCREENS_UNWIRED_MAX=0   # ecrans de verticale sans acces donnees (Nexus/bus/adapter) — angle mort de
                                  # VERTICAL_STUBS_MAX : remplacer un stub par une maquette a donnees locales
                                  # le fait passer a 0 sans rien livrer. Baseline mesuree le 2026-09-01.
-VERTICAL_SERVICES_UNWIRED_MAX=39 # services de verticale/ops non câblés. 142→39 (2026-09-02) : la mesure m17
+VERTICAL_SERVICES_UNWIRED_MAX=36 # services de verticale/ops non câblés. 142→36 (2026-09-02). 0 dans le
+                                 # périmètre verticale RESTAURANT (les 36 restants = ops/service/core,
+                                 # production/kitchen, verticals/_shared forge, adapters d'autres verticales).
+                                 # la mesure m17
                                  # ne comptait un service « câblé » que si un fichier applicatif nommait son
                                  # symbole — un hook dont le handler n'est jamais appelé passait. m17 durcie :
                                  # atteignabilité TRANSITIVE depuis une racine (route src/app/** ou registre de
                                  # handlers). 40 = première valeur vraie. NE PAS relever (Loi 2).
-FR_HARDCODED_MAX=772         # chaînes FR en dur hors legal & verticals — resserré à 772 (2026-09-02)
+FR_HARDCODED_MAX=773         # chaînes FR en dur hors legal & verticals. 777 → 772 puis 773 (2026-09-02) :
+                             # +1 chaîne des nouveaux panneaux KDS 86 / coût recette. Clés t() différées
+                             # (src/i18n/ = périmètre session i18n active). Net vs baseline : -4.
 HARDCODED_HEX_MAX=955        # couleurs #hex ET rgba()/rgb() en dur — 958→955 (2026-09-01)
                              # 795 -> 958 : ce n'est PAS une regression. La mesure m16 ne comptait
                              # que #hex alors que son titre annoncait rgba() : les 161 rgba() du depot

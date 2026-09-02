@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Table as TableIcon, Search, LayoutGrid, Zap, Bell, RotateCcw } from "lucide-react";
+import { Table as TableIcon, Search, LayoutGrid, Zap, Bell, RotateCcw, Ban } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { ActionGuard } from "@/shared/components/rbac/ActionGuard";
 import { SettingsGearButton } from "@/shared/components/settings/ContextualSettings";
@@ -25,6 +25,7 @@ interface KDSHeaderProps {
     setShowModificationAlerts: (show: boolean) => void;
     isRecallMode: boolean;
     setIsRecallMode: (v: boolean) => void;
+    onOpen86?: () => void;
 }
 
 export function KDSHeader({
@@ -44,6 +45,7 @@ export function KDSHeader({
     setShowModificationAlerts,
     isRecallMode,
     setIsRecallMode,
+    onOpen86,
 }: KDSHeaderProps) {
     const [isSearchExpanded, setIsSearchExpanded] = useState(false);
     const [isGridDropdownOpen, setIsGridDropdownOpen] = useState(false);
@@ -238,6 +240,20 @@ export function KDSHeader({
                         )}
                     </AnimatePresence>
                 </div>
+
+                {/* 86 — mise en rupture d'un ingrédient */}
+                {onOpen86 && (
+                    <ActionGuard page="kds" action="eightysix_ingredient">
+                        <button
+                            onClick={onOpen86}
+                            title="Mettre un ingrédient en 86"
+                            className="flex items-center gap-2 h-10 px-4 rounded-lg text-sm font-medium tracking-tight transition-colors border shrink-0 bg-surface-glass border-border/50 text-text-muted hover:text-error hover:border-error/50"
+                        >
+                            <Ban className="w-[15px] h-[15px]" strokeWidth={2} />
+                            <span>86</span>
+                        </button>
+                    </ActionGuard>
+                )}
 
                 {/* Rush toggle — semantic red, no icon dance */}
                 <button

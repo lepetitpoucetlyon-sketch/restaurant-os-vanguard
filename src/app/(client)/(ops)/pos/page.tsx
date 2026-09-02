@@ -14,6 +14,7 @@ import { formatCurrency, formatMu } from "@/lib/formatters";
 const PaymentDialog = dynamic(() => import('@/modules/ops/service/restaurant/pos/components/PaymentDialog').then(m => m.PaymentDialog), { ssr: false });
 const SplitBillDialog = dynamic(() => import('@/modules/ops/service/restaurant/pos/components/SplitBillDialog').then(m => m.SplitBillDialog), { ssr: false });
 const CashDrawerModal = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.CashDrawerModal), { ssr: false });
+const CashCounterModal = dynamic(() => import('@/modules/ops').then(m => m.CashCounterModal), { ssr: false });
 const PinModal = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.PinModal), { ssr: false });
 const TipPanel = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.TipPanel), { ssr: false });
 const VoidModal = dynamic(() => import('@/modules/commerce/ui/pos').then(m => m.VoidModal), { ssr: false });
@@ -57,6 +58,7 @@ function POSPage() {
         noteValue, setNoteValue,
         isTipPanelOpen, setIsTipPanelOpen,
         isCashDrawerOpen, setIsCashDrawerOpen,
+        cashDrawer,
         isVoidModalOpen, setIsVoidModalOpen,
         isCourseViewOpen, setIsCourseViewOpen,
         pendingAction, pinError, handleProtectedAction, handlePinConfirm, handlePinClose,
@@ -123,7 +125,23 @@ function POSPage() {
                 setSelectedCategory={setSelectedCategory}
             />
 
-            <div className="absolute right-3 top-3 z-30">
+            <div className="absolute right-3 top-3 z-30 flex items-center gap-2">
+                <button
+                    type="button"
+                    onClick={() => cashDrawer.openCounter('SKIM')}
+                    className="h-9 rounded-lg border border-border-default px-3 text-xs text-text-muted hover:text-text-primary hover:bg-surface-hover"
+                    title="Prélèvement de caisse"
+                >
+                    Prélèvement
+                </button>
+                <button
+                    type="button"
+                    onClick={() => cashDrawer.openCounter('DROP')}
+                    className="h-9 rounded-lg border border-border-default px-3 text-xs text-text-muted hover:text-text-primary hover:bg-surface-hover"
+                    title="Apport de fond de caisse"
+                >
+                    Apport
+                </button>
                 <TableActionsMenu
                     currentTable={currentTable as never}
                     allTables={allTables as never}
@@ -133,6 +151,17 @@ function POSPage() {
                     onScanDineAndDash={handleScanDineAndDash}
                 />
             </div>
+
+            {cashDrawer.isCounterOpen && (
+                <CashCounterModal
+                    isOpen={cashDrawer.isCounterOpen}
+                    onClose={cashDrawer.closeCounter}
+                    type={cashDrawer.counterType}
+                    expectedAmountInMicrounits={cashDrawer.expectedAmountInMicrounits}
+                    isBlindMode={cashDrawer.counterType === 'EOD_CLOSE'}
+                    onValidate={cashDrawer.handleValidateCount}
+                />
+            )}
 
             {/* Responsive Main Layout */}
             <ResponsiveShell

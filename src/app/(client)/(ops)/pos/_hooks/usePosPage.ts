@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
-import { usePOSController, useTableLock } from "@modules/ops";
+import { usePOSController, useTableLock, useCashDrawer } from "@modules/ops";
 import { useKitchen, useTables } from "@/modules/ops";
 import { useAuth, useTenant } from "@/shared/providers/NexusCoreProvider";
 import { useIsMobile } from "@/shared/hooks";
@@ -49,6 +49,14 @@ export function usePosPage() {
         operatorName: posUser?.displayName ?? posUser?.name,
         autoAcquire: true,
     });
+
+    // ── Tiroir-caisse : suivi des mouvements (prélèvement / dépôt / clôture) ───
+    const cashDrawer = useCashDrawer(
+        "drawer-main",
+        activeTenantId ?? "",
+        posUser?.id ?? "unknown",
+        (posUser as { role?: string })?.role ?? "plongeur",
+    );
 
     // ── Scanner Code-barres / Douchette en Caisse ─────────────────────────────
     useBarcodeScanner(posController.products, posController.handleAddToCart);
@@ -154,6 +162,7 @@ export function usePosPage() {
         noteValue, setNoteValue,
         isTipPanelOpen, setIsTipPanelOpen,
         isCashDrawerOpen, setIsCashDrawerOpen,
+        cashDrawer,
         isVoidModalOpen, setIsVoidModalOpen,
         isCourseViewOpen, setIsCourseViewOpen,
         pendingAction, pinError, handleProtectedAction, handlePinConfirm, handlePinClose,

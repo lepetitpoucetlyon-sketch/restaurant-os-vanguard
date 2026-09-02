@@ -9,6 +9,7 @@ import { printRecipeTechnicalSheet } from './recipe-detail/recipePrintHelper';
 import { RecipeSidebarHero } from './recipe-detail/RecipeSidebarHero';
 import { RecipeIngredientsSection } from './recipe-detail/RecipeIngredientsSection';
 import { RecipeStepsSection } from './recipe-detail/RecipeStepsSection';
+import { RecipeCostSummary } from './recipe-detail/RecipeCostSummary';
 
 interface RecipeDetailDialogProps {
     isOpen: boolean;
@@ -52,12 +53,18 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
                         onClose={onClose}
                     />
 
-                    <div className="p-10 flex-1 overflow-auto elegant-scrollbar">
+                    <div className="p-10 flex-1 overflow-auto elegant-scrollbar space-y-8">
                         <RecipeIngredientsSection
                             recipe={recipe}
                             basePortions={basePortions}
                             currentPortions={currentPortions}
                         />
+                        <div className="border-t border-black/5 pt-6">
+                            <h3 className="text-nano font-black text-primary dark:text-text-primary uppercase tracking-widest mb-4">
+                                Rentabilité
+                            </h3>
+                            <RecipeCostSummary recipe={recipe} currentPortions={currentPortions} />
+                        </div>
                     </div>
 
                     {/* Sidebar footer — print button */}

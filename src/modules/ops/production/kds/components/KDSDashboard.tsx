@@ -15,6 +15,7 @@ import { toast } from "sonner";
 
 import { KDSHeader } from "./KDSHeader";
 import { KDSPacingBanner } from "./KDSPacingBanner";
+import { KDSEightysixPanel } from "./KDSEightysixPanel";
 import { hasAllergens } from "./kds-ticket/kdsTicketHelpers";
 import { KDSRecallSection } from "./kds-dashboard/KDSRecallSection";
 import { KDSProductionGrid } from "./kds-dashboard/KDSProductionGrid";
@@ -59,6 +60,7 @@ export function KDSDashboard() {
     const [isRecallMode, setIsRecallMode] = useState(false);
     const [recalledOrders, setRecalledOrders] = useState<Order[]>([]);
     const [isRecallLoading, setIsRecallLoading] = useState(false);
+    const [is86Open, setIs86Open] = useState(false);
     const tenantId = useAtomValue(tenantIdAtom) as string | undefined;
 
     const [lastOrderCount, setLastOrderCount] = useState(orders.length);
@@ -164,7 +166,10 @@ export function KDSDashboard() {
                 setShowModificationAlerts={setShowModificationAlerts}
                 isRecallMode={isRecallMode}
                 setIsRecallMode={setIsRecallMode}
+                onOpen86={() => setIs86Open(true)}
             />
+
+            <KDSEightysixPanel open={is86Open} onClose={() => setIs86Open(false)} tenantId={tenantId} />
 
             <KDSPacingBanner
                 status={pacingStatus}
