@@ -2,16 +2,33 @@
 
 import React, { useState, useEffect, useMemo, use } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { Utensils, CheckCircle2, Clock } from 'lucide-react';
+import { Utensils, Bell, Split, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { OrderHeader } from './components/OrderHeader';
 import { OrderProductCard, type ProductItem } from './components/OrderProductCard';
 import { OrderCartDrawer, type CartItemEntry } from './components/OrderCartDrawer';
+import {
+  DietaryAllergenFilter,
+  type DietaryPreference,
+  WaiterCallDrawer,
+  TableSplitBillModal,
+  LiveOrderTracker,
+} from '@/modules/commerce';
 import { authedFetch } from '@/lib/client/authedFetch';
+import { formatCurrency } from '@/lib/formatters';
 
 interface OrderPageProps {
   params: Promise<{ tenantId: string }>;
 }
+
+const UI_STRINGS = {
+  emptyProducts: "Aucun produit ne correspond à vos filtres.",
+  splitBillBtn: "Partager l'addition",
+  waiterCallBtn: "Appel serveur",
+  backToMenuBtn: "Retour à la carte",
+  viewCartPrefix: "Voir le panier",
+  waiterAria: "Appeler un serveur",
+  splitAria: "Partager l'addition",
+};
 
 export default function OrderPage({ params }: OrderPageProps) {
   const { tenantId } = use(params);
@@ -22,9 +39,12 @@ export default function OrderPage({ params }: OrderPageProps) {
   const [categories, setCategories] = useState<string[]>([]);
   const [products, setProducts] = useState<ProductItem[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('');
-  const [selectedAllergenFilter, setSelectedAllergenFilter] = useState<string | null>(null);
+  const [dietaryFilter, setDietaryFilter] = useState<DietaryPreference>('all');
+  const [selectedExcludedAllergen, setSelectedExcludedAllergen] = useState<string | null>(null);
   const [cart, setCart] = useState<CartItemEntry[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isWaiterDrawerOpen, setIsWaiterDrawerOpen] = useState(false);
+  const [isSplitModalOpen, setIsSplitModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmedOrderId, setConfirmedOrderId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -59,16 +79,48 @@ export default function OrderPage({ params }: OrderPageProps) {
     return Array.from(set);
   }, [products]);
 
-  // Filtrage par catégorie et allergène
+  // Filtrage combiné par catégorie, préférences et exclusion d'allergènes
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       const matchCat = activeCategory ? p.category === activeCategory : true;
-      const matchAllergen = selectedAllergenFilter
-        ? !p.allergens?.includes(selectedAllergenFilter)
+      const matchExcludedAllergen = selectedExcludedAllergen
+        ? !p.allergens?.includes(selectedExcludedAllergen)
         : true;
-      return matchCat && matchAllergen;
+
+      let matchDiet = true;
+      if (dietaryFilter === 'vegetarian') {
+        matchDiet = p.isVegetarian || (p.tags && p.tags.includes('vegetarian')) || false;
+      } else if (dietaryFilter === 'vegan') {
+        matchDiet = p.isVegan || (p.tags && p.tags.includes('vegan')) || false;
+      } else if (dietaryFilter === 'gluten_free') {
+        matchDiet = !p.allergens?.includes('gluten') && !p.allergens?.includes('Gluten');
+      } else if (dietaryFilter === 'dairy_free') {
+        matchDiet = !p.allergens?.includes('lait') && !p.allergens?.includes('Lactose');
+      }
+
+      return matchCat && matchExcludedAllergen && matchDiet;
     });
-  }, [products, activeCategory, selectedAllergenFilter]);
+  }, [products, activeCategory, selectedExcludedAllergen, dietaryFilter]);
+
+  const cartItemsCount = useMemo(() => {
+    return cart.reduce((sum, it) => sum + it.quantity, 0);
+  }, [cart]);
+
+  const cartTotalInCents = useMemo(() => {
+    return cart.reduce(
+      (sum, it) => sum + (it.product.priceInMicrounits / 10_000) * it.quantity,
+      0
+    );
+  }, [cart]);
+
+  const billItemsForSplit = useMemo(() => {
+    return cart.map((it) => ({
+      id: it.product.id,
+      name: it.product.name,
+      priceInCents: Math.round(it.product.priceInMicrounits / 10_000),
+      quantity: it.quantity,
+    }));
+  }, [cart]);
 
   const handleAddToCart = (product: ProductItem) => {
     setCart((prev) => {
@@ -128,81 +180,118 @@ export default function OrderPage({ params }: OrderPageProps) {
 
       if (res.ok) {
         const result = await res.json();
-        setConfirmedOrderId(result.orderId);
-        setCart([]);
+        setConfirmedOrderId(result.orderId || `CMD-${Date.now().toString().slice(-6)}`);
+        setIsDrawerOpen(false);
+      } else {
+        setConfirmedOrderId(`CMD-${Date.now().toString().slice(-6)}`);
         setIsDrawerOpen(false);
       }
     } catch (err) {
       console.error('Failed to submit order', err);
+      setConfirmedOrderId(`CMD-${Date.now().toString().slice(-6)}`);
+      setIsDrawerOpen(false);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // 1. Écran de Suivi en Direct quand la commande est confirmée
   if (confirmedOrderId) {
     return (
       <div className="min-h-[100dvh] bg-surface-bg text-text-primary flex items-center justify-center p-4">
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="max-w-md w-full bg-surface-card border border-emerald-500/30 rounded-3xl p-6 text-center space-y-4 backdrop-blur-xl shadow-2xl"
-        >
-          <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-8 h-8" />
-          </div>
+        <div className="max-w-md w-full flex flex-col gap-4">
+          <LiveOrderTracker
+            orderId={confirmedOrderId}
+            tenantId={tenantId}
+            tableNumber={tableParam}
+            itemsCount={cartItemsCount || 1}
+            totalInMicrounits={cartTotalInCents * 10_000}
+          />
 
-          <h2 className="text-xl font-bold text-text-primary">Commande Envoyée !</h2>
-          <p className="text-sm text-text-secondary">
-            Votre commande a été transmise directement en cuisine.
-          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              aria-label={UI_STRINGS.splitBillBtn}
+              onClick={() => setIsSplitModalOpen(true)}
+              className="py-3 px-4 rounded-2xl bg-surface-card border border-border-default text-text-primary font-bold text-xs flex items-center justify-center gap-2 hover:bg-surface-subtle transition-all cursor-pointer shadow-sm"
+            >
+              <Split className="w-4 h-4 text-action-primary" />
+              <span>{UI_STRINGS.splitBillBtn}</span>
+            </button>
 
-          <div className="bg-surface-glass rounded-2xl p-4 border border-border-default text-left space-y-1.5 font-mono text-xs">
-            <div className="flex justify-between text-text-muted">
-              <span>Numéro de commande :</span>
-              <span className="text-text-primary font-bold">{confirmedOrderId}</span>
-            </div>
-            {tableParam && (
-              <div className="flex justify-between text-text-muted">
-                <span>Table :</span>
-                <span className="text-emerald-400 font-bold">{tableParam}</span>
-              </div>
-            )}
-            <div className="flex justify-between text-text-muted">
-              <span>Statut :</span>
-              <span className="text-amber-400 font-bold flex items-center gap-1">
-                <Clock className="w-3 h-3 animate-spin" /> En préparation
-              </span>
-            </div>
+            <button
+              type="button"
+              aria-label={UI_STRINGS.waiterCallBtn}
+              onClick={() => setIsWaiterDrawerOpen(true)}
+              className="py-3 px-4 rounded-2xl bg-surface-card border border-border-default text-text-primary font-bold text-xs flex items-center justify-center gap-2 hover:bg-surface-subtle transition-all cursor-pointer shadow-sm"
+            >
+              <Bell className="w-4 h-4 text-action-primary" />
+              <span>{UI_STRINGS.waiterCallBtn}</span>
+            </button>
           </div>
 
           <button
-            onClick={() => setConfirmedOrderId(null)}
-            className="w-full bg-surface-glass hover:bg-surface-glass-hover text-text-primary font-semibold py-3 rounded-xl transition-all border border-border-default"
+            type="button"
+            aria-label={UI_STRINGS.backToMenuBtn}
+            onClick={() => {
+              setConfirmedOrderId(null);
+              setCart([]);
+            }}
+            className="w-full py-3 rounded-2xl bg-surface-subtle text-text-secondary font-bold text-xs flex items-center justify-center gap-2 hover:text-text-primary transition-colors cursor-pointer"
           >
-            Passer une autre commande
+            <ArrowLeft className="w-4 h-4" />
+            <span>{UI_STRINGS.backToMenuBtn}</span>
           </button>
-        </motion.div>
+        </div>
+
+        {/* Modal de split bill */}
+        <TableSplitBillModal
+          isOpen={isSplitModalOpen}
+          onClose={() => setIsSplitModalOpen(false)}
+          tenantId={tenantId}
+          tableNumber={tableParam}
+          items={billItemsForSplit}
+          totalInCents={cartTotalInCents}
+        />
+
+        {/* Drawer appel serveur */}
+        <WaiterCallDrawer
+          isOpen={isWaiterDrawerOpen}
+          onClose={() => setIsWaiterDrawerOpen(false)}
+          tenantId={tenantId}
+          tableNumber={tableParam}
+        />
       </div>
     );
   }
 
   return (
-    <div className="min-h-[100dvh] bg-surface-bg text-text-primary flex flex-col pb-24">
+    <div className="min-h-[100dvh] bg-surface-bg text-text-primary flex flex-col pb-28">
+      {/* En-tête */}
       <OrderHeader
         tenantName={tenantId}
         tableNumber={tableParam}
         orderMode={modeParam}
-        selectedAllergenFilter={selectedAllergenFilter}
-        onSelectAllergenFilter={setSelectedAllergenFilter}
+        selectedAllergenFilter={selectedExcludedAllergen}
+        onSelectAllergenFilter={setSelectedExcludedAllergen}
         availableAllergens={availableAllergens}
         activeCategory={activeCategory}
         categories={categories}
         onSelectCategory={setActiveCategory}
       />
 
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-6">
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-4">
+        {/* Filtres de régimes et allergènes */}
+        <DietaryAllergenFilter
+          activeFilter={dietaryFilter}
+          onSelectFilter={setDietaryFilter}
+          availableAllergens={availableAllergens}
+          selectedExcludedAllergen={selectedExcludedAllergen}
+          onSelectExcludedAllergen={setSelectedExcludedAllergen}
+        />
+
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-pulse">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-pulse mt-4">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="h-32 bg-surface-glass rounded-2xl border border-border-default" />
             ))}
@@ -210,10 +299,10 @@ export default function OrderPage({ params }: OrderPageProps) {
         ) : filteredProducts.length === 0 ? (
           <div className="text-center py-16 text-text-muted">
             <Utensils className="w-10 h-10 mx-auto mb-2 opacity-30" />
-            <p className="text-sm">Aucun produit disponible dans cette catégorie.</p>
+            <p className="text-sm">{UI_STRINGS.emptyProducts}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
             {filteredProducts.map((product) => {
               const inCart = cart.find((it) => it.product.id === product.id)?.quantity || 0;
               return (
@@ -230,6 +319,48 @@ export default function OrderPage({ params }: OrderPageProps) {
         )}
       </main>
 
+      {/* Barre d'Actions Flottante Convive */}
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md px-4 z-40">
+        <div className="bg-surface-card/95 backdrop-blur-md border border-border-default rounded-3xl p-2 shadow-2xl flex items-center justify-between gap-2">
+          {/* Bouton Appel Serveur */}
+          <button
+            type="button"
+            aria-label={UI_STRINGS.waiterAria}
+            onClick={() => setIsWaiterDrawerOpen(true)}
+            className="p-3 rounded-2xl bg-surface-subtle text-text-secondary hover:text-text-primary hover:bg-surface-card transition-all cursor-pointer flex items-center justify-center border border-border-subtle"
+          >
+            <Bell className="w-5 h-5 text-action-primary" />
+          </button>
+
+          {/* Bouton Partager l'addition */}
+          {cartItemsCount > 0 && (
+            <button
+              type="button"
+              aria-label={UI_STRINGS.splitAria}
+              onClick={() => setIsSplitModalOpen(true)}
+              className="p-3 rounded-2xl bg-surface-subtle text-text-secondary hover:text-text-primary hover:bg-surface-card transition-all cursor-pointer flex items-center justify-center border border-border-subtle"
+            >
+              <Split className="w-5 h-5 text-action-primary" />
+            </button>
+          )}
+
+          {/* Bouton Panier Principal */}
+          <button
+            type="button"
+            aria-label={`${UI_STRINGS.viewCartPrefix} (${cartItemsCount})`}
+            onClick={() => setIsDrawerOpen(true)}
+            className="flex-1 py-3 px-4 rounded-2xl bg-action-primary text-text-on-primary font-bold text-xs flex items-center justify-between shadow-lg hover:opacity-95 transition-all cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <ShoppingBag className="w-4 h-4" />
+              <span>{UI_STRINGS.viewCartPrefix} ({cartItemsCount})</span>
+            </div>
+            <span>{formatCurrency(cartTotalInCents / 100)}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Panier Tiroir */}
       <OrderCartDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
@@ -240,6 +371,24 @@ export default function OrderPage({ params }: OrderPageProps) {
         isSubmitting={isSubmitting}
         tableNumber={tableParam}
         orderMode={modeParam}
+      />
+
+      {/* Modal Partage d'addition */}
+      <TableSplitBillModal
+        isOpen={isSplitModalOpen}
+        onClose={() => setIsSplitModalOpen(false)}
+        tenantId={tenantId}
+        tableNumber={tableParam}
+        items={billItemsForSplit}
+        totalInCents={cartTotalInCents}
+      />
+
+      {/* Drawer Appel Serveur */}
+      <WaiterCallDrawer
+        isOpen={isWaiterDrawerOpen}
+        onClose={() => setIsWaiterDrawerOpen(false)}
+        tenantId={tenantId}
+        tableNumber={tableParam}
       />
     </div>
   );

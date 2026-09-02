@@ -510,4 +510,14 @@ export interface OPSEvents {
     ticketId: string;
     reason: string;
   };
+
+  'ops.waiter_call_requested': {
+    v: 1;
+    tenantId: string;
+    tableId: string;
+    tableName: string;
+    reason: string;
+    note?: string;
+    requestedAt: string;
+  };
 }

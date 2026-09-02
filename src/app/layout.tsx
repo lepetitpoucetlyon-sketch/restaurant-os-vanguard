@@ -7,6 +7,7 @@ import { whiteLabelInstanceConfig } from "@/config/instance";
 import { ErrorBoundary } from "@/shared/components/ErrorBoundary";
 import { NexusProviderStack } from "@components/layout/NexusProviderStack";
 import { ImpersonationBanner } from "@components/layout/ImpersonationBanner";
+import { OfflineSyncBanner } from "@/shared/components/layout/OfflineSyncBanner";
 import { ServiceWorkerRegistration } from "@components/ServiceWorkerRegistration";
 import { ThemeApplicator } from "@/shared/components/ThemeApplicator";
 
@@ -99,6 +100,7 @@ export default function RootLayout({
             <NexusProviderStack>
                 <ThemeApplicator />
                 <ImpersonationBanner />
+                <OfflineSyncBanner />
                 {children}
             </NexusProviderStack>
           </Suspense>

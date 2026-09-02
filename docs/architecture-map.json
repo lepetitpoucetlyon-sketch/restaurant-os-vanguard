@@ -1,16 +1,16 @@
 {
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
-    "files": 3738,
-    "loc": 360905,
+    "files": 3745,
+    "loc": 362412,
     "pages": 87,
     "apiRoutes": 218
   },
   "layers": {
     "kernel": 39,
     "lib": 231,
-    "shared": 736,
-    "modules": 1615,
+    "shared": 737,
+    "modules": 1620,
     "app": 466,
     "verticals": 253,
     "infrastructure": 43,
@@ -22,7 +22,7 @@
   },
   "sharedSubfolders": {
     "atoms": 2,
-    "components": 204,
+    "components": 205,
     "connector-manifest": 12,
     "constants": 1,
     "contexts": 9,
@@ -61,7 +61,7 @@
   },
   "piliers": {
     "commerce": {
-      "files": 348,
+      "files": 352,
       "barrel": true
     },
     "compliance": {
@@ -81,7 +81,7 @@
       "barrel": true
     },
     "intelligence": {
-      "files": 171,
+      "files": 172,
       "barrel": true
     },
     "logistics": {
@@ -170,7 +170,7 @@
     },
     {
       "file": "src/shared/eventBus/events/ops.events.ts",
-      "loc": 514
+      "loc": 524
     },
     {
       "file": "src/app/(admin)/admin/mcc/components/TenantChangelogPanel.tsx",

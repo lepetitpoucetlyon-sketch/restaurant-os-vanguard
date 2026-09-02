@@ -96,4 +96,10 @@ export type {
 } from './acquisition/onboarding/schemas/companyProfile';
 export { emptyCompanyProfile } from './acquisition/onboarding/schemas/companyProfile';
 
+// Expérience Convive (B2C & À Table)
+export { TableSplitBillModal, type BillItem } from './components/ordering/TableSplitBillModal';
+export { LiveOrderTracker, type LiveOrderStatus } from './components/ordering/LiveOrderTracker';
+export { WaiterCallDrawer, type ServiceRequestType } from './components/ordering/WaiterCallDrawer';
+export { DietaryAllergenFilter, type DietaryPreference } from './components/ordering/DietaryAllergenFilter';
+
 

@@ -11,6 +11,9 @@ export interface ProductItem {
   priceInMicrounits: number;
   description?: string;
   allergens?: string[];
+  isVegetarian?: boolean;
+  isVegan?: boolean;
+  tags?: string[];
   available: boolean;
   imageUrl?: string;
 }

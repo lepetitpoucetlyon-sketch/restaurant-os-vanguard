@@ -82,3 +82,7 @@ export { registerAutomationRunner } from "./automations/engine/AutomationRunner"
 export { BrandingService, type BrandInput } from "./services/BrandingService";
 export { Slayer } from "./services/Slayer";
 export { IdentityGuardService } from "./services/IdentityGuardService";
+
+// 🚀 Reprise d'Antériorité & Airlock
+export { AirlockPipeline } from "./migration/AirlockPipeline";
+export { AirlockMigrationPanel } from "./migration/components/AirlockMigrationPanel";
