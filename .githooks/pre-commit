@@ -32,7 +32,7 @@ echo "🔒 [3/6] Intégrité des gates (anti-triche : personne ne desserre une g
 node scripts/verify-gate-integrity.mjs || fail "Intégrité des gates : une gate a été desserrée."
 
 echo "🔄 [4/6] Cycles d'import…"
-node scripts/cycles-inspector.mjs --threshold=430 || fail "Cycles d'import au-dessus du seuil."
+node scripts/cycles-inspector.mjs --threshold=0 || fail "Cycles d'import — seuil ratchet 0 dépassé."
 
 echo "🎨 [5/6] Design guard (patterns bannis retires du plan v3.1)…"
 bash scripts/design-guard-diff.sh || fail "Design guard : pattern banni introduit — cf. CLAUDE-VIBE.md."
