@@ -1,6 +1,8 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
+import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { KDSCourseSequencingEngine } from '@/modules/ops';
@@ -9,23 +11,72 @@ import { toMicrounits } from '@/shared/schemas/primitives';
 
 export const dynamic = 'force-dynamic';
 
+const GUEST_CHANNELS = new Set(['QR_TABLE', 'CLICK_AND_COLLECT', 'KIOSK', 'MOBILE_GUEST']);
+
+const OrderItemSchema = z.object({
+  productId: z.string().min(1),
+  categoryId: z.string().optional(),
+  name: z.string().optional(),
+  quantity: z.number().int().min(1).max(99).default(1),
+  unitPriceInMicrounits: z.number().min(0),
+  taxRate: z.enum(['0.055', '0.10', '0.20']).optional(),
+  course: z.enum(['entree', 'plat', 'dessert']).optional().default('plat'),
+  notes: z.string().max(280).optional(),
+});
+
+const OrderBodySchema = z.object({
+  tenantId: z.string().min(1).optional(),
+  tableId: z.string().nullable().optional(),
+  channel: z.string().optional(),
+  items: z.array(OrderItemSchema).min(1, 'items: tableau non vide obligatoire'),
+});
+
+/**
+ * POST /api/v1/orders
+ *
+ * Deux modes :
+ *  - **Personnel** (jeton d'auth valide) : `operatorId` = l'utilisateur, `channel` libre.
+ *  - **Convive** (parcours QR, sans session) : rate-limité par IP, `tenantId` pris
+ *    dans le corps, `operatorId` = `guest`, `channel` contraint à la liste convive.
+ *
+ * Dans les deux cas : écriture `ops_flows/`, init cadençage KDS, émission `order.placed`.
+ */
 export async function POST(req: NextRequest) {
   const caller = await requireTenantUser(req);
-  if (isDenied(caller)) return caller;
+
+  let body: z.infer<typeof OrderBodySchema>;
+  try {
+    body = OrderBodySchema.parse(await req.json());
+  } catch (err) {
+    const details = err instanceof z.ZodError ? err.flatten() : undefined;
+    return NextResponse.json({ error: 'Payload de commande invalide', details }, { status: 400 });
+  }
+
+  let tenantId: string;
+  let operatorId: string;
+  let channel: string;
+
+  if (!isDenied(caller)) {
+    tenantId = caller.tenantId;
+    operatorId = caller.uid;
+    channel = body.channel || 'MOBILE_SERVER';
+  } else {
+    // Mode convive : borne / QR code, sans session.
+    tenantId = body.tenantId || req.nextUrl.searchParams.get('tenantId') || '';
+    if (!tenantId) {
+      return NextResponse.json({ error: 'tenantId obligatoire pour une commande convive' }, { status: 400 });
+    }
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+    const rl = await getRateLimiter().check(`orders:${ip}:${tenantId}`, 12, 60 * 1000);
+    if (!rl.allowed) {
+      return NextResponse.json({ error: 'Trop de commandes envoyées, patientez un instant.' }, { status: 429 });
+    }
+    operatorId = 'guest';
+    channel = GUEST_CHANNELS.has(body.channel ?? '') ? (body.channel as string) : 'QR_TABLE';
+  }
 
   try {
-    const body = await req.json();
-    const { tableId, channel = 'MOBILE_SERVER', items } = body;
-    const tenantId = caller.tenantId;
-    const operatorId = caller.uid;
-
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return NextResponse.json(
-        { error: 'Champ obligatoire manquant: items (tableau non vide)' },
-        { status: 400 }
-      );
-    }
-
+    const { tableId, items } = body;
     const orderId = `ord_api_${Date.now()}_${Math.random().toString(36).substring(7)}`;
     const now = Date.now();
 
@@ -39,13 +90,13 @@ export async function POST(req: NextRequest) {
       taxRate: (it.taxRate ?? '0.10') as '0.055' | '0.10' | '0.20',
       discountInMicrounits: toMicrounits(0),
       modifiers: [],
-      course: it.course || 'plat',
+      course: it.course,
       notes: it.notes,
     }));
 
     const totalInMicrounits = cartItems.reduce(
       (sum, it) => sum + it.unitPriceInMicrounits * it.quantity,
-      0
+      0,
     );
 
     const orderRecord = {
@@ -62,13 +113,8 @@ export async function POST(req: NextRequest) {
       createdAt: now,
     };
 
-    // 1. Persistance
     await Nexus.adapter.set(`tenants/${tenantId}/ops_flows/${orderId}`, orderRecord);
-
-    // 2. Initialisation cadençage KDS
-    await KDSCourseSequencingEngine.initializeOrderCourses(tenantId, orderId, tableId, cartItems);
-
-    // 3. Émission sur le bus
+    await KDSCourseSequencingEngine.initializeOrderCourses(tenantId, orderId, tableId ?? undefined, cartItems);
     await NexusEventBus.emit('order.placed', {
       v: 1,
       orderId,
@@ -79,14 +125,8 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(
-      {
-        orderId,
-        status: 'pending',
-        totalInMicrounits,
-        itemsCount: cartItems.length,
-        createdAt: now,
-      },
-      { status: 201 }
+      { orderId, status: 'pending', totalInMicrounits, itemsCount: cartItems.length, createdAt: now },
+      { status: 201 },
     );
   } catch (err) {
     return NextResponse.json({ error: 'Erreur traitement commande API' }, { status: 500 });

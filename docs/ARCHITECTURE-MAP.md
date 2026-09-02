@@ -5,18 +5,18 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3745** · LOC : **362 412**
-- Pages : **87** · Routes API : **218**
+- Fichiers `.ts/.tsx` : **3752** · LOC : **363 743**
+- Pages : **87** · Routes API : **221**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
 | `src/modules/` | 1620 |
-| `src/shared/` | 737 |
-| `src/app/` | 466 |
+| `src/shared/` | 740 |
+| `src/app/` | 469 |
 | `src/verticals/` | 253 |
-| `src/lib/` | 231 |
-| `src/infrastructure/` | 43 |
+| `src/lib/` | 230 |
+| `src/infrastructure/` | 42 |
 | `src/kernel/` | 39 |
 | `src/store/` | 24 |
 | `src/config/` | 9 |
@@ -35,7 +35,7 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 223 |
+| `shared/eventBus/` | 226 |
 | `shared/components/` | 205 |
 | `shared/nexus/` | 140 |
 | `shared/hooks/` | 52 |
@@ -91,6 +91,6 @@
 | `src/__tests__/helpers/saga.intelligence.test.ts` | 607 |
 | `src/__tests__/helpers/saga.ops2.test.ts` | 586 |
 | `src/__tests__/helpers/saga.finance2.test.ts` | 571 |
-| `src/config/navConfig.ts` | 530 |
+| `src/config/navConfig.ts` | 539 |
 | `src/shared/eventBus/events/ops.events.ts` | 524 |
 | `src/app/(admin)/admin/mcc/components/TenantChangelogPanel.tsx` | 503 |

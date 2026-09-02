@@ -13,21 +13,20 @@ import {
   TableSplitBillModal,
   LiveOrderTracker,
 } from '@/modules/commerce';
-import { authedFetch } from '@/lib/client/authedFetch';
-import { formatCurrency } from '@/lib/formatters';
+import { formatMu } from '@/lib/formatters';
 
 interface OrderPageProps {
   params: Promise<{ tenantId: string }>;
 }
 
 const UI_STRINGS = {
-  emptyProducts: "Aucun produit ne correspond à vos filtres.",
+  emptyProducts: 'Aucun produit ne correspond à vos filtres.',
   splitBillBtn: "Partager l'addition",
-  waiterCallBtn: "Appel serveur",
-  backToMenuBtn: "Retour à la carte",
-  viewCartPrefix: "Voir le panier",
-  waiterAria: "Appeler un serveur",
-  splitAria: "Partager l'addition",
+  waiterCallBtn: 'Appel serveur',
+  backToMenuBtn: 'Retour à la carte',
+  viewCartPrefix: 'Voir le panier',
+  waiterAria: 'Appeler un serveur',
+  submitError: 'Envoi de la commande impossible. Appelez un serveur ou réessayez.',
 };
 
 export default function OrderPage({ params }: OrderPageProps) {
@@ -46,15 +45,16 @@ export default function OrderPage({ params }: OrderPageProps) {
   const [isWaiterDrawerOpen, setIsWaiterDrawerOpen] = useState(false);
   const [isSplitModalOpen, setIsSplitModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [confirmedOrderId, setConfirmedOrderId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Charger le menu public v1
+  // Menu public v1 (endpoint non authentifié — parcours QR convive).
   useEffect(() => {
     async function loadMenu() {
       try {
         setLoading(true);
-        const res = await authedFetch(`/api/v1/menu?tenantId=${encodeURIComponent(tenantId)}`);
+        const res = await fetch(`/api/v1/menu?tenantId=${encodeURIComponent(tenantId)}`, { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           setCategories(data.categories || ['Entrées', 'Plats', 'Desserts', 'Boissons']);
@@ -72,14 +72,12 @@ export default function OrderPage({ params }: OrderPageProps) {
     loadMenu();
   }, [tenantId]);
 
-  // Allergènes disponibles dans le menu
   const availableAllergens = useMemo(() => {
     const set = new Set<string>();
     products.forEach((p) => p.allergens?.forEach((a) => set.add(a)));
     return Array.from(set);
   }, [products]);
 
-  // Filtrage combiné par catégorie, préférences et exclusion d'allergènes
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       const matchCat = activeCategory ? p.category === activeCategory : true;
@@ -102,32 +100,30 @@ export default function OrderPage({ params }: OrderPageProps) {
     });
   }, [products, activeCategory, selectedExcludedAllergen, dietaryFilter]);
 
-  const cartItemsCount = useMemo(() => {
-    return cart.reduce((sum, it) => sum + it.quantity, 0);
-  }, [cart]);
+  const cartItemsCount = useMemo(() => cart.reduce((sum, it) => sum + it.quantity, 0), [cart]);
 
-  const cartTotalInCents = useMemo(() => {
-    return cart.reduce(
-      (sum, it) => sum + (it.product.priceInMicrounits / 10_000) * it.quantity,
-      0
-    );
-  }, [cart]);
+  const cartTotalInMicrounits = useMemo(
+    () => cart.reduce((sum, it) => sum + it.product.priceInMicrounits * it.quantity, 0),
+    [cart],
+  );
 
-  const billItemsForSplit = useMemo(() => {
-    return cart.map((it) => ({
-      id: it.product.id,
-      name: it.product.name,
-      priceInCents: Math.round(it.product.priceInMicrounits / 10_000),
-      quantity: it.quantity,
-    }));
-  }, [cart]);
+  const billItemsForSplit = useMemo(
+    () =>
+      cart.map((it) => ({
+        id: it.product.id,
+        name: it.product.name,
+        priceInMicrounits: it.product.priceInMicrounits,
+        quantity: it.quantity,
+      })),
+    [cart],
+  );
 
   const handleAddToCart = (product: ProductItem) => {
     setCart((prev) => {
       const existing = prev.find((it) => it.product.id === product.id);
       if (existing) {
         return prev.map((it) =>
-          it.product.id === product.id ? { ...it, quantity: it.quantity + 1 } : it
+          it.product.id === product.id ? { ...it, quantity: it.quantity + 1 } : it,
         );
       }
       return [...prev, { product, quantity: 1 }];
@@ -138,11 +134,9 @@ export default function OrderPage({ params }: OrderPageProps) {
     setCart((prev) => {
       const existing = prev.find((it) => it.product.id === productId);
       if (!existing) return prev;
-      if (existing.quantity <= 1) {
-        return prev.filter((it) => it.product.id !== productId);
-      }
+      if (existing.quantity <= 1) return prev.filter((it) => it.product.id !== productId);
       return prev.map((it) =>
-        it.product.id === productId ? { ...it, quantity: it.quantity - 1 } : it
+        it.product.id === productId ? { ...it, quantity: it.quantity - 1 } : it,
       );
     });
   };
@@ -158,44 +152,41 @@ export default function OrderPage({ params }: OrderPageProps) {
 
   const handleSubmitOrder = async () => {
     if (cart.length === 0) return;
+    setIsSubmitting(true);
+    setSubmitError(null);
     try {
-      setIsSubmitting(true);
-      const payload = {
-        tableId: tableParam || undefined,
-        channel: modeParam === 'takeaway' ? 'CLICK_AND_COLLECT' : 'QR_TABLE',
-        items: cart.map((it) => ({
-          productId: it.product.id,
-          name: it.product.name,
-          quantity: it.quantity,
-          unitPriceInMicrounits: it.product.priceInMicrounits,
-          notes: it.notes,
-        })),
-      };
-
-      const res = await authedFetch('/api/v1/orders', {
+      const res = await fetch('/api/v1/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          tenantId,
+          tableId: tableParam || undefined,
+          channel: modeParam === 'takeaway' ? 'CLICK_AND_COLLECT' : 'QR_TABLE',
+          items: cart.map((it) => ({
+            productId: it.product.id,
+            name: it.product.name,
+            quantity: it.quantity,
+            unitPriceInMicrounits: it.product.priceInMicrounits,
+            notes: it.notes,
+          })),
+        }),
       });
 
-      if (res.ok) {
-        const result = await res.json();
-        setConfirmedOrderId(result.orderId || `CMD-${Date.now().toString().slice(-6)}`);
-        setIsDrawerOpen(false);
-      } else {
-        setConfirmedOrderId(`CMD-${Date.now().toString().slice(-6)}`);
-        setIsDrawerOpen(false);
-      }
+      if (!res.ok) throw new Error(`orders ${res.status}`);
+      const result = await res.json();
+      if (!result.orderId) throw new Error('orderId manquant');
+
+      setConfirmedOrderId(result.orderId);
+      setIsDrawerOpen(false);
     } catch (err) {
       console.error('Failed to submit order', err);
-      setConfirmedOrderId(`CMD-${Date.now().toString().slice(-6)}`);
-      setIsDrawerOpen(false);
+      setSubmitError(UI_STRINGS.submitError);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // 1. Écran de Suivi en Direct quand la commande est confirmée
+  // Écran de suivi en direct : la commande existe réellement côté serveur.
   if (confirmedOrderId) {
     return (
       <div className="min-h-[100dvh] bg-surface-bg text-text-primary flex items-center justify-center p-4">
@@ -205,7 +196,7 @@ export default function OrderPage({ params }: OrderPageProps) {
             tenantId={tenantId}
             tableNumber={tableParam}
             itemsCount={cartItemsCount || 1}
-            totalInMicrounits={cartTotalInCents * 10_000}
+            totalInMicrounits={cartTotalInMicrounits}
           />
 
           <div className="grid grid-cols-2 gap-2">
@@ -244,17 +235,16 @@ export default function OrderPage({ params }: OrderPageProps) {
           </button>
         </div>
 
-        {/* Modal de split bill */}
         <TableSplitBillModal
           isOpen={isSplitModalOpen}
           onClose={() => setIsSplitModalOpen(false)}
           tenantId={tenantId}
+          orderId={confirmedOrderId}
           tableNumber={tableParam}
           items={billItemsForSplit}
-          totalInCents={cartTotalInCents}
+          totalInMicrounits={cartTotalInMicrounits}
         />
 
-        {/* Drawer appel serveur */}
         <WaiterCallDrawer
           isOpen={isWaiterDrawerOpen}
           onClose={() => setIsWaiterDrawerOpen(false)}
@@ -267,7 +257,6 @@ export default function OrderPage({ params }: OrderPageProps) {
 
   return (
     <div className="min-h-[100dvh] bg-surface-bg text-text-primary flex flex-col pb-28">
-      {/* En-tête */}
       <OrderHeader
         tenantName={tenantId}
         tableNumber={tableParam}
@@ -281,7 +270,6 @@ export default function OrderPage({ params }: OrderPageProps) {
       />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-4">
-        {/* Filtres de régimes et allergènes */}
         <DietaryAllergenFilter
           activeFilter={dietaryFilter}
           onSelectFilter={setDietaryFilter}
@@ -317,12 +305,12 @@ export default function OrderPage({ params }: OrderPageProps) {
             })}
           </div>
         )}
+
+        {submitError && <p className="mt-4 text-center text-xs font-medium text-error">{submitError}</p>}
       </main>
 
-      {/* Barre d'Actions Flottante Convive */}
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md px-4 z-40">
         <div className="bg-surface-card/95 backdrop-blur-md border border-border-default rounded-3xl p-2 shadow-2xl flex items-center justify-between gap-2">
-          {/* Bouton Appel Serveur */}
           <button
             type="button"
             aria-label={UI_STRINGS.waiterAria}
@@ -332,19 +320,6 @@ export default function OrderPage({ params }: OrderPageProps) {
             <Bell className="w-5 h-5 text-action-primary" />
           </button>
 
-          {/* Bouton Partager l'addition */}
-          {cartItemsCount > 0 && (
-            <button
-              type="button"
-              aria-label={UI_STRINGS.splitAria}
-              onClick={() => setIsSplitModalOpen(true)}
-              className="p-3 rounded-2xl bg-surface-subtle text-text-secondary hover:text-text-primary hover:bg-surface-card transition-all cursor-pointer flex items-center justify-center border border-border-subtle"
-            >
-              <Split className="w-5 h-5 text-action-primary" />
-            </button>
-          )}
-
-          {/* Bouton Panier Principal */}
           <button
             type="button"
             aria-label={`${UI_STRINGS.viewCartPrefix} (${cartItemsCount})`}
@@ -355,12 +330,11 @@ export default function OrderPage({ params }: OrderPageProps) {
               <ShoppingBag className="w-4 h-4" />
               <span>{UI_STRINGS.viewCartPrefix} ({cartItemsCount})</span>
             </div>
-            <span>{formatCurrency(cartTotalInCents / 100)}</span>
+            <span>{formatMu(cartTotalInMicrounits)}</span>
           </button>
         </div>
       </div>
 
-      {/* Panier Tiroir */}
       <OrderCartDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
@@ -373,17 +347,6 @@ export default function OrderPage({ params }: OrderPageProps) {
         orderMode={modeParam}
       />
 
-      {/* Modal Partage d'addition */}
-      <TableSplitBillModal
-        isOpen={isSplitModalOpen}
-        onClose={() => setIsSplitModalOpen(false)}
-        tenantId={tenantId}
-        tableNumber={tableParam}
-        items={billItemsForSplit}
-        totalInCents={cartTotalInCents}
-      />
-
-      {/* Drawer Appel Serveur */}
       <WaiterCallDrawer
         isOpen={isWaiterDrawerOpen}
         onClose={() => setIsWaiterDrawerOpen(false)}
