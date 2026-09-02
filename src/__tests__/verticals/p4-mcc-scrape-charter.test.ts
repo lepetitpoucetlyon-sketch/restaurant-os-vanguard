@@ -46,7 +46,11 @@ const mockScrapeCompany = vi.mocked(scrapeCompany);
 
 // ── SUT ────────────────────────────────────────────────────────────────────────
 
-import { resolveBrandingOverlayFromRequest } from '@/lib/mcc/provisioning/steps/provisioningSteps';
+import {
+    resolveBrandingOverlayFromRequest,
+    registerCompanyScraper,
+    type CompanyScraperFn,
+} from '@/lib/mcc/provisioning/steps/provisioningSteps';
 import type { CompanyProfile } from '@/modules/commerce/acquisition/onboarding/schemas/companyProfile';
 
 function makeProfile(
@@ -81,6 +85,9 @@ function makeProfile(
 describe('resolveBrandingOverlayFromRequest', () => {
     beforeEach(() => {
         mockScrapeCompany.mockReset();
+        // ADR-015 : le scraper est injecté par le composition root (DI), plus par
+        // un import du barrel @/modules/commerce (cassait le cycle #8).
+        registerCompanyScraper(mockScrapeCompany as unknown as CompanyScraperFn);
     });
 
     it('sans websiteUrl → null (skip scrape, pas d\'appel réseau)', async () => {

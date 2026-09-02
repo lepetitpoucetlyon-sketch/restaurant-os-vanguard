@@ -15,13 +15,9 @@ export interface InstanceSecurityConfig {
 export const DEFAULT_SECURITY_CONFIG: InstanceSecurityConfig = {
     authorizedDomains: {
         'lepetitpoucet.com': 'lepetitpoucet',
-        'bistrolyon.fr': 'bistrolyon',
-        'urbanburger.io': 'urbanburger',
         'kitchen-os.app': 'restaurant-os',
         // --- 🛰️ Firebase Hosting Standard ---
         'kitchen-os-lepetitpoucet.web.app': 'lepetitpoucet',
-        'kitchen-os-bistrolyon.web.app': 'bistrolyon',
-        'kitchen-os-urbanburger.web.app': 'urbanburger',
         'restaurant-os-web.web.app': 'restaurant-os',
         'restaurant-os-web.firebaseapp.com': 'restaurant-os',
         // --- 🛠️ Localhost / Dev ---
@@ -30,8 +26,6 @@ export const DEFAULT_SECURITY_CONFIG: InstanceSecurityConfig = {
     },
     authorizedProjects: {
         'lepetitpoucet': 'lepetitpoucet-prod',
-        'bistrolyon': 'bistrolyon-prod',
-        'urbanburger': 'urbanburger-prod',
         'restaurant-os': 'kitchen-os-gastro', // FIXED
         '__dev__': 'kitchen-os-gastro'
     },
