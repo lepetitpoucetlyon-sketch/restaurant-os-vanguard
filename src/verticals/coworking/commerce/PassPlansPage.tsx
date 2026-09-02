@@ -14,6 +14,7 @@ export function PassPlansPage() {
     if (!activeTenantId) return;
     OccupancyAnalyticsService.listActivePassPlans(activeTenantId)
       .then(setPlans)
+      .catch((e) => console.error('[PassPlansPage]', e))
       .finally(() => setLoading(false));
   }, [activeTenantId]);
 

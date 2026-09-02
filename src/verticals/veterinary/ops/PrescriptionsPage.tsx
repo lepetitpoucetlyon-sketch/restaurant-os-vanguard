@@ -14,6 +14,7 @@ export function PrescriptionsPage() {
     if (!activeTenantId) return;
     CareLoadAnalyticsService.listActivePrescriptions(activeTenantId)
       .then(setPrescriptions)
+      .catch((e) => console.error('[PrescriptionsPage]', e))
       .finally(() => setLoading(false));
   }, [activeTenantId]);
 

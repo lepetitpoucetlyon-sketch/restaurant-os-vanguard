@@ -145,7 +145,7 @@ export class PrintingService {
     if (!receipt) return;
     const bytes = new EscPosBuilder(receipt.paperWidth, receipt.hasCutter).openCashDrawer();
     // Fire and forget
-    void this.print({ type: 'test' }, { ...receipt }).then(() => {});
+    void this.print({ type: 'test' }, { ...receipt }).then(() => {}).catch(() => {});
     // Send open drawer command directly if network
     if (receipt.connection.type === 'network') {
       void printNetworkRaw(receipt.connection, bytes);

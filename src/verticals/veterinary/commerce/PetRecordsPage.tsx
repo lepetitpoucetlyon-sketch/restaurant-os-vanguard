@@ -25,6 +25,7 @@ export function PetRecordsPage() {
         setReport(r);
         setPatients(p);
       })
+      .catch((e) => console.error('[PetRecordsPage]', e))
       .finally(() => setLoading(false));
   }, [activeTenantId]);
 

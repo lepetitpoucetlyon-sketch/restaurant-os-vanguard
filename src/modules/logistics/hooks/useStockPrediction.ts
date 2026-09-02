@@ -24,6 +24,7 @@ export function useStockPrediction(
         setLoading(true);
         StockOracleRegistry.predictStockout(itemId, itemMovements, currentQty as Quantity)
             .then(setPrediction)
+            .catch((e) => console.error('[useStockPrediction]', e))
             .finally(() => setLoading(false));
     }, [itemId, currentQty, allMovements]);
 

@@ -14,6 +14,7 @@ export function FlowerDeliveriesPage() {
     if (!activeTenantId) return;
     FlowerFreshnessService.listDeliveries(activeTenantId)
       .then(setDeliveries)
+      .catch((e) => console.error('[FlowerDeliveriesPage]', e))
       .finally(() => setLoading(false));
   }, [activeTenantId]);
 

@@ -42,18 +42,18 @@ function loadSentry(): Promise<SentryLike | null> {
 
 export const Sentry: SentryLike = {
     captureException(err, ctx) {
-        loadSentry().then(s => s?.captureException(err, ctx));
+        loadSentry().then(s => s?.captureException(err, ctx)).catch(() => { /* télémétrie best-effort */ });
     },
     captureMessage(msg, ctxOrLevel) {
-        loadSentry().then(s => s?.captureMessage(msg, ctxOrLevel));
+        loadSentry().then(s => s?.captureMessage(msg, ctxOrLevel)).catch(() => { /* télémétrie best-effort */ });
     },
     setTag(key, value) {
-        loadSentry().then(s => s?.setTag(key, value));
+        loadSentry().then(s => s?.setTag(key, value)).catch(() => { /* télémétrie best-effort */ });
     },
     setContext(name, context) {
-        loadSentry().then(s => s?.setContext(name, context));
+        loadSentry().then(s => s?.setContext(name, context)).catch(() => { /* télémétrie best-effort */ });
     },
     addBreadcrumb(b) {
-        loadSentry().then(s => s?.addBreadcrumb(b));
+        loadSentry().then(s => s?.addBreadcrumb(b)).catch(() => { /* télémétrie best-effort */ });
     },
 };

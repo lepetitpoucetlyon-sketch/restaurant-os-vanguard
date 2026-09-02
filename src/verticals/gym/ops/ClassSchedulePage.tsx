@@ -14,6 +14,7 @@ export function ClassSchedulePage() {
     if (!activeTenantId) return;
     MembershipAnalyticsService.listUpcomingClasses(activeTenantId)
       .then(setSessions)
+      .catch((e) => console.error('[ClassSchedulePage]', e))
       .finally(() => setLoading(false));
   }, [activeTenantId]);
 

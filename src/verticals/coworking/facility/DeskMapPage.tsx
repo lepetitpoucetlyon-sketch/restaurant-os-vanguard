@@ -25,6 +25,7 @@ export function DeskMapPage() {
         setReport(r);
         setBookings(b);
       })
+      .catch((e) => console.error('[DeskMapPage]', e))
       .finally(() => setLoading(false));
   }, [activeTenantId]);
 

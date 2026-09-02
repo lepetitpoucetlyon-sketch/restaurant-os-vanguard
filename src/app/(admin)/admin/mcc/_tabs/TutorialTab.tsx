@@ -10,7 +10,7 @@ interface CodeBlockProps {
 function CodeBlock({ code, comment }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const copy = () => {
-    navigator.clipboard.writeText(code).then(() => {
+    navigator.clipboard.writeText(code).catch(() => {}).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     });

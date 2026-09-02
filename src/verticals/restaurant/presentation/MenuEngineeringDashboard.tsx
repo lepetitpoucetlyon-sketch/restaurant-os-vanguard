@@ -35,6 +35,7 @@ export function MenuEngineeringDashboard() {
     menuEngineeringService
       .computeReport({ tenantId: activeTenantId, periodStart: start, periodEnd: end })
       .then(setReport)
+      .catch((e) => console.error('[MenuEngineeringDashboard]', e))
       .finally(() => setLoading(false));
   }, [activeTenantId]);
 

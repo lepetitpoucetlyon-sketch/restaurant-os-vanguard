@@ -36,7 +36,7 @@ const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [frDictionary, setFrDictionary] = useState<SovereignData | null>(null);
 
     useEffect(() => {
-        loadTranslations('fr').then(dict => setFrDictionary(dict));
+        loadTranslations('fr').then(dict => setFrDictionary(dict)).catch((e) => console.error('[NexusCore] i18n fr', e));
     }, []);
 
     useEffect(() => {

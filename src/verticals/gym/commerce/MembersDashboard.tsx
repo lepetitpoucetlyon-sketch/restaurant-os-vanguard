@@ -25,6 +25,7 @@ export function MembersDashboard() {
         setReport(r);
         setMemberships(m);
       })
+      .catch((e) => console.error('[MembersDashboard]', e))
       .finally(() => setLoading(false));
   }, [activeTenantId]);
 

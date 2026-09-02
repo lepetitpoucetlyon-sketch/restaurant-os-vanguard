@@ -85,7 +85,7 @@ export default function ApiKeysPanel() {
   };
 
   const copyToClipboard = (value: string) => {
-    navigator.clipboard.writeText(value).then(() => toast.success('Clé copiée'));
+    navigator.clipboard.writeText(value).then(() => toast.success('Clé copiée')).catch(() => toast.error('Copie impossible'));
   };
 
   return (

@@ -239,6 +239,12 @@ export const m7_swallowed = {
       const lignes = src.split('\n');
       lignes.forEach((l, i) => {
         if (!/\.then\(/.test(l)) return;
+        // PIÈGE : `import('x').then(m => m.Named)` n'est PAS une promesse flottante —
+        // c'est du code-splitting (React.lazy / next/dynamic / componentLoader), dont
+        // l'échec de chargement remonte à Suspense/ErrorBoundary du framework.
+        // Les confondre gonflait m7 de ~100 (200 → ~95).
+        if (/\bimport\s*\([^)]*\)\s*\.then\(/.test(l)) return;
+        if (/\b(?:dynamic|lazy|componentLoader|React\.lazy)\b/.test(l)) return;
         if (!/\.catch\(/.test(lignes.slice(i, i + 6).join('\n'))) flottantes.push(`${c.rel(f)}:${i + 1}`);
       });
     }

@@ -25,6 +25,7 @@ export function FloralArrangementsPage() {
         setReport(r);
         setArrangements(a);
       })
+      .catch((e) => console.error('[FloralArrangementsPage]', e))
       .finally(() => setLoading(false));
   }, [activeTenantId]);
 
