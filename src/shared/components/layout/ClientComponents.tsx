@@ -27,14 +27,27 @@ const Map3DOverlay = dynamic(
     { ssr: false }
 );
 
-const PUBLIC_MARKETING_PATHS = ['/verticales', '/pricing', '/signup', '/legal', '/landing', '/welcome', '/auth', '/login', '/demo', '/showcase'];
+const OPS_PREFIXES = [
+    '/pos', '/pos-mobile', '/kds', '/kitchen', '/bar', '/floor-plan',
+    '/reservations', '/staff', '/planning', '/timeclock', '/recruitment',
+    '/leaves', '/finance', '/haccp', '/inventory', '/crm', '/marketing',
+    '/analytics', '/intelligence', '/menu-builder', '/registre', '/operations',
+    '/settings/branding', '/settings/security', '/facility', '/franchise',
+    '/automations', '/mon-espace', '/welcome-staff', '/accounting-portal',
+    '/migration', '/vanguard-simulator', '/aide', '/pms', '/suppliers',
+    '/menu-engineering', '/hygiene', '/nf525', '/kiosk',
+];
 
 export function ClientComponents({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
-    const isPublic = pathname === '/' || pathname === '/welcome' || pathname?.startsWith('/admin') || PUBLIC_MARKETING_PATHS.some(p => pathname?.startsWith(p));
+    // Le shell d'exploitation (Sidebar, MobileNavBar, Launchpad) est STRICTEMENT
+    // réservé aux écrans internes du personnel (OPS_PREFIXES).
+    // Les parcours convives (/order, /menu), publics (landing, marketing), et admin
+    // ne doivent JAMAIS monter la coque d'exploitation.
+    const isOpsRoute = pathname ? OPS_PREFIXES.some(prefix => pathname === prefix || pathname.startsWith(`${prefix}/`)) : false;
 
-    if (isPublic) {
+    if (!isOpsRoute) {
         return <>{children}</>;
     }
 

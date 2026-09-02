@@ -19,10 +19,45 @@ self.addEventListener('notificationclick', event => {
   event.waitUntil(clients.openWindow(event.notification.data.url));
 });
 
+const CACHE_NAME = 'restaurant-os-offline-v1';
+const OFFLINE_URL = '/offline';
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll([OFFLINE_URL, '/icons/icon-192.png']))
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+    )
+  );
+  self.clients.claim();
+});
+
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+
+  // Pour les requêtes de navigation de page, tentative réseau avec fallback vers la page /offline
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).catch(async () => {
+        const cache = await caches.open(CACHE_NAME);
+        const cached = await cache.match(OFFLINE_URL);
+        return cached || new Response('Mode hors-ligne Restaurant OS', {
+          headers: { 'Content-Type': 'text/html; charset=utf-8' },
+        });
+      })
+    );
+    return;
+  }
+
+  // Pour les autres assets statiques, cache puis réseau
   event.respondWith(
-    caches.match(event.request).then(cached => cached || fetch(event.request))
+    caches.match(event.request).then(cached => cached || fetch(event.request).catch(() => undefined))
   );
 });
 

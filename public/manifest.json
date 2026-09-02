@@ -1,14 +1,15 @@
 {
   "name": "Restaurant OS",
-  "short_name": "ROS",
+  "short_name": "Restaurant OS",
   "description": "Intelligence opérationnelle pour la restauration",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1A2350",
+  "background_color": "#0B0B0C",
   "theme_color": "#C5A059",
-  "orientation": "portrait-primary",
+  "orientation": "any",
   "scope": "/",
   "lang": "fr",
+  "categories": ["business", "productivity", "food"],
   "icons": [
     {
       "src": "/icons/icon-192.png",

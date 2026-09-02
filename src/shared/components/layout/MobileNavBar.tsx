@@ -44,21 +44,21 @@ const PRIMARY_NAV = [
 ];
 
 const GRID_ITEMS = [
-    { key: "kds", href: "/kds", icon: ChefHat, color: "#F97316" },
-    { key: "pos_mobile", href: "/pos-mobile", icon: MonitorSmartphone, color: "#3B82F6" },
-    { key: "reservations", href: "/reservations", icon: CalendarDays, color: "#EC4899" },
-    { key: "inventory", href: "/inventory", icon: Package, color: "#84CC16" },
-    { key: "timeclock", href: "/timeclock", icon: Clock, color: "#06B6D4" },
-    { key: "bar", href: "/bar", icon: Wine, color: "#F97316" },
-    { key: "crm", href: "/crm", icon: Heart, color: "#EC4899" },
-    { key: "hr", href: "/staff", icon: Users, color: "#06B6D4" },
-    { key: "planning", href: "/staff?tab=planning", icon: CalendarDays, color: "#06B6D4" },
-    { key: "haccp", href: "/haccp", icon: Sparkles, color: "#14B8A6" },
-    { key: "treasury", href: "/finance", icon: Wallet, color: "#EF4444" },
-    { key: "nf525", href: "/nf525", icon: FileCheck, color: "#F59E0B" },
-    { key: "analytics", href: "/analytics", icon: BarChart3, color: "#8B5CF6" },
-    { key: "registre", href: "/registre", icon: ScrollText, color: "#0EA5E9" },
-    { key: "settings", href: "/settings", icon: Settings, color: "#64748B" },
+    { key: "kds", href: "/kds", icon: ChefHat, colorClass: "text-orange-500 border-orange-500/30" },
+    { key: "pos_mobile", href: "/pos-mobile", icon: MonitorSmartphone, colorClass: "text-blue-500 border-blue-500/30" },
+    { key: "reservations", href: "/reservations", icon: CalendarDays, colorClass: "text-pink-500 border-pink-500/30" },
+    { key: "inventory", href: "/inventory", icon: Package, colorClass: "text-lime-500 border-lime-500/30" },
+    { key: "timeclock", href: "/timeclock", icon: Clock, colorClass: "text-cyan-500 border-cyan-500/30" },
+    { key: "bar", href: "/bar", icon: Wine, colorClass: "text-amber-500 border-amber-500/30" },
+    { key: "crm", href: "/crm", icon: Heart, colorClass: "text-rose-500 border-rose-500/30" },
+    { key: "hr", href: "/staff", icon: Users, colorClass: "text-sky-500 border-sky-500/30" },
+    { key: "planning", href: "/staff?tab=planning", icon: CalendarDays, colorClass: "text-sky-500 border-sky-500/30" },
+    { key: "haccp", href: "/haccp", icon: Sparkles, colorClass: "text-teal-500 border-teal-500/30" },
+    { key: "treasury", href: "/finance", icon: Wallet, colorClass: "text-red-500 border-red-500/30" },
+    { key: "nf525", href: "/nf525", icon: FileCheck, colorClass: "text-amber-500 border-amber-500/30" },
+    { key: "analytics", href: "/analytics", icon: BarChart3, colorClass: "text-violet-500 border-violet-500/30" },
+    { key: "registre", href: "/registre", icon: ScrollText, colorClass: "text-cyan-500 border-cyan-500/30" },
+    { key: "settings", href: "/settings", icon: Settings, colorClass: "text-slate-400 border-slate-400/30" },
 ];
 
 export function MobileNavBar() {
@@ -148,11 +148,10 @@ export function MobileNavBar() {
                                                     "w-14 h-14 rounded-2xl flex items-center justify-center border transition-all duration-300 shadow-soft", 
                                                     pathname === item.href 
                                                         ? "bg-accent-gold text-text-primary border-transparent shadow-glow scale-105" 
-                                                        : "bg-bg-primary text-text-muted hover:text-text-primary hover:scale-105 border-border"
+                                                        : cn("bg-bg-primary hover:text-text-primary hover:scale-105", item.colorClass)
                                                 )}
-                                                style={{ borderColor: pathname === item.href ? undefined : `${item.color}40` }}
                                             >
-                                                <item.icon className="w-6 h-6" style={{ color: pathname === item.href ? undefined : item.color }} />
+                                                <item.icon className="w-6 h-6" />
                                             </div>
                                             <span className="text-nano font-black uppercase tracking-wider text-text-muted text-center line-clamp-1 group-hover:text-text-primary transition-colors">
                                                 {/* Pas de repli ici : GRID_ITEMS ne porte pas de libellé

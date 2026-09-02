@@ -109,7 +109,14 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  serverExternalPackages: ['playwright', 'playwright-core', 'mqtt'],
+  serverExternalPackages: [
+    'playwright',
+    'playwright-core',
+    'mqtt',
+    'firebase-admin',
+    '@google-cloud/firestore',
+    'web-push',
+  ],
 
   // ── HTTP Security Headers (production-grade) ────────────────────────────────
   // X-Frame-Options, HSTS, CSP, XSS protection — standard SaaS.
