@@ -119,22 +119,12 @@ export class QualityEngine {
         const recentFailures = snapshots.filter(d => d.hygieneStatus === 'dirty');
         
         if (recentFailures.length >= 3) {
-            const { MaintenanceAgent } = await import('@/modules/facility');
-            await MaintenanceAgent.submitSOS({
+            const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+            await NexusEventBus.emit('facility.maintenance_required', {
                 tenantId,
-                userId: 'system_quality',
-                type: 'CRITICAL_BUG',
+                assetId: 'haccp_hygiene',
+                assetType: 'haccp',
                 description: 'Three consecutive deliveries failed hygiene standards. Mandatory floor audit required.',
-                pageKey: 'haccp',
-                systemState: { 
-                    currentRoute: '/quality', 
-                    orderCount: 0, 
-                    lastActions: ['THREAT_DETECTED'], 
-                    inventoryStatus: 'nominal', 
-                    offlineMode: false,
-                    activeModules: ['haccp']
-                },
-                logs: ['[QualityEngine] Initiating automated SOS due to repeated hygiene failures.']
             });
         }
     } catch (err) {

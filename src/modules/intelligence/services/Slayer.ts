@@ -87,9 +87,18 @@ export class Slayer {
                                 const nexusOrder = await DataDigester.digestOrder(rawOrder as import("@/shared/nexus/contracts").SovereignMap, { isLegacy: true });
                                 if (!nexusOrder) throw new Error("Validation Failed");
 
-                                // 2. SCELLAGE FISCAL (SHA-256 Post-Quantum)
-                                const { FinanceCore } = await import("@/modules/finance");
-                                const seal = await FinanceCore.sealRecordWithHash(nexusOrder.id, nexusOrder);
+                                // 2. SCELLAGE FISCAL (SHA-256 Post-Quantum via QuantumCrypto)
+                                const { QuantumCrypto } = await import("@/lib/QuantumCrypto");
+                                const secret = process.env.FISCAL_SIGNING_SECRET || 'legacy-slayer-seal';
+                                const qSeal = await QuantumCrypto.generateQuantumSeal(JSON.stringify(nexusOrder), secret);
+                                const seal = {
+                                    hash: qSeal.hash,
+                                    previousHash: '0',
+                                    sequence: 1,
+                                    signedPayload: qSeal.latticeSignature,
+                                    algorithm: 'SLH-DSA-SHAKE-256',
+                                    updatedAt: new Date().toISOString()
+                                };
                                 
                                 // Extension du type pour inclure le scellage fiscal sans cast "unknown"
                                 const sealedOrder = {

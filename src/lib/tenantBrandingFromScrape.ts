@@ -11,7 +11,7 @@
  * compatibilité descendante stricte (100% rétro-compatible avec les fixtures existantes).
  */
 
-import type { CompanyProfile } from '@/modules/commerce';
+import type { CompanyProfile } from '@/shared/nexus/contracts/onboarding.types';
 
 export interface ScrapedBrandingOverlay {
     primaryColor: string;
@@ -41,7 +41,7 @@ export function tenantBrandingFromScrape(
 ): ScrapedBrandingOverlay | null {
     if (!profile) return null;
     if (profile.branding.source !== 'scraped') return null;
-    const b = profile.branding as Record<string, unknown>;
+    const b = profile.branding as unknown as Record<string, unknown>;
 
     const overlay: ScrapedBrandingOverlay = {
         primaryColor: b.primaryColor as string,

@@ -4,7 +4,7 @@ import {
     ComplianceExtractionErrorSchema,
     type IdentityExtraction,
     type ComplianceExtractionError
-} from '@/modules/compliance';
+} from '@/shared/nexus/contracts/compliance.schemas';
 import { IDENTITY_GUARD_SYSTEM_PROMPT } from '@/config/prompts/compliance.prompt';
 import { toError } from "@/lib/toError";
 import { LLMManager } from '../ia/ai/LLMManager';

@@ -33,8 +33,8 @@ export const OraclePredictor: React.FC<OraclePredictorProps> = ({ prediction, it
                             <Sparkles className="w-5 h-5" />
                         </div>
                         <div>
-                            <h3 className="text-sm font-black uppercase tracking-widest text-text-primary">Oracle Prédictif v7</h3>
-                            <p className="text-nano text-text-muted font-light">Analyse Monte-Carlo • 1000 scénarios</p>
+                            <h3 className="text-sm font-black uppercase tracking-widest text-text-primary">Prévision de Rupture</h3>
+                            <p className="text-nano text-text-muted font-light">Estimation basée sur l'historique de consommation</p>
                         </div>
                     </div>
                     <StatusBadge 

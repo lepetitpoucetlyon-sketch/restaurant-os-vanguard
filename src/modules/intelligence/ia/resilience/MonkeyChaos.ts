@@ -14,10 +14,8 @@ export const MonkeyChaos = {
     async attackLedger(tenantId: string): Promise<{ success: boolean; message: string }> {
         logger.warn('🧪 [MonkeyChaos] Initiating Ledger Attack: Attempting unbalanced transaction...');
         try {
-            const { SovereignLedger } = await import('@/modules/finance');
-            // We bypass the standard recordTransfer to test the internal validation if possible,
-            // or we send a clearly broken request to verify the financier blocks it.
-            await SovereignLedger.getInstance(tenantId).recordTransfer({
+            const { Nexus } = await import('@/lib/nexus/NexusAdapter');
+            await Nexus.adapter.set(`tenants/${tenantId}/ledger/MONKEY-PATCH-2026`, {
                 debitAccount: 'SALES',
                 creditAccount: 'CASH',
                 amountInCents: 10000,

@@ -28,7 +28,11 @@ export interface ComplianceDocument {
   id: string;
   url: string;
   name: string;
-  status: 'valid' | 'expired' | 'missing' | 'pending';
+  title?: string;
+  description?: string;
+  lastUpdated?: string;
+  nextReview?: string;
+  status: 'valid' | 'expired' | 'missing' | 'pending' | 'attention' | 'certified';
   validUntil: string | null;
   updatedAt: string;
 }

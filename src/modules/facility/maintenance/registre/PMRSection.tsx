@@ -1,6 +1,6 @@
 "use client";
 
-import { useRegistre } from "@/shared/contexts/RegistreContext";
+import { useRegistre } from "@/shared/hooks";
 import type { PMRAmenagement } from "@/shared/nexus/contracts/context/registre.contracts";
 import { Accessibility, Calendar, Clock, CheckCircle2, AlertTriangle, Wrench, MapPin } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";

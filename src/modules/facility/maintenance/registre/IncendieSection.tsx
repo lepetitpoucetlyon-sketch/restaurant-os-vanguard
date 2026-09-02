@@ -1,6 +1,6 @@
 "use client";
 
-import { useRegistre } from "@/shared/contexts/RegistreContext";
+import { useRegistre } from "@/shared/hooks";
 import { Flame, MapPin, Calendar, Clock, CheckCircle2, AlertTriangle, Users, Plus } from "lucide-react";
 import { Button } from "@ui/Button";
 import { cn } from "@/lib/ui.foundations";
@@ -45,8 +45,8 @@ export function IncendieSection() {
                     </h3>
                     <span className="text-nano font-mono font-bold text-text-muted">{(extincteurs)?.length || 0} équipements</span>
                 </div>
-                <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border shadow-sm overflow-hidden">
-                    <table className="w-full text-sm text-left">
+                <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border shadow-sm overflow-hidden overflow-x-auto custom-scrollbar">
+                    <table className="w-full text-sm text-left min-w-[650px]">
                         <thead>
                             <tr className="bg-bg-tertiary/30 text-nano font-black text-text-muted uppercase tracking-[0.2em] border-b border-border">
                                 <th className="px-8 py-5">Emplacement</th>

@@ -88,13 +88,10 @@ export const MaintenanceAgent = {
      * AI CORE : Analyse Gemini Pro avec Injection d'ADN
      */
     async analyzeWithAI(ticket: MaintenanceTicket, context: MaintenanceTicketContext): Promise<MaintenanceAIAnalysis> {
-        const { LLMManager, AI_MODELS, DNAInjector } = await import('@/modules/intelligence');
-        const tenantDNA = await DNAInjector.getTenantDNA(ticket.tenantId);
+        const { TenantAIRegistry } = await import('@/kernel/ai/tenant/TenantAIRegistry');
+        const registry = await TenantAIRegistry.forTenant(ticket.tenantId);
 
         const userPrompt = `
-            === CLIENT DNA (Rules to respect) ===
-            ${tenantDNA}
-
             === MAINTENANCE REQUEST ===
             - Ticket ID: ${ticket.id}
             - Domain/Module: ${ticket.pageKey || 'Universal'}
@@ -118,9 +115,9 @@ export const MaintenanceAgent = {
             }
         `;
 
-        const response = await LLMManager.provider.generateText({
-            model: AI_MODELS.fast,
-            systemPrompt: 'You are the Senior SRE for Restaurant OS Empire.',
+        const response = await registry.provider.generateText({
+            model: 'fast',
+            systemPrompt: 'You are the Maintenance & Facility Assistant for Restaurant OS.',
             userPrompt,
             responseMimeType: 'application/json',
         });
@@ -154,6 +151,6 @@ export const MaintenanceAgent = {
      * 8. NOTIFICATION (Simple Log Final)
      */
     async finalizeTicket(ticketId: string, resolution: string) {
-        logger.info(`🏛️ [EMPIRE NOTIFICATION] Ticket ${ticketId} résolu.`, { resolution });
+        logger.info(`🔧 [MAINTENANCE NOTIFICATION] Ticket ${ticketId} résolu.`, { resolution });
     }
 };

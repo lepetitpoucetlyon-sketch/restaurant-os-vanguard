@@ -202,8 +202,8 @@ export function ProvisioningWizard({ onClose, onSuccess }: ProvisioningWizardPro
                             </div>
 
                             <div className="space-y-3">
-                                <h3 className="text-4xl font-serif text-text-primary uppercase italic tracking-tighter animate-pulse">Neural Expansion...</h3>
-                                <p className="text-xs text-text-muted uppercase tracking-[0.4em] font-bold">Allocating Cloud Resources & Generating Twins</p>
+                                <h3 className="text-4xl font-serif text-text-primary uppercase italic tracking-tighter animate-pulse">{"Déploiement en cours..."}</h3>
+                                <p className="text-xs text-text-muted uppercase tracking-[0.4em] font-bold">{"Initialisation de la base de données & configuration"}</p>
                             </div>
 
                             <div className="w-full max-w-sm space-y-4 pt-8">

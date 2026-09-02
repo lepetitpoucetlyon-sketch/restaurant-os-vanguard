@@ -1,10 +1,34 @@
 /**
- * OnboardingState — état du parcours d'onboarding B2B d'un tenant.
- * Persisté dans tenantConfig (merge post-seeding).
+ * OnboardingState & CompanyProfile — contrats d'onboarding B2B d'un tenant.
+ * Réside dans shared/nexus/contracts pour respecter la Loi des Couches (ADR-015).
  */
 
-import type { ImportCategory } from '@/modules/commerce/acquisition/onboarding/migration/types';
-import type { ConnectorId } from '@/modules/commerce/acquisition/onboarding/migration/connectors/types';
+import type { Microunits } from '@/shared/schemas/primitives';
+
+export type ImportCategory =
+  | 'menu'
+  | 'staff'
+  | 'crm'
+  | 'suppliers'
+  | 'inventory'
+  | 'recipes'
+  | 'reservations'
+  | 'statements'
+  | 'fec'
+  | 'floorplan'
+  | 'haccp_history';
+
+export type ConnectorId =
+    | 'zenchef'
+    | 'thefork'
+    | 'zelty'
+    | 'laddition'
+    | 'lightspeed'
+    | 'tiller'
+    | 'pennylane'
+    | 'sage'
+    | 'cashpad'
+    | 'popina';
 
 export type OnboardingMode = 'from_zero' | 'migration' | 'skipped';
 
@@ -71,3 +95,69 @@ export const DEFAULT_ONBOARDING_STATE: OnboardingState = {
         hasFiscalGenesis: true, // GENESIS seal créé par TenantSeeder
     },
 };
+
+// ── CompanyProfile contracts ──────────────────────────────────────────────────
+
+export interface CompanyIdentity {
+    name: string;
+    legalName?: string;
+    siren?: string;
+    address?: {
+        street?: string;
+        postalCode?: string;
+        city?: string;
+        country?: string;
+    };
+    phone?: string;
+    email?: string;
+    openingHours?: Record<string, string>;
+}
+
+export interface SectorSignals {
+    detectedVariant: string;
+    subVariantHint?: string;
+    confidence: number;
+    evidence: string[];
+}
+
+export interface ExtractedProductItem {
+    id: string;
+    name: string;
+    description: string;
+    priceInMicrounits: Microunits;
+    taxRate: number;
+    category: string;
+    isAvailable: boolean;
+    sourceUrl?: string;
+}
+
+export interface CompanyBranding {
+    primaryColor: string;
+    secondaryColor?: string;
+    logoUrl?: string;
+    fontFamily?: string;
+    source: 'scraped' | 'default';
+}
+
+export interface CompanyScale {
+    estimatedStaff?: number;
+    multiSite?: boolean;
+    siteCount?: number;
+    evidence: string[];
+}
+
+export interface CompanyScrapeRaw {
+    pagesCrawled: string[];
+    jsonLdBlocks: number;
+    warnings: string[];
+    scrapedAt: string;
+}
+
+export interface CompanyProfile {
+    identity: CompanyIdentity;
+    sectorSignals: SectorSignals;
+    catalog: ExtractedProductItem[];
+    branding: CompanyBranding;
+    scale: CompanyScale;
+    raw: CompanyScrapeRaw;
+}

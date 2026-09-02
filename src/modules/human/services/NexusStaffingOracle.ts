@@ -4,15 +4,14 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 /**
  * 🧑‍💼 NexusStaffingOracle - Restaurant OS
- * The Predictive HR Advisor of the Empire.
- * Grade X : Autonomous Planning Guard.
+ * Assistant de prévision des besoins en effectifs et dimensionnement des plannings.
  */
 export class NexusStaffingOracle {
     /**
      * Compares predicted demand with scheduled staff to identify gaps.
      */
     static async analyzeStaffingGaps(date: string): Promise<StaffingProposal | null> {
-        logger.info(`[StaffingOracle] Analyzing future reality for ${date}...`);
+        logger.info(`[StaffingOracle] Analyzing staffing requirements for ${date}...`);
 
         // 1. Fetch Dynamic Configuration
         let ratio = DEFAULT_STAFF_RATIO;

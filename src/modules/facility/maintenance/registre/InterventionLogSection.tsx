@@ -1,6 +1,6 @@
 "use client";
 
-import { useRegistre } from "@/shared/contexts/RegistreContext";
+import { useRegistre } from "@/shared/hooks";
 import { 
     Calendar, 
     BadgeCheck, 

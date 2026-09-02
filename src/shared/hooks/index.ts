@@ -40,3 +40,6 @@ export { useConnector } from './useConnector';
 export type { UseConnectorResult } from './useConnector';
 export { useUnsavedChanges } from './useUnsavedChanges';
 export type { UseUnsavedChangesOptions } from './useUnsavedChanges';
+export { useRegistre } from './useRegistre';
+export type { ComplianceDocument, PrestataireDocument, ExtincteurDocument, ExerciceDocument, InterventionDocument, PMRAmenagement } from './useRegistre';
+

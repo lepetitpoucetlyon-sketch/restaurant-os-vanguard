@@ -137,18 +137,41 @@ export interface ScrapeCharterInput {
     siret: string;
 }
 
+export type CompanyScraperFn = (input: {
+    websiteUrl: string;
+    fallbackName?: string;
+    siren?: string;
+}) => Promise<unknown>;
+
+let registeredScraper: CompanyScraperFn | null = null;
+
+export function registerCompanyScraper(scraper: CompanyScraperFn): void {
+    registeredScraper = scraper;
+}
+
+export function getRegisteredCompanyScraper(): CompanyScraperFn | null {
+    return registeredScraper;
+}
+
 export async function resolveBrandingOverlayFromRequest(
     input: ScrapeCharterInput,
+    customScraper?: CompanyScraperFn,
 ): Promise<ScrapedBrandingOverlay | null> {
     if (!input.websiteUrl) return null;
+    const scraper = customScraper ?? registeredScraper;
+    if (!scraper) {
+        logger.info('[MCC/prov] Aucun scraper de charte enregistré — fallback request.branding', {
+            websiteUrl: input.websiteUrl,
+        });
+        return null;
+    }
     try {
-        const { scrapeCompany } = await import('@/modules/commerce');
-        const profile = await scrapeCompany({
+        const profile = await scraper({
             websiteUrl: input.websiteUrl,
             fallbackName: input.companyName,
             siren: input.siret,
         });
-        const overlay = tenantBrandingFromScrape(profile);
+        const overlay = tenantBrandingFromScrape(profile as never);
         if (overlay) {
             logger.info('[MCC/prov] Charte extraite du site', {
                 websiteUrl: input.websiteUrl,

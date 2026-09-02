@@ -77,6 +77,10 @@ export * from './domain/schemas/giftcard';
 export * from './domain/schemas/customerAccount';
 export * from './domain/schemas/loyalty';
 
+import { registerCompanyScraper } from '@/lib/mcc/provisioning/steps/provisioningSteps';
+import { scrapeCompany as _scrapeCompany } from './acquisition/onboarding/services/CompanyScrapeAgent';
+registerCompanyScraper(_scrapeCompany as never);
+
 // P0 dé-stubbing (2026-08-22) : DigitalDnaCrawlerService supprimé (stub keyword-matching).
 // Remplacé par CompanyScrapeAgent (scrape RÉEL, SSRF-guard, JSON-LD parser).
 export {
@@ -91,4 +95,5 @@ export type {
     SectorSignals,
 } from './acquisition/onboarding/schemas/companyProfile';
 export { emptyCompanyProfile } from './acquisition/onboarding/schemas/companyProfile';
+
 

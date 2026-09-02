@@ -2,8 +2,8 @@
 export type RestaurantAmbiance = 'SERENITY' | 'RUSH_SPEED' | 'ELEGANCE_NIGHT';
 
 /**
- * 🕯️ AmbianceService - The Emotional Brain of the Empire
- * Adapts the UI "Soul" based on restaurant context and time of day.
+ * 💡 AmbianceService - Service de gestion d'ambiance et thème horaire
+ * Adapte le thème d'affichage et l'ambiance selon le contexte du service et l'heure de la journée.
  */
 export class AmbianceService {
     private static manualOverride: RestaurantAmbiance | null = null;

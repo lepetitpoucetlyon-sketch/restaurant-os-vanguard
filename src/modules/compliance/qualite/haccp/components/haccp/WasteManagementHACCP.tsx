@@ -2,7 +2,7 @@
 
 // @wip owner:compliance-team échéance:2026-Q4 — écran HACCP à intégrer dans le flow qualité (audit orphelins 2026-08-30)
 import { useHACCP } from "@nexus/guards/NexusGuardProvider";
-import { useRegistre } from "@/shared/contexts/RegistreContext";
+import { useRegistre } from "@/shared/hooks";
 import { 
     Trash2, 
     Droplets, 

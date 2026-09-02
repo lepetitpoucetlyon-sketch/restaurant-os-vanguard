@@ -1,5 +1,5 @@
 export { FleetCommander } from './FleetCommander';
-export { FleetComplianceService, type SiteIntegrityReport, type GlobalComplianceCertificate } from './FleetComplianceService';
+export { FleetComplianceService, type SiteIntegrityReport, type GlobalComplianceCertificate } from '@/shared/providers/fleet/FleetComplianceService';
 export { FleetTelemetryService, fleetTelemetry } from './FleetTelemetryService';
 export * from './FleetTelemetryExecutor';
 export { QuantumOrchestrator } from './QuantumOrchestrator';

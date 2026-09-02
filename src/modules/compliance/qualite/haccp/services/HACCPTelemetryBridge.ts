@@ -48,20 +48,12 @@ export const HACCPTelemetryBridge = {
 
       // 🚨 Trigger SOS if health is critical
       if (healthScore < 60 || criticalEvents > 2) {
-        const { MaintenanceAgent } = await import('@/modules/facility');
-        await MaintenanceAgent.submitSOS({
+        const { NexusEventBus } = await import('@/shared/eventBus/NexusEventBus');
+        await NexusEventBus.emit('facility.maintenance_required', {
           tenantId,
-          userId: 'system_haccp_bridge',
-          type: 'CRITICAL_BUG', // Used as generic critical signal
+          assetId: 'haccp_hygiene',
+          assetType: 'haccp',
           description: `HYGIENE CRITICAL: Health Score at ${healthScore}%. Multiple rejections or sanitation failures detected.`,
-          systemState: {
-            currentRoute: '/haccp',
-            orderCount: 0,
-            inventoryStatus: 'monitoring',
-            offlineMode: false,
-            lastActions: ['HACCP_AUTO_SCAN']
-          },
-          logs: [`Last health score: ${healthScore}`, `Critical rejections: ${criticalEvents}`]
         });
       }
 
