@@ -1,4 +1,5 @@
 /**
+ * @wip ops-service — Échéance: 2026-11-01
  * ServiceTicketService — gestion du cycle de vie d'un ServiceTicket.
  *
  * Transitions : OPEN → WORKING → READY → CLOSED (+CANCELLED)

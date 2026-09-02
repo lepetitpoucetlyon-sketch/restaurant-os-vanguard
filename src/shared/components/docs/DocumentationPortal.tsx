@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { CATEGORY_DOCS } from '@/lib/docs-data';
+import { CATEGORY_DOCS } from '@/lib/docs';
 import { RecipeTechnicalSheet } from '@/modules/ops';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUI } from '@/shared/hooks';

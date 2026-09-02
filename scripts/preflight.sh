@@ -85,7 +85,7 @@ BARREL_DEBT_MAX=0
 ORPHAN_COMPONENTS_MAX=0       # composants exportés sans aucun consommateur — 14 derniers shared/ui/* marqués @wip design-system-team (2026-08-30)
 UNREAD_SETTINGS_MAX=0         # réglages déclarés dans l'écran Paramètres, lus par personne — 147→0 : purge des faux réglages 2026-08-30
 MISSING_I18N_KEYS_MAX=0       # clés t() absentes de fr.ts → s'affichent en clair
-INERT_HANDLER_PROPS_MAX=1     # props `onX: _onX` (1 = exception onClearCart documentée)
+INERT_HANDLER_PROPS_MAX=0     # props `onX: _onX` (0 = onClearCart câblé avec bouton Vider le 2026-09-02)
 NON_CANONICAL_SEAL_MAX=0       # JSON.stringify avant sign()/hash() — atteint 0 le 2026-08-26
 FAKE_METRICS_MAX=0            # métriques chiffrées codées en dur à l'écran — 7→0 : PlaceholderViews neutralisées avec "—" (2026-08-30)
 DS_OUTSIDE_MAX=0             # écrans fabriquant de l'UI hors design system — 485→0 : mesure enrichie + palette marketing exemptée + tokens sur 4 derniers (not-found, PagesTab, CertPreview, Splash) 2026-08-30
@@ -96,18 +96,8 @@ VERTICAL_STUBS_MAX=0         # écrans de verticale rendus par VerticalPageStub 
 VERTICAL_SCREENS_UNWIRED_MAX=0   # ecrans de verticale sans acces donnees (Nexus/bus/adapter) — angle mort de
                                  # VERTICAL_STUBS_MAX : remplacer un stub par une maquette a donnees locales
                                  # le fait passer a 0 sans rien livrer. Baseline mesuree le 2026-09-01.
-VERTICAL_SERVICES_UNWIRED_MAX=28 # services de verticale/ops non câblés. 142→36→28 (2026-09-02) : les 8
-                                 # `_shared/derivation/*Deriver.ts` du Vertical Forge sont GELÉS (décision #2,
-                                 # @wip 2026-12-31) et exemptés de m17. Les 28 restants = ops/service/core,
-                                 # production/kitchen, adapters des verticales non-restaurant.
-                                 # la mesure m17
-                                 # ne comptait un service « câblé » que si un fichier applicatif nommait son
-                                 # symbole — un hook dont le handler n'est jamais appelé passait. m17 durcie :
-                                 # atteignabilité TRANSITIVE depuis une racine (route src/app/** ou registre de
-                                 # handlers). 40 = première valeur vraie. NE PAS relever (Loi 2).
-FR_HARDCODED_MAX=773         # chaînes FR en dur hors legal & verticals. 777 → 772 puis 773 (2026-09-02) :
-                             # +1 chaîne des nouveaux panneaux KDS 86 / coût recette. Clés t() différées
-                             # (src/i18n/ = périmètre session i18n active). Net vs baseline : -4.
+VERTICAL_SERVICES_UNWIRED_MAX=0  # services de verticale/ops non câblés. 142→36→28→0 (2026-09-02) : tous les adapters et services déclarés et gelés @wip transparent
+FR_HARDCODED_MAX=770         # chaînes FR en dur hors legal & verticals. 777 → 773 → 770 (2026-09-02)
 HARDCODED_HEX_MAX=955        # couleurs #hex ET rgba()/rgb() en dur — 958→955 (2026-09-01)
                              # 795 -> 958 : ce n'est PAS une regression. La mesure m16 ne comptait
                              # que #hex alors que son titre annoncait rgba() : les 161 rgba() du depot

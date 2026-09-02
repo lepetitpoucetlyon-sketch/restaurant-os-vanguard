@@ -1,4 +1,4 @@
-// Core Agnostic Interfaces for ops/production
+/** @wip ops-production — Échéance: 2026-11-01. Core Agnostic Interfaces for ops/production */
 
 export interface IProductionOrder {
   id: string;

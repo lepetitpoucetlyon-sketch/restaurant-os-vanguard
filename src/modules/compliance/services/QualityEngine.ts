@@ -2,7 +2,7 @@ import { NexusTransaction } from '@/lib/adapters/NexusTransaction';
 import { logger } from '@/lib/logger';
 import { HACCPTelemetryBridge } from '../qualite/haccp/services/HACCPTelemetryBridge';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { FiscalEngine } from '@/lib/fiscal';
+import { FiscalEngine } from '@/lib/mcc/fiscal/FiscalEngine';
 import { SharedKernel } from '@/lib/shared-kernel';
 
 import { 

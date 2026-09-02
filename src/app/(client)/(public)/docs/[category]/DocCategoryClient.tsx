@@ -3,7 +3,7 @@
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { DocumentationPortal } from "@/shared/components/docs";
-import { CATEGORY_DOCS } from "@/lib/docs-data";
+import { CATEGORY_DOCS } from "@/lib/docs";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 

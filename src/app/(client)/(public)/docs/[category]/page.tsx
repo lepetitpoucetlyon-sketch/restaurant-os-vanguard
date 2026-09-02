@@ -1,6 +1,5 @@
-
 import React from "react";
-import { CATEGORY_DOCS } from "@/lib/docs-data";
+import { CATEGORY_DOCS } from "@/lib/docs";
 import DocCategoryClient from "./DocCategoryClient";
 
 export function generateStaticParams() {

@@ -179,7 +179,7 @@ export const MacroBrain = {
                     const lastSeal  = sorted[0];
 
                     // Créer le sceau de maintenance NF525
-                    const { FiscalEngine } = await import('@/lib/fiscal');
+                    const { FiscalEngine } = await import('@/lib/mcc/fiscal/FiscalEngine');
                     const seal = await FiscalEngine.sealEntry(
                         `macro_seal_${instanceId}_${Date.now()}`,
                         {

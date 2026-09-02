@@ -17,6 +17,23 @@ export function registerFeatureFlagSyncHandler(): () => void {
             enabled,
             syncedAt: new Date().toISOString(),
           });
+          try {
+            const { ChangelogService } = await import('@/lib/mcc/ChangelogService');
+            await ChangelogService.record({
+              tenantId,
+              action: enabled ? 'FEATURE_FLAG_ENABLED' : 'FEATURE_FLAG_DISABLED',
+              category: 'FEATURE_FLAG',
+              key: `featureFlags.${flagKey}`,
+              title: `Feature flag ${flagKey} ${enabled ? 'activé' : 'désactivé'}`,
+              description: `Le feature flag "${flagKey}" a été basculé à "${enabled}" par ${payload.updatedBy || 'l\'opérateur MCC'}.`,
+              appliedBy: payload.updatedBy || 'mcc-operator',
+              authorType: 'developer',
+              after: { enabled },
+              scope: tenantIds.length > 1 ? 'fleet' : 'tenant',
+            });
+          } catch {
+            // Ignorer si échec journalisation
+          }
         })
       );
 

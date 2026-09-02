@@ -3,8 +3,8 @@ import { logger } from '@/lib/logger';
 
 function extractTag(xml: string, tag: string): string {
   const patterns = [
-    new RegExp(`<(?:[a-z]+:)?${tag}[^>]*>([^<]+)<`, 'i'),
-    new RegExp(`<${tag}[^>]*>([^<]+)<`, 'i'),
+    new RegExp(`<(?:[a-z0-9]+:)?${tag}(?:\\s[^>]*)?>([^<]+)<\\/(?:[a-z0-9]+:)?${tag}>`, 'i'),
+    new RegExp(`<(?:[a-z0-9]+:)?${tag}(?:\\s[^>]*)?>([^<]+)<`, 'i'),
   ];
   for (const re of patterns) {
     const m = xml.match(re);
@@ -14,7 +14,7 @@ function extractTag(xml: string, tag: string): string {
 }
 
 function extractSection(xml: string, tag: string): string {
-  const re = new RegExp(`<(?:[a-z]+:)?${tag}[^>]*>([\\s\\S]*?)<\\/(?:[a-z]+:)?${tag}>`, 'i');
+  const re = new RegExp(`<(?:[a-z0-9]+:)?${tag}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/(?:[a-z0-9]+:)?${tag}>`, 'i');
   const m = xml.match(re);
   return m ? m[1] : '';
 }
@@ -104,8 +104,9 @@ export function parseEInvoiceXml(xml: string, providerInvoiceId?: string): Inbou
   const format = detectFormat(xml);
   logger.info(`[FacturXParser] Format détecté : ${format}`);
 
-  const invoiceNumber = extractTag(xml, 'ID') || extractTag(xml, 'ID');
-  const issueDateRaw = extractTag(xml, 'DateTimeString') || extractTag(xml, 'IssueDate');
+  const exchangedDoc = extractSection(xml, 'ExchangedDocument');
+  const invoiceNumber = (exchangedDoc ? extractTag(exchangedDoc, 'ID') : '') || extractTag(xml, 'ID');
+  const issueDateRaw = (exchangedDoc ? extractTag(exchangedDoc, 'DateTimeString') : '') || extractTag(xml, 'DateTimeString') || extractTag(xml, 'IssueDate');
   const issueDate = issueDateRaw.length === 8
     ? `${issueDateRaw.slice(0, 4)}-${issueDateRaw.slice(4, 6)}-${issueDateRaw.slice(6, 8)}`
     : issueDateRaw;

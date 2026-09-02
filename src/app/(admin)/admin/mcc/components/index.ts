@@ -42,3 +42,4 @@ export * from './VerticalActivePanel';
 export * from './HardwareHealthGrid';
 export * from './FiscalArchiveExportPanel';
 export * from './TenantHealthPanel';
+export * from './NewChangelogEntryModal';

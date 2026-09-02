@@ -1,7 +1,7 @@
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
 import type { PurchaseOrder, DeliveryNote } from './types';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
-import { DocumentVault } from '@/lib/vault';
+import { DocumentVault } from '@/lib/mcc/vault/DocumentVault';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 /**

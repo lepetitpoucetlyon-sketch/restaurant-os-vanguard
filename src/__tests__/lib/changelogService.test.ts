@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import { ChangelogService, autoCategory } from '@/lib/mcc/ChangelogService';
+import { ChangelogService, autoCategory, autoAuthorType } from '@/lib/mcc/ChangelogService';
 import type { ChangelogEntry, ChangelogInput } from '@/lib/mcc/ChangelogService';
 
 vi.mock('server-only', () => ({}));
@@ -35,6 +35,10 @@ describe('autoCategory()', () => {
     ['featureFlags.kds',          'CONFIG_UPDATE', 'FEATURE_FLAG'],
     ['capabilities.loyalty',      'CONFIG_UPDATE', 'FEATURE_FLAG'],
     ['billing.tier',              'CONFIG_UPDATE', 'BILLING'],
+    [undefined,                   'GENESIS_CREATED','GENESIS'],
+    [undefined,                   'DEV_HOTFIX_VAT', 'DEV_HOTFIX'],
+    [undefined,                   'CORE_UPDATE_V4', 'CORE_UPDATE'],
+    [undefined,                   'EVOLUTION_ORDER','EVOLUTION'],
     [undefined,                   'UPGRADE_VERSION','UPGRADE'],
     [undefined,                   'ROLLOUT_PATCH',  'ROLLOUT'],
     [undefined,                   'MODULE_ENABLED', 'FEATURE_FLAG'],
@@ -47,10 +51,26 @@ describe('autoCategory()', () => {
   });
 });
 
+// ── autoAuthorType ───────────────────────────────────────────────────────────
+
+describe('autoAuthorType()', () => {
+  it.each([
+    ['ai-agent:gemini-pro', 'ai_agent'],
+    ['ai-support-agent',    'ai_agent'],
+    ['system:seeder',       'system'],
+    ['system',              'system'],
+    ['dev@restaurant-os.fr','developer'],
+    ['mcc-operator',        'developer'],
+    ['contact@bistrot.fr',  'client'],
+  ])('appliedBy=%s → %s', (appliedBy, expected) => {
+    expect(autoAuthorType(appliedBy)).toBe(expected);
+  });
+});
+
 // ── record() ─────────────────────────────────────────────────────────────────
 
 describe('ChangelogService.record()', () => {
-  it('écrit l\'entrée dans mcc/changelog/{id} et la retourne', async () => {
+  it('écrit l\'entrée dans mcc/changelog/{id} et la retourne avec hash et authorType', async () => {
     const entry = await ChangelogService.record(BASE_INPUT);
 
     expect(mockSet).toHaveBeenCalledOnce();
@@ -61,6 +81,9 @@ describe('ChangelogService.record()', () => {
     expect(data.appliedBy).toBe('uid-admin');
     expect(data.scope).toBe('tenant');
     expect(data.category).toBe('CONFIG');
+    expect(data.authorType).toBe('client');
+    expect(typeof data.commitHash).toBe('string');
+    expect(data.commitHash).toHaveLength(7);
     expect(typeof data.appliedAt).toBe('string');
     expect(entry).toMatchObject({ tenantId: 'tenant-001', scope: 'tenant' });
   });
@@ -137,8 +160,54 @@ describe('ChangelogService.getByCategory()', () => {
     await ChangelogService.getByCategory('UPGRADE', 'tenant-x');
     const opts = mockQuery.mock.calls[0]![1];
     expect(opts?.where).toHaveLength(2);
-    const fields = opts!.where!.map((w: any) => w.field);
+    const fields = opts!.where!.map((w: { field: string }) => w.field);
     expect(fields).toContain('category');
     expect(fields).toContain('tenantId');
+  });
+});
+
+// ── getRecentContextForAI() ──────────────────────────────────────────────────
+
+describe('ChangelogService.getRecentContextForAI()', () => {
+  it('fusionne et formate l\'historique tenant et flotte pour l\'IA', async () => {
+    mockQuery.mockImplementation((_, opts) => {
+      const isFleet = opts?.where?.[0]?.value === '__FLEET__';
+      if (isFleet) {
+        return Promise.resolve([
+          {
+            id: 'fleet-1',
+            tenantId: '__FLEET__',
+            category: 'CORE_UPDATE',
+            action: 'OTA_V4',
+            title: 'Mise à jour v4.5.0',
+            description: 'Déploiement moteur fiscal',
+            appliedBy: 'system',
+            authorType: 'system',
+            appliedAt: '2026-09-02T10:00:00.000Z',
+          }
+        ]);
+      }
+      return Promise.resolve([
+        {
+          id: 'tenant-1',
+          tenantId: 'tenant-001',
+          category: 'DEV_HOTFIX',
+          action: 'FIX_VAT',
+          title: 'Correction TVA midi',
+          description: 'Ajustement taux 10%',
+          appliedBy: 'dev@core.fr',
+          authorType: 'developer',
+          appliedAt: '2026-09-02T12:00:00.000Z',
+        }
+      ]);
+    });
+
+    const context = await ChangelogService.getRecentContextForAI('tenant-001', 5);
+
+    expect(context).toContain('[DEV_HOTFIX]');
+    expect(context).toContain('Correction TVA midi');
+    expect(context).toContain('[CORE_UPDATE]');
+    expect(context).toContain('Mise à jour v4.5.0');
+    expect(context.indexOf('Correction TVA midi')).toBeLessThan(context.indexOf('Mise à jour v4.5.0')); // Plus récent en premier
   });
 });

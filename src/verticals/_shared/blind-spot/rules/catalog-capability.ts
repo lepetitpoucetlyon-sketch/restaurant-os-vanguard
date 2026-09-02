@@ -1,4 +1,5 @@
 /**
+ * @wip vertical-forge — Échéance: 2026-11-01
  * 🛒 Règles d'angles morts — famille "catalog_capability".
  *
  * Le catalogue scrapé révèle un besoin métier concret, mais la capability

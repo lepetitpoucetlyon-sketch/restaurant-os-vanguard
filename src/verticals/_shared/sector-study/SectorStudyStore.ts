@@ -1,4 +1,5 @@
 /**
+ * @wip vertical-forge — Échéance: 2026-11-01
  * 🗄️ SectorStudyStore — persistance MCC des études sectorielles.
  *
  * Rôle : versionner et exposer les `SectorStudy` produites par `runSectorStudy`

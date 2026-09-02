@@ -1,4 +1,5 @@
 /**
+ * @wip vertical-forge — Échéance: 2026-11-01
  * Pont OPTIONNEL entre le SectorStudyAgent (agnostique) et le pilier intelligence.
  *
  * Volontairement HORS du barrel sector-study : seuls les appelants qui veulent

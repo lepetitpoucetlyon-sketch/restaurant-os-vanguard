@@ -1,3 +1,4 @@
+/** @wip vertical-forge — Échéance: 2026-11-01. Types domaine verticale Garage. */
 export interface IVehicle {
     id: string;
     licensePlate: string;

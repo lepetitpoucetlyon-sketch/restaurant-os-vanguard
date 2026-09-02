@@ -1,4 +1,5 @@
 /**
+ * @wip ops-hardware — Échéance: 2026-11-01
  * Core interface for Printer Connections (Grade X)
  * Ensures all connection methods (Bluetooth, USB, Network) expose the same contract.
  */

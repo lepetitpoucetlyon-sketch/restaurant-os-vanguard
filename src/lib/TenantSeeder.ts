@@ -305,6 +305,31 @@ export const TenantSeeder = {
       await Nexus.adapter.set(`tenants/${tenantId}/brandingTokens`, brandTokens);
       seededPaths.push(`tenants/${tenantId}/brandingTokens`);
 
+      // ── Enregistrement Registre & Changelog Genèse (Loi 8 / MCC) ─────────
+      try {
+        const { ChangelogService } = await import('@/lib/mcc/ChangelogService');
+        await ChangelogService.record({
+          tenantId,
+          action: 'GENESIS_CREATED',
+          category: 'GENESIS',
+          title: `Création du restaurant "${name}" (${variant})`,
+          description: `Initialisation de l'instance Restaurant OS — Variante métier : ${variant}, propriétaire : ${adminEmail}, ${seededPaths.length} collections initialisées.`,
+          appliedBy: adminEmail || 'system:seeder',
+          authorName: adminEmail ? adminEmail.split('@')[0] : 'Système',
+          authorType: adminEmail ? 'client' : 'system',
+          scope: 'tenant',
+          after: {
+            variant,
+            name,
+            siren: resolvedSiren,
+            tier: tier ?? 'production',
+            seededCollections: seededPaths.length,
+          }
+        });
+      } catch (logErr) {
+        logger.warn(`[TenantSeeder] Échec enregistrement changelog genesis pour ${tenantId}`, logErr);
+      }
+
       logger.info(`[TenantSeeder] Tenant ${tenantId} seeded — ${seededPaths.length} collections`);
       return { success: true, seededPaths };
 

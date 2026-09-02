@@ -39,7 +39,7 @@ export const FiscalAuditTool: ToolDefinition<FiscalAuditArgs> = {
         }
 
         // 🛡️ RUN AUDIT (Titan Logic)
-        const { FiscalEngine } = await import('@/lib/fiscal');
+        const { FiscalEngine } = await import('@/lib/mcc/fiscal/FiscalEngine');
         const result = await FiscalEngine.runAudit(seals, args.tenantId);
 
         return {

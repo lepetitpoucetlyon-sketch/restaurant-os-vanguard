@@ -1,6 +1,6 @@
 #!/bin/bash
-# 🔪 nexus-suture.sh — Version Vanguard V5.3 (Predator Edition)
-# Suture agressive et recherche récursive des composants
+# 🏺 NEXUS-SUTURE.SH — V5.1 (Fixed Bash 3)
+# Outil de transplantation Grade X pour Restaurant OS Vanguard
 
 MODULE=$1
 PILIER=$2
@@ -8,51 +8,80 @@ SOURCE="scratch/old-repo/src"
 TARGET="src/modules/$MODULE"
 
 if [ -z "$MODULE" ] || [ -z "$PILIER" ]; then
-  echo "❌ Usage: ./scripts/nexus-suture.sh <nom_module> <pilier>"
-  exit 1
+    echo "❌ Usage: ./nexus-suture.sh <nom_module> <pilier>"
+    exit 1
 fi
 
-MODULE_CAP=$(echo "$MODULE" | perl -pe 's/(^|[-_])(.)/uc($2)/ge; s/[-_]//g')
+echo "🔪 Suture de FER : $MODULE → Pilier $PILIER"
 
-echo "🔪 Début de suture : $MODULE → $TARGET (pilier: $PILIER)"
+# Helper pour Capitalize (Bash 3 compatible)
+CAP_MODULE=$(echo "$MODULE" | awk '{print toupper(substr($0,1,1)) substr($0,2)}')
 
-# 1. Créer la structure
+# 1. Création de la structure étanche
 mkdir -p "$TARGET"/{ui,hooks,schemas,types}
 
-# 2. Recherche PREDATOR des composants UI
-echo "📦 Recherche Predator des composants UI..."
-# On cherche partout où le nom du module apparaît dans un dossier "components" ou "app"
-find "$SOURCE" -type d \( -path "*components/$MODULE" -o -path "*app*/$MODULE" \) | while read -r dir; do
-    echo "  ✓ Source trouvée : $dir"
-    cp -r "$dir/"*.tsx "$TARGET/ui/" 2>/dev/null
-done
+# 2. Transplantation UI (Extraction sélective et flexible)
+echo "📦 Extraction UI de old-repo..."
+FOUND_UI=false
+SEARCH_PATHS=(
+    "$SOURCE/components/$MODULE"
+    "$SOURCE/modules/$PILIER/components/$MODULE"
+    "$SOURCE/modules/ops/components/$MODULE"
+    "$SOURCE/modules/commerce/components/$MODULE"
+)
 
-# 3. Recherche de la logique (Hooks/Services)
-echo "🧠 Recherche de la logique métier..."
-find "$SOURCE" -name "*${MODULE}*" -name "*.ts" | grep -vE "node_modules|types|schemas" | while read -r file; do
-    echo "  ✓ Logique trouvée : $file"
-    # Si c'est un fichier volumineux (>100 lignes), c'est probablement le service
-    if [ $(wc -l < "$file") -gt 50 ]; then
-        cp "$file" "$TARGET/hooks/use${MODULE_CAP}.ts"
-        echo "  ✓ Service copié en use${MODULE_CAP}.ts"
+for PATH_UI in "${SEARCH_PATHS[@]}"; do
+    if [ -d "$PATH_UI" ]; then
+        cp "$PATH_UI/"*.{tsx,ts} "$TARGET/ui/" 2>/dev/null
+        echo "  ✓ Composants transplantés depuis $PATH_UI"
+        FOUND_UI=true
+        break
     fi
 done
 
-# 4. Fallback Hook
-if [ ! -f "$TARGET/hooks/use${MODULE_CAP}.ts" ]; then
-    echo "  🔧 Génération du squelette hook use${MODULE_CAP}..."
-    cat > "$TARGET/hooks/use${MODULE_CAP}.ts" << HOOKEOF
-import { useAtom } from 'jotai';
-export function use${MODULE_CAP}() { return {}; }
-HOOKEOF
+if [ "$FOUND_UI" = false ]; then
+    echo "  ⚠ Aucun composant UI trouvé pour $MODULE"
 fi
 
-# 5. Schéma Zod
-cat > "$TARGET/schemas/${MODULE}.schema.ts" << SCHEMAAEOF
-import { z } from 'zod';
-export const ${MODULE_CAP}Schema = z.object({ id: z.string().uuid() });
-export type ${MODULE_CAP} = z.infer<typeof ${MODULE_CAP}Schema>;
-SCHEMAAEOF
+# 3. Branchement du Hook Souverain
+HOOK_FILE="$TARGET/hooks/use$CAP_MODULE.ts"
+if [ ! -f "$HOOK_FILE" ]; then
+    echo "🧠 Injection du Hook Souverain use$CAP_MODULE..."
+    cat > "$HOOK_FILE" << EOF
+"use client";
 
-echo ""
-echo "✅ Suture physique terminée pour : $MODULE"
+import { useAtom } from 'jotai';
+import { ${MODULE}Schema } from '../schemas/${MODULE}.schema';
+import { /* atoms requis */ } from '@/store/pillars/index'; 
+
+export function use$CAP_MODULE() {
+  return {};
+}
+EOF
+fi
+
+# 4. Scellage Zod
+SCHEMA_FILE="$TARGET/schemas/${MODULE}.schema.ts"
+if [ ! -f "$SCHEMA_FILE" ]; then
+    echo "🛡️ Scellage du schéma Zod..."
+    cat > "$SCHEMA_FILE" << EOF
+import { z } from 'zod';
+
+export const ${MODULE}Schema = z.object({
+  id: z.string().uuid(),
+});
+
+export type ${CAP_MODULE} = z.infer<typeof ${MODULE}Schema>;
+EOF
+fi
+
+# 5. Audit de contamination
+echo "🔍 Scan de reliques fantômes dans $TARGET..."
+CONTAMINATION=$(grep -r "old-repo\|operationalAtoms\|infrastructure" "$TARGET" | wc -l)
+if [ "$CONTAMINATION" -gt 0 ]; then
+    echo "🚨 ALERTE : $CONTAMINATION imports toxiques détectés."
+else
+    echo "✅ ÉTANCHÉITÉ : Aucune relique détectée."
+fi
+
+echo "🚀 MODULE $MODULE PRÊT POUR VALIDATION ATLAS."

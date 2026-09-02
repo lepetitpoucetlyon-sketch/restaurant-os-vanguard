@@ -14,7 +14,7 @@ export * from './ia/agency';
 export * from './ia/fleet';
 export { CircuitBreaker } from './ia/resilience/CircuitBreaker';
 export { FleetOutboxDrainService } from './ia/fleet/FleetOutboxDrainService';
-export { GeminiProvider } from './ia/GeminiProvider';
+export { GeminiProvider } from './ia/ai/GeminiProvider';
 export { RealtimeVoiceFactory } from './ia/realtime/RealtimeVoiceFactory';
 export type { IRealtimeVoiceService } from './ia/realtime/IRealtimeVoiceService';
 

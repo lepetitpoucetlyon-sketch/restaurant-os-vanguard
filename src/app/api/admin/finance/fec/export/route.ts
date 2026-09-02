@@ -1,7 +1,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { FECGenerator } from '@/modules/finance';
-import { DocumentVault } from '@/lib/vault';
+import { DocumentVault } from '@/lib/mcc/vault/DocumentVault';
 import { FinanceErrorCode, CoreErrorCode } from '@/shared/nexus/contracts/errors.types';
 import { JournalEntry } from '@/shared/nexus/contracts/finance.types';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';

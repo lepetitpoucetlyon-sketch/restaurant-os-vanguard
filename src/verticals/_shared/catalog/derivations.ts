@@ -1,4 +1,5 @@
 /**
+ * @wip vertical-forge — Échéance: 2026-11-01
  * 🧬 Derivations — les Record<PlatformVariant, X> dérivés du VerticalBlueprintRegistry.
  *
  * ── Contexte (P5 MEGA-PLAN Forge Stack) ────────────────────────────────────────

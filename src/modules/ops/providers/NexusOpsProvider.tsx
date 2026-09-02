@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { SovereignNode } from "@/shared/nexus/contracts";
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
-import { TelemetryHook } from '@/lib/telemetry';
+import { TelemetryHook } from '@/lib/telemetry/TelemetryHook';
 import { logger } from '@/lib/logger';
 import { EmpireInstance } from '@/shared/types/empire';
 import { SovereignStorage } from '@/shared/services/SovereignStorage';

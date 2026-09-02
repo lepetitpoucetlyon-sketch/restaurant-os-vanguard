@@ -38,12 +38,15 @@ function buildContextSnapshot(tenantId: string, rawConfig: unknown): string {
   });
 }
 
-function buildUserPrompt(description: string, screenshotUrl: string | undefined, contextSnapshot: string): string {
+function buildUserPrompt(description: string, screenshotUrl: string | undefined, contextSnapshot: string, recentHistory: string): string {
   return `Requête opérateur : ${description}
 ${screenshotUrl ? `Screenshot : ${screenshotUrl}` : ''}
 
 Contexte réel de l'instance du tenant :
 ${contextSnapshot}
+
+Historique récent des modifications & interventions (Registre Dev / IA / Flotte) :
+${recentHistory}
 
 Retourne UNIQUEMENT un objet JSON valide avec ces champs exacts :
 {
@@ -66,13 +69,16 @@ async function analyze(payload: NexusEventPayload<'support.ticket_submitted'>): 
   await Nexus.adapter.set(ticketPath, { status: 'analyzing' }, { merge: true });
 
   try {
-    const rawConfig = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`);
+    const [rawConfig, recentHistory] = await Promise.all([
+      Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`),
+      ChangelogService.getRecentContextForAI(tenantId, 10),
+    ]);
     const contextSnapshot = buildContextSnapshot(tenantId, rawConfig);
 
     const systemPrompt = MCCAIRegistry.composePrompt('supportDraft', {
       tenantId,
     });
-    const userPrompt = buildUserPrompt(description, screenshotUrl, contextSnapshot);
+    const userPrompt = buildUserPrompt(description, screenshotUrl, contextSnapshot, recentHistory);
 
     let rawText = '';
     try {

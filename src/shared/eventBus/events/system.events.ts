@@ -1,4 +1,19 @@
 export interface SYSTEMEvents {
+  "mcc.changelog_recorded": {
+    v: 1;
+    isSimulation?: boolean;
+    id: string;
+    tenantId: string;
+    category: string;
+    action: string;
+    title?: string;
+    description: string;
+    appliedBy: string;
+    authorType: string;
+    scope: string;
+    appliedAt: string;
+  };
+
   "mcc.feature_flag_toggled": {
     v: 1;
     isSimulation?: boolean;

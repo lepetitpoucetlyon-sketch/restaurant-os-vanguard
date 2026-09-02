@@ -1,7 +1,7 @@
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { makeComplianceAdapter } from '@/verticals/_shared/adapters';
 
-/** Conformité retail = socle universel (HACCP/RGPD) + deltas journal d'audit & rappel produit. */
+/** @wip vertical-forge — Échéance: 2026-11-01. Conformité retail = socle universel (HACCP/RGPD) + deltas journal d'audit & rappel produit. */
 export const RetailComplianceAdapter = {
   ...makeComplianceAdapter(),
   emitAuditLog(payload: { tenantId: string; patientId: string; action: string; performedBy: string; timestamp: string }) {

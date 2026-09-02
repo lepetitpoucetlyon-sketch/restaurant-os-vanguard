@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useAtomValue, useStore } from 'jotai';
 import { NexusSyncService } from '@/lib/NexusSyncService';
-import { TelemetryHook } from '@/lib/telemetry';
+import { TelemetryHook } from '@/lib/telemetry/TelemetryHook';
 import { GlobalRegistryService } from '@/lib/GlobalRegistryService';
 import { useTaskContext } from '@/lib/icm/useTaskContext';
 import { tenantIdAtom } from '@/store/pillars/sovereign';

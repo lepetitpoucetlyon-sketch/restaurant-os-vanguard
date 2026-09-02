@@ -1,7 +1,7 @@
 import { InvoiceTarget, CollectionAction } from './types';
 import { EscalationEngine } from './EscalationEngine';
 import { QuantumCrypto } from '@/lib/QuantumCrypto';
-import { DocumentVault } from '@/lib/vault';
+import { DocumentVault } from '@/lib/mcc/vault/DocumentVault';
 import { NexusBridge } from '@/lib/nexus/NexusBridge';
 import { NexusTelemetryService } from '@/lib/NexusTelemetryService';
 import { SovereignMath } from '@/shared/services/SovereignMath';

@@ -1,0 +1,138 @@
+{
+  "project_id": "6579253670455119326",
+  "last_sync": "2026-04-12T14:31:00.000Z",
+  "screens": [
+    {
+      "route": "/",
+      "file": "src/app/page.tsx",
+      "template": "exports-stitch/templates/dashboard.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/floor-plan",
+      "file": "src/app/floor-plan/page.tsx",
+      "template": "exports-stitch/templates/floor-plan.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/reservations",
+      "file": "src/app/reservations/page.tsx",
+      "template": "exports-stitch/templates/reservations.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/pos",
+      "file": "src/app/pos/page.tsx",
+      "template": "exports-stitch/templates/pos.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/kitchen",
+      "file": "src/app/kitchen/page.tsx",
+      "template": "exports-stitch/templates/kitchen.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/kds",
+      "file": "src/app/kds/page.tsx",
+      "template": "exports-stitch/templates/kds.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/inventory",
+      "file": "src/app/inventory/page.tsx",
+      "template": "exports-stitch/templates/inventory.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/storage-map",
+      "file": "src/app/storage-map/page.tsx",
+      "template": "exports-stitch/templates/storage-map.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/crm",
+      "file": "src/app/crm/page.tsx",
+      "template": "exports-stitch/templates/crm.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/staff",
+      "file": "src/app/staff/page.tsx",
+      "template": "exports-stitch/templates/staff.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/planning",
+      "file": "src/app/planning/page.tsx",
+      "template": "exports-stitch/templates/planning.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/leaves",
+      "file": "src/app/leaves/page.tsx",
+      "template": "exports-stitch/templates/leaves.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/finance",
+      "file": "src/app/finance/page.tsx",
+      "template": "exports-stitch/templates/finance.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/analytics",
+      "file": "src/app/analytics/page.tsx",
+      "template": "exports-stitch/templates/analytics.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/haccp",
+      "file": "src/app/haccp/page.tsx",
+      "template": "exports-stitch/templates/haccp.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/groups",
+      "file": "src/app/groups/page.tsx",
+      "template": "exports-stitch/templates/groups.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/seo",
+      "file": "src/app/seo/page.tsx",
+      "template": "exports-stitch/templates/seo.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/bar",
+      "file": "src/app/bar/page.tsx",
+      "template": "exports-stitch/templates/bar.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/registre",
+      "file": "src/app/registre/page.tsx",
+      "template": "exports-stitch/templates/registre.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/settings",
+      "file": "src/app/settings/page.tsx",
+      "template": "exports-stitch/templates/settings.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/accounting",
+      "file": "src/app/accounting/page.tsx",
+      "template": "exports-stitch/templates/accounting.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    },
+    {
+      "route": "/audit-portal",
+      "file": "src/app/audit-portal/page.tsx",
+      "template": "exports-stitch/templates/audit-portal.stitch.json",
+      "timestamp": "2026-04-12T14:31:00.000Z"
+    }
+  ]
+}

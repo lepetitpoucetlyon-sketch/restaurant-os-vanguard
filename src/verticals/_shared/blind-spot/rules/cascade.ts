@@ -1,4 +1,5 @@
 /**
+ * @wip vertical-forge — Échéance: 2026-11-01
  * 🔗 Règles d'angles morts — famille "dependency_cascade".
  *
  * Violation d'une dépendance déclarée dans CapabilityCatalog (`dependsOn`) ou

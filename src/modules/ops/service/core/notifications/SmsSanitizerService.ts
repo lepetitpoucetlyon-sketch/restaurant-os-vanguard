@@ -1,4 +1,5 @@
 /**
+ * @wip ops-notifications — Échéance: 2026-11-01
  * M103 + M105 — SMS Silent Drop + GSM-7 vs UCS-2 sanitizer
  *
  * M103 : validation stricte E.164 avant envoi. Si échec, event `system.sms_delivery_failed`

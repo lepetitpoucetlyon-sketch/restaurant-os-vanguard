@@ -1,4 +1,5 @@
 /**
+ * @wip vertical-forge — Échéance: 2026-11-01
  * 📏 Règles d'angles morts — famille "scale_tier_mismatch".
  *
  * Les signaux de scrape indiquent une taille/topologie précise, mais le tier

@@ -59,6 +59,11 @@ Le singleton `Nexus` (`src/lib/nexus/NexusAdapter.ts`) enveloppe **automatiqueme
 
 ## Conventions critiques
 
+### Analyse d'Impacts en Cascade, Bus Events & RBAC (Loi 12)
+- **Topologie du Bus d'Événements** : Pour chaque nouvelle feature, mapper les événements émis (`emit`) et consommés (`on`). Interdire formellement les boucles de rappel infinies (Handler $\rightarrow$ Event $\rightarrow$ Handler). Idempotence obligatoire sur tout handler persistant.
+- **RBAC Zéro-Trust & Multi-Tenant** : Toute route API MCC doit utiliser `requireMccLevel` (`mcc_admin`, `mcc_support`, `mcc_readonly`) et toute route client doit vérifier l'étanchéité absolue du `tenantId`.
+- **Ingestion Contextuelle IA** : Tout système de log ou de configuration doit alimenter le contexte des agents IA (ex: `ChangelogService.getRecentContextForAI` pour le support).
+
 ### Zéro AI Slop — Vocabulaire B2B Métier Strict (Loi 11)
 - **Interdiction formelle** de tout jargon sci-fi, cyberpunk, lore fantasque ou pseudo-sacré (`Empire`, `Oracle mystique`, `DNA Crawler`, `Morphogenèse`, `Convive Esprit`, `Compendium`, `Cognitive Stability Index`, `Vanguard Simulator`).
 - Utiliser **exclusivement** le vocabulaire métier réel de la restauration et du SaaS B2B (*Analyses & Prévisions, Assistant de Gestion, Réseau & Multi-Établissements, Personnalisation Graphique, Client / Couvert, Clôture Z, Scellement NF525*).

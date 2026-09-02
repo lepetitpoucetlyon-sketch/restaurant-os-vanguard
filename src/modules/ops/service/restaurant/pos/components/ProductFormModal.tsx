@@ -21,7 +21,7 @@ import { ProductBasicDetails } from "./product-form/ProductBasicDetails";
 import { ProductBarFields } from "./product-form/ProductBarFields";
 
 // Constants
-import { ALLERGENS, CATEGORIES_DISH, CATEGORIES_COCKTAIL } from "@/constants/product-form";
+import { ALLERGENS, CATEGORIES_DISH, CATEGORIES_COCKTAIL } from "./product-form/constants";
 
 interface ProductFormModalProps {
     isOpen: boolean;

@@ -46,7 +46,7 @@ export function DesktopSidebar() {
     return (
         <aside 
             className={cn(
-                "h-screen sticky top-0 border-r border-border/40 bg-bg-primary/80 backdrop-blur-3xl transition-all duration-700 ease-[0.16, 1, 0.3, 1] z-50 flex flex-col group/sidebar",
+                "h-dvh sticky top-0 border-r border-border/40 bg-bg-primary/80 backdrop-blur-3xl transition-all duration-700 ease-[0.16, 1, 0.3, 1] z-50 flex flex-col group/sidebar",
                 isSidebarCollapsed ? "w-[80px]" : "w-[300px]"
             )}
         >

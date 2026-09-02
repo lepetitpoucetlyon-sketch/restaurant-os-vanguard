@@ -190,6 +190,31 @@ Chaque texte affiché doit pouvoir être lu et compris immédiatement par un res
 
 ---
 
+## Loi 12 — Analyse d'Impacts en Cascade, Chaînes d'Événements & RBAC Strict
+
+Pour toute nouvelle fonctionnalité, modification de schéma, route API ou composant, l'agent doit **systématiquement modéliser et vérifier 4 dimensions critiques d'impacts avant de valider son travail** :
+
+### 1. Chaînes d'Événements & Effets de Bord en Cascade (NexusEventBus)
+- **Topologie des Déclencheurs** : Identifier tous les événements émis (`emit/emitDurable`) et reçus (`on`).
+- **Prévention Anti-Boucle Infinie** : Vérifier qu'un handler ne ré-émet pas un événement qui le re-déclenche directement ou indirectement (interdit : Handler A $\rightarrow$ Event B $\rightarrow$ Handler B $\rightarrow$ Event A).
+- **Garantie d'Idempotence** : Tout handler modifiant un état persistant, des stocks, des finances ou des droits doit être idempotent (`eventId` ou transaction déterministe).
+
+### 2. Contrôle d'Accès RBAC & Isolation Multi-Tenant Zéro-Trust
+- **Routes API & Serveur** :
+  - Console globale / MCC : Guard explicite obligatoire `requireMccLevel(req, 'mcc_admin' | 'mcc_support' | 'mcc_readonly')`.
+  - App Client / Restaurant : `requireAuth(req)` ou `requireRole(req, ['ADMIN', 'MANAGER'])` avec vérification stricte de l'étanchéité `tenantId` (zéro fuite inter-tenant).
+- **Interface UI** : Masquage ou désactivation conditionnelle des boutons/actions selon les rôles du personnel (`ADMIN`, `MANAGER`, `WAITER`, `CHEF`, `ACCOUNTANT`).
+
+### 3. Continuité d'Actions Dépendantes & Intégrité Système
+- **Fiscalité NF525** : L'action impacte-t-elle l'encaissement, les ventilations de TVA ou le Grand Total ? Si oui, scellement SHA-256 obligatoire sans flottant JS.
+- **Résilience Offline (Dexie / Outbox)** : L'action doit-elle fonctionner sans réseau (prise de commande POS, impression ticket) ou requiert-elle le serveur ?
+- **Ingestion Contextuelle IA** : Si l'action produit des modifications structurelles ou des logs, s'assurer que les agents IA (Hermes, SupportAgent, Diagnostics) disposent du contexte à jour (via `ChangelogService.getRecentContextForAI` ou mémoires de session).
+
+### 4. Rétro-compatibilité de Schémas & Données Historiques
+- Tout ajout de champ dans `tenantConfig` ou les schémas Zod doit être rétro-compatible (valeur par défaut ou optionnel `optional()`) pour ne jamais casser les instances existantes créées antérieurement.
+
+---
+
 ## Installation des gardes (une fois, par la personne humaine de préférence)
 ```bash
 git config core.hooksPath .githooks

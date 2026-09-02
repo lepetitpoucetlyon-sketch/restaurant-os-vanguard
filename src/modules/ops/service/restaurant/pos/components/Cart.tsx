@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Minus, Plus, ChefHat, CreditCard, Users, X, MoreHorizontal } from "lucide-react";
+import { Minus, Plus, ChefHat, CreditCard, Users, X, MoreHorizontal, Trash2 } from "lucide-react";
 import { ScrollArea } from "@ui/ScrollArea";
 import { cn } from "@/lib/ui.foundations";;
 import { motion, AnimatePresence } from "framer-motion";
@@ -113,7 +113,7 @@ const SwipeableCartItem = ({ item, priceMultiplier, onUpdateQuantity, onItemCont
 };
 
 
-export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onCheckout, onSendToKitchen, onSplitBill, tableNumber, guestCount, showClose, onClose, onItemContextMenu }: CartProps) {
+export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendToKitchen, onSplitBill, tableNumber, guestCount, showClose, onClose, onItemContextMenu }: CartProps) {
     const { t } = useLanguage();
     const isMobile = useIsMobile();
     const splitBillEnabled = usePageSetting('pos', 'split_bill_enabled', true);
@@ -164,6 +164,18 @@ export function Cart({ items, onUpdateQuantity, onClearCart: _onClearCart, onChe
                 </div>
 
                 <div className="flex items-center gap-2">
+                    {items.length > 0 && onClearCart && (
+                        <button
+                            type="button"
+                            aria-label="Vider le panier"
+                            title="Vider le panier"
+                            onClick={onClearCart}
+                            className="h-9 px-2.5 rounded-lg border border-border/60 hover:border-status-danger/40 hover:bg-status-danger/10 text-text-muted hover:text-status-danger transition-colors text-xs font-medium flex items-center gap-1.5"
+                        >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">{"Vider"}</span>
+                        </button>
+                    )}
                     <SettingsGearButton pageKey="pos" className="h-9 w-9 shrink-0" />
                     {showClose && isMobile && (
                         <button aria-label="Fermer" onClick={onClose} className="w-9 h-9 rounded-lg bg-bg-tertiary flex items-center justify-center">

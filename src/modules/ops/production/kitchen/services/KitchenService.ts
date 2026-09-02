@@ -1,6 +1,7 @@
 import { Recipe } from '@nexus/contracts/common.types';
 
 /**
+ * @wip ops-production — Échéance: 2026-11-01
  * 🍳 KitchenService - Restaurant OS
  * Centralized Domain Logic for Culinary Operations and HACCP.
  * Grade VI: Industrialized Recipe & Prep Management.

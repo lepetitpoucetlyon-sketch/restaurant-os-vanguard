@@ -1,4 +1,5 @@
 /**
+ * @wip vertical-forge — Échéance: 2026-11-01
  * ⚖️ Règles d'angles morts — famille "regulatory".
  *
  * L'étude sectorielle ou le profil scrapé signale une obligation légale, mais

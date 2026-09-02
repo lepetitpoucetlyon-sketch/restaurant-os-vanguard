@@ -29,14 +29,23 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'tenantId et description requis' }, { status: 400 });
   }
 
+  const tenantId = body.tenantId.trim();
+  const description = body.description.trim();
+
+  const { ChangelogService } = await import('@/lib/mcc/ChangelogService');
+  const recentHistory = await ChangelogService.getRecentContextForAI(tenantId, 10);
+
   const systemPrompt = MCCAIRegistry.composePrompt('diagnose', {
-    tenantId: body.tenantId.trim(),
+    tenantId,
   });
 
   const userPrompt = `Analyse ce problème signalé par un opérateur.
-Tenant : ${body.tenantId.trim()}
-Description : ${body.description.trim()}
+Tenant : ${tenantId}
+Description : ${description}
 ${body.screenshotUrl ? `Screenshot : ${body.screenshotUrl}` : ''}
+
+Historique récent des modifications & interventions (Registre Dev / IA / Flotte) :
+${recentHistory}
 
 Retourne UNIQUEMENT un objet JSON valide avec ces champs :
 {

@@ -13,6 +13,7 @@ export interface WaitlistEntry {
 }
 
 /**
+ * @wip ops-service — Échéance: 2026-11-01
  * 📝 C5.3: Waitlist Manager
  * Gère la file d'attente (Walk-ins) séparément des réservations.
  */

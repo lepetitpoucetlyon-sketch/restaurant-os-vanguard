@@ -16,10 +16,11 @@ vi.mock('@/modules/compliance/qualite/haccp/store/qualityAtoms', () => ({
     qualityActiveControlAtom: { toString: () => 'qualityActiveControlAtom' }
 }));
 
-vi.mock('@/infrastructure/services/SelfHealingEngine', () => ({
+vi.mock('@shared/services/SelfHealingEngine', () => ({
     SelfHealingEngine: {
-        calculateCRC: vi.fn().mockReturnValue('mock-crc'),
-        auditAndHeal: vi.fn()
+        auditAndHeal: vi.fn(),
+        calculateCRC: vi.fn().mockReturnValue('mock_crc_123'),
+        calculateMerkleTree: vi.fn().mockReturnValue('mock_merkle_root')
     }
 }));
 

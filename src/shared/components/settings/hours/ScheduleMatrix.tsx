@@ -3,7 +3,7 @@
 import { motion, Variants } from "framer-motion";
 import { Clock } from "lucide-react";
 import { DaySchedule, DayOfWeek } from "@nexus/contracts";
-import { DAYS_CONFIG } from "@/constants/scheduling";
+import { DAYS_CONFIG } from "./daysConfig";
 import { DayRow } from "./DayRow";
 
 interface ScheduleMatrixProps {
