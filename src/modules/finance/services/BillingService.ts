@@ -3,7 +3,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { PRICING } from '@/shared/constants/pricing';
 
-const STRIPE_API_VERSION = '2026-06-24.dahlia' as const;
+const STRIPE_API_VERSION = '2026-08-26.dahlia' as const;
 
 export interface FleetTreasuryReport {
   /** MRR réel basé sur les abonnements Stripe actifs (€) */

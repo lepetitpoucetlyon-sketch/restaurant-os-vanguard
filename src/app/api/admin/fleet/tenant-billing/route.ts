@@ -12,7 +12,7 @@ import { logger } from '@/lib/logger';
 
 // Initialisation de Stripe (le SDK est présent)
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2026-06-24.dahlia',
+  apiVersion: '2026-08-26.dahlia',
 });
 
 interface TenantConfig {

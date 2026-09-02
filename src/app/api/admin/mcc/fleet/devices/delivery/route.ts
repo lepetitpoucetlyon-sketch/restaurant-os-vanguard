@@ -7,7 +7,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 // NOTE: In production, STRIPE_SECRET_KEY must be in environment variables
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_mock_key', {
-  apiVersion: '2026-06-24.dahlia',
+  apiVersion: '2026-08-26.dahlia',
 });
 
 // Price ID for the hardware rental MRR (Monthly Recurring Revenue)

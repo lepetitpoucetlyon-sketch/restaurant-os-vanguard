@@ -39,7 +39,7 @@ const BodySchema = z.discriminatedUnion('action', [
 function getStripe(): Stripe {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error('STRIPE_SECRET_KEY is not configured');
-  return new Stripe(key, { apiVersion: '2026-06-24.dahlia' });
+  return new Stripe(key, { apiVersion: '2026-08-26.dahlia' });
 }
 
 export async function POST(request: NextRequest) {

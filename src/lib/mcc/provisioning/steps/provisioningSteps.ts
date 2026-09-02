@@ -19,7 +19,7 @@ export async function setupStripeCustomer(tenantId: string, request: Provisionin
     const stripeKey = process.env.STRIPE_SECRET_KEY;
     let stripeCustomerId: string;
     if (stripeKey) {
-        const stripe = new Stripe(stripeKey, { apiVersion: '2026-06-24.dahlia' });
+        const stripe = new Stripe(stripeKey, { apiVersion: '2026-08-26.dahlia' });
         const customer = await stripe.customers.create({
             email: request.ownerEmail,
             name: request.companyName,

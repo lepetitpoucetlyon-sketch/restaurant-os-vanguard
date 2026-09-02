@@ -63,7 +63,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const returnUrl = requested && requested.startsWith(appUrl) ? requested : `${appUrl}/settings?tab=billing`;
 
     try {
-        const stripe = new Stripe(secret, { apiVersion: '2026-06-24.dahlia' });
+        const stripe = new Stripe(secret, { apiVersion: '2026-08-26.dahlia' });
         const session = await stripe.billingPortal.sessions.create({
             customer: stripeCustomerId,
             return_url: returnUrl,

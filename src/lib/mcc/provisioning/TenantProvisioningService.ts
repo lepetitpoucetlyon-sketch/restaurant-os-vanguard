@@ -139,7 +139,7 @@ export class TenantProvisioningService {
                 if (stripeKey && !stripeCustomerId.startsWith('cus_mock_')) {
                     logger.info(`[MCC/prov/rollback] Suppression du customer Stripe ${stripeCustomerId}`);
                     const StripeLib = (await import('stripe')).default;
-                    const stripe = new StripeLib(stripeKey, { apiVersion: '2026-06-24.dahlia' as never });
+                    const stripe = new StripeLib(stripeKey, { apiVersion: '2026-08-26.dahlia' as never });
                     await stripe.customers.del(stripeCustomerId).catch((err: unknown) => {
                         logger.warn('[MCC/prov/rollback] Erreur suppression Stripe customer', toError(err).message);
                     });
