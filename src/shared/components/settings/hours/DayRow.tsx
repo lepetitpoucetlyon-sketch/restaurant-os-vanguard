@@ -137,7 +137,7 @@ export function DayRow({ day, config, onChange, index }: DayRowProps) {
                 <div className="hidden 2xl:block w-px h-24 bg-surface-bg dark:bg-surface-card/10 self-center" />
                 <div className="h-px w-full bg-surface-bg dark:bg-surface-card/5 2xl:hidden" />
 
-                <div className="space-y-6 lg:min-w-[200px]">
+                <div className="space-y-6 lg:min-w-[12.5rem]">
                     <div className="flex items-center gap-3 px-2">
                         <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center shadow-sm border",
                             day.isOpen ? "bg-status-danger/10 border-red-500/20 text-status-danger" : "bg-surface-bg dark:bg-surface-card/5 border-transparent text-text-muted")}>

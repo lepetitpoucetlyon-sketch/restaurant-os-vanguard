@@ -84,7 +84,7 @@ export function KDSHeader({
                 sans compensation, l'en-tête sort de la coquille arrondie et se fait
                 rogner à gauche (le « C » de CUISINE, puis l'heure elle-même).
                 <md : -16px → px-4 ‖ md..lg : -32px → px-8 ‖ ≥lg : mise en page large. */}
-            <div className="w-full max-w-[1800px] mx-auto flex items-center gap-3 lg:gap-6 px-4 md:px-8 lg:px-10 h-[76px]">
+            <div className="w-full max-w-[112.5rem] mx-auto flex items-center gap-3 lg:gap-6 px-4 md:px-8 lg:px-10 h-[76px]">
                 {/* Signature editorial title */}
                 <div className="flex items-baseline gap-3 shrink-0">
                     {/* lg et non md : à 768px le `-m-8` de KDSDashboard tire l'en-tête

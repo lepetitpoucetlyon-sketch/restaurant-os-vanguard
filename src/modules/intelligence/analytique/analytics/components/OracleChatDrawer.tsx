@@ -105,7 +105,7 @@ export function OracleChatDrawer({
                     <p className="text-xs font-bold">
                       Posez une question sur vos opérations
                     </p>
-                    <p className="text-nano mt-1 max-w-[240px]">
+                    <p className="text-nano mt-1 max-w-[15rem]">
                       Menu, stocks, finances, planning, conformité... Accédez rapidement aux indicateurs clés.
                     </p>
                   </div>

@@ -42,7 +42,7 @@ export function MarketingHomePage() {
           backgroundSize: '72px 72px',
         }} />
 
-        <div className="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 py-24 sm:py-32">
+        <div className="relative w-full max-w-[87.5rem] mx-auto px-4 sm:px-6 lg:px-10 py-24 sm:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
 
             {/* Colonne gauche : texte aligné à gauche */}
@@ -124,7 +124,7 @@ export function MarketingHomePage() {
                   </div>
 
                   {/* Mini bento — 3 tiles */}
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     {[
                       { k: 'Couverts', v: '184', hint: 'ce midi' },
                       { k: 'Tables', v: '18/22', hint: 'occupées' },
@@ -147,7 +147,7 @@ export function MarketingHomePage() {
       {/* ─── FEATURES — Bento asymétrique (taste-skill : 3-col equal cards banned) ─── */}
       <section id="features" className="py-24 sm:py-32 relative">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,rgba(197,160,89,0.04),transparent)]" />
-        <div className="relative max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="relative max-w-[87.5rem] mx-auto px-4 sm:px-6 lg:px-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -191,7 +191,7 @@ export function MarketingHomePage() {
 
       {/* ─── VERTICALES — grille sobre, pas d'emoji ─── */}
       <section id="verticals" className="py-24 sm:py-32">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="max-w-[87.5rem] mx-auto px-4 sm:px-6 lg:px-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -241,7 +241,7 @@ export function MarketingHomePage() {
       {/* ─── PRICING — pas de gradient CTA, tabular numbers ─── */}
       <section className="py-24 sm:py-32 relative">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_30%_at_50%_100%,rgba(197,160,89,0.04),transparent)]" />
-        <div className="relative max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="relative max-w-[75rem] mx-auto px-4 sm:px-6 lg:px-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

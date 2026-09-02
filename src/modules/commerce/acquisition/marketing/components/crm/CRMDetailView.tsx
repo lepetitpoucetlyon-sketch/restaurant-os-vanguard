@@ -83,7 +83,7 @@ export function CRMDetailView() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-[70px] h-[calc(100vh-70px)] w-[450px] bg-bg-secondary border-l border-border z-40 shadow-2xl overflow-auto elegant-scrollbar"
+            className="fixed right-0 top-[70px] h-[calc(100vh-70px)] w-[28.125rem] bg-bg-secondary border-l border-border z-40 shadow-2xl overflow-auto elegant-scrollbar"
         >
             <div className="p-10 border-b border-border bg-text-primary text-text-primary relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent-gold/20 to-transparent pointer-events-none" />

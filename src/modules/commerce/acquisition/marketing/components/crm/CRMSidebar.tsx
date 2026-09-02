@@ -36,7 +36,7 @@ export function CRMSidebar() {
         <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="w-[420px] bg-bg-secondary border-r border-border hidden md:flex flex-col p-8 gap-10"
+            className="w-[26.25rem] bg-bg-secondary border-r border-border hidden md:flex flex-col p-8 gap-10"
         >
             <div className="relative group">
                 <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted/30 group-focus-within:text-accent-gold transition-colors" />

@@ -32,7 +32,7 @@ export function SplitByItemPanel({
                         key={item.cartId}
                         className="flex items-center justify-between gap-4 px-5 py-3 rounded-2xl bg-surface-card/[0.04] border border-white/5"
                     >
-                        <span className="text-xs font-semibold text-text-primary/80 truncate max-w-[140px]">
+                        <span className="text-xs font-semibold text-text-primary/80 truncate max-w-[8.75rem]">
                             {item.name} ×{item.quantity}
                         </span>
                         <div className="flex gap-2 shrink-0">

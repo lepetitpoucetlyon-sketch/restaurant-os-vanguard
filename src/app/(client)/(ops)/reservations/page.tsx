@@ -76,7 +76,7 @@ function ReservationsPage() {
                                     <div className="flex-1 flex flex-col overflow-hidden">
                                         <DailyListView reservations={todayReservations} isLoading={isLoading} onMarkArrived={markArrived} onMarkNoShow={handleMarkNoShow} onCancel={handleCancelReservation} noShowConfirmId={noShowConfirmId} setNoShowConfirmId={setNoShowConfirmId} />
                                     </div>
-                                    <div className="hidden xl:flex w-[420px] border-l border-border overflow-auto p-6 bg-bg-primary shrink-0">
+                                    <div className="hidden xl:flex w-[26.25rem] border-l border-border overflow-auto p-6 bg-bg-primary shrink-0">
                                         <TableGrid tables={tablesByZone} onTableClick={() => setIsNewResOpen(true)} />
                                     </div>
                                 </>

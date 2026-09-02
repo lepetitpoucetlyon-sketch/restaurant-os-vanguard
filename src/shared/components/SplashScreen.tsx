@@ -63,7 +63,7 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
                 >
                     {/* Lueur d'ambiance radiale dynamique */}
                     <div
-                        className="absolute w-[600px] h-[600px] rounded-full pointer-events-none transition-all duration-1000"
+                        className="absolute w-[37.5rem] h-[600px] rounded-full pointer-events-none transition-all duration-1000"
                         style={{
                             background: `radial-gradient(circle, ${primary}25 0%, ${primary}08 45%, transparent 70%)`,
                             filter: 'blur(80px)',
@@ -96,7 +96,7 @@ export function SplashScreen({ onDone }: SplashScreenProps) {
                                     src={logoUrl}
                                     srcSet={tokens.logoUrl_2x ? `${logoUrl} 1x, ${tokens.logoUrl_2x} 2x` : undefined}
                                     alt={brandName}
-                                    className="relative z-10 max-h-20 max-w-[200px] object-contain drop-shadow-2xl"
+                                    className="relative z-10 max-h-20 max-w-[12.5rem] object-contain drop-shadow-2xl"
                                 />
                             ) : (
                                 <div

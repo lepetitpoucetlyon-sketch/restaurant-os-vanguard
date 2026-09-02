@@ -65,7 +65,7 @@ export default function AuditPortal() {
     return (
         <div className="min-h-[100dvh] bg-bg-primary text-text-primary px-4 md:px-12 py-20 elegant-scrollbar relative overflow-hidden">
             {/* Background Atmosphere - HTML elements for RSC */}
-            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-action-primary blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-[50rem] h-[800px] bg-action-primary blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             
             <div className="max-w-7xl mx-auto relative z-10">
                 <header className="mb-32 text-center">

@@ -220,7 +220,7 @@ export function PlanningDashboard() {
                                                 </div>
                                                 <h4 className="font-serif font-black text-sm text-text-primary">{user.name}</h4>
                                             </div>
-                                            <div className="grid grid-cols-7 gap-1 h-2">
+                                            <div className="grid grid-cols-7 sm:grid-cols-7 gap-1 h-2">
                                                 {weekDays.map((d, i) => (
                                                     <div key={i} className={cn("rounded-full", shifts.some(s => s.userId === user.id && isSameDay(s.date, d)) ? "bg-action-primary" : "bg-surface-bg border border-border-default")} />
                                                 ))}
@@ -279,7 +279,7 @@ export function PlanningDashboard() {
                                                 </div>
                                                 <h4 className="text-2xl font-serif font-black italic text-text-primary">{user.name}</h4>
                                             </div>
-                                            <div className="grid grid-cols-7 gap-1.5 h-3">
+                                            <div className="grid grid-cols-7 sm:grid-cols-7 gap-1.5 h-3">
                                                 {weekDays.map((d, i) => (
                                                     <div key={i} className={cn("rounded-full", shifts.some(s => s.userId === user.id && isSameDay(s.date, d)) ? "bg-action-primary" : "bg-surface-bg border border-border-default")} />
                                                 ))}

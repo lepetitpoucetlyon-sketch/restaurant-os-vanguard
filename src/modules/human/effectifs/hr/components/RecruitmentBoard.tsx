@@ -147,7 +147,7 @@ function KanbanColumn({
     const { isOver, setNodeRef } = useDroppable({ id });
 
     return (
-        <div className="flex flex-col w-[240px] flex-shrink-0">
+        <div className="flex flex-col w-[15rem] flex-shrink-0">
             {/* Header */}
             <div className={cn("flex items-center justify-between mb-3 pb-3 border-b", border)}>
                 <div className="flex items-center gap-2">

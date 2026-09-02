@@ -85,7 +85,7 @@ export const SimulatorView: React.FC = () => {
                         className="absolute inset-0 border-2 border-dashed border-accent-gold/40 rounded-[3rem]" 
                     />
                 </div>
-                <div className="max-w-[280px]">
+                <div className="max-w-[17.5rem]">
                     <h2 className="text-3xl font-serif font-black italic text-text-primary mb-2">Simulateur Alpha</h2>
                     <p className="text-sm font-light text-text-muted leading-relaxed">
                         Lancez des scénarios de jumeau numérique pour valider vos décisions stratégiques avant exécution.

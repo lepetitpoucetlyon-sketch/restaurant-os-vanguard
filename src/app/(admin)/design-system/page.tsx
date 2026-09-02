@@ -337,7 +337,7 @@ export default function DesignSystemPage() {
   const [activeMainTab, setActiveMainTab] = useState<'verticals' | 'patterns' | 'rbac' | 'pwa'>('patterns');
 
   return (
-    <div className="min-h-[100dvh] bg-surface-bg p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto">
+    <div className="min-h-[100dvh] bg-surface-bg p-6 lg:p-10 space-y-8 max-w-[100rem] mx-auto">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>

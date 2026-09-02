@@ -131,7 +131,7 @@ export function StrategyOracle() {
                             {messages.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center opacity-30">
                                     <BrainCircuit className="w-12 h-12 mb-4" />
-                                    <p className="text-nano font-medium max-w-[200px] leading-relaxed">
+                                    <p className="text-nano font-medium max-w-[12.5rem] leading-relaxed">
                                         {"Cliquez sur \"Actualiser\" pour générer la synthèse du parc."}
                                     </p>
                                 </div>

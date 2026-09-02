@@ -277,7 +277,7 @@ export const RBACTenantMatrix: React.FC = () => {
                     <table className="w-full text-left border-collapse text-xs">
                         <thead>
                             <tr className="bg-surface-elevated/70 border-b border-border-base/80">
-                                <th className="p-4 font-serif font-bold text-text-primary min-w-[220px] sticky left-0 bg-surface-elevated z-10">
+                                <th className="p-4 font-serif font-bold text-text-primary min-w-[13.75rem] sticky left-0 bg-surface-elevated z-10">
                                     Écran / Fonctionnalité
                                 </th>
                                 {TENANT_ROLES_LIST.map(({ role, label, level }) => (

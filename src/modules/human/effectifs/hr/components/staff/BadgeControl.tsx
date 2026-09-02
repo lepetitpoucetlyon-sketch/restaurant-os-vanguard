@@ -146,7 +146,7 @@ export const BadgeControl: React.FC = () => {
                     </div>
                     <div className="space-y-1 text-right">
                         <p className="text-nano font-black uppercase tracking-tighter text-text-muted">ID Séquence Scellé</p>
-                        <p className="text-nano font-mono font-bold text-accent truncate max-w-[120px] ml-auto">
+                        <p className="text-nano font-mono font-bold text-accent truncate max-w-[7.5rem] ml-auto">
                             {currentShift.fiscalSeal?.hash || "PENDING_SYNC"}
                         </p>
                     </div>

@@ -156,7 +156,7 @@ export function PinLogin() {
                             </div>
 
                             {/* Aesthetic Keypad */}
-                            <div className="grid grid-cols-3 gap-4 max-w-xs mx-auto w-full px-4">
+                            <div className="grid grid-cols-3 sm:grid-cols-3 gap-4 max-w-xs mx-auto w-full px-4">
                                 {digits.map((digit, i) => (
                                     digit === "delete" ? (
                                         <button

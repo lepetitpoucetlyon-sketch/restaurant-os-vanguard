@@ -73,7 +73,7 @@ export function NCListItem({
               <img
                 src={nc.photoRef}
                 alt="Photo non-conformité"
-                className="max-w-[200px] rounded-lg border border-border object-cover"
+                className="max-w-[12.5rem] rounded-lg border border-border object-cover"
               />
             </div>
           )}

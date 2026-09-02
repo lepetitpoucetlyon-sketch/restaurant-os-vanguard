@@ -106,7 +106,7 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 400, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="fixed top-2 right-2 bottom-2 z-[200] w-[calc(100%-1rem)] md:w-[480px] bg-surface-card border border-border rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col"
+                className="fixed top-2 right-2 bottom-2 z-[200] w-[calc(100%-1rem)] md:w-[30rem] bg-surface-card border border-border rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col"
             >
                 {/* Visual Glow (Dark Mode Only) */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-accent-gold/5 blur-[100px] pointer-events-none hidden dark:block" />

@@ -82,7 +82,7 @@ export function DetailInvoiceTab({ asset, depreciationSchedule }: DetailInvoiceT
           <span>Tableau d Amortissement Linéaire (Comptabilité PCG)</span>
         </h4>
         <div className="w-full overflow-x-auto custom-scrollbar">
-          <table className="w-full text-xs text-left min-w-[500px]">
+          <table className="w-full text-xs text-left min-w-[31.25rem]">
           <thead>
             <tr className="border-b border-border-default text-text-muted">
               <th className="py-2">Année</th>

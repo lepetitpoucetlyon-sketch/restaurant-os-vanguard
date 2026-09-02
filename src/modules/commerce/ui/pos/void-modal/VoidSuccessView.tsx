@@ -16,7 +16,7 @@ export function VoidSuccessView({ onReset, onClose }: VoidSuccessViewProps) {
             <p className="text-sm font-black uppercase tracking-wider text-text-primary">
                 Extourne enregistrée
             </p>
-            <p className="text-micro text-text-muted max-w-[260px]">
+            <p className="text-micro text-text-muted max-w-[16.25rem]">
                 Une écriture négative a été créée dans journalEntries
                 et scellée conformément à NF525. Le ticket original est inchangé.
             </p>

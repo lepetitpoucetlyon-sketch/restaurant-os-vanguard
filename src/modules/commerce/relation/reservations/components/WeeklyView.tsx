@@ -36,7 +36,7 @@ export function WeeklyView({ reservations, weekDays, selectedDate, onDateClick }
 
     return (
         <div className="flex-1 overflow-hidden flex flex-col p-4 md:p-6 bg-bg-primary">
-            <div className="grid grid-cols-7 gap-2 flex-1 overflow-hidden">
+            <div className="grid grid-cols-7 sm:grid-cols-7 gap-2 flex-1 overflow-hidden">
                 {byDay.map(({ day, dayRes }) => {
                     const isToday = isSameDay(day, new Date());
                     const isSelected = isSameDay(day, selectedDate);

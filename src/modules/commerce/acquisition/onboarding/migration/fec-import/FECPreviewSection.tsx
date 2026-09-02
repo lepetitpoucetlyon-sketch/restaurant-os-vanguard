@@ -107,7 +107,7 @@ export function FECPreviewSection({
                       <span className="text-action-primary">{entry.CompteNum}</span>{" "}
                       <span className="text-text-muted">{entry.CompteLib}</span>
                     </td>
-                    <td className="px-3 py-2 text-text-primary max-w-[160px] truncate">
+                    <td className="px-3 py-2 text-text-primary max-w-[10rem] truncate">
                       {entry.EcritureLib}
                     </td>
                     <td className="px-3 py-2 text-right font-mono text-text-primary whitespace-nowrap">

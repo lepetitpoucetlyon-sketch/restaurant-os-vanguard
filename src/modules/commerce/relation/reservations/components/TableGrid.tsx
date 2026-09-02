@@ -24,7 +24,7 @@ const cinematicItem = {
 export function TableGrid({ tables, onTableClick }: TableGridProps) {
     return (
         <div className="flex-1 w-full relative p-4 md:p-8 pb-32">
-            <div className="max-w-[1800px] mx-auto space-y-12">
+            <div className="max-w-[112.5rem] mx-auto space-y-12">
                 {Object.entries(tables).map(([zone, tableList]) => (
                     <div key={zone}>
                         {/* Zone Header */}

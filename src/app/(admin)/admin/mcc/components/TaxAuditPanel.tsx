@@ -209,7 +209,7 @@ export function TaxAuditPanel() {
                                     {result.journalEntries.slice(0, JOURNAL_DISPLAY_LIMIT).map(je => (
                                         <tr key={je.id} className="hover:bg-surface-card transition-colors">
                                             <td className="px-4 py-2.5 font-mono">{je.date?.slice(0, 10)}</td>
-                                            <td className="px-4 py-2.5 max-w-[200px] truncate">{je.label}</td>
+                                            <td className="px-4 py-2.5 max-w-[12.5rem] truncate">{je.label}</td>
                                             <td className="px-4 py-2.5 font-mono text-violet-400">{je.pcgAccount} – {je.pcgLabel}</td>
                                             <td className={`px-4 py-2.5 text-right font-mono tabular-nums ${je.type === 'credit' ? 'text-status-success' : 'text-status-danger'}`}>
                                                 {je.type === 'debit' ? '–' : '+'}{muToEur(Math.abs(je.amountInMicrounits))}

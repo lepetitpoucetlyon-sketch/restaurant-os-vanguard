@@ -187,7 +187,7 @@ export function TutorialBubble() {
                     y: hasTarget ? (showAbove ? '-100%' : '0%') : '-50%'
                 }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                className="absolute w-[320px] bg-surface-card rounded-[2.5rem] shadow-premium shadow-glow-accent/10 dark:shadow-black/80 border border-border-default p-7 pointer-events-auto overflow-hidden ring-1 ring-black/5"
+                className="absolute w-[20rem] bg-surface-card rounded-[2.5rem] shadow-premium shadow-glow-accent/10 dark:shadow-black/80 border border-border-default p-7 pointer-events-auto overflow-hidden ring-1 ring-black/5"
             >
                 {/* Status Indicator Bar */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-1.5 bg-surface-glass rounded-b-xl flex items-center justify-center overflow-hidden">

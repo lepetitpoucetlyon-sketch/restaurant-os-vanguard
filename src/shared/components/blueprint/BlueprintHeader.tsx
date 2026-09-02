@@ -7,7 +7,7 @@ import { Sparkles, Terminal, Activity } from "lucide-react";
 export function BlueprintHeader() {
     return (
         <motion.div variants={fadeInUp} className="text-center space-y-10 relative">
-            <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-accent/10 blur-[100px] rounded-full -z-10" />
+            <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-[18.75rem] h-[300px] bg-accent/10 blur-[100px] rounded-full -z-10" />
 
             <div className="flex flex-col items-center gap-6">
                 <motion.div 

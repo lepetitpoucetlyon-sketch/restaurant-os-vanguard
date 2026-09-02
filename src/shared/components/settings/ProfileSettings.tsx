@@ -98,7 +98,7 @@ export default function ProfileSettings() {
         transition={{ delay: 0.1 }}
         className="bg-bg-secondary border border-border rounded-[2.5rem] shadow-premium p-10 overflow-hidden relative"
       >
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[100px] -mr-64 -mt-64 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[31.25rem] h-[500px] bg-accent/5 rounded-full blur-[100px] -mr-64 -mt-64 pointer-events-none" />
 
         <IdentityCoreHeader
           selectedUser={selectedUser}

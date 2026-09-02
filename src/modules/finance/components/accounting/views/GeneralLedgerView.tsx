@@ -37,7 +37,7 @@ export function GeneralLedgerView() {
                         >
                             <div>
                                 <span className="font-mono text-xs font-bold text-accent">{account.code}</span>
-                                <p className="text-sm font-medium text-text-primary truncate max-w-[180px]">{account.name}</p>
+                                <p className="text-sm font-medium text-text-primary truncate max-w-[11.25rem]">{account.name}</p>
                             </div>
                              <span className={cn("text-sm font-black font-mono", (account.balanceInMicrounits ?? account.balanceInCents) >= 0 ? "text-success" : "text-error")}>
                                 {fmu(account.balanceInMicrounits, account.balanceInCents)}
@@ -66,7 +66,7 @@ export function GeneralLedgerView() {
                             </div>
                         </div>
                         <div className="flex-1 overflow-auto overflow-x-auto custom-scrollbar p-6">
-                            <table className="w-full min-w-[650px]">
+                            <table className="w-full min-w-[40.625rem]">
                                 <thead>
                                     <tr className="border-b border-border">
                                         <th className="text-left py-3 text-nano font-black text-text-muted uppercase">Date</th>

@@ -100,7 +100,7 @@ export function RecipeTechnicalSheet({
     return (
         <div className="flex h-full w-full overflow-hidden">
             {/* Left Side: Recipe Summary & Ingredients */}
-            <div className="w-[380px] bg-bg-primary dark:bg-bg-secondary border-r border-subtle dark:border-border flex flex-col h-full overflow-y-auto elegant-scrollbar">
+            <div className="w-[23.75rem] bg-bg-primary dark:bg-bg-secondary border-r border-subtle dark:border-border flex flex-col h-full overflow-y-auto elegant-scrollbar">
                 {/* Image Section */}
                 <div className="relative h-[300px] w-full mb-10 overflow-hidden">
                     <img

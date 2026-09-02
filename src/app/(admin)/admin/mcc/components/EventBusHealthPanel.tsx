@@ -121,7 +121,7 @@ export const EventBusHealthPanel: React.FC = () => {
                     <div className="text-xs text-text-muted mt-1">{entry.handlerId}</div>
                   </td>
                   <td className="py-3 px-4">
-                    <div className="truncate max-w-[250px] text-red-400" title={entry.error}>
+                    <div className="truncate max-w-[15.625rem] text-red-400" title={entry.error}>
                       {entry.error}
                     </div>
                     <div className="text-xs text-text-muted mt-1">

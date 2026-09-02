@@ -73,7 +73,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                             animate="visible"
                             exit="exit"
                             className={cn(
-                                "pointer-events-auto rounded-2xl shadow-2xl border w-full sm:w-auto sm:min-w-[340px] max-w-md backdrop-blur-xl overflow-hidden",
+                                "pointer-events-auto rounded-2xl shadow-2xl border w-full sm:w-auto sm:min-w-[21.25rem] max-w-md backdrop-blur-xl overflow-hidden",
                                 toast.type === 'success' ? "bg-bg-primary/95 dark:bg-bg-secondary/95 border-green-100 dark:border-green-900/30" :
                                     toast.type === 'error' ? "bg-bg-primary/95 dark:bg-bg-secondary/95 border-red-100 dark:border-red-900/30" :
                                         toast.type === 'premium' ? "bg-text-primary/95 border-default" :

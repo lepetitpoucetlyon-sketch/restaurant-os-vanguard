@@ -73,7 +73,7 @@ export function AutoSafeLayout({
     fluid: "w-full px-4 sm:px-6 lg:px-8",
     contained: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
     split: "w-full grid grid-cols-1 lg:grid-cols-12 gap-6 px-4 sm:px-6",
-    cinema: "w-full max-w-[1800px] mx-auto px-4 sm:px-6",
+    cinema: "w-full max-w-[112.5rem] mx-auto px-4 sm:px-6",
   }[container];
 
   return (

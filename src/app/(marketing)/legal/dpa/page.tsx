@@ -40,7 +40,7 @@ export default function DpaPage() {
 
         <h2>4. Sous-traitants ultérieurs</h2>
         <div className="w-full overflow-x-auto custom-scrollbar my-4">
-          <table className="w-full min-w-[550px]">
+          <table className="w-full min-w-[34.375rem]">
             <thead>
               <tr><th>Sous-traitant</th><th>Finalité</th><th>Localisation</th></tr>
             </thead>

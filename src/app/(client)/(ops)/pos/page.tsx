@@ -176,7 +176,7 @@ function POSPage() {
                         <div className="flex-1 overflow-auto p-4 elegant-scrollbar">
                             <ProductGrid categoryFilter={selectedCategory} onAddToCart={handleAddToCart} products={products} isLoading={isLoading} outOfStockIds={outOfStockIds} />
                         </div>
-                        <div className="w-[340px] shrink-0 border-l border-border-default bg-surface-card overflow-auto elegant-scrollbar">
+                        <div className="w-[21.25rem] shrink-0 border-l border-border-default bg-surface-card overflow-auto elegant-scrollbar">
                             <Cart items={cartItems} onUpdateQuantity={handleUpdateQuantity} onClearCart={handleClearCart} onCheckout={handleCheckoutWithTip} onSendToKitchen={handleSendToKitchen} onSplitBill={() => setIsSplitOpen(true)} tableNumber={currentTable?.number} guestCount={currentTable?.seats} onItemContextMenu={handleItemContextMenu} />
                         </div>
                     </div>
@@ -188,7 +188,7 @@ function POSPage() {
                         </div>
 
                         {isCartSidebar && (
-                            <div className="h-full hidden xl:flex xl:flex-col w-[400px] shrink-0 border-l border-border/50 transition-colors overflow-hidden bg-surface-card">
+                            <div className="h-full hidden xl:flex xl:flex-col w-[25rem] shrink-0 border-l border-border/50 transition-colors overflow-hidden bg-surface-card">
                                 <div className="flex items-center gap-6 px-5 pt-4 pb-0 border-b border-border/40 shrink-0">
                                     <button onClick={() => setIsCourseViewOpen(false)}
                                         aria-current={!isCourseViewOpen ? "page" : undefined}
@@ -275,7 +275,7 @@ function POSPage() {
             <AnimatePresence>
                 {isTipPanelOpen && (
                     <motion.div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} key="tip-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm px-4 pb-8 sm:pb-0" onClick={(e) => { if (e.target === e.currentTarget) handleTipSkipped(); }}>
-                        <motion.div key="tip-card" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ type: "spring", stiffness: 380, damping: 34 }} className="w-full sm:w-[420px]">
+                        <motion.div key="tip-card" initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ type: "spring", stiffness: 380, damping: 34 }} className="w-full sm:w-[26.25rem]">
                             <TipPanel totalInMicrounits={cartTotal} onTipSelect={handleTipConfirmed} />
                             <button onClick={handleTipSkipped} className="mt-4 w-full h-12 rounded-full border border-border text-micro font-black uppercase tracking-wider text-text-muted hover:border-border/80 bg-surface-card/80 transition-colors">Passer — Sans pourboire</button>
                         </motion.div>

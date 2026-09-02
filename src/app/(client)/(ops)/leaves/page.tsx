@@ -161,7 +161,7 @@ function LeavesPage() {
                                 <select
                                     value={statusFilter}
                                     onChange={e => setStatusFilter(e.target.value as LeaveRequestStatus | 'all')}
-                                    className="appearance-none pl-5 pr-12 py-3 rounded-xl bg-bg-secondary border border-border text-xs font-bold uppercase tracking-widest text-text-primary focus:border-accent outline-none cursor-pointer shadow-sm min-w-[200px]"
+                                    className="appearance-none pl-5 pr-12 py-3 rounded-xl bg-bg-secondary border border-border text-xs font-bold uppercase tracking-widest text-text-primary focus:border-accent outline-none cursor-pointer shadow-sm min-w-[12.5rem]"
                                 >
                                     <option value="all">Tous les statuts</option>
                                     <option value="pending_approval">En attente</option>

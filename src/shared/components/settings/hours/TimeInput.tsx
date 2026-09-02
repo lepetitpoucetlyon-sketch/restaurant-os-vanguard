@@ -31,7 +31,7 @@ export function TimeInput({ value, onChange, disabled, label, icon: Icon }: Time
     }, [isPickerOpen]);
 
     return (
-        <div ref={containerRef} className="relative group/time flex-1 min-w-[124px]">
+        <div ref={containerRef} className="relative group/time flex-1 min-w-[7.75rem]">
             {label && (
                 <div className="absolute -top-7 left-1 flex items-center gap-1.5 opacity-60 group-hover/time:opacity-100 transition-opacity">
                     <div className="w-1 h-1 rounded-full bg-accent" />

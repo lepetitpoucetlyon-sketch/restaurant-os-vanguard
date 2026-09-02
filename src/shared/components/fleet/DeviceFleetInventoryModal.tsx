@@ -153,7 +153,7 @@ export function DeviceFleetInventoryModal({ open, onClose }: DeviceFleetInventor
                           <Icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold text-text-primary truncate max-w-[150px]">
+                          <h4 className="text-sm font-bold text-text-primary truncate max-w-[9.375rem]">
                             {device.deviceName}
                           </h4>
                           <p className="text-micro text-text-muted flex items-center gap-1">

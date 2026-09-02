@@ -38,7 +38,7 @@ export default function SimulatorPage() {
     };
 
     return (
-        <div className="flex flex-col gap-10 p-8 max-w-[1400px] mx-auto animate-in fade-in duration-1000">
+        <div className="flex flex-col gap-10 p-8 max-w-[87.5rem] mx-auto animate-in fade-in duration-1000">
             <PageHeader 
                 title="Nexus Temporal Simulator" 
                 subtitle="Grade X Shadow Context Forking & Live Monitoring"

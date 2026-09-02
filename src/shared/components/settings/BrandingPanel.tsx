@@ -529,7 +529,7 @@ export function BrandingPanel() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {draft.logoUrl ? (
-                    <img src={draft.logoUrl} alt="Logo" className="max-h-8 max-w-[120px] object-contain" />
+                    <img src={draft.logoUrl} alt="Logo" className="max-h-8 max-w-[7.5rem] object-contain" />
                   ) : (
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white shadow-lg"

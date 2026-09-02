@@ -245,7 +245,7 @@ export function MercurialeTab() {
                 </div>
             ) : (
                 <div className="overflow-x-auto rounded-2xl border border-border-default bg-surface-card">
-                    <table className="w-full text-left text-xs min-w-[720px]">
+                    <table className="w-full text-left text-xs min-w-[45rem]">
                         <thead className="bg-surface-card border-b border-border-default text-text-muted font-semibold uppercase tracking-wider text-nano">
                             <tr>
                                 <th className="p-3.5">Ingrédient</th>

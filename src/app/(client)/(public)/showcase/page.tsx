@@ -81,8 +81,8 @@ export default function ShowcasePage() {
   return (
     <div className="min-min-h-[100dvh] bg-surface-bg text-text-primary font-sans selection:bg-accent selection:text-primary">
       {/* GLOW OVERLAYS */}
-      <div className="fixed top-0 left-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] -z-10" />
-      <div className="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-action-primary/5 rounded-full blur-[120px] -z-10" />
+      <div className="fixed top-0 left-1/4 w-[31.25rem] h-[500px] bg-accent/10 rounded-full blur-[120px] -z-10" />
+      <div className="fixed bottom-0 right-1/4 w-[31.25rem] h-[500px] bg-action-primary/5 rounded-full blur-[120px] -z-10" />
 
       {/* HERO SECTION */}
       <section className="pt-32 pb-20 px-6 text-center max-w-5xl mx-auto">

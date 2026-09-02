@@ -46,7 +46,7 @@ export function SingleTableForm({ zone, onAdd }: SingleTableFormProps) {
           className="w-full rounded-md border border-border bg-bg-primary px-2 py-1.5 text-sm text-text-primary focus:outline-none focus:border-accent"
         />
       </label>
-      <label className="space-y-1 flex-1 min-w-[100px]">
+      <label className="space-y-1 flex-1 min-w-[6.25rem]">
         <span className="text-xs text-text-muted">Forme</span>
         <select
           value={shape}

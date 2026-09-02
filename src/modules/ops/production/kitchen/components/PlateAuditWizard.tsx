@@ -130,7 +130,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                 </div>
 
                 {/* Right: AI Intelligence Panel */}
-                <div className="w-full md:w-[450px] p-12 bg-surface-card flex flex-col justify-center">
+                <div className="w-full md:w-[28.125rem] p-12 bg-surface-card flex flex-col justify-center">
                     {!auditResult && !isScanning && (
                         <div className="text-center space-y-6">
                             <div className="w-20 h-20 bg-surface-card/5 rounded-3xl flex items-center justify-center mx-auto">

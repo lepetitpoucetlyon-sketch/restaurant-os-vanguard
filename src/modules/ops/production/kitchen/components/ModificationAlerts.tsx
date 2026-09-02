@@ -267,7 +267,7 @@ export function ModificationAlertsPanel({ isOpen, onClose }: ModificationAlertsP
                                             <h3 className="font-serif font-medium text-2xl text-primary dark:text-text-primary mb-2">
                                                 Tout est en ordre
                                             </h3>
-                                            <p className="text-secondary max-w-[200px] leading-relaxed">
+                                            <p className="text-secondary max-w-[12.5rem] leading-relaxed">
                                                 Aucune demande de modification en attente pour le moment.
                                             </p>
                                         </motion.div>

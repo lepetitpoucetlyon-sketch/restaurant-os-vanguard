@@ -173,7 +173,7 @@ export function PinModal({ isOpen, title, onConfirm, onClose, error }: PinModalP
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.88, y: 24 }}
                         transition={{ type: "spring", stiffness: 440, damping: 32 }}
-                        className="bg-surface-card border border-border rounded-[2rem] p-8 w-[340px] shadow-2xl"
+                        className="bg-surface-card border border-border rounded-[2rem] p-8 w-[21.25rem] shadow-2xl"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between mb-8">

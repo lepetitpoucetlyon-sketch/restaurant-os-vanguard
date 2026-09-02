@@ -199,7 +199,7 @@ export function LifecycleTreePanel() {
                                                 <div className="space-y-3">
                                                     {branch.steps.map((step, sIdx) => (
                                                         <div key={sIdx} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-xl bg-surface-bg/50 border border-border-subtle/50 hover:border-focus/30 transition-colors">
-                                                            <div className="flex items-center gap-2 min-w-[120px]">
+                                                            <div className="flex items-center gap-2 min-w-[7.5rem]">
                                                                 <span className="text-chip-label text-muted bg-surface-hover px-2 py-1 rounded-lg">
                                                                     {step.actor}
                                                                 </span>

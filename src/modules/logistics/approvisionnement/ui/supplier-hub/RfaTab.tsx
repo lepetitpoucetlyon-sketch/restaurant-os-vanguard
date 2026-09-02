@@ -270,7 +270,7 @@ export function RfaTab() {
 
                                 {isOpen && (
                                     <div className="mt-3 overflow-x-auto">
-                                        <table className="w-full text-left text-xs min-w-[420px]">
+                                        <table className="w-full text-left text-xs min-w-[26.25rem]">
                                             <thead className="text-text-muted uppercase tracking-wider text-nano border-b border-border-default">
                                                 <tr>
                                                     <th className="py-2">Palier</th>

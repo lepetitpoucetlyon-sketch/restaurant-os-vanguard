@@ -92,7 +92,7 @@ export function UniversalAssistantFrame() {
                                 "fixed z-50 bg-bg-primary/95 border border-border/80 shadow-2xl backdrop-blur-xl flex flex-col transition-all duration-300",
                                 viewMode === 'EXPANDED'
                                     ? "inset-4 sm:inset-10 rounded-2xl border-accent/30"
-                                    : "top-0 right-0 bottom-0 w-full sm:w-[420px] border-l"
+                                    : "top-0 right-0 bottom-0 w-full sm:w-[26.25rem] border-l"
                             )}
                         >
                             {/* Header de la Frame */}

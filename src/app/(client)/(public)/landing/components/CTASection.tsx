@@ -11,7 +11,7 @@ export function CTASection() {
         <section className="relative py-32 px-6 bg-surface-card overflow-hidden">
             {/* Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-action-primary/10 via-transparent to-[#007AFF]/5" />
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-action-primary/10 rounded-full blur-[150px]" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[62.5rem] h-[400px] bg-action-primary/10 rounded-full blur-[150px]" />
 
             <motion.div
                 initial={{ opacity: 0, y: 30 }}

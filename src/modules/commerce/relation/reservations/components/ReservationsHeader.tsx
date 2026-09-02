@@ -97,7 +97,7 @@ export function ReservationsHeader({
                             >
                                 <ChevronLeft className="w-4 h-4" />
                             </button>
-                            <span className="text-sm font-serif italic text-text-primary capitalize min-w-[150px] text-center tracking-tight">{displayDate}</span>
+                            <span className="text-sm font-serif italic text-text-primary capitalize min-w-[9.375rem] text-center tracking-tight">{displayDate}</span>
                             <button
                                 onClick={() => setSelectedDate((d) => { const n = new Date(d); n.setDate(n.getDate() + 1); return n; })}
                                 aria-label="Jour suivant"
@@ -117,7 +117,7 @@ export function ReservationsHeader({
                             >
                                 <ChevronLeft className="w-4 h-4" />
                             </button>
-                            <span className="text-sm font-serif italic text-text-primary min-w-[190px] text-center tracking-tight">{weekLabel}</span>
+                            <span className="text-sm font-serif italic text-text-primary min-w-[11.875rem] text-center tracking-tight">{weekLabel}</span>
                             <button
                                 onClick={() => setWeekOffset((o) => o + 1)}
                                 aria-label="Semaine suivante"

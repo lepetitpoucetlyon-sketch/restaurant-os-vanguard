@@ -20,8 +20,8 @@ export function HeroSection() {
                 style={{ backgroundImage: `url(${brandBanner})` }}
             />
 
-            <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-action-primary/10 rounded-full blur-[150px] opacity-50" />
-            <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-action-accent/10 rounded-full blur-[120px] opacity-30" />
+            <div className="absolute top-1/4 left-1/4 w-[37.5rem] h-[600px] bg-action-primary/10 rounded-full blur-[150px] opacity-50" />
+            <div className="absolute bottom-1/4 right-1/4 w-[25rem] h-[400px] bg-action-accent/10 rounded-full blur-[120px] opacity-30" />
 
             {/* Grid Pattern */}
             <div

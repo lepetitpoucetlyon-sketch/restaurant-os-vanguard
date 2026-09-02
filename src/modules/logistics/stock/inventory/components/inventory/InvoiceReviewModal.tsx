@@ -83,7 +83,7 @@ export function InvoiceReviewModal({ data, onClose, onSaveComplete }: InvoiceRev
                 {/* Content Table with Responsive Horizontal Scroll */}
                 <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-10 custom-scrollbar">
                     <div className="overflow-x-auto elegant-scrollbar -mx-2 px-2">
-                        <table className="w-full min-w-[580px] border-separate border-spacing-y-4">
+                        <table className="w-full min-w-[36.25rem] border-separate border-spacing-y-4">
                             <thead>
                                 <tr className="text-nano font-black text-secondary uppercase tracking-[0.3em]">
                                     <th className="text-left px-4 sm:px-6 py-3 sm:py-4 font-black">Produit Extrait</th>

@@ -52,7 +52,7 @@ export function StorageDetailBubble({
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] max-h-[85vh] bg-bg-secondary/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/20 z-50 flex flex-col overflow-hidden border border-border"
+                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32.5rem] max-h-[85vh] bg-bg-secondary/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/20 z-50 flex flex-col overflow-hidden border border-border"
             >
                 <StorageBubbleHeader
                     location={location}

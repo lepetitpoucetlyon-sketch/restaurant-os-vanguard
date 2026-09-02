@@ -112,7 +112,7 @@ export function FloorPlanHeader({
                                     exit={{ opacity: 0, y: 8 }}
                                     transition={{ ease: [0.16, 1, 0.3, 1], duration: 0.24 }}
                                     role="listbox"
-                                    className="absolute top-full left-0 mt-3 w-[260px] bg-surface-card border border-border/60 rounded-xl shadow-2xl z-50 p-1 overflow-hidden"
+                                    className="absolute top-full left-0 mt-3 w-[16.25rem] bg-surface-card border border-border/60 rounded-xl shadow-2xl z-50 p-1 overflow-hidden"
                                 >
                                     {floors.map((f) => {
                                         const isCurrent = f.id === currentFloorId;

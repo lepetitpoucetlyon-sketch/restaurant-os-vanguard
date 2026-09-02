@@ -25,7 +25,7 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
             <div className="w-80 h-full bg-bg-secondary border-l border-white/10 p-6 flex flex-col items-center justify-center text-center text-text-muted select-none">
                 <Sliders className="w-10 h-10 text-neutral-600 mb-3" />
                 <span className="text-xs font-medium text-text-secondary">Aucun élément sélectionné</span>
-                <span className="text-[11px] text-text-muted mt-1 max-w-[200px]">
+                <span className="text-[11px] text-text-muted mt-1 max-w-[12.5rem]">
                     Cliquez sur un élément du canvas ou de l arborescence pour inspecter ses propriétés.
                 </span>
             </div>
@@ -48,7 +48,7 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
             <div className="p-4 border-b border-white/10 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <Sliders className="w-4 h-4 text-amber-400" />
-                    <span className="text-xs font-semibold text-text-primary truncate max-w-[160px]">
+                    <span className="text-xs font-semibold text-text-primary truncate max-w-[10rem]">
                         {node.name}
                     </span>
                 </div>
@@ -136,7 +136,7 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
                     <div className="space-y-3 border-t border-white/5 pt-4">
                         <span className="text-[10px] font-mono uppercase tracking-wider text-text-muted">Auto-Layout</span>
 
-                        <div className="grid grid-cols-3 gap-1 bg-bg-tertiary/40 p-1 rounded-xl border border-white/5">
+                        <div className="grid grid-cols-3 sm:grid-cols-3 gap-1 bg-bg-tertiary/40 p-1 rounded-xl border border-white/5">
                             <button
                                 onClick={() => onUpdateNode(node.id, { layoutMode: 'NONE' } as Partial<SceneNode>)}
                                 className={`py-1 rounded text-[11px] font-medium transition-all ${
@@ -207,7 +207,7 @@ export const PropertyInspector: React.FC<PropertyInspectorProps> = ({
                     <span className="text-[10px] font-mono uppercase tracking-wider text-text-muted">Couleur & Remplissage</span>
                     
                     {/* Preset Palettes */}
-                    <div className="grid grid-cols-6 gap-1.5">
+                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
                         {Object.entries(OPEN_PENCIL_DEFAULT_COLORS).slice(0, 12).map(([key, rgba]) => (
                             <button
                                 key={key}

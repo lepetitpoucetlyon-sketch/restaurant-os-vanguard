@@ -159,7 +159,7 @@ export function RFMSegmentation({ customers }: Props) {
                             {meta.label} ({segRows.length})
                         </div>
                         <div className="overflow-x-auto rounded-xl border border-border">
-                            <table className="w-full text-xs min-w-[540px]">
+                            <table className="w-full text-xs min-w-[33.75rem]">
                                 <thead>
                                     <tr className="bg-surface-glass text-text-muted border-b border-border">
                                         <th className="px-4 py-2 text-left font-medium">Client</th>

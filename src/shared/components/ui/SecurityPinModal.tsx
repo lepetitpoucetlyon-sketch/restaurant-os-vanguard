@@ -76,7 +76,7 @@ export const SecurityPinModal: React.FC<SecurityPinModalProps> = ({
                 </div>
 
                 <h3 className="text-xl font-serif font-bold text-text-primary mb-2">{title}</h3>
-                <p className="text-sm text-text-muted mb-8 max-w-[280px] mx-auto">{description}</p>
+                <p className="text-sm text-text-muted mb-8 max-w-[17.5rem] mx-auto">{description}</p>
 
                 <div className="flex justify-center gap-4 mb-10">
                     {[0, 1, 2, 3].map((i) => (
@@ -94,7 +94,7 @@ export const SecurityPinModal: React.FC<SecurityPinModalProps> = ({
                     ))}
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 max-w-[280px] mx-auto">
+                <div className="grid grid-cols-3 sm:grid-cols-3 gap-4 max-w-[17.5rem] mx-auto">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
                         <button
                             key={num}

@@ -46,7 +46,7 @@ export function DateNavigator({
                 <ChevronLeft strokeWidth={2.5} className="h-4 w-4" />
             </motion.button>
 
-            <span className="text-sm font-serif font-medium italic text-text-primary capitalize min-w-[140px] text-center">
+            <span className="text-sm font-serif font-medium italic text-text-primary capitalize min-w-[8.75rem] text-center">
                 {displayDate}
             </span>
 

@@ -138,7 +138,7 @@ function AnalyticsPage() {
                         <section>
                             <SectionHeader icon={BarChart2}>CA — 30 derniers jours</SectionHeader>
                             <div className="rounded-xl border border-border/60 bg-surface-base p-4 overflow-x-auto">
-                                <div className="flex items-end gap-[3px] min-w-[520px]" style={{ height: "140px" }}>
+                                <div className="flex items-end gap-[3px] min-w-[32.5rem]" style={{ height: "140px" }}>
                                     {chartData.map((d: { label: string; fullLabel: string; revenue: number }, i: number) => (
                                         <div key={i} className="flex flex-col items-center flex-1 gap-1.5 group" title={`${d.fullLabel} : ${d.revenue.toLocaleString("fr-FR")} €`}>
                                             <div className="flex-1 w-full flex items-end">

@@ -71,7 +71,7 @@ export function DUERPSection() {
                     Évaluation des Risques par Zone
                 </h3>
                 <div className="bg-surface-card dark:bg-bg-secondary rounded-2xl border border-border shadow-sm overflow-hidden overflow-x-auto custom-scrollbar">
-                    <table className="w-full text-sm text-left min-w-[600px]">
+                    <table className="w-full text-sm text-left min-w-[37.5rem]">
                         <thead>
                             <tr className="bg-bg-tertiary/30 text-nano font-black text-text-muted uppercase tracking-[0.2em] border-b border-border">
                                 <th className="px-8 py-5">Zone</th>

@@ -57,7 +57,7 @@ export function MindMapDependencies() {
                         whileHover={{ scale: 1.1, zIndex: 10, transition: { duration: 0.2 } }}
                         className="absolute p-6 rounded-[2.5rem] bg-bg-tertiary/80 border border-border/50 backdrop-blur-3xl shadow-premium hover:border-accent/50 transition-colors group cursor-help"
                     >
-                        <div className="flex items-center gap-5 min-w-[160px]">
+                        <div className="flex items-center gap-5 min-w-[10rem]">
                             <div className={`w-14 h-14 rounded-2xl ${node.bg} border border-border flex items-center justify-center shadow-lg`}>
                                 <node.icon className={`w-7 h-7 ${node.color} group-hover:scale-110 transition-transform`} />
                             </div>

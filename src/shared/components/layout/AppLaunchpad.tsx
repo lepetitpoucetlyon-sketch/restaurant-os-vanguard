@@ -255,7 +255,7 @@ export function AppLaunchpad({ isOpen, onClose, sections }: AppLaunchpadProps) {
                                                 </div>
 
                                                 <div className="flex flex-col items-center text-center px-2">
-                                                    <span className="font-serif font-black italic text-[13px] md:text-[15px] uppercase tracking-wider group-hover:text-accent-gold transition-all duration-300 line-clamp-2 max-w-[110px] md:max-w-[140px] leading-tight opacity-95 group-hover:opacity-100 text-primary">
+                                                    <span className="font-serif font-black italic text-[13px] md:text-[15px] uppercase tracking-wider group-hover:text-accent-gold transition-all duration-300 line-clamp-2 max-w-[6.875rem] md:max-w-[8.75rem] leading-tight opacity-95 group-hover:opacity-100 text-primary">
                                                         {t(`nav.${item.key}`, item.label)}
                                                     </span>
                                                     <motion.div

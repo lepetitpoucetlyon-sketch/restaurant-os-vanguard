@@ -105,7 +105,7 @@ export function CustomerImportPreview({
                     {Object.keys(rows[0]).slice(0, 8).map((col) => (
                       <td
                         key={col}
-                        className="px-3 py-1.5 text-text-primary truncate max-w-[120px]"
+                        className="px-3 py-1.5 text-text-primary truncate max-w-[7.5rem]"
                         title={row[col] ?? ""}
                       >
                         {row[col] || (

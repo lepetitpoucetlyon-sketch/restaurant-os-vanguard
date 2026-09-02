@@ -47,7 +47,7 @@ export default function SecurityPage() {
 
         <h2>Infrastructure</h2>
         <div className="w-full overflow-x-auto custom-scrollbar my-4">
-          <table className="w-full min-w-[550px]">
+          <table className="w-full min-w-[34.375rem]">
             <thead>
               <tr><th>Service</th><th>Fournisseur</th><th>Localisation</th></tr>
             </thead>

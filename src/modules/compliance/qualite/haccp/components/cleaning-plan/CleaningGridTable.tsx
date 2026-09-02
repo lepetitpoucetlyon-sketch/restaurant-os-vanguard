@@ -18,7 +18,7 @@ export function CleaningGridTable({
 }: CleaningGridTableProps) {
     return (
         <div className="overflow-x-auto rounded-xl border border-border">
-            <table className="w-full text-xs border-collapse min-w-[720px]">
+            <table className="w-full text-xs border-collapse min-w-[45rem]">
                 <thead>
                     <tr className="bg-surface-glass">
                         <th className="px-3 py-2 text-left text-text-muted font-medium border-b border-border w-40">Zone / Tâche</th>

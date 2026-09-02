@@ -79,7 +79,7 @@ export function CartItemContextMenu({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 32 }}
                         transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                        className="bg-surface-card border border-border rounded-t-[2rem] sm:rounded-[2rem] p-6 w-full sm:w-[400px] shadow-2xl"
+                        className="bg-surface-card border border-border rounded-t-[2rem] sm:rounded-[2rem] p-6 w-full sm:w-[25rem] shadow-2xl"
                     >
                         {/* Header */}
                         <div className="flex items-center justify-between mb-5">

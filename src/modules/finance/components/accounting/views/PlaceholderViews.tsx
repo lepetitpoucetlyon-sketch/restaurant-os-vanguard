@@ -25,13 +25,13 @@ export function SuppliersView() {
         <StatCard label="Délai Moyen de Règlement" value="28 jours" />
       </StatGrid>
       <div className="bg-surface-card border border-border-default rounded-2xl overflow-hidden overflow-x-auto custom-scrollbar">
-        <div className="p-4 border-b border-border-default flex justify-between items-center min-w-[600px]">
+        <div className="p-4 border-b border-border-default flex justify-between items-center min-w-[37.5rem]">
           <h3 className="font-bold text-sm text-text-primary">Balance Auxiliaire Fournisseurs (Compte 401)</h3>
           <button className="px-3 py-1.5 rounded-xl bg-action-primary text-text-on-primary text-xs font-bold shadow-sm">
             {"Nouveau Règlement"}
           </button>
         </div>
-        <table className="w-full text-xs min-w-[600px]">
+        <table className="w-full text-xs min-w-[37.5rem]">
           <thead className="bg-surface-bg text-text-muted">
             <tr>
               <th className="p-3 text-left">Compte</th>

@@ -156,7 +156,7 @@ export function TenantUsersPanel({ instance }: Props) {
                     <ChevronDown className="w-3 h-3" />
                   </button>
                   {roleEditing === u.id && (
-                    <div className="absolute right-0 top-full mt-1 z-50 bg-surface-bg border border-border-subtle rounded-xl overflow-hidden shadow-xl min-w-[120px]">
+                    <div className="absolute right-0 top-full mt-1 z-50 bg-surface-bg border border-border-subtle rounded-xl overflow-hidden shadow-xl min-w-[7.5rem]">
                       {Object.entries(ROLE_LABELS).map(([role, label]) => (
                         <button
                           key={role}

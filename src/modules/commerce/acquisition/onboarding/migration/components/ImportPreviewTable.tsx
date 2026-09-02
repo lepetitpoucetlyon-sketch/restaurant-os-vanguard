@@ -71,7 +71,7 @@ export function ImportPreviewTable({
             {preview.map((row, i) => (
               <tr key={i} className="hover:bg-muted/30 transition-colors">
                 {headers.map(h => (
-                  <td key={h} className="px-3 py-1.5 whitespace-nowrap max-w-[160px] truncate text-foreground/80">{row[h]}</td>
+                  <td key={h} className="px-3 py-1.5 whitespace-nowrap max-w-[10rem] truncate text-foreground/80">{row[h]}</td>
                 ))}
               </tr>
             ))}

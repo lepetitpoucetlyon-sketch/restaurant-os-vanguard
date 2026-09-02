@@ -60,7 +60,7 @@ export function PreviewTable({ rows, onRowChange, maxRows = 50, readOnly = false
                 return (
                   <td
                     key={col}
-                    className="px-3 py-1.5 max-w-[200px] truncate cursor-pointer"
+                    className="px-3 py-1.5 max-w-[12.5rem] truncate cursor-pointer"
                     title={row[col] ?? ''}
                     onDoubleClick={() => startEdit(rowIdx, col, row[col] ?? '')}
                   >

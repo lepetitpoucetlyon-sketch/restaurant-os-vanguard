@@ -107,7 +107,7 @@ function ShiftCard({ shift, warnings }: { shift: Shift; warnings: LegalWarning[]
             )}
         >
             {/* Date + time */}
-            <div className="flex items-center gap-2 min-w-[220px]">
+            <div className="flex items-center gap-2 min-w-[13.75rem]">
                 <Clock className="w-3.5 h-3.5 text-text-muted flex-shrink-0" />
                 <span className="text-xs font-medium text-text-primary capitalize">{dateLabel}</span>
                 <span className="text-xs text-text-muted">
@@ -239,7 +239,7 @@ export function PlanningWeekView({
                         >
                             <ChevronLeft className="w-4 h-4" />
                         </button>
-                        <span className="px-3 text-sm font-serif font-medium text-text-primary min-w-[170px] text-center">
+                        <span className="px-3 text-sm font-serif font-medium text-text-primary min-w-[10.625rem] text-center">
                             {weekLabel}
                         </span>
                         <button

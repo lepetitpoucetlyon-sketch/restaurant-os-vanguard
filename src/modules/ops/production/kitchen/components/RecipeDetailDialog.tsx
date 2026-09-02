@@ -43,7 +43,7 @@ export function RecipeDetailDialog({ isOpen, onClose, recipe }: RecipeDetailDial
         >
             <div className="w-full h-[85vh] rounded-[3rem] shadow-[0_32px_128px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col md:flex-row relative border transition-colors duration-500 bg-surface-card border-black/5">
                 {/* Static Sidebar */}
-                <div className="md:w-[450px] border-r flex flex-col h-full shrink-0 relative transition-colors duration-500 bg-surface-bg border-black/5">
+                <div className="md:w-[28.125rem] border-r flex flex-col h-full shrink-0 relative transition-colors duration-500 bg-surface-bg border-black/5">
                     <RecipeSidebarHero
                         recipe={recipe}
                         basePortions={basePortions}

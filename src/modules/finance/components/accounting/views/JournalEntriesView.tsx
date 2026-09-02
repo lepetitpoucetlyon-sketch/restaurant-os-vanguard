@@ -55,7 +55,7 @@ export function JournalEntriesView() {
             </div>
 
             <div className="bg-bg-secondary rounded-2xl border border-border overflow-hidden overflow-x-auto custom-scrollbar">
-                <table className="w-full min-w-[700px]">
+                <table className="w-full min-w-[43.75rem]">
                     <thead>
                         <tr className="border-b border-border bg-bg-tertiary/30">
                             <th className="text-left py-4 px-6 text-nano font-black text-text-muted uppercase">Date</th>

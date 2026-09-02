@@ -146,7 +146,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
     return (
         <div className={cn(
             "flex flex-col h-full bg-surface-card dark:bg-bg-secondary transition-colors duration-200",
-            !isMobile ? "border-l border-border w-[380px] lg:w-[420px]" : "w-full"
+            !isMobile ? "border-l border-border w-[23.75rem] lg:w-[26.25rem]" : "w-full"
         )}>
             {/* Cart Header */}
             <div className="p-5 border-b border-border flex items-center justify-between bg-surface-card dark:bg-bg-secondary">

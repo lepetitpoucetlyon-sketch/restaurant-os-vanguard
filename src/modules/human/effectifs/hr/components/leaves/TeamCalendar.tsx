@@ -86,7 +86,7 @@ export function TeamCalendar() {
             </div>
 
             {/* Calendar grid */}
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 sm:grid-cols-7 gap-2">
                 {/* Header */}
                 {weekDays.map(day => (
                     <div key={day} className="text-center text-nano font-bold text-text-muted uppercase tracking-widest py-3">

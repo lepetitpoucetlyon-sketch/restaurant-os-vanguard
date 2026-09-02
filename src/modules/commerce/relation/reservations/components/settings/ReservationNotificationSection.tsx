@@ -316,7 +316,7 @@ export function ReservationNotificationSection({ config, setConfig }: Props) {
 
           {/* Live Smartphone Simulator */}
           <div className="lg:col-span-5 flex flex-col items-center">
-            <div className="w-full max-w-[280px] bg-neutral-900 border-4 border-neutral-700 rounded-[2.5rem] p-3 shadow-2xl space-y-3 text-white">
+            <div className="w-full max-w-[17.5rem] bg-neutral-900 border-4 border-neutral-700 rounded-[2.5rem] p-3 shadow-2xl space-y-3 text-white">
               {/* Phone speaker & camera notch */}
               <div className="w-20 h-4 bg-neutral-800 rounded-full mx-auto" />
               

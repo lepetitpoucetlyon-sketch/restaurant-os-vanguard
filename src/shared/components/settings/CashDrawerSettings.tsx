@@ -168,7 +168,7 @@ export default function CashDrawerSettings() {
                     <p className="text-chip-label text-text-muted">
                         Configuration série
                     </p>
-                    <div className="max-w-[200px]">
+                    <div className="max-w-[12.5rem]">
                         <label className="text-chip-label-sm text-text-muted block mb-1.5">
                             Baud rate
                         </label>

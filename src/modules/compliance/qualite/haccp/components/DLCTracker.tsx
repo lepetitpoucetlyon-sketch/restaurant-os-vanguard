@@ -150,7 +150,7 @@ export function DLCTracker() {
                 </div>
             ) : (
                 <div className="overflow-x-auto rounded-xl border border-border">
-                    <table className="w-full text-sm border-collapse min-w-[640px]">
+                    <table className="w-full text-sm border-collapse min-w-[40rem]">
                         <thead>
                             <tr className="bg-surface-glass text-xs text-text-muted">
                                 <th className="px-3 py-2.5 text-left font-medium border-b border-border">Ingrédient</th>

@@ -131,7 +131,7 @@ export function BankTab({
                     </p>
                 ) : (
                     <div className="overflow-x-auto rounded-lg border border-border">
-                        <table className="w-full text-sm min-w-[560px]">
+                        <table className="w-full text-sm min-w-[35rem]">
                             <thead>
                                 <tr className="bg-surface-glass border-b border-border text-xs text-text-muted">
                                     <th className="text-left px-4 py-2.5 font-medium">Date</th>

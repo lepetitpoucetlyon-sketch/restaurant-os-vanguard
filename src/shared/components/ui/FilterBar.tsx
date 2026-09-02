@@ -73,7 +73,7 @@ export function FilterBar({
         <div className={cn("flex items-center gap-3 flex-wrap", styles.container, className)}>
             {/* Search */}
             {onSearch && (
-                <div className="relative flex-1 min-w-[200px]">
+                <div className="relative flex-1 min-w-[12.5rem]">
                     <input
                         type="text"
                         value={searchQuery}
@@ -115,7 +115,7 @@ export function FilterBar({
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             className={cn(
-                                "absolute top-full left-0 mt-2 min-w-[180px] bg-bg-secondary border border-border shadow-xl z-50 overflow-hidden",
+                                "absolute top-full left-0 mt-2 min-w-[11.25rem] bg-bg-secondary border border-border shadow-xl z-50 overflow-hidden",
                                 styles.dropdown
                             )}
                         >

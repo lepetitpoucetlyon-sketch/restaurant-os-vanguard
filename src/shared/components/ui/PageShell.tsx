@@ -226,7 +226,7 @@ export function PageShell({
       <main
         className={cn(
           "flex-1 flex flex-col",
-          isFlush ? "p-0" : isCompact ? "p-4" : "p-6 lg:p-8 max-w-[1600px] w-full mx-auto",
+          isFlush ? "p-0" : isCompact ? "p-4" : "p-6 lg:p-8 max-w-[100rem] w-full mx-auto",
           contentClassName
         )}
       >

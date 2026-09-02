@@ -36,7 +36,7 @@ export default function VsZeltyPage() {
         </p>
 
         <div className="rounded-2xl border border-white/[0.06] overflow-hidden overflow-x-auto custom-scrollbar">
-          <table className="w-full text-sm min-w-[600px]">
+          <table className="w-full text-sm min-w-[37.5rem]">
             <thead>
               <tr className="bg-white/[0.03]">
                 <th className="text-left px-6 py-4 font-medium text-white/60">Fonctionnalité</th>

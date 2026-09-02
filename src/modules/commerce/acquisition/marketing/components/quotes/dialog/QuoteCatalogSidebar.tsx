@@ -29,7 +29,7 @@ export function QuoteCatalogSidebar({
                     animate={{ x: 0 }}
                     exit={{ x: '100%' }}
                     transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                    className="absolute top-0 right-0 w-[400px] h-full bg-bg-secondary border-l border-border z-50 shadow-2xl p-8 flex flex-col"
+                    className="absolute top-0 right-0 w-[25rem] h-full bg-bg-secondary border-l border-border z-50 shadow-2xl p-8 flex flex-col"
                 >
                     <div className="flex items-center justify-between mb-10">
                         <h4 className="text-micro font-black text-text-primary uppercase tracking-[0.4em]">Bibliothèque Artefacts</h4>

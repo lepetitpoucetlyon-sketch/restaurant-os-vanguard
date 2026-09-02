@@ -52,7 +52,7 @@ export function SectorStudyTab() {
           </p>
         </div>
 
-        <div className="relative min-w-[240px]">
+        <div className="relative min-w-[15rem]">
           <Search className="w-4 h-4 text-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"

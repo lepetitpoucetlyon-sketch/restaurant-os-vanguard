@@ -32,7 +32,7 @@ export function ResaSummaryPanel({
     onSubmit,
 }: ResaSummaryPanelProps) {
     return (
-        <div className="w-[300px] bg-bg-secondary p-10 flex flex-col justify-between shrink-0 border-l border-border">
+        <div className="w-[18.75rem] bg-bg-secondary p-10 flex flex-col justify-between shrink-0 border-l border-border">
             <div className="space-y-6">
                 {selectedCustomer ? (
                     <>
@@ -74,7 +74,7 @@ export function ResaSummaryPanel({
                         <div className="w-16 h-16 rounded-full bg-bg-tertiary flex items-center justify-center mx-auto border border-dashed border-border">
                             <Users strokeWidth={1} className="w-8 h-8 text-text-muted/30" />
                         </div>
-                        <p className="text-micro font-black uppercase tracking-widest text-text-muted max-w-[160px] mx-auto leading-relaxed italic">
+                        <p className="text-micro font-black uppercase tracking-widest text-text-muted max-w-[10rem] mx-auto leading-relaxed italic">
                             Sélectionnez un client pour continuer
                         </p>
                     </div>

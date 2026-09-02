@@ -23,7 +23,7 @@ export function MindMapSidebar({ selectedNode, onClose, onSelectNode }: MindMapS
 
     return (
         <div className={cn(
-            "w-[400px] border-l border-border bg-bg-primary dark:bg-bg-secondary shadow-[-20px_0_40px_rgba(0,0,0,0.05)] transition-transform duration-500 ease-in-out absolute right-0 top-0 bottom-0 z-30 p-10 flex flex-col",
+            "w-[25rem] border-l border-border bg-bg-primary dark:bg-bg-secondary shadow-[-20px_0_40px_rgba(0,0,0,0.05)] transition-transform duration-500 ease-in-out absolute right-0 top-0 bottom-0 z-30 p-10 flex flex-col",
             selectedNode ? "translate-x-0" : "translate-x-full"
         )}>
             {selectedNode && (

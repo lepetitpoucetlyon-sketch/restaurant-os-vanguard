@@ -63,7 +63,7 @@ export function TimesheetTab({ visibleShiftLogs, isManager, staffMembers }: Time
                                                 {employee?.displayName ?? employee?.email ?? log.performedBy}
                                             </td>
                                         )}
-                                        <td className="px-4 py-2.5 font-mono text-nano text-text-muted truncate max-w-[160px]">
+                                        <td className="px-4 py-2.5 font-mono text-nano text-text-muted truncate max-w-[10rem]">
                                             {log.shiftId}
                                         </td>
                                     </tr>

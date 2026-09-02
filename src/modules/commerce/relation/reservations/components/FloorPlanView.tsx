@@ -18,7 +18,7 @@ export function FloorPlanView({ setSelectedTable }: FloorPlanViewProps) {
 
     return (
         <div className="p-4 md:p-8 pb-32">
-            <div className="max-w-[1800px] mx-auto space-y-12">
+            <div className="max-w-[112.5rem] mx-auto space-y-12">
                 {Object.entries(TABLES_DATA).map(([zone, tableList]) => (
                     <div key={zone}>
                         <div className="flex items-center gap-4 mb-6">

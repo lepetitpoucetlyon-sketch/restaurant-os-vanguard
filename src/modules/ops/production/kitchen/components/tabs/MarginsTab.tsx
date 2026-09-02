@@ -100,7 +100,7 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                             )}>
                                 <kpi.icon strokeWidth={1.5} className={cn("w-6 h-6", kpi.color)} />
                             </div>
-                            <span className="text-nano font-black uppercase text-text-muted tracking-[0.2em] leading-tight max-w-[100px]">{kpi.label}</span>
+                            <span className="text-nano font-black uppercase text-text-muted tracking-[0.2em] leading-tight max-w-[6.25rem]">{kpi.label}</span>
                         </div>
                         <div className="text-5xl font-serif font-black text-text-primary tracking-tighter mb-4">{kpi.value}</div>
                         <p className={cn(
@@ -215,7 +215,7 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                                         </td>
                                         <td className="px-10 py-6 text-right">
                                             <span className={cn(
-                                                "px-4 py-2 rounded-xl text-nano font-black uppercase tracking-[0.2em] shadow-sm inline-block min-w-[120px] text-center",
+                                                "px-4 py-2 rounded-xl text-nano font-black uppercase tracking-[0.2em] shadow-sm inline-block min-w-[7.5rem] text-center",
                                                 status === 'excellent' ? 'bg-accent-gold/10 text-accent-gold border border-accent-gold/20' :
                                                     status === 'good' ? 'bg-warning/10 text-warning border border-warning/20' :
                                                         'bg-error/10 text-error border border-error/20'

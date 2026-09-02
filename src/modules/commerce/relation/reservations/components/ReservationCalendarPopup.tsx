@@ -57,7 +57,7 @@ export function ReservationCalendarPopup({
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    className="absolute top-full mt-4 left-1/2 -translate-x-1/2 w-[350px] bg-bg-secondary backdrop-blur-2xl border border-border shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[2.5rem] p-6 z-[60] overflow-hidden"
+                    className="absolute top-full mt-4 left-1/2 -translate-x-1/2 w-[21.875rem] bg-bg-secondary backdrop-blur-2xl border border-border shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-[2.5rem] p-6 z-[60] overflow-hidden"
                 >
                     <div className="flex items-center justify-between mb-6">
                         <button aria-label="Précédent" onClick={handlePrevMonth} className="p-2 hover:bg-bg-tertiary rounded-full text-text-muted hover:text-accent transition-all">
@@ -71,7 +71,7 @@ export function ReservationCalendarPopup({
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-7 gap-1 mb-2">
+                    <div className="grid grid-cols-7 sm:grid-cols-7 gap-1 mb-2">
                         {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, i) => (
                             <div key={i} className="text-nano font-black text-text-muted/50 text-center uppercase tracking-widest py-2">
                                 {d}
@@ -79,7 +79,7 @@ export function ReservationCalendarPopup({
                         ))}
                     </div>
 
-                    <div className="grid grid-cols-7 gap-1">
+                    <div className="grid grid-cols-7 sm:grid-cols-7 gap-1">
                         {daysInMonth.map((day, i) => {
                             const resCount = getResCountForDate(day);
                             const isCurrent = isSameDay(day, currentDate);
