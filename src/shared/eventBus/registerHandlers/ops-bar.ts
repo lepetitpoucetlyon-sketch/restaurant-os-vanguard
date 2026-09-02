@@ -1,17 +1,29 @@
 import { NexusEventBus } from "../NexusEventBus";
-import { logger } from "@/lib/logger";
 
+/**
+ * Écart de dosage bec verseur (SmartSpoutTelemetryService a détecté un
+ * sur-versement ou un free-pour) → notification au manager pour contrôle.
+ */
 export function registerOpsBarHandlers(): Array<() => void> {
   return [
-    NexusEventBus.on("bar.spout_variance_detected", async (payload) => {
-      try {
-        const { SmartSpoutTelemetryService } = await import("@/modules/ops/service/restaurant/pos/services/SmartSpoutTelemetryService");
-        if (typeof (SmartSpoutTelemetryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).notifyOrder === "function") {
-          await (SmartSpoutTelemetryService as unknown as Record<string, (payload: unknown) => Promise<unknown>>).notifyOrder(payload);
-        }
-      } catch (err) {
-        logger.error("[bar.spout_variance_detected] SmartSpout error:", err);
-      }
-    })
+    NexusEventBus.on("bar.spout_variance_detected", (payload) => {
+      const p = payload as {
+        tenantId: string;
+        spoutId: string;
+        productId: string;
+        varianceCl: number;
+      };
+      NexusEventBus.emit("notification.created", {
+        v: 1,
+        tenantId: p.tenantId,
+        id: crypto.randomUUID(),
+        type: "alert",
+        title: "Écart de dosage bar",
+        message: `Bec ${p.spoutId} — ${p.varianceCl > 0 ? "+" : ""}${p.varianceCl} cl vs caisse (produit ${p.productId}). Contrôle recommandé.`,
+        priority: "high",
+        read: false,
+        timestamp: new Date().toISOString(),
+      });
+    }),
   ];
 }

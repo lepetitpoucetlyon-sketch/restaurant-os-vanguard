@@ -18,6 +18,7 @@ import { ExactChangeAssistanceService } from "../services/ExactChangeAssistanceS
 import { ChangeAsTipService } from "../services/ChangeAsTipService";
 import { BilingualTipGratuityHelper } from "../services/BilingualTipGratuityHelper";
 import { MealVoucherLimitGuard } from "../services/MealVoucherLimitGuard";
+import { TpeReconciliationService } from "../services/TpeReconciliationService";
 
 interface PaymentDialogProps {
     isOpen: boolean;
@@ -47,6 +48,7 @@ export function PaymentDialog({ isOpen, total, tvaInMicrounits, orderId, tenantI
 
     const manualAdapterRef = useRef<ReturnType<typeof terminalService.getManualAdapter>>(null);
     const defaultDeviceRef = useRef<string | null>(null);
+    const lastTpeTxnRef = useRef<string | null>(null);
 
     if (!isOpen) return null;
 
@@ -72,8 +74,32 @@ export function PaymentDialog({ isOpen, total, tvaInMicrounits, orderId, tenantI
         setTerminalState("pending");
         setTerminalError(null);
 
+        const chargeOrderId = orderId ?? `ORDER_${Date.now()}`;
+
+        // Retry après échec : vérifier que le débit précédent n'est pas déjà capturé (anti double-débit).
+        if (lastTpeTxnRef.current && tenantId) {
+            const check = await TpeReconciliationService.checkBeforeRedebit({
+                tenantId,
+                orderId: chargeOrderId,
+                tpeTransactionId: lastTpeTxnRef.current,
+                operatorId: operatorId ?? 'pos-operator',
+            }).catch(() => null);
+            if (check && !check.safe && check.reason === 'already_captured') {
+                setTerminalState("idle");
+                setIsProcessing(true);
+                try {
+                    const hash = await onPaymentComplete();
+                    applyHashIfPresent(hash, setCertifiedHash);
+                    setIsSuccess(true);
+                } finally { setIsProcessing(false); }
+                return;
+            }
+        }
+
         const defaultDevice = terminalService.getDefault();
         defaultDeviceRef.current = defaultDevice?.id ?? null;
+        const tpeTxnId = `TPE-${chargeOrderId}-${Date.now()}`;
+        lastTpeTxnRef.current = tpeTxnId;
 
         let result: PaymentResult;
         try {
@@ -89,7 +115,7 @@ export function PaymentDialog({ isOpen, total, tvaInMicrounits, orderId, tenantI
 
             result = await terminalService.charge({
                 amountInMicrounits,
-                orderId: orderId ?? `ORDER_${Date.now()}`,
+                orderId: chargeOrderId,
                 description: `Commande POS`,
             });
         } catch (err) {
@@ -99,6 +125,18 @@ export function PaymentDialog({ isOpen, total, tvaInMicrounits, orderId, tenantI
         }
 
         if (result.status === "approved") {
+            if (tenantId) {
+                await TpeReconciliationService.recordTransaction({
+                    transactionId: tpeTxnId,
+                    orderId: chargeOrderId,
+                    tenantId,
+                    amountInMicrounits,
+                    status: 'captured',
+                    terminalId: defaultDeviceRef.current ?? 'POS-MAIN',
+                    capturedAt: Date.now(),
+                    updatedAt: Date.now(),
+                }).catch(() => null);
+            }
             setTerminalState("idle");
             setIsProcessing(true);
             try {

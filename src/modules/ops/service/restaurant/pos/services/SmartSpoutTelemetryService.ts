@@ -28,6 +28,11 @@ export interface SpoutVarianceResult {
 /**
  * SmartSpoutTelemetryService — Angle mort L18.
  * Rapprochement télémétrique en direct entre doses mesurées par les becs verseurs connectés et tickets caisse.
+ *
+ * @wip owner:ops-hardware échéance:2026-12-01 — `analyzeSpoutActivity` n'a pas de
+ * source : il attend un flux `SpoutTelemetryEvent` d'une passerelle WebSocket vers
+ * les becs verseurs connectés, non encore construite. L'aval est prêt :
+ * `bar.spout_variance_detected` → `registerOpsBarHandlers` → notification manager.
  */
 export class SmartSpoutTelemetryService {
   static async analyzeSpoutActivity(event: SpoutTelemetryEvent): Promise<SpoutVarianceResult> {

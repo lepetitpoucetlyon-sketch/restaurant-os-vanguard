@@ -5,7 +5,6 @@ import { registerOpsReservationHandlers } from "./ops-reservations";
 import { registerOpsDeliveryHandlers } from "./ops-delivery";
 import { registerOpsBarHandlers } from "./ops-bar";
 import { registerOpsPrintHandlers } from "./ops-print";
-import { registerOpsTpeHandlers } from "./ops-tpe";
 
 export function registerOpsHandlers(): Array<() => void> {
   return [
@@ -16,6 +15,5 @@ export function registerOpsHandlers(): Array<() => void> {
     ...registerOpsDeliveryHandlers(),
     ...registerOpsBarHandlers(),
     ...registerOpsPrintHandlers(),
-    ...registerOpsTpeHandlers(),
   ];
 }

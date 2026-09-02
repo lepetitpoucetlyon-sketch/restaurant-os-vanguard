@@ -71,9 +71,12 @@ export function KDSTicketTimers({ ticket, tenantId }: Props) {
     const meat = useMemo(() => detectMeat(ticket.items), [ticket.items]);
 
     // Synchro chaud/froid : calculée une fois quand un ticket mixte entre en préparation.
-    const coldSyncRef = useRef<{ coldStartAt: number } | null>(null);
+    // État (et non ref) → la mise à jour re-rend de façon fiable, même si deux rendus
+    // tombent dans la même milliseconde (un `setNow(Date.now())` identique serait ignoré).
+    const [coldSync, setColdSync] = useState<{ coldStartAt: number } | null>(null);
     useEffect(() => {
-        if (!isCooking || coldSyncRef.current) return;
+        if (!isCooking) { setColdSync(null); return; }
+        if (coldSync) return;
         const stations = (ticket.items ?? []).map(i => resolveStation(i.name || ''));
         const hasHot = stations.includes('hot');
         const hasCold = stations.includes('cold') || stations.includes('pastry');
@@ -88,10 +91,8 @@ export function KDSTicketTimers({ ticket, tenantId }: Props) {
             };
         });
         const plan = HotColdSyncKdsService.planCourseSync(tenantId, ticket.id, specs);
-        coldSyncRef.current = { coldStartAt: Date.now() + plan.coldStartTimeOffsetSeconds * 1000 };
-        setNow(Date.now());
-    }, [isCooking, tenantId, ticket.id, ticket.items]);
-    if (!isCooking) coldSyncRef.current = null;
+        setColdSync({ coldStartAt: Date.now() + plan.coldStartTimeOffsetSeconds * 1000 });
+    }, [isCooking, coldSync, tenantId, ticket.id, ticket.items]);
 
     // readyAt : figé au premier rendu où le ticket est `ready`.
     const readyAtRef = useRef<number | null>(null);
@@ -101,9 +102,10 @@ export function KDSTicketTimers({ ticket, tenantId }: Props) {
     if (!isReady) readyAtRef.current = null;
 
     // Plan de repos viande : calculé une seule fois au passage `ready`.
-    const restPlanRef = useRef<{ readyToCarveTimestamp: number; recommendedRestDurationSeconds: number } | null>(null);
+    const [restPlan, setRestPlan] = useState<{ readyToCarveTimestamp: number; recommendedRestDurationSeconds: number } | null>(null);
     useEffect(() => {
-        if (!isReady || !meat || restPlanRef.current) return;
+        if (!isReady || !meat) { setRestPlan(null); return; }
+        if (restPlan) return;
         const plan = MeatRestingTimerService.calculateRestingPlan({
             tenantId,
             orderId: ticket.id,
@@ -112,9 +114,8 @@ export function KDSTicketTimers({ ticket, tenantId }: Props) {
             doneness: meat.doneness,
             cookedEndTimestamp: readyAtRef.current ?? Date.now(),
         });
-        restPlanRef.current = plan;
-        setNow(Date.now());
-    }, [isReady, meat, tenantId, ticket.id]);
+        setRestPlan(plan);
+    }, [isReady, meat, restPlan, tenantId, ticket.id]);
 
     // Relance passe : ré-évaluée toutes les 20 s tant que le ticket est `ready`.
     const [passAlert, setPassAlert] = useState<'none' | 'warning' | 'critical'>('none');
@@ -141,16 +142,16 @@ export function KDSTicketTimers({ ticket, tenantId }: Props) {
         return () => clearInterval(id);
     }, [isReady, isCooking]);
 
-    const restRemaining = restPlanRef.current
-        ? Math.max(0, Math.floor((restPlanRef.current.readyToCarveTimestamp - now) / 1000))
+    const restRemaining = restPlan
+        ? Math.max(0, Math.floor((restPlan.readyToCarveTimestamp - now) / 1000))
         : 0;
     const passElapsed = readyAtRef.current ? Math.floor((now - readyAtRef.current) / 1000) : 0;
-    const coldStartRemaining = coldSyncRef.current
-        ? Math.max(0, Math.floor((coldSyncRef.current.coldStartAt - now) / 1000))
+    const coldStartRemaining = coldSync
+        ? Math.max(0, Math.floor((coldSync.coldStartAt - now) / 1000))
         : 0;
 
-    const showCold = isCooking && coldSyncRef.current !== null && coldStartRemaining > 0;
-    if (!showCold && !restPlanRef.current && passAlert === 'none') return null;
+    const showCold = isCooking && coldSync !== null && coldStartRemaining > 0;
+    if (!showCold && !restPlan && passAlert === 'none') return null;
 
     return (
         <div className="px-4 pb-2 flex flex-wrap gap-2">
@@ -160,7 +161,7 @@ export function KDSTicketTimers({ ticket, tenantId }: Props) {
                     Lancer le froid dans {fmt(coldStartRemaining)}
                 </span>
             )}
-            {restPlanRef.current && isReady && (
+            {restPlan && isReady && (
                 <span
                     className={cn(
                         'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium tabular-nums',
