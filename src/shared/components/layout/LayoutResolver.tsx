@@ -51,6 +51,7 @@ export function LayoutResolver({ children }: { children: React.ReactNode }) {
             sections={filterByRole(
                 filterByCapabilities(filterNavSections(NAV_SECTIONS, APP_MODE), capabilities),
                 userLevel,
+                userRole,
             )}
         />
     );

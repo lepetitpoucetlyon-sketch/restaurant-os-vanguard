@@ -19,6 +19,7 @@ import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { ROLE_LABELS } from '@/lib/AccessPolicyManager';
+import { normalizeRbacRole, resolveRoleLevel } from '@/kernel/contracts/rbac';
 import { toError } from "@/lib/toError";
 
 const ROLE_PERMISSIONS_PATH = (tenantId: string) =>
@@ -42,15 +43,19 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         return NextResponse.json({ error: 'JSON invalide' }, { status: 400 });
     }
 
-    const { userId, role } = body;
+    const { userId, role: rawRole } = body;
     const { tenantId } = caller;
 
-    if (!userId || !role) {
+    if (!userId || !rawRole) {
         return NextResponse.json({ error: 'userId et role sont requis' }, { status: 400 });
     }
 
+    // Normalisation canonique du rôle (traduction auto des alias legacy)
+    const normalized = normalizeRbacRole(rawRole);
+    const role = normalized || rawRole;
+
     // ── Validation du rôle ────────────────────────────────────────────────────
-    const isStandardRole = Object.keys(ROLE_LABELS).includes(role);
+    const isStandardRole = !!normalized || Object.keys(ROLE_LABELS).includes(role);
     let isCustomRole = false;
 
     if (!isStandardRole) {
@@ -84,6 +89,26 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     const previousRole = existing.role ?? '—';
+
+    // ── Contrôle Anti-Élévation de Privilèges (Loi 12) ─────────────────────────
+    // Règle d'or : un utilisateur ne peut pas attribuer un rôle supérieur ou égal
+    // à son propre niveau, ni modifier un utilisateur de rang supérieur ou égal au sien.
+    const callerLevel = resolveRoleLevel(caller.role) ?? 0;
+    const targetRoleLevel = resolveRoleLevel(role) ?? 0;
+    const targetCurrentRoleLevel = existing.role ? (resolveRoleLevel(existing.role) ?? 0) : 0;
+
+    if (caller.role !== 'admin' && caller.role !== 'mcc_super_admin') {
+        if (targetRoleLevel >= callerLevel) {
+            return NextResponse.json({
+                error: `Action non autorisée : votre niveau hiérarchique (${caller.role}: ${callerLevel}) ne vous permet pas d'attribuer un rôle de niveau ${targetRoleLevel} (${role}).`,
+            }, { status: 403 });
+        }
+        if (targetCurrentRoleLevel >= callerLevel) {
+            return NextResponse.json({
+                error: `Action non autorisée : votre niveau hiérarchique (${caller.role}: ${callerLevel}) ne vous permet pas de modifier un utilisateur de rang supérieur ou égal (${existing.role}: ${targetCurrentRoleLevel}).`,
+            }, { status: 403 });
+        }
+    }
 
     // ── Écriture Nexus (DB-agnostique) ────────────────────────────────────────
     await Nexus.adapter.set(userPath, {

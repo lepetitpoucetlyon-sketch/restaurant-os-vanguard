@@ -40,7 +40,7 @@ export const DEFAULT_PAGE_ACCESS: Record<PageKey | string, PermissionRole[]> = {
     kds: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman'],
     kitchen: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier'],
     bar: ['admin', 'directeur', 'manager', 'chef_rang', 'barman'],
-    floor_plan: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
+    floor_plan: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'barman', 'hotesse'],
     reservations: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
     staff: ['admin', 'directeur', 'manager', 'chef_rang'],
     planning: ['admin', 'directeur', 'manager', 'chef_rang', 'chef_cuisinier'],
@@ -48,7 +48,7 @@ export const DEFAULT_PAGE_ACCESS: Record<PageKey | string, PermissionRole[]> = {
     recruitment: ['admin', 'directeur', 'manager'],
     leaves: ['admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
     finance: ['admin', 'directeur', 'manager', 'comptable'],
-    haccp: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier'],
+    haccp: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier', 'plongeur'],
     inventory: ['admin', 'directeur', 'manager', 'comptable', 'chef_cuisinier', 'cuisinier', 'barman'],
     crm: ['admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'hotesse'],
     marketing: ['admin', 'directeur', 'manager', 'chef_rang'],
@@ -58,11 +58,15 @@ export const DEFAULT_PAGE_ACCESS: Record<PageKey | string, PermissionRole[]> = {
     registre: ['admin', 'directeur', 'manager', 'comptable', 'chef_cuisinier'],
     operations: ['admin', 'directeur', 'manager', 'chef_rang', 'chef_cuisinier'],
     settings: ['admin', 'directeur', 'manager'],
+    facility: ['admin', 'directeur', 'manager'],
     franchise: ['admin', 'directeur'],
+    automations: ['admin', 'directeur'],
     mon_espace: ['admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
     welcome_staff: ['admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
+    accounting_portal: ['admin', 'directeur', 'comptable'],
     migration: ['admin', 'directeur'],
     vanguard: ['admin', 'directeur', 'manager'],
+    vanguard_simulator: ['admin', 'directeur'],
 };
 
 export const DEFAULT_TAB_ACCESS: Record<string, Record<string, number>> = {

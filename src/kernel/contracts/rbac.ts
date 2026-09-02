@@ -164,11 +164,23 @@ export type RbacRole = keyof typeof RBAC_ROLES;
 export type FleetRole = { [K in RbacRole]: (typeof RBAC_ROLES)[K]['scope'] extends 'fleet' ? K : never }[RbacRole];
 export type TenantRole = { [K in RbacRole]: (typeof RBAC_ROLES)[K]['scope'] extends 'tenant' ? K : never }[RbacRole];
 
-/** Alias legacy — tokens Firebase existants. À supprimer post-migration claims. */
+/** Alias legacy — tokens Firebase existants, tables d'authentification PIN et anciennes bases. */
 export const LEGACY_ROLE_ALIASES: Record<string, RbacRole> = {
   super_admin: 'mcc_super_admin',
   fleet_admin: 'mcc_super_admin',
   SUPER_ADMIN: 'mcc_super_admin',
+  server: 'serveur',
+  floor_manager: 'chef_rang',
+  kitchen_chef: 'chef_cuisinier',
+  chef_cuisine: 'chef_cuisinier',
+  kitchen_line: 'cuisinier',
+  kitchen: 'cuisinier',
+  bartender: 'barman',
+  host: 'hotesse',
+  cashier: 'serveur',
+  'pos-standard': 'serveur',
+  'guest-view': 'serveur',
+  'kds-view': 'cuisinier',
 };
 
 /** Normalise un rôle brut (avec alias legacy) vers un RbacRole canonique. */

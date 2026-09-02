@@ -41,6 +41,7 @@ export function DesktopSidebar() {
             capabilities,
         ),
         userLevel,
+        userRole,
     );
 
     return (

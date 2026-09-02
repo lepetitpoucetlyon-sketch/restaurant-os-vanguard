@@ -12,7 +12,7 @@ const CashCountSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const caller = await requireTenantRole(req, 'manager');
+  const caller = await requireTenantRole(req, 'comptable');
   if (isDenied(caller)) return caller;
 
   const lockDenied = await requireUnlockedPeriod(caller.tenantId, Date.now());

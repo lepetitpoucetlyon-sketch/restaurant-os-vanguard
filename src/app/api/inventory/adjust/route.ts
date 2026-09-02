@@ -12,7 +12,7 @@ const AdjustSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const caller = await requireTenantRole(req, 'manager');
+  const caller = await requireTenantRole(req, 'chef_cuisinier');
   if (isDenied(caller)) return caller;
 
   const parsed = AdjustSchema.safeParse(await req.json().catch(() => ({})));

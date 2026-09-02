@@ -83,6 +83,11 @@ export interface NavItem {
      * Si absent → visible pour tous les rôles tenant.
      */
     minLevel?: number;
+    /**
+     * RBAC — liste blanche explicite des rôles autorisés à voir cet item.
+     * Si spécifié, l'item n'est affiché que si le rôle de l'utilisateur figure dans la liste.
+     */
+    allowedRoles?: string[];
 }
 
 export interface NavSection {
@@ -106,7 +111,7 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#C5A059',
         mode: 'both',
         items: [
-            { label: "Tableau de bord", key: "dashboard", href: "/operations", icon: LayoutDashboard, category: "dashboard" },
+            { label: "Tableau de bord", key: "dashboard", href: "/operations", icon: LayoutDashboard, category: "dashboard", minLevel: 45, allowedRoles: ['admin', 'directeur', 'manager', 'chef_rang', 'chef_cuisinier'] },
         ]
     },
 
@@ -135,10 +140,10 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#3B82F6',
         mode: 'mcc',
         items: [
-            { label: "Console MCC", key: "mcc_console", href: "/admin/mcc", icon: Building2, category: "mcc", requiredCapability: "mod_fleet_management" },
-            { label: "Flotte & Tenants", key: "mcc_fleet", href: "/admin/mcc?tab=fleet", icon: Building2, category: "mcc", requiredCapability: "mod_fleet_management" },
-            { label: "Conformité", key: "mcc_compliance", href: "/admin/mcc?tab=compliance", icon: ShieldCheck, category: "mcc", requiredCapability: "mod_fleet_management" },
-            { label: "Prospection", key: "mcc_prospecting", href: "/admin/prospecting", icon: Star, category: "mcc" },
+            { label: "Console MCC", key: "mcc_console", href: "/admin/mcc", icon: Building2, category: "mcc", requiredCapability: "mod_fleet_management", minLevel: 800 },
+            { label: "Flotte & Tenants", key: "mcc_fleet", href: "/admin/mcc?tab=fleet", icon: Building2, category: "mcc", requiredCapability: "mod_fleet_management", minLevel: 800 },
+            { label: "Conformité", key: "mcc_compliance", href: "/admin/mcc?tab=compliance", icon: ShieldCheck, category: "mcc", requiredCapability: "mod_fleet_management", minLevel: 800 },
+            { label: "Prospection", key: "mcc_prospecting", href: "/admin/prospecting", icon: Star, category: "mcc", minLevel: 800 },
         ]
     },
     {
@@ -149,9 +154,9 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#8B5CF6',
         mode: 'mcc',
         items: [
-            { label: "Trésorerie SaaS", key: "mcc_treasury", href: "/admin/mcc?tab=treasury", icon: CreditCard, category: "mcc" },
-            { label: "Intelligence Flotte", key: "mcc_intelligence", href: "/admin/mcc?tab=intelligence", icon: Activity, category: "mcc" },
-            { label: "MDM Devices", key: "mcc_mdm", href: "/admin/mcc?tab=fleet", icon: Smartphone, category: "mcc" },
+            { label: "Trésorerie SaaS", key: "mcc_treasury", href: "/admin/mcc?tab=treasury", icon: CreditCard, category: "mcc", minLevel: 800 },
+            { label: "Intelligence Flotte", key: "mcc_intelligence", href: "/admin/mcc?tab=intelligence", icon: Activity, category: "mcc", minLevel: 800 },
+            { label: "MDM Devices", key: "mcc_mdm", href: "/admin/mcc?tab=fleet", icon: Smartphone, category: "mcc", minLevel: 800 },
         ]
     },
 
@@ -164,12 +169,12 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#3B82F6',
         mode: 'tenant',
         items: [
-            { label: "Point de vente", key: "pos", href: "/pos", icon: Store, category: "pos", requiredCapability: "mod_pos" },
-            { label: "POS Mobile", key: "pos_mobile", href: "/pos-mobile", icon: MonitorSmartphone, category: "pos", requiredCapability: "mod_pos" },
-            { label: "Éditeur de Carte", key: "menu_builder", href: "/menu-builder", icon: ChefHat, category: "pos", requiredCapability: "mod_pos", minLevel: 50 },
+            { label: "Point de vente", key: "pos", href: "/pos", icon: Store, category: "pos", requiredCapability: "mod_pos", minLevel: 40, allowedRoles: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'barman'] },
+            { label: "POS Mobile", key: "pos_mobile", href: "/pos-mobile", icon: MonitorSmartphone, category: "pos", requiredCapability: "mod_pos", minLevel: 40, allowedRoles: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'barman'] },
+            { label: "Éditeur de Carte", key: "menu_builder", href: "/menu-builder", icon: ChefHat, category: "pos", requiredCapability: "mod_pos", minLevel: 50, allowedRoles: ['admin', 'directeur', 'manager', 'chef_cuisinier'] },
             { label: "Ingénierie Menu", key: "menu_engineering", href: "/menu-engineering", icon: Flame, category: "pos", minLevel: 70, requiredCapability: "mod_analytics" },
-            { label: "Plan de salle", key: "floor_plan", href: "/floor-plan", icon: Map, category: "floor-plan", requiredCapability: "mod_floor_plan" },
-            { label: "Gestion Opérations", key: "operations", href: "/operations", icon: ClipboardCheck, category: "operations", minLevel: 50 },
+            { label: "Plan de salle", key: "floor_plan", href: "/floor-plan", icon: Map, category: "floor-plan", requiredCapability: "mod_floor_plan", minLevel: 30, allowedRoles: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'barman', 'hotesse'] },
+            { label: "Gestion Opérations", key: "operations", href: "/operations", icon: ClipboardCheck, category: "operations", minLevel: 50, allowedRoles: ['admin', 'directeur', 'manager', 'chef_rang', 'chef_cuisinier'] },
         ]
     },
 
@@ -182,13 +187,13 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#F97316',
         mode: 'tenant',
         items: [
-            { label: "Production (KDS)", key: "kds", href: "/kds", icon: ChefHat, category: "kds", requiredCapability: "mod_kds" },
-            { label: "Gestion Cuisine", key: "kitchen_management", href: "/kitchen", icon: Coffee, category: "kitchen", requiredCapability: "mod_kitchen_management", minLevel: 45 },
-            { label: "Bar & Sommellerie", key: "bar", href: "/bar", icon: Wine, category: "kitchen", requiredCapability: "mod_bar", minLevel: 35 },
-            { label: "Stocks & Inventaire", key: "inventory", href: "/inventory", icon: Package, category: "inventory", requiredCapability: "mod_inventory", minLevel: 50 },
-            { label: "Plan des Stockages", key: "storage_map", href: "/inventory?tab=storage", icon: Refrigerator, category: "inventory", requiredCapability: "mod_storage_map", minLevel: 50 },
-            { label: "Réception Marchandises", key: "goods_reception", href: "/admin/inventory/reception", icon: Truck, category: "inventory", minLevel: 50 },
-            { label: "Achats & Économat", key: "purchasing", href: "/inventory?tab=orders", icon: ShoppingCart, category: "inventory", requiredCapability: "mod_purchasing", minLevel: 60 },
+            { label: "Production (KDS)", key: "kds", href: "/kds", icon: ChefHat, category: "kds", requiredCapability: "mod_kds", minLevel: 35, allowedRoles: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman'] },
+            { label: "Gestion Cuisine", key: "kitchen_management", href: "/kitchen", icon: Coffee, category: "kitchen", requiredCapability: "mod_kitchen_management", minLevel: 45, allowedRoles: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier'] },
+            { label: "Bar & Sommellerie", key: "bar", href: "/bar", icon: Wine, category: "kitchen", requiredCapability: "mod_bar", minLevel: 35, allowedRoles: ['admin', 'directeur', 'manager', 'chef_rang', 'barman'] },
+            { label: "Stocks & Inventaire", key: "inventory", href: "/inventory", icon: Package, category: "inventory", requiredCapability: "mod_inventory", minLevel: 50, allowedRoles: ['admin', 'directeur', 'manager', 'comptable', 'chef_cuisinier', 'cuisinier', 'barman'] },
+            { label: "Plan des Stockages", key: "storage_map", href: "/inventory?tab=storage", icon: Refrigerator, category: "inventory", requiredCapability: "mod_storage_map", minLevel: 50, allowedRoles: ['admin', 'directeur', 'manager', 'comptable', 'chef_cuisinier', 'cuisinier', 'barman'] },
+            { label: "Réception Marchandises", key: "goods_reception", href: "/admin/inventory/reception", icon: Truck, category: "inventory", minLevel: 50, allowedRoles: ['admin', 'directeur', 'manager', 'comptable', 'chef_cuisinier', 'cuisinier', 'barman'] },
+            { label: "Achats & Économat", key: "purchasing", href: "/inventory?tab=orders", icon: ShoppingCart, category: "inventory", requiredCapability: "mod_purchasing", minLevel: 60, allowedRoles: ['admin', 'directeur', 'manager', 'comptable', 'chef_cuisinier'] },
         ]
     },
 
@@ -202,9 +207,9 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#14B8A6',
         mode: 'tenant',
         items: [
-            { label: "HACCP & Qualité", key: "haccp", href: "/haccp", icon: ClipboardCheck, category: "haccp", requiredCapability: "mod_haccp", minLevel: 40 },
-            { label: "Contrôle Réception", key: "quality_control", href: "/haccp?tab=quality", icon: Microscope, category: "haccp", requiredCapability: "mod_quality_control", minLevel: 40 },
-            { label: "Parc Matériel & GMAO", key: "facility", href: "/facility", icon: Wrench, category: "facility", minLevel: 50 },
+            { label: "HACCP & Qualité", key: "haccp", href: "/haccp", icon: ClipboardCheck, category: "haccp", requiredCapability: "mod_haccp", minLevel: 40, allowedRoles: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier', 'plongeur'] },
+            { label: "Contrôle Réception", key: "quality_control", href: "/haccp?tab=quality", icon: Microscope, category: "haccp", requiredCapability: "mod_quality_control", minLevel: 40, allowedRoles: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier', 'plongeur'] },
+            { label: "Parc Matériel & GMAO", key: "facility", href: "/facility", icon: Wrench, category: "facility", minLevel: 50, allowedRoles: ['admin', 'directeur', 'manager'] },
             { label: "Registres Obligatoires", key: "registre", href: "/registre", icon: ScrollText, category: "registre", badge: "LÉGAL", requiredCapability: "mod_registre", minLevel: 70 },
         ]
     },
@@ -218,7 +223,7 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#F59E0B',
         mode: 'tenant',
         items: [
-            { label: "Commandes Livraison", key: "delivery_orders", href: "/operations?tab=delivery", icon: Truck, category: "delivery", requiredCapability: "mod_delivery" },
+            { label: "Commandes Livraison", key: "delivery_orders", href: "/operations?tab=delivery", icon: Truck, category: "delivery", requiredCapability: "mod_delivery", minLevel: 50, allowedRoles: ['admin', 'directeur', 'manager', 'chef_rang'] },
             { label: "Dark Kitchen & Hubs", key: "dark_kitchen", href: "/operations?tab=dark-kitchen", icon: Pizza, category: "delivery", requiredCapability: "mod_dark_kitchen", minLevel: 70 },
         ]
     },
@@ -232,10 +237,10 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#EC4899',
         mode: 'tenant',
         items: [
-            { label: "Réservations", key: "reservations", href: "/reservations", icon: CalendarDays, category: "reservations", requiredCapability: "mod_reservations" },
+            { label: "Réservations", key: "reservations", href: "/reservations", icon: CalendarDays, category: "reservations", requiredCapability: "mod_reservations", minLevel: 30, allowedRoles: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'] },
             { label: "CRM Clients", key: "crm", href: "/crm", icon: Heart, category: "reservations", requiredCapability: "mod_customer", minLevel: 50 },
             { label: "Fidélité & Gift Cards", key: "loyalty", href: "/crm?tab=loyalty", icon: Gift, category: "loyalty", requiredCapability: "mod_loyalty", minLevel: 50 },
-            { label: "Devis & Privatisation", key: "quotes", href: "/marketing?tab=quotes", icon: FileSpreadsheet, category: "reservations", requiredCapability: "mod_quotes", minLevel: 50 },
+            { label: "Devis & Privatisation", key: "quotes", href: "/marketing?tab=quotes", icon: FileSpreadsheet, category: "reservations", requiredCapability: "mod_quotes", minLevel: 50, allowedRoles: ['admin', 'directeur', 'manager', 'chef_rang'] },
             { label: "Groupes & Événements", key: "groups", href: "/groups", icon: PartyPopper, category: "reservations", requiredCapability: "mod_groups", minLevel: 50 },
         ]
     },
@@ -249,8 +254,8 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#06B6D4',
         mode: 'tenant',
         items: [
-            { label: "Prise de Poste", key: "onboarding", href: "/welcome-staff", icon: Briefcase, category: "onboarding", requiredCapability: "mod_onboarding" },
-            { label: "Pointage Temps Réel", key: "timeclock", href: "/timeclock", icon: Clock, category: "staff", requiredCapability: "mod_hr" },
+            { label: "Prise de Poste", key: "onboarding", href: "/welcome-staff", icon: Briefcase, category: "onboarding", requiredCapability: "mod_onboarding", minLevel: 10 },
+            { label: "Pointage Temps Réel", key: "timeclock", href: "/timeclock", icon: Clock, category: "staff", requiredCapability: "mod_hr", minLevel: 10 },
             { label: "Ressources Humaines", key: "hr", href: "/staff?tab=team", icon: Users, category: "staff", requiredCapability: "mod_hr", minLevel: 70 },
             { label: "Planning", key: "planning", href: "/staff?tab=planning", icon: CalendarRange, category: "planning", requiredCapability: "mod_planning", minLevel: 70 },
             { label: "Congés & Absences", key: "leaves", href: "/leaves", icon: Palmtree, category: "planning", requiredCapability: "mod_leaves", minLevel: 70 },
@@ -302,7 +307,7 @@ export const NAV_SECTIONS: NavSection[] = [
         items: [
             { label: "Gestion Comptable", key: "accounting_management", href: "/finance?tab=accounting", icon: BookOpen, category: "accounting", requiredCapability: "mod_accounting_management", minLevel: 60 },
             { label: "Conformité NF525", key: "nf525", href: "/nf525", icon: FileCheck, category: "accounting", badge: "NF525", minLevel: 70 },
-            { label: "Portail Comptable", key: "accounting_portal", href: "/accounting-portal", icon: Newspaper, category: "accounting", minLevel: 60 },
+            { label: "Portail Comptable", key: "accounting_portal", href: "/accounting-portal", icon: Newspaper, category: "accounting", minLevel: 60, allowedRoles: ['admin', 'directeur', 'comptable'] },
             { label: "Registres Légaux", key: "registre_legal", href: "/registre", icon: ScrollText, category: "registre", badge: "LÉGAL", requiredCapability: "mod_registre", minLevel: 70 },
         ]
     },
@@ -329,14 +334,14 @@ export const NAV_SECTIONS: NavSection[] = [
         color: '#64748B',
         mode: 'both',
         items: [
-            { label: "Réglages", key: "settings", href: "/settings", icon: Settings, category: "settings" },
-            { label: "Studio OpenPencil (84p)", key: "open_pencil_studio", href: "/admin/studio", icon: Sparkles, category: "admin", minLevel: 90, badge: "DESIGN" },
-            { label: "Mon Espace", key: "mon_espace", href: "/mon-espace", icon: UserCog, category: "settings" },
+            { label: "Réglages", key: "settings", href: "/settings", icon: Settings, category: "settings", minLevel: 70, allowedRoles: ['admin', 'directeur', 'manager'] },
+            { label: "Studio OpenPencil (87p)", key: "open_pencil_studio", href: "/admin/studio", icon: Sparkles, category: "admin", minLevel: 90, badge: "DESIGN" },
+            { label: "Mon Espace", key: "mon_espace", href: "/mon-espace", icon: UserCog, category: "settings", minLevel: 10 },
             { label: "Checklist Mise en Service", key: "onboarding_checklist", href: "/settings?tab=onboarding-checklist", icon: ClipboardCheck, category: "settings", minLevel: 70 },
             { label: "Intégrations & API", key: "integrations", href: "/integrations", icon: Plug, category: "settings", requiredCapability: "mod_settings", minLevel: 70 },
             { label: "Gestion des Accès", key: "access_management", href: "/account-settings", icon: Lock, category: "account-settings", minLevel: 90 },
             { label: "Notifications & Alertes", key: "notifications", href: "/settings?tab=notifications", icon: Bell, category: "settings", minLevel: 70 },
-            { label: "Aide & Support", key: "aide", href: "/aide", icon: HelpCircle, category: "support" },
+            { label: "Aide & Support", key: "aide", href: "/aide", icon: HelpCircle, category: "support", minLevel: 10 },
             { label: "Tableau de Bord Perf.", key: "simulator", href: "/simulator", icon: Gauge, category: "admin", minLevel: 90 },
         ]
     },
@@ -380,11 +385,15 @@ export function filterByCapabilities(
 export function filterByRole(
     sections: NavSection[],
     userLevel: number | undefined,
+    userRole?: string,
 ): NavSection[] {
     return sections
         .map(section => ({
             ...section,
             items: section.items.filter(item => {
+                if (item.allowedRoles && userRole && !item.allowedRoles.includes(userRole)) {
+                    return false;
+                }
                 if (item.minLevel === undefined) return true;
                 if (userLevel === undefined) return false;
                 return userLevel >= item.minLevel;

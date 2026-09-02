@@ -106,9 +106,9 @@ function sectorKpis(variant: PlatformVariant): Kpi[] {
     switch (variant) {
         case 'restaurant':
             return [
-                { id: 'table_rotation', label: 'Rotation table', unit: 'x/j', description: 'Nombre moyen de couverts par table par jour.', visibleTo: ['manager', 'chef_cuisine'] },
+                { id: 'table_rotation', label: 'Rotation table', unit: 'x/j', description: 'Nombre moyen de couverts par table par jour.', visibleTo: ['manager', 'chef_cuisinier'] },
                 { id: 'avg_cover_price', label: 'Ticket moyen couvert', unit: '€', description: 'CA / nb couverts.', visibleTo: ['admin', 'manager'] },
-                { id: 'food_cost_pct', label: 'Coût matière %', unit: '%', description: 'Ratio coût matière / CA.', visibleTo: ['admin', 'chef_cuisine'] },
+                { id: 'food_cost_pct', label: 'Coût matière %', unit: '%', description: 'Ratio coût matière / CA.', visibleTo: ['admin', 'chef_cuisinier'] },
             ];
         case 'hotel':
             return [

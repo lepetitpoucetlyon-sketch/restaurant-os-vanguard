@@ -30,7 +30,7 @@ export class RestaurantVertical implements IVerticalPlugin {
       path: '/menu-engineering',
       label: 'Ingénierie Menus',
       icon: 'ChartPie',
-      roles: ['admin', 'directeur', 'manager'],
+      roles: ['admin', 'directeur', 'manager', 'chef_cuisinier'],
       componentLoader: () =>
         import('./presentation/MenuEngineeringDashboard').then(m => ({ default: m.MenuEngineeringDashboard as unknown as React.ComponentType })),
     },
@@ -54,7 +54,7 @@ export class RestaurantVertical implements IVerticalPlugin {
       path: '/suppliers',
       label: 'Fournisseurs 360°',
       icon: 'Building2',
-      roles: ['admin', 'directeur', 'manager', 'chef_cuisine'],
+      roles: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'comptable'],
       componentLoader: () =>
         import('@/modules/logistics/approvisionnement/ui/SupplierHubDashboard').then(m => ({ default: m.SupplierHubDashboard as unknown as React.ComponentType })),
     },

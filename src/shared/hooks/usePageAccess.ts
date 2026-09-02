@@ -4,15 +4,23 @@ import { DEFAULT_PAGE_ACCESS } from "@/shared/schemas";
 import { useAuth } from "@/shared/providers/NexusCoreContext";
 import type { PageKey, PermissionRole } from "@/shared/nexus/contracts/permissions.types";
 
+import { normalizeRbacRole } from "@/kernel/contracts/rbac";
+
 export function usePageAccess(pageKey: PageKey | string): boolean {
   const { currentUser } = useAuth();
   const config = useAtomValue(rbacConfigAtom);
 
   if (!currentUser) return false;
-  // admin = plus haut niveau tenant · mcc_super_admin = opérateur MCC qui a accès à tout
-  if (currentUser.role === 'admin' || currentUser.role === 'mcc_super_admin') return true;
+  // admin = plus haut niveau tenant · opérateurs MCC qui ont accès pour assistance
+  if (
+    currentUser.role === 'admin' ||
+    currentUser.role === 'mcc_super_admin' ||
+    currentUser.role === 'mcc_support' ||
+    currentUser.role === 'mcc_junior_dev'
+  ) return true;
 
-  const role = currentUser.role as PermissionRole;
+  // Normalisation canonique du rôle (gère les tokens legacy "server", "host"…)
+  const role = (normalizeRbacRole(currentUser.role) || currentUser.role) as PermissionRole;
 
   // Defaults
   const defaultAllowed = DEFAULT_PAGE_ACCESS[pageKey] || [];

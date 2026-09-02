@@ -40,7 +40,7 @@ export const DEFAULT_PAGE_ACCESS: Record<PageKey | string, PermissionRole[]> = {
     kds: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman'],
     kitchen: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier'],
     bar: ['admin', 'directeur', 'manager', 'chef_rang', 'barman'],
-    floor_plan: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
+    floor_plan: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'barman', 'hotesse'],
     reservations: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
     staff: ['admin', 'directeur', 'manager', 'chef_rang'],
     planning: ['admin', 'directeur', 'manager', 'chef_rang', 'chef_cuisinier'],
@@ -48,7 +48,7 @@ export const DEFAULT_PAGE_ACCESS: Record<PageKey | string, PermissionRole[]> = {
     recruitment: ['admin', 'directeur', 'manager'],
     leaves: ['admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
     finance: ['admin', 'directeur', 'manager', 'comptable'],
-    haccp: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier'],
+    haccp: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier', 'plongeur'],
     inventory: ['admin', 'directeur', 'manager', 'comptable', 'chef_cuisinier', 'cuisinier', 'barman'],
     crm: ['admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'hotesse'],
     marketing: ['admin', 'directeur', 'manager', 'chef_rang'],
@@ -61,6 +61,11 @@ export const DEFAULT_PAGE_ACCESS: Record<PageKey | string, PermissionRole[]> = {
     facility: ['admin', 'directeur', 'manager'],
     franchise: ['admin', 'directeur'],
     automations: ['admin', 'directeur'],
+    mon_espace: ['admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
+    welcome_staff: ['admin', 'directeur', 'manager', 'comptable', 'chef_rang', 'serveur', 'chef_cuisinier', 'cuisinier', 'barman', 'hotesse', 'plongeur'],
+    accounting_portal: ['admin', 'directeur', 'comptable'],
+    migration: ['admin', 'directeur'],
+    vanguard_simulator: ['admin', 'directeur'],
 };
 
 export const DEFAULT_TAB_ACCESS: Record<string, Record<string, PermissionRole[]>> = {
@@ -96,30 +101,31 @@ export const DEFAULT_ACTION_ACCESS: Record<string, Record<string, PermissionRole
     reservations: {
         cancel_reservation: ['admin', 'directeur', 'manager', 'chef_rang', 'hotesse'],
         mark_no_show: ['admin', 'directeur', 'manager', 'chef_rang', 'hotesse'],
-        create_group: ['admin', 'directeur', 'manager'],
+        create_group: ['admin', 'directeur', 'manager', 'chef_rang', 'hotesse'],
     },
     pos: {
-        void_line: ['admin', 'directeur', 'manager'],
+        void_line: ['admin', 'directeur', 'manager', 'chef_rang'],
         apply_discount: ['admin', 'directeur', 'manager', 'chef_rang'],
         cash_count: ['admin', 'directeur', 'manager', 'comptable'],
-        split_payment: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur'],
+        split_payment: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'barman'],
     },
     kds: {
-        bump_order: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier'],
-        recall_ticket: ['admin', 'directeur', 'manager', 'chef_cuisinier'],
+        bump_order: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier', 'barman'],
+        recall_ticket: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'cuisinier'],
+        eightysix_ingredient: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'barman'],
     },
     finance: {
         export_fec: ['admin', 'comptable'],
-        seal_zday: ['admin', 'directeur'],
+        seal_zday: ['admin', 'directeur', 'manager'],
         reconcile_bank: ['admin', 'directeur', 'comptable'],
         create_expense_claim: ['admin', 'directeur', 'manager', 'comptable'],
     },
     staff: {
-        edit_shifts: ['admin', 'directeur', 'manager', 'chef_rang', 'chef_cuisinier'],
+        edit_shifts: ['admin', 'directeur', 'manager', 'chef_cuisinier'],
         approve_leaves: ['admin', 'directeur', 'manager'],
     },
     inventory: {
-        adjust_stock: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'comptable'],
+        adjust_stock: ['admin', 'directeur', 'manager', 'chef_cuisinier'],
     },
     haccp: {
         archive_logs: ['admin', 'directeur'],

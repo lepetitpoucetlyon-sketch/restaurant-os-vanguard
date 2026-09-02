@@ -54,7 +54,10 @@ export function ActionGuard({
     );
   }
 
-  if (!hasAccess) {
+  // Si l'utilisateur n'a pas accès directement :
+  // - Si requiresPin est actif et non encore validé : on autorise le clic pour ouvrir la modale PIN manager
+  // - Sinon : on applique le mode disable ou le fallback
+  if (!hasAccess && (!requiresPin || isAuthorizedSession)) {
     if (disabledMode === 'disable') {
       return (
         <div
@@ -77,7 +80,7 @@ export function ActionGuard({
     return <>{fallback}</>;
   }
 
-  if (!requiresPin || isAuthorizedSession) {
+  if (hasAccess && (!requiresPin || isAuthorizedSession)) {
     return <>{children}</>;
   }
 
@@ -95,7 +98,19 @@ export function ActionGuard({
 
   return (
     <>
-      <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); (e.currentTarget as HTMLElement).click(); } }} onClickCapture={handleInterceptClick} className="contents">
+      <div
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            (e.currentTarget as HTMLElement).click();
+          }
+        }}
+        onClickCapture={handleInterceptClick}
+        className="contents cursor-pointer"
+        title={!hasAccess ? `${disabledReason} — Cliquez pour autoriser avec le PIN responsable` : undefined}
+      >
         {children}
       </div>
 
