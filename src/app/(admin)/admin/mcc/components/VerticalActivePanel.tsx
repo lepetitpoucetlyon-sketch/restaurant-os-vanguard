@@ -32,6 +32,7 @@ export function VerticalActivePanel({ tenantId }: Props) {
   useEffect(() => {
     Nexus.adapter.get(`tenants/${tenantId}/vertical-config`)
       .then(data => setConfig(data as VerticalConfig | null))
+      .catch((e) => console.error("[VerticalActivePanel]", e))
       .finally(() => setLoading(false));
   }, [tenantId]);
 

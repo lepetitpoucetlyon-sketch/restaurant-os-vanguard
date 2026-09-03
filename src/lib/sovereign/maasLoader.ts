@@ -96,7 +96,7 @@ export function MaasComponentGuard({ moduleName, claims, importFn, fallback, ...
     useEffect(() => {
         let isMounted = true;
 
-        loadMaasModule(moduleName, claims, importFn).then((mod) => {
+        loadMaasModule(moduleName, claims, importFn).catch((e) => { console.error("[maasLoader]", e); return null; }).then((mod) => {
             if (isMounted) {
                 if (mod) {
                     setIsAllowed(true);

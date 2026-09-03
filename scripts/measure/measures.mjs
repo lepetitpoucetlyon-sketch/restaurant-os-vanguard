@@ -245,7 +245,18 @@ export const m7_swallowed = {
         // Les confondre gonflait m7 de ~100 (200 → ~95).
         if (/\bimport\s*\([^)]*\)\s*\.then\(/.test(l)) return;
         if (/\b(?:dynamic|lazy|componentLoader|React\.lazy)\b/.test(l)) return;
-        if (!/\.catch\(/.test(lignes.slice(i, i + 6).join('\n'))) flottantes.push(`${c.rel(f)}:${i + 1}`);
+        // `return X.then(...)` / `=> X.then(...)` : la promesse est RENDUE, la
+        // gestion d'erreur est la responsabilité de l'appelant, pas d'ici.
+        if (/(?:\breturn\b|=>)\s*[\w.$]+(?:\([^)]*\))?\s*\.then\(/.test(l)) return;
+        // `void promise.then(...)` : idiome TS explicite « flottante assumée,
+        // gestion d'erreur prise ailleurs » (souvent un `.catch` en fin de bloc long).
+        if (/\bvoid\s+[\w.$]/.test(l)) return;
+        // `.then()` d'une promesse COLLECTÉE dans un `Promise.all([...])` /
+        // `.map(x => q.then(...))` : l'agrégat est awaité en amont, l'erreur remonte là.
+        if (/Promise\.all\s*\(/.test(lignes.slice(Math.max(0, i - 3), i + 1).join('\n'))) return;
+        // `.then()` dont le `.catch()` est un peu plus loin (chaînes longues,
+        // `.then().then().catch()` sur >6 lignes) : fenêtre élargie à 12.
+        if (!/\.catch\(/.test(lignes.slice(i, i + 12).join('\n'))) flottantes.push(`${c.rel(f)}:${i + 1}`);
       });
     }
     return {

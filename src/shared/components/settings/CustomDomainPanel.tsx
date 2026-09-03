@@ -25,7 +25,8 @@ export default function CustomDomainPanel() {
   useEffect(() => {
     void fetch("/api/tenant/custom-domain")
       .then(r => r.json())
-      .then((d: DomainStatus) => { setStatus(d); if (d.customDomain) setInput(d.customDomain); });
+      .then((d: DomainStatus) => { setStatus(d); if (d.customDomain) setInput(d.customDomain); })
+      .catch((e) => console.error("[CustomDomainPanel]", e));
   }, []);
 
   async function save() {

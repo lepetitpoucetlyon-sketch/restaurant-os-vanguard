@@ -37,13 +37,13 @@ export function registerWasteValidatedHandler() {
             totalWasteValue += item.quantity * (stockItem.prmp ?? 0);
 
             if (newQty <= (stockItem.lowStockThreshold ?? 0)) {
-              Promise.resolve().then(() => {
+              void Promise.resolve().then(async () => {
                 if (newQty <= 0) {
                   NexusEventBus.emitDurable('stock.zero', { v: 1, tenantId, itemId: item.productId, itemName: item.productId });
                 } else {
                   NexusEventBus.emitDurable('stock.low', { v: 1, tenantId, itemId: item.productId, itemName: item.productId, currentQuantity: newQty, threshold: stockItem.lowStockThreshold ?? 0 });
                 }
-              });
+              }).catch(() => { /* alertes stock best-effort */ });
             }
           }
         }

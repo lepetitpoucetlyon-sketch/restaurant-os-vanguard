@@ -72,7 +72,7 @@ export function TrustedDevicePanel() {
             generateDeviceFingerprint().then(fp => {
                 localStorage.setItem(STORAGE_KEY, fp);
                 setMyFingerprint(fp);
-            });
+            }).catch((e) => console.error("[TrustedDevicePanel] fingerprint", e));
         }
     }, [loadDevices]);
 

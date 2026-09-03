@@ -45,7 +45,7 @@ export function HealthHistorySparkline({ tenantId }: { tenantId: string }) {
           .get<HealthSnapshot>(`mcc/tenantHealth/${tenantId}/history/${day}`)
           .catch(() => null),
       ),
-    ).then(results => {
+    ).catch((e) => { console.error("[HealthHistorySparkline]", e); return [] as (HealthSnapshot | null)[]; }).then(results => {
       if (cancelled) return;
       const map: Record<string, HealthSnapshot> = {};
       days.forEach((day, i) => {

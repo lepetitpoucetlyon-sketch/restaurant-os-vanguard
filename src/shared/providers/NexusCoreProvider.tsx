@@ -43,7 +43,7 @@ const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
         let isMounted = true;
         loadTranslations(currentLanguage).then(dict => {
             if (isMounted) setActiveDictionary(dict);
-        });
+        }).catch((e) => console.error("[NexusCore] i18n", e));
         return () => { isMounted = false; };
     }, [currentLanguage]);
 

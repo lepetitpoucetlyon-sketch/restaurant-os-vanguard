@@ -52,7 +52,7 @@ export class SqliteMemoryAdapter implements INexusAdapter {
   ): () => void {
     this.get<T>(path, context).then((data) => {
       if (data) callback(data);
-    });
+    }).catch(() => { /* snapshot best-effort */ });
     return () => {};
   }
 

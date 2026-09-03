@@ -41,7 +41,7 @@ export function registerLoyaltyPointsAccrualHandler() {
       });
       
       // On déclenche l'événement points_earned et rfm_trigger (P0-1.10)
-      Promise.resolve().then(() => {
+      void Promise.resolve().then(async () => {
         NexusEventBus.emitDurable('crm.points_earned', {
           v: 1,
           tenantId,
@@ -65,7 +65,7 @@ export function registerLoyaltyPointsAccrualHandler() {
             rewardName: 'Dessert Offert',
           });
         }
-      });
+      }).catch(() => { /* effets CRM best-effort */ });
     },
     { id: 'loyalty-points-accrual-handler', priority: 'BACKGROUND' }
   );
