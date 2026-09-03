@@ -197,6 +197,34 @@ describe('Lot N0 — câblage notifications (livraison, pas seulement émission)
     expect(sendToRole).toHaveBeenCalled();
   });
 
+  it('B : un dispatch réussi écrit une preuve de livraison (outcome=dispatched)', async () => {
+    registerNotificationUrgentDispatchHandler();
+
+    await NexusEventBus.emit('notification.urgent', {
+      v: 1, tenantId: 't1', roles: ['manager'],
+      message: 'Écart de caisse', priority: 'CRITICAL',
+    });
+
+    const deliveries = [...store.entries()].filter(([k]) => k.startsWith('tenants/t1/alertDeliveries/'));
+    expect(deliveries.length).toBe(1);
+    expect((deliveries[0][1] as { outcome: string }).outcome).toBe('dispatched');
+    expect((deliveries[0][1] as { roles: string[] }).roles).toContain('manager');
+  });
+
+  it('B : un push différé (heures calmes) est tracé (outcome=skipped_quiet_hours)', async () => {
+    registerNotificationUrgentDispatchHandler();
+    store.set('tenants/t1/settings/global', { notifications: { doNotDisturb: true } });
+
+    await NexusEventBus.emit('notification.urgent', {
+      v: 1, tenantId: 't1', roles: ['manager'],
+      message: 'Rapport prêt', priority: 'HIGH',
+    });
+
+    const deliveries = [...store.entries()].filter(([k]) => k.startsWith('tenants/t1/alertDeliveries/'));
+    expect(deliveries.length).toBe(1);
+    expect((deliveries[0][1] as { outcome: string }).outcome).toBe('skipped_quiet_hours');
+  });
+
   it('N0-5 : deux notifications de même sujet fusionnent (une ligne, occurrences=2)', async () => {
     registerNotificationCreatedHandler();
 

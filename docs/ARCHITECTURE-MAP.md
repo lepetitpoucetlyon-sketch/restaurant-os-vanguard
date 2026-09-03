@@ -5,14 +5,14 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3779** · LOC : **369 490**
+- Fichiers `.ts/.tsx` : **3780** · LOC : **369 732**
 - Pages : **87** · Routes API : **221**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
 | `src/modules/` | 1625 |
-| `src/shared/` | 746 |
+| `src/shared/` | 747 |
 | `src/app/` | 469 |
 | `src/verticals/` | 253 |
 | `src/lib/` | 230 |
@@ -36,7 +36,7 @@
 | Sous-dossier | Fichiers |
 |---|---:|
 | `shared/eventBus/` | 228 |
-| `shared/components/` | 208 |
+| `shared/components/` | 209 |
 | `shared/nexus/` | 140 |
 | `shared/hooks/` | 52 |
 | `shared/providers/` | 31 |
@@ -79,11 +79,11 @@
 ## Top 15 gros fichiers (candidats god-file)
 | Fichier | LOC |
 |---|---:|
-| `src/i18n/locales/en.ts` | 985 |
-| `src/i18n/locales/es.ts` | 985 |
-| `src/i18n/locales/fr.ts` | 985 |
-| `src/i18n/locales/ja.ts` | 985 |
-| `src/i18n/locales/pt.ts` | 985 |
+| `src/i18n/locales/en.ts` | 998 |
+| `src/i18n/locales/es.ts` | 998 |
+| `src/i18n/locales/fr.ts` | 998 |
+| `src/i18n/locales/ja.ts` | 998 |
+| `src/i18n/locales/pt.ts` | 998 |
 | `src/shared/components/ui/PageShell.tsx` | 734 |
 | `src/__tests__/handlers/saga-handlers.test.ts` | 675 |
 | `src/__tests__/architecture/invariants.test.ts` | 631 |

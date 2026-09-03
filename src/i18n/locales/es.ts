@@ -207,6 +207,19 @@ const es: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "alertJournal": {
+            "title": "Registro de entregas",
+            "subtitle": "Prueba de que el sistema avisó: cada alerta, sus destinatarios y el resultado.",
+            "empty": "Aún no hay entregas registradas.",
+            "colWhen": "Cuándo",
+            "colAlert": "Alerta",
+            "colTarget": "Destinatarios",
+            "colResult": "Resultado",
+            "dispatched": "Enviada",
+            "skipped_quiet_hours": "Aplazada (horas de silencio)",
+            "muted": "Categoría silenciada",
+            "no_recipients": "Sin destinatario",
+        },
         "alertRouting": {
             "title": "Quién recibe qué",
             "subtitle": "Para cada categoría de alerta, elija qué roles reciben aviso. Desmarque una categoría para silenciar sus notificaciones.",

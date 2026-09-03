@@ -207,6 +207,19 @@ const fr: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "alertJournal": {
+            "title": "Journal de livraison",
+            "subtitle": "Preuve que le système a bien prévenu : chaque alerte, ses destinataires et le résultat.",
+            "empty": "Aucune livraison enregistrée pour l'instant.",
+            "colWhen": "Quand",
+            "colAlert": "Alerte",
+            "colTarget": "Destinataires",
+            "colResult": "Résultat",
+            "dispatched": "Envoyée",
+            "skipped_quiet_hours": "Différée (heures calmes)",
+            "muted": "Catégorie coupée",
+            "no_recipients": "Aucun destinataire",
+        },
         "alertRouting": {
             "title": "Qui reçoit quoi",
             "subtitle": "Pour chaque catégorie d'alerte, choisissez les rôles prévenus. Décochez la catégorie pour couper ses notifications.",

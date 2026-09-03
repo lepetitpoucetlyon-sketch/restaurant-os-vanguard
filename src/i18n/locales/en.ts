@@ -207,6 +207,19 @@ const en: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "alertJournal": {
+            "title": "Delivery log",
+            "subtitle": "Proof the system did notify: each alert, its recipients and the outcome.",
+            "empty": "No delivery recorded yet.",
+            "colWhen": "When",
+            "colAlert": "Alert",
+            "colTarget": "Recipients",
+            "colResult": "Outcome",
+            "dispatched": "Sent",
+            "skipped_quiet_hours": "Deferred (quiet hours)",
+            "muted": "Category muted",
+            "no_recipients": "No recipient",
+        },
         "alertRouting": {
             "title": "Who receives what",
             "subtitle": "For each alert category, choose which roles are notified. Uncheck a category to mute its notifications.",

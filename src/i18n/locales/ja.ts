@@ -207,6 +207,19 @@ const ja: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "alertJournal": {
+            "title": "配信ログ",
+            "subtitle": "システムが確かに通知した証拠：各アラート、宛先、結果。",
+            "empty": "まだ配信記録はありません。",
+            "colWhen": "日時",
+            "colAlert": "アラート",
+            "colTarget": "宛先",
+            "colResult": "結果",
+            "dispatched": "送信済み",
+            "skipped_quiet_hours": "延期（サイレント時間帯）",
+            "muted": "カテゴリ停止",
+            "no_recipients": "宛先なし",
+        },
         "alertRouting": {
             "title": "誰が何を受け取るか",
             "subtitle": "アラートの種類ごとに通知する役割を選びます。カテゴリのチェックを外すと通知が停止します。",

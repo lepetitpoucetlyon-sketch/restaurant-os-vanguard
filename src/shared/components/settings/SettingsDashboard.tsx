@@ -25,6 +25,7 @@ import {
 import { StandardSettingsEngine } from "@/shared/components/settings/ui/StandardSettingsEngine";
 import { QuietHoursSettings } from "@/shared/components/settings/QuietHoursSettings";
 import { AlertRoutingSettings } from "@/shared/components/settings/AlertRoutingSettings";
+import { AlertDeliveryJournal } from "@/shared/components/settings/AlertDeliveryJournal";
 import { 
     IDENTITY_SCHEMA, 
     CONTACT_SCHEMA, 
@@ -218,6 +219,7 @@ export function SettingsDashboard() {
                     <StandardSettingsEngine schema={NOTIFICATIONS_SCHEMA} />
                     <QuietHoursSettings />
                     <AlertRoutingSettings />
+                    <AlertDeliveryJournal />
                 </div>
             );
             case 'goals': return <LazyGoalsSettings />; // Goals has complex UI, keeping it for now

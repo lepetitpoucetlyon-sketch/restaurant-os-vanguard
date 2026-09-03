@@ -23,6 +23,34 @@ async function readNotificationSettings(tenantId: string): Promise<TenantNotific
   }
 }
 
+type DeliveryOutcome = 'dispatched' | 'skipped_quiet_hours' | 'muted' | 'no_recipients';
+
+/**
+ * Journal de livraison append-only (preuve « le système a bien prévenu »).
+ * Best-effort : ne jamais faire échouer le dispatch d'une alerte.
+ */
+async function recordDelivery(
+  tenantId: string,
+  doc: { outcome: DeliveryOutcome; severity: string; message: string; responsibility?: string; roles: string[]; userIds: string[] }
+): Promise<void> {
+  try {
+    const id = `del_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+    await Nexus.adapter.set(`tenants/${tenantId}/alertDeliveries/${id}`, {
+      id,
+      channel: 'push',
+      attemptedAt: new Date().toISOString(),
+      message: doc.message.slice(0, 200),
+      severity: doc.severity,
+      responsibility: doc.responsibility ?? null,
+      roles: doc.roles,
+      userIds: doc.userIds,
+      outcome: doc.outcome,
+    });
+  } catch (err) {
+    logger.warn('[NotificationUrgentDispatch] Journal de livraison indisponible', toError(err).message);
+  }
+}
+
 /**
  * NotificationUrgentDispatchHandler (P0-1.2)
  * Écoute `notification.urgent` (priority: CRITICAL).
@@ -48,6 +76,7 @@ export function registerNotificationUrgentDispatchHandler(): () => void {
           logger.info(
             `[NotificationUrgentDispatch] Push différé (heures calmes) pour tenant ${tenantId} — alerte conservée au centre de notifications`
           );
+          await recordDelivery(tenantId, { outcome: 'skipped_quiet_hours', severity, message, responsibility, roles: [], userIds: [] });
           return;
         }
       }
@@ -65,6 +94,7 @@ export function registerNotificationUrgentDispatchHandler(): () => void {
           logger.info(
             `[NotificationUrgentDispatch] Responsabilité ${responsibility} coupée par le tenant ${tenantId} — push supprimé (alerte conservée au centre)`
           );
+          await recordDelivery(tenantId, { outcome: 'muted', severity, message, responsibility, roles: [], userIds: [] });
           return;
         }
         namedUserIds.push(...resolved.userIds);
@@ -94,6 +124,7 @@ export function registerNotificationUrgentDispatchHandler(): () => void {
         logger.warn(
           `[NotificationUrgentDispatch] Aucun destinataire résolu pour [${(roles ?? []).join(', ')}]${responsibility ? ` / ${responsibility}` : ''} (tenant: ${tenantId}) — alerte non dispatchée`
         );
+        await recordDelivery(tenantId, { outcome: 'no_recipients', severity, message, responsibility, roles: [], userIds: [] });
         return;
       }
 
@@ -141,6 +172,9 @@ export function registerNotificationUrgentDispatchHandler(): () => void {
           logger.warn(`[NotificationUrgentDispatch] Échec émission WebPush pour rôle ${role}: ${toError(err).message}`);
         }
       }
+
+      // Preuve de livraison (append-only).
+      await recordDelivery(tenantId, { outcome: 'dispatched', severity, message, responsibility, roles: normalizedRoles, userIds: Array.from(new Set(namedUserIds)) });
     },
     { id: 'notification-urgent-dispatch-handler', priority: 'CRITICAL' }
   );

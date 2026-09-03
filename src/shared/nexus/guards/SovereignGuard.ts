@@ -34,6 +34,7 @@ export const SovereignGuard = {
         'coupons',
         'paymentMethods',
         'wormArchives',
+        'alertDeliveries',
     ]),
 
     IMMUTABLE_COLLECTIONS: new Set<string>([
@@ -51,6 +52,7 @@ export const SovereignGuard = {
         'wormArchives',
         'legacyArchive',
         'legacyOrders',
+        'alertDeliveries',
     ]),
 
     /**
