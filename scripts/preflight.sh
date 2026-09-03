@@ -97,7 +97,7 @@ VERTICAL_SCREENS_UNWIRED_MAX=0   # ecrans de verticale sans acces donnees (Nexus
                                  # VERTICAL_STUBS_MAX : remplacer un stub par une maquette a donnees locales
                                  # le fait passer a 0 sans rien livrer. Baseline mesuree le 2026-09-01.
 VERTICAL_SERVICES_UNWIRED_MAX=0  # services de verticale/ops non câblés. 142→36→28→0 (2026-09-02) : tous les adapters et services déclarés et gelés @wip transparent
-FR_HARDCODED_MAX=751         # chaînes FR en dur hors legal & verticals. 777→767→751 (2026-09-03) : lot POS encaissement/caisse/tables migré vers t() (pos.flow.*, 5 locales) — cf. PLAN-DETTE-UI phase 1.
+FR_HARDCODED_MAX=728         # chaînes FR en dur hors legal & verticals. 777→751→728 (2026-09-03) : lots POS + KDS/cuisine/bar migrés (pos.flow.*, kitchen.*, bar.*, 5 locales) — PLAN-DETTE-UI phase 1.
 HARDCODED_HEX_MAX=758        # couleurs #hex ET rgba() en dur. 958→955→803→758 (2026-09-03) : + whitelist navConfig (couleurs consommées en hex-math ${c}80 dans AppLaunchpad) + retrait du champ 'color' mort de SETTINGS_CATEGORIES (30, non lu).
                              # 795 -> 958 : ce n'est PAS une regression. La mesure m16 ne comptait
                              # que #hex alors que son titre annoncait rgba() : les 161 rgba() du depot

@@ -5,8 +5,10 @@ import { motion } from "framer-motion";
 import { Truck } from "lucide-react";
 import { Button } from "@ui/Button";
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
+import { useLanguage } from "@/shared/hooks";
 
 export function SuppliersTab() {
+    const { t } = useLanguage();
     return (
         <motion.div
             variants={cinematicContainer}
@@ -16,8 +18,8 @@ export function SuppliersTab() {
         >
             <motion.div variants={fadeInUp} className="flex items-center justify-between mb-10">
                 <div>
-                    <h2 className="text-3xl font-serif font-semibold text-text-primary tracking-tight">Réseau Fournisseurs</h2>
-                    <p className="text-text-muted text-[13px] mt-2 font-medium">Gestion du catalogue partenaires et pilotage de la chaîne logistique</p>
+                    <h2 className="text-3xl font-serif font-semibold text-text-primary tracking-tight">{t('kitchen.suppliers.title')}</h2>
+                    <p className="text-text-muted text-[13px] mt-2 font-medium">{t('kitchen.suppliers.subtitle')}</p>
                 </div>
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Button className="btn-elegant-primary h-12 px-8 shadow-lg shadow-accent/10">

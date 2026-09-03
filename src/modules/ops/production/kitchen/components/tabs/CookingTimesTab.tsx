@@ -5,8 +5,10 @@ import { motion } from "framer-motion";
 import { Button } from "@ui/Button";
 import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
+import { useLanguage } from "@/shared/hooks";
 
 export function CookingTimesTab() {
+    const { t } = useLanguage();
     return (
         <motion.div
             variants={cinematicContainer}
@@ -17,7 +19,7 @@ export function CookingTimesTab() {
             <motion.div variants={fadeInUp} className="flex items-center justify-between mb-8">
                 <div>
                     <h2 className="text-2xl font-black text-text-primary">Temps de Cuisson</h2>
-                    <p className="text-text-muted text-sm mt-1">Référentiel des temps de cuisson standards</p>
+                    <p className="text-text-muted text-sm mt-1">{t('kitchen.cookingTimes.subtitle')}</p>
                 </div>
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Button className="h-12 bg-text-primary text-bg-primary px-6 rounded-xl font-bold">

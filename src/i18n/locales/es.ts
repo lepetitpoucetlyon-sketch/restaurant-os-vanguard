@@ -575,6 +575,57 @@ const es: SovereignData = {
             }
         }
     },
+    "kitchen": {
+        "allergens": {
+            "title": "Alérgenos y dietas",
+            "subtitle": "Cumplimiento normativo e información al cliente",
+            "dietOptions": "Opciones de dieta",
+            "present": "Alérgenos presentes"
+        },
+        "cookingTimes": {
+            "subtitle": "Referencia de tiempos de cocción estándar"
+        },
+        "margins": {
+            "subtitle": "Rentabilidad detallada por plato y optimización del coste de materia",
+            "dishName": "NOMBRE DEL PLATO",
+            "evaluation": "EVALUACIÓN"
+        },
+        "miseEnPlace": {
+            "subtitle": "Tareas de producción calculadas según las previsiones de reservas",
+            "loading": "Cargando tareas…",
+            "empty": "Ninguna tarea programada"
+        },
+        "recipes": {
+            "subtitle": "El saber hacer de tu establecimiento, centralizado y protegido."
+        },
+        "suppliers": {
+            "title": "Red de proveedores",
+            "subtitle": "Gestión del catálogo de socios y control de la cadena logística"
+        },
+        "waste": {
+            "quantityToDeduct": "Cantidad a deducir"
+        },
+        "kds": {
+            "completeOrder": "Pedido completo (maridajes)"
+        }
+    },
+    "bar": {
+        "cocktail": {
+            "ingredients": "Ingredientes"
+        },
+        "stocks": {
+            "orderFromSuppliers": "Haz un pedido a tus proveedores"
+        },
+        "wineCellar": {
+            "title": "Bodega",
+            "subtitle": "Gestiona tu bodega y sus referencias"
+        },
+        "wine": {
+            "grape": "Variedad de uva",
+            "servingTemp": "Temperatura de servicio",
+            "pairings": "Maridajes sugeridos"
+        }
+    },
     "inventory": {
         "title": "Stock e Inventario",
         "stats": {

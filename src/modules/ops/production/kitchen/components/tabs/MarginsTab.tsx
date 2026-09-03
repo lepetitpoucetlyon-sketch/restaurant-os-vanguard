@@ -8,12 +8,14 @@ import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
 
 import { useState, useMemo } from "react";
+import { useLanguage } from "@/shared/hooks";
 
 interface MarginsTabProps {
     recipes: import('@nexus/contracts').Recipe[];
 }
 
 export function MarginsTab({ recipes }: MarginsTabProps) {
+    const { t } = useLanguage();
     const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
 
     const sortedRecipes = useMemo(() => {
@@ -39,7 +41,7 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
             <motion.div variants={fadeInUp} className="flex items-center justify-between mb-12">
                 <div>
                     <h2 className="text-4xl font-serif font-black text-text-primary tracking-tight">Analyse des Marges</h2>
-                    <p className="text-text-muted text-[13px] mt-3 font-medium uppercase tracking-widest">Rentabilité détaillée par plat et optimisation du coût matière</p>
+                    <p className="text-text-muted text-[13px] mt-3 font-medium uppercase tracking-widest">{t('kitchen.margins.subtitle')}</p>
                 </div>
             </motion.div>
 
@@ -134,12 +136,12 @@ export function MarginsTab({ recipes }: MarginsTabProps) {
                     <table className="w-full">
                         <thead>
                             <tr className="bg-bg-tertiary/30 text-nano font-black text-text-muted uppercase tracking-[0.3em] border-b border-border/30">
-                                <th className="text-left px-10 py-8">DÉSIGNATION DU PLAT</th>
+                                <th className="text-left px-10 py-8">{t('kitchen.margins.dishName')}</th>
                                 <th className="text-center px-6 py-8">PRIX VENTE</th>
                                 <th className="text-center px-6 py-8">COÛT MAT.</th>
                                 <th className="text-center px-6 py-8">MARGE TOTALE</th>
                                 <th className="text-center px-6 py-8">% MARGE</th>
-                                <th className="text-right px-10 py-8">ÉVALUATION</th>
+                                <th className="text-right px-10 py-8">{t('kitchen.margins.evaluation')}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border/30">

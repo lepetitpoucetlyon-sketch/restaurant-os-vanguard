@@ -12,6 +12,7 @@ import { Button } from "@ui/Button";
 import { cn } from "@/lib/ui.foundations";
 import type { Wine, WineRegion } from '../../../../../types/bar';
 import { formatCurrency } from "@/lib/formatters";
+import { useLanguage } from "@/shared/hooks";
 
 interface WineCellarTabProps {
   wines: Wine[];
@@ -34,12 +35,13 @@ export const WineCellarTab: React.FC<WineCellarTabProps> = ({
   setSelectedWine,
   onAddWine
 }) => {
+  const { t } = useLanguage();
   return (
     <div className="animate-in fade-in duration-300">
         <div className="flex items-center justify-between mb-8">
             <div>
-                <h2 className="text-2xl font-black text-text-primary">Cave à Vins</h2>
-                <p className="text-text-muted text-sm mt-1">Gérez votre cave et vos références</p>
+                <h2 className="text-2xl font-black text-text-primary">{t('bar.wineCellar.title')}</h2>
+                <p className="text-text-muted text-sm mt-1">{t('bar.wineCellar.subtitle')}</p>
             </div>
             <div className="flex gap-3">
                 <div className="relative">

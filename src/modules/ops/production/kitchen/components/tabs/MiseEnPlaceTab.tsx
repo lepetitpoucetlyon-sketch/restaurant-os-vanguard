@@ -7,6 +7,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
 
 import { MiseEnPlaceTask } from "@nexus/contracts";
+import { useLanguage } from "@/shared/hooks";
 
 interface MiseEnPlaceTabProps {
     prepTasks: MiseEnPlaceTask[];
@@ -16,6 +17,7 @@ interface MiseEnPlaceTabProps {
 }
 
 export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask, isLoading }: MiseEnPlaceTabProps) {
+    const { t } = useLanguage();
     return (
         <motion.div
             variants={cinematicContainer}
@@ -26,7 +28,7 @@ export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask, isLoad
             <motion.div variants={fadeInUp} className="flex items-center justify-between mb-10">
                 <div>
                     <h2 className="text-3xl font-serif font-semibold text-text-primary tracking-tight">Mise en Place du Jour</h2>
-                    <p className="text-text-muted text-[13px] mt-2 font-medium">Tâches de production calculées selon les prévisions de réservations</p>
+                    <p className="text-text-muted text-[13px] mt-2 font-medium">{t('kitchen.miseEnPlace.subtitle')}</p>
                 </div>
                 <motion.div
                     whileHover={{ scale: 1.05 }}
@@ -42,12 +44,12 @@ export function MiseEnPlaceTab({ prepTasks, togglePrepTask, onSelectTask, isLoad
                 {isLoading && prepTasks.length === 0 ? (
                     <div className="flex items-center justify-center py-16 text-text-muted gap-3">
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        <span className="text-micro font-bold uppercase tracking-widest">Chargement des tâches…</span>
+                        <span className="text-micro font-bold uppercase tracking-widest">{t('kitchen.miseEnPlace.loading')}</span>
                     </div>
                 ) : !isLoading && prepTasks.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-16 text-text-muted text-center">
                         <CheckCircle2 strokeWidth={1} className="w-10 h-10 mb-4 opacity-30" />
-                        <p className="text-micro font-bold uppercase tracking-widest">Aucune tâche planifiée</p>
+                        <p className="text-micro font-bold uppercase tracking-widest">{t('kitchen.miseEnPlace.empty')}</p>
                     </div>
                 ) : null}
                 <AnimatePresence mode="popLayout">

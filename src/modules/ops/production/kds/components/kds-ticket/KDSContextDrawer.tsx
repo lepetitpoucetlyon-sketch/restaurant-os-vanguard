@@ -6,6 +6,7 @@ import { cn } from "@/lib/ui.foundations";
 import type { Order, OrderItem } from "@nexus/contracts";
 import type { CartItem } from '../../../../workflow/engine/types';
 import { resolveStation } from '../../contracts/kds-constants';
+import { useLanguage } from "@/shared/hooks";
 
 interface KDSContextDrawerProps {
     ticket: Order;
@@ -24,6 +25,7 @@ export function KDSContextDrawer({
     isContextOpen,
     onToggle,
 }: KDSContextDrawerProps) {
+  const { t } = useLanguage();
     if (Object.keys(fullOrderGroupedBySeat).length === 0) return null;
 
     return (
@@ -33,7 +35,7 @@ export function KDSContextDrawer({
                 className="w-full flex items-center justify-between p-4 text-secondary hover:text-primary hover:bg-surface-bg transition-colors"
             >
                 <div className="flex items-center gap-2">
-                    <span className="text-nano font-black uppercase tracking-[0.15em]">Commande Complète (Accords)</span>
+                    <span className="text-nano font-black uppercase tracking-[0.15em]">{t('kitchen.kds.completeOrder')}</span>
                     <span className="px-2 py-0.5 rounded-full bg-surface-card border border-subtle text-nano font-black">
                         {ticket.items.length}
                     </span>

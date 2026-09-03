@@ -3,8 +3,10 @@
 
 import { motion } from "framer-motion";
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
+import { useLanguage } from "@/shared/hooks";
 
 export function AllergensTab() {
+    const { t } = useLanguage();
     return (
         <motion.div
             variants={cinematicContainer}
@@ -14,8 +16,8 @@ export function AllergensTab() {
         >
             <motion.div variants={fadeInUp} className="flex items-center justify-between mb-8">
                 <div>
-                    <h2 className="text-2xl font-black text-text-primary">Allergènes & Régimes</h2>
-                    <p className="text-text-muted text-sm mt-1">Conformité réglementaire et information client</p>
+                    <h2 className="text-2xl font-black text-text-primary">{t('kitchen.allergens.title')}</h2>
+                    <p className="text-text-muted text-sm mt-1">{t('kitchen.allergens.subtitle')}</p>
                 </div>
             </motion.div>
 
@@ -48,7 +50,7 @@ export function AllergensTab() {
 
             {/* Dietary Options */}
             <motion.div variants={fadeInUp} className="bg-bg-secondary rounded-3xl p-6 border border-border shadow-sm">
-                <h3 className="font-black text-lg text-text-primary mb-6">Options Régimes Alimentaires</h3>
+                <h3 className="font-black text-lg text-text-primary mb-6">{t('kitchen.allergens.dietOptions')}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
                         { name: 'Végétarien', count: 15, icon: '🥗', color: '#C5A059' },

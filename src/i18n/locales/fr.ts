@@ -575,6 +575,57 @@ const fr: SovereignData = {
             }
         }
     },
+    "kitchen": {
+        "allergens": {
+            "title": "Allergènes & Régimes",
+            "subtitle": "Conformité réglementaire et information client",
+            "dietOptions": "Options Régimes Alimentaires",
+            "present": "Allergènes Présents"
+        },
+        "cookingTimes": {
+            "subtitle": "Référentiel des temps de cuisson standards"
+        },
+        "margins": {
+            "subtitle": "Rentabilité détaillée par plat et optimisation du coût matière",
+            "dishName": "DÉSIGNATION DU PLAT",
+            "evaluation": "ÉVALUATION"
+        },
+        "miseEnPlace": {
+            "subtitle": "Tâches de production calculées selon les prévisions de réservations",
+            "loading": "Chargement des tâches…",
+            "empty": "Aucune tâche planifiée"
+        },
+        "recipes": {
+            "subtitle": "Le savoir-faire de votre établissement, centralisé et sécurisé."
+        },
+        "suppliers": {
+            "title": "Réseau Fournisseurs",
+            "subtitle": "Gestion du catalogue partenaires et pilotage de la chaîne logistique"
+        },
+        "waste": {
+            "quantityToDeduct": "Quantité à déduire"
+        },
+        "kds": {
+            "completeOrder": "Commande Complète (Accords)"
+        }
+    },
+    "bar": {
+        "cocktail": {
+            "ingredients": "Ingrédients"
+        },
+        "stocks": {
+            "orderFromSuppliers": "Passez commande auprès de vos fournisseurs"
+        },
+        "wineCellar": {
+            "title": "Cave à Vins",
+            "subtitle": "Gérez votre cave et vos références"
+        },
+        "wine": {
+            "grape": "Cépage",
+            "servingTemp": "Température de service",
+            "pairings": "Accords suggérés"
+        }
+    },
     "inventory": {
         "title": "Stocks & Inventaire",
         "stats": {

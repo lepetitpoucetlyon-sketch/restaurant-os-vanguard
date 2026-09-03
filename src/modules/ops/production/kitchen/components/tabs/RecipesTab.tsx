@@ -9,6 +9,7 @@ import { cn } from "@/lib/ui.foundations";;
 import { cinematicContainer, fadeInUp, cinematicItem } from "@/shared/utils/motion";
 import { RecipeCostBadge } from '../../../recipes/RecipeCostBadge';
 import { BarRecipeCard } from '../../../recipes/BarRecipeCard';
+import { useLanguage } from "@/shared/hooks";
 
 interface RecipesTabProps {
     recipes: import('@nexus/contracts').Recipe[];
@@ -20,6 +21,7 @@ interface RecipesTabProps {
 }
 
 export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteRecipe, onNewRecipe, isLoading }: RecipesTabProps) {
+    const { t } = useLanguage();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -40,7 +42,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
             <motion.div variants={fadeInUp} className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
                 <div>
                     <h2 className="text-3xl font-serif font-semibold text-text-primary tracking-tight">Livre de Recettes & Fiches</h2>
-                    <p className="text-text-muted text-[13px] mt-2 font-medium">Le savoir-faire de votre établissement, centralisé et sécurisé.</p>
+                    <p className="text-text-muted text-[13px] mt-2 font-medium">{t('kitchen.recipes.subtitle')}</p>
                 </div>
                 <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full md:w-auto">
                     <div className="relative w-full md:w-64">
@@ -211,7 +213,7 @@ export function RecipesTab({ recipes, onSelectRecipe, onEditRecipe, onDeleteReci
                                     {recipe.allergens && recipe.allergens.length > 0 && (
                                         <div className={cn("flex items-center gap-3 px-4 py-2 bg-warning-soft dark:bg-warning/10 rounded-lg border border-warning/10", !recipe.image && "justify-center")}>
                                             <AlertTriangle strokeWidth={1.5} className="w-4 h-4 text-warning" />
-                                            <span className="text-micro font-bold text-warning uppercase tracking-wider">Allergènes Présents</span>
+                                            <span className="text-micro font-bold text-warning uppercase tracking-wider">{t('kitchen.allergens.present')}</span>
                                         </div>
                                     )}
                                     {/* cui-1: Food cost + margin display */}

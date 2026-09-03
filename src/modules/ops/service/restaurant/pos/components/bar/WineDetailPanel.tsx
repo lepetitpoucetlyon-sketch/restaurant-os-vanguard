@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Button } from "@ui/Button";
 import type { Wine as WineType, WineRegion } from '../../../../../types/bar';
+import { useLanguage } from "@/shared/hooks";
 
 interface WineDetailPanelProps {
   selectedWine: WineType | null;
@@ -25,6 +26,7 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
   onEdit,
   onOrderRestock
 }) => {
+  const { t } = useLanguage();
   if (!selectedWine) return null;
 
   const region = regions.find(r => r.id === selectedWine.region);
@@ -62,11 +64,11 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
             {/* Details */}
             <div className="space-y-4">
                 <div className="p-3 bg-bg-primary dark:bg-bg-tertiary rounded-xl">
-                    <p className="text-nano font-black text-text-muted uppercase">Cépage</p>
+                    <p className="text-nano font-black text-text-muted uppercase">{t('bar.wine.grape')}</p>
                     <p className="font-bold text-text-primary">{selectedWine.grape}</p>
                 </div>
                 <div className="p-3 bg-bg-primary dark:bg-bg-tertiary rounded-xl">
-                    <p className="text-nano font-black text-text-muted uppercase">Température de service</p>
+                    <p className="text-nano font-black text-text-muted uppercase">{t('bar.wine.servingTemp')}</p>
                     <p className="font-bold text-text-primary">{selectedWine.servingTemp}</p>
                 </div>
                 <div className="p-3 bg-bg-primary dark:bg-bg-tertiary rounded-xl">
@@ -77,7 +79,7 @@ export const WineDetailPanel: React.FC<WineDetailPanelProps> = ({
 
             {/* Pairings */}
             <div>
-                <p className="text-nano font-black text-text-muted uppercase mb-3">Accords suggérés</p>
+                <p className="text-nano font-black text-text-muted uppercase mb-3">{t('bar.wine.pairings')}</p>
                 <div className="flex flex-wrap gap-2">
                     {selectedWine.pairings.map((pairing, i) => (
                         <span key={i} className="px-3 py-1.5 bg-wine/10 text-wine rounded-lg text-sm font-bold">

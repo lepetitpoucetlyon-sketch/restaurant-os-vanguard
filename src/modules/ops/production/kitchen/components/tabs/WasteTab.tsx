@@ -11,6 +11,7 @@ import React, { useState, useCallback } from "react";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { useTenant } from "@/shared/hooks";
 import { Ingredient, RegulatoryWasteLog } from "@nexus/contracts";
+import { useLanguage } from "@/shared/hooks";
 
 interface WasteTabProps {
     ingredients: Ingredient[];
@@ -18,6 +19,7 @@ interface WasteTabProps {
 }
 
 export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) {
+    const { t } = useLanguage();
     const { showToast } = useToast();
     const { tenantId } = useTenant();
     const [selectedIngredient, setSelectedIngredient] = useState("");
@@ -97,7 +99,7 @@ export function WasteTab({ ingredients, wasteLogs: _wasteLogs }: WasteTabProps) 
 
                                 <div className="lg:col-span-5 space-y-3 group">
                                     <label className="text-nano font-black uppercase text-muted tracking-[0.25em] ml-1 group-focus-within:text-error transition-all flex justify-between items-center">
-                                        <span>Quantité à déduire</span>
+                                        <span>{t('kitchen.waste.quantityToDeduct')}</span>
                                         <span className="text-nano lowercase font-serif italic normal-case tracking-normal text-error opacity-0 group-focus-within:opacity-100 transition-opacity">champ obligatoire</span>
                                     </label>
                                     <div className="relative">

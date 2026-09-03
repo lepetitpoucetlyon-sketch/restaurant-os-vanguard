@@ -575,6 +575,57 @@ const ja: SovereignData = {
             }
         }
     },
+    "kitchen": {
+        "allergens": {
+            "title": "アレルゲン・食事制限",
+            "subtitle": "法令順守と顧客への情報提供",
+            "dietOptions": "食事オプション",
+            "present": "含まれるアレルゲン"
+        },
+        "cookingTimes": {
+            "subtitle": "標準加熱時間の基準表"
+        },
+        "margins": {
+            "subtitle": "料理別の詳細な収益性と原価最適化",
+            "dishName": "料理名",
+            "evaluation": "評価"
+        },
+        "miseEnPlace": {
+            "subtitle": "予約予測に基づいて算出された仕込みタスク",
+            "loading": "タスクを読み込み中…",
+            "empty": "予定されたタスクはありません"
+        },
+        "recipes": {
+            "subtitle": "店舗のノウハウを一元管理し安全に保管"
+        },
+        "suppliers": {
+            "title": "仕入先ネットワーク",
+            "subtitle": "取引先カタログ管理とサプライチェーン運営"
+        },
+        "waste": {
+            "quantityToDeduct": "控除する数量"
+        },
+        "kds": {
+            "completeOrder": "フルオーダー（ペアリング）"
+        }
+    },
+    "bar": {
+        "cocktail": {
+            "ingredients": "材料"
+        },
+        "stocks": {
+            "orderFromSuppliers": "仕入先に発注する"
+        },
+        "wineCellar": {
+            "title": "ワインセラー",
+            "subtitle": "セラーと銘柄を管理"
+        },
+        "wine": {
+            "grape": "品種",
+            "servingTemp": "提供温度",
+            "pairings": "おすすめペアリング"
+        }
+    },
     "inventory": {
         "title": "在庫 & 棚卸",
         "stats": {

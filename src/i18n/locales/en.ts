@@ -575,6 +575,57 @@ const en: SovereignData = {
             }
         }
     },
+    "kitchen": {
+        "allergens": {
+            "title": "Allergens & Diets",
+            "subtitle": "Regulatory compliance and customer information",
+            "dietOptions": "Dietary options",
+            "present": "Allergens present"
+        },
+        "cookingTimes": {
+            "subtitle": "Standard cooking times reference"
+        },
+        "margins": {
+            "subtitle": "Detailed profitability per dish and food-cost optimisation",
+            "dishName": "DISH NAME",
+            "evaluation": "EVALUATION"
+        },
+        "miseEnPlace": {
+            "subtitle": "Production tasks computed from reservation forecasts",
+            "loading": "Loading tasks…",
+            "empty": "No tasks scheduled"
+        },
+        "recipes": {
+            "subtitle": "Your establishment's know-how, centralised and secured."
+        },
+        "suppliers": {
+            "title": "Supplier network",
+            "subtitle": "Partner catalogue management and supply-chain steering"
+        },
+        "waste": {
+            "quantityToDeduct": "Quantity to deduct"
+        },
+        "kds": {
+            "completeOrder": "Complete order (pairings)"
+        }
+    },
+    "bar": {
+        "cocktail": {
+            "ingredients": "Ingredients"
+        },
+        "stocks": {
+            "orderFromSuppliers": "Order from your suppliers"
+        },
+        "wineCellar": {
+            "title": "Wine cellar",
+            "subtitle": "Manage your cellar and its references"
+        },
+        "wine": {
+            "grape": "Grape variety",
+            "servingTemp": "Serving temperature",
+            "pairings": "Suggested pairings"
+        }
+    },
     "inventory": {
         "title": "Inventory & Stock",
         "stats": {

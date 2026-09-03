@@ -10,6 +10,7 @@ import {
 import { Button } from "@ui/Button";
 import type { Cocktail } from '../../../../../types/bar';
 import { formatCurrency } from "@/lib/formatters";
+import { useLanguage } from "@/shared/hooks";
 
 interface CocktailTabProps {
   cocktails: Cocktail[];
@@ -22,6 +23,7 @@ export const CocktailTab: React.FC<CocktailTabProps> = ({
   setShowCocktailModal,
   setEditingCocktail
 }) => {
+  const { t } = useLanguage();
   return (
     <div className="animate-in fade-in duration-150">
         <div className="flex items-center justify-between mb-8">
@@ -62,7 +64,7 @@ export const CocktailTab: React.FC<CocktailTabProps> = ({
                     <p className="text-sm text-text-muted mb-4">{cocktail.category}</p>
 
                     <div className="space-y-2 mb-4">
-                        <p className="text-micro font-black text-text-muted uppercase">Ingrédients</p>
+                        <p className="text-micro font-black text-text-muted uppercase">{t('bar.cocktail.ingredients')}</p>
                         <div className="flex flex-wrap gap-1">
                             {cocktail.ingredients.map((ing, i) => (
                                 <span key={i} className="px-2 py-1 bg-bg-primary dark:bg-bg-tertiary rounded-md text-micro font-bold text-text-muted">

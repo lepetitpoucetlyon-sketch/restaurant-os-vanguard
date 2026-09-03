@@ -9,6 +9,7 @@ import {
   GlassWater 
 } from "lucide-react";
 import { Button } from "@ui/Button";
+import { useLanguage } from "@/shared/hooks";
 
 interface StocksTabProps {
   lowStockWines: number;
@@ -31,6 +32,7 @@ export const StocksTab: React.FC<StocksTabProps> = ({
   onViewAlerts,
   categories
 }) => {
+  const { t } = useLanguage();
   const displayCategories = categories || [
     { name: 'Spiritueux', count: 45, value: 8500, icon: Wine, color: '#722F37' },
     { name: 'Vins', count: wineCount, value: totalCellarValue, icon: Grape, color: '#8B0000' },
@@ -53,7 +55,7 @@ export const StocksTab: React.FC<StocksTabProps> = ({
                 <AlertCircle className="w-6 h-6 text-status-danger" />
                 <div>
                     <p className="font-bold text-status-danger">{lowStockWines} références en stock critique</p>
-                    <p className="text-sm text-text-muted">Passez commande auprès de vos fournisseurs</p>
+                    <p className="text-sm text-text-muted">{t('bar.stocks.orderFromSuppliers')}</p>
                 </div>
                 <Button 
                     variant="outline" 

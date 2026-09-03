@@ -575,6 +575,57 @@ const pt: SovereignData = {
             }
         }
     },
+    "kitchen": {
+        "allergens": {
+            "title": "Alérgenos e dietas",
+            "subtitle": "Conformidade regulamentar e informação ao cliente",
+            "dietOptions": "Opções alimentares",
+            "present": "Alérgenos presentes"
+        },
+        "cookingTimes": {
+            "subtitle": "Referência de tempos de cozimento padrão"
+        },
+        "margins": {
+            "subtitle": "Rentabilidade detalhada por prato e otimização do custo de matéria",
+            "dishName": "NOME DO PRATO",
+            "evaluation": "AVALIAÇÃO"
+        },
+        "miseEnPlace": {
+            "subtitle": "Tarefas de produção calculadas a partir das previsões de reservas",
+            "loading": "Carregando tarefas…",
+            "empty": "Nenhuma tarefa programada"
+        },
+        "recipes": {
+            "subtitle": "O saber-fazer do seu estabelecimento, centralizado e protegido."
+        },
+        "suppliers": {
+            "title": "Rede de fornecedores",
+            "subtitle": "Gestão do catálogo de parceiros e controlo da cadeia logística"
+        },
+        "waste": {
+            "quantityToDeduct": "Quantidade a deduzir"
+        },
+        "kds": {
+            "completeOrder": "Pedido completo (harmonizações)"
+        }
+    },
+    "bar": {
+        "cocktail": {
+            "ingredients": "Ingredientes"
+        },
+        "stocks": {
+            "orderFromSuppliers": "Faça um pedido aos seus fornecedores"
+        },
+        "wineCellar": {
+            "title": "Adega",
+            "subtitle": "Gira a sua adega e as suas referências"
+        },
+        "wine": {
+            "grape": "Casta",
+            "servingTemp": "Temperatura de serviço",
+            "pairings": "Harmonizações sugeridas"
+        }
+    },
     "inventory": {
         "title": "Stock & Inventário",
         "stats": {
