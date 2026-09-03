@@ -1,8 +1,22 @@
 import { NexusEventBus } from '../NexusEventBus';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { browserPush } from '@/lib/push/browserPush';
 import { normalizeRbacRole } from '@/kernel/contracts/rbac';
+import { evaluatePush, type QuietHoursConfig } from '@/kernel/alerts/QuietHoursPolicy';
 import { toError } from "@/lib/toError";
+
+/** Lit les réglages d'heures calmes du tenant (best-effort ; défaut = livrer). */
+async function readQuietHoursConfig(tenantId: string): Promise<QuietHoursConfig | null> {
+  try {
+    const settings = await Nexus.adapter.get<{ notifications?: QuietHoursConfig; notificationsConfig?: QuietHoursConfig }>(
+      `tenants/${tenantId}/settings/global`
+    );
+    return settings?.notifications ?? settings?.notificationsConfig ?? null;
+  } catch {
+    return null; // en cas de doute, on ne bâillonne pas une alerte
+  }
+}
 
 /**
  * NotificationUrgentDispatchHandler (P0-1.2)
@@ -13,7 +27,22 @@ export function registerNotificationUrgentDispatchHandler(): () => void {
   return NexusEventBus.on(
     'notification.urgent',
     async (payload) => {
-      const { tenantId, message, roles, metadata } = payload;
+      const { tenantId, message, roles, metadata, priority } = payload;
+
+      // N2-a : gating par sévérité + heures calmes (branche doNotDisturb / dnd*).
+      // CRITICAL traverse toujours ; HIGH est différé pendant les heures calmes —
+      // l'alerte reste visible dans le centre (notification.created), le push seul
+      // est supprimé pour ne pas réveiller inutilement.
+      const severity = priority === 'CRITICAL' ? 'CRITICAL' : 'HIGH';
+      if (severity !== 'CRITICAL') {
+        const quietCfg = await readQuietHoursConfig(tenantId);
+        if (evaluatePush('HIGH', quietCfg) === 'SUPPRESS_QUIET_HOURS') {
+          logger.info(
+            `[NotificationUrgentDispatch] Push différé (heures calmes) pour tenant ${tenantId} — alerte conservée au centre de notifications`
+          );
+          return;
+        }
+      }
 
       // Correctif N0-3 : normalisation canonique des rôles au point d'étranglement.
       // Corrige d'un seul endroit les 84 ciblages en dur non canoniques du dépôt

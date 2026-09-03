@@ -80,6 +80,36 @@ describe('Lot N0 — câblage notifications (livraison, pas seulement émission)
     expect(sendToRole).not.toHaveBeenCalled();
   });
 
+  it('N2-a : une alerte HAUTE est différée quand le mode silencieux est actif (pas de push)', async () => {
+    registerNotificationUrgentDispatchHandler();
+    store.set('tenants/t1/settings/global', { notifications: { doNotDisturb: true } });
+
+    await NexusEventBus.emit('notification.urgent', {
+      v: 1,
+      tenantId: 't1',
+      roles: ['manager'],
+      message: 'Rapport prêt',
+      priority: 'HIGH',
+    });
+
+    expect(sendToRole).not.toHaveBeenCalled(); // différée — reste au centre, pas de push
+  });
+
+  it('N2-a : une alerte CRITIQUE traverse le mode silencieux', async () => {
+    registerNotificationUrgentDispatchHandler();
+    store.set('tenants/t1/settings/global', { notifications: { doNotDisturb: true } });
+
+    await NexusEventBus.emit('notification.urgent', {
+      v: 1,
+      tenantId: 't1',
+      roles: ['manager'],
+      message: 'Chambre froide +8°C',
+      priority: 'CRITICAL',
+    });
+
+    expect(sendToRole).toHaveBeenCalled(); // critique : jamais bâillonnée
+  });
+
   it('N0-5 : deux notifications de même sujet fusionnent (une ligne, occurrences=2)', async () => {
     registerNotificationCreatedHandler();
 
