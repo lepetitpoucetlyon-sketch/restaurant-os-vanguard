@@ -374,6 +374,36 @@ const ja: SovereignData = {
     },
     "pos": {
         "title": "POSレジ",
+        "flow": {
+            "payment": {
+                "conecsNetwork": "CONECSネットワーク（Edenred / Swile / Pluxee / Up / Bimpli）",
+                "conecsEligible": "CONECS対象額：",
+                "remainingDue": "残額："
+            },
+            "terminal": {
+                "presentCard": "お客様はカードをご提示ください",
+                "declined": "支払いが拒否されました"
+            },
+            "cash": {
+                "coins": "硬貨",
+                "summary": "概要",
+                "totalCounted": "計上合計",
+                "expectedTheoretical": "理論値",
+                "variance": "レジ差異"
+            },
+            "split": {
+                "tableSummary": "テーブル概要"
+            },
+            "table": {
+                "noneEligible": "対象テーブルなし",
+                "legendTitle": "プロトコル凡例",
+                "installed": "設置済み",
+                "ordered": "注文済み"
+            },
+            "cart": {
+                "selectItems": "商品を選択してください"
+            }
+        },
         "search_placeholder": "料理やドリンクを検索...",
         "fallback_description": "厳選された新鮮な食材で調理された料理です。",
         "table": "テーブル",

@@ -374,6 +374,36 @@ const es: SovereignData = {
     },
     "pos": {
         "title": "Punto de Venta (TPV)",
+        "flow": {
+            "payment": {
+                "conecsNetwork": "Red CONECS (Edenred / Swile / Pluxee / Up / Bimpli)",
+                "conecsEligible": "Importe CONECS elegible:",
+                "remainingDue": "Saldo restante:"
+            },
+            "terminal": {
+                "presentCard": "El cliente puede presentar su tarjeta",
+                "declined": "Pago rechazado"
+            },
+            "cash": {
+                "coins": "Monedas",
+                "summary": "Resumen",
+                "totalCounted": "Total contado",
+                "expectedTheoretical": "Teórico esperado",
+                "variance": "Descuadre de caja"
+            },
+            "split": {
+                "tableSummary": "Resumen de la mesa"
+            },
+            "table": {
+                "noneEligible": "Ninguna mesa elegible",
+                "legendTitle": "Leyenda de protocolos",
+                "installed": "Instalados",
+                "ordered": "Pedido"
+            },
+            "cart": {
+                "selectItems": "Selecciona artículos para empezar"
+            }
+        },
         "search_placeholder": "Buscar plato o bebida...",
         "fallback_description": "Plato elaborado al momento con ingredientes frescos seleccionados.",
         "table": "Mesa",

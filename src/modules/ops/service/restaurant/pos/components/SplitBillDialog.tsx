@@ -114,7 +114,7 @@ export function SplitBillDialog({
                             </div>
                             <h1 className="text-4xl font-serif font-black text-text-primary italic tracking-tight leading-none">{t('pos.split.title')}</h1>
                             <p className="text-micro font-black text-text-primary/30 uppercase tracking-[0.4em] mt-4">
-                                <span className="text-nano font-black text-text-primary/30 uppercase tracking-[0.4em] mb-1">Résumé de la Table</span>
+                                <span className="text-nano font-black text-text-primary/30 uppercase tracking-[0.4em] mb-1">{t('pos.flow.split.tableSummary')}</span>
                                 Total TTC: <span className="text-text-primary">{formatMu(totalInMicrounits)}</span> • <span className="text-accent-gold">{paidCount}/{splitCount} {t('pos.split.signatures')}</span>
                             </p>
                         </div>

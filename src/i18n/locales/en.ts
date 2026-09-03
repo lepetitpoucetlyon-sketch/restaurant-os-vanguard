@@ -374,6 +374,36 @@ const en: SovereignData = {
     },
     "pos": {
         "title": "Point of Sale",
+        "flow": {
+            "payment": {
+                "conecsNetwork": "CONECS network (Edenred / Swile / Pluxee / Up / Bimpli)",
+                "conecsEligible": "Eligible CONECS amount:",
+                "remainingDue": "Remaining balance:"
+            },
+            "terminal": {
+                "presentCard": "The customer can present their card",
+                "declined": "Payment declined"
+            },
+            "cash": {
+                "coins": "Coins",
+                "summary": "Summary",
+                "totalCounted": "Total counted",
+                "expectedTheoretical": "Expected (theoretical)",
+                "variance": "Cash variance"
+            },
+            "split": {
+                "tableSummary": "Table summary"
+            },
+            "table": {
+                "noneEligible": "No eligible table",
+                "legendTitle": "Protocol legend",
+                "installed": "Set",
+                "ordered": "Ordered"
+            },
+            "cart": {
+                "selectItems": "Select items to get started"
+            }
+        },
         "search_placeholder": "Search item or beverage...",
         "fallback_description": "Freshly prepared dish with premium ingredients.",
         "table": "Table",

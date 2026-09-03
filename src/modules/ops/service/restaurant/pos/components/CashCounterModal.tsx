@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { logger } from '@/lib/logger';
 import { formatCurrency } from '@/lib/formatters';
 import { Button } from '@/shared/components/ui';
+import { useLanguage } from '@/shared/hooks';
 
 export interface CashCounterModalProps {
   isOpen: boolean;
@@ -42,6 +43,7 @@ export const CashCounterModal: React.FC<CashCounterModalProps> = ({
   onValidate,
   type
 }) => {
+  const { t } = useLanguage();
   const [counts, setCounts] = useState<Record<number, number>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -129,7 +131,7 @@ export const CashCounterModal: React.FC<CashCounterModalProps> = ({
             </div>
 
             <div>
-              <h3 className="font-semibold text-text-secondary mb-3 border-b border-border pb-2 text-sm uppercase tracking-wider">Pièces</h3>
+              <h3 className="font-semibold text-text-secondary mb-3 border-b border-border pb-2 text-sm uppercase tracking-wider">{t('pos.flow.cash.coins')}</h3>
               <div className="space-y-2">
                 {DENOMINATIONS.filter(d => d.type === 'coin').map(denom => (
                   <div key={denom.value} className="flex items-center justify-between">
@@ -153,11 +155,11 @@ export const CashCounterModal: React.FC<CashCounterModalProps> = ({
         {/* Colonne Récapitulatif */}
         <div className="w-full lg:w-80 bg-bg-secondary border-t lg:border-t-0 lg:border-l border-border p-6 flex flex-col justify-between">
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-text-primary">Récapitulatif</h3>
+            <h3 className="text-lg font-bold text-text-primary">{t('pos.flow.cash.summary')}</h3>
             
             <div className="p-4 bg-bg-tertiary rounded-xl border border-border space-y-3">
               <div>
-                <span className="text-xs text-text-muted uppercase tracking-wider block">Total Compté</span>
+                <span className="text-xs text-text-muted uppercase tracking-wider block">{t('pos.flow.cash.totalCounted')}</span>
                 <span className="text-2xl font-bold font-mono text-text-primary">
                   {formatCurrency(totalCounted / 1_000_000)}
                 </span>
@@ -166,14 +168,14 @@ export const CashCounterModal: React.FC<CashCounterModalProps> = ({
               {!isBlindMode && (
                 <>
                   <div className="border-t border-border/50 pt-2">
-                    <span className="text-xs text-text-muted uppercase tracking-wider block">Théorique Attendu</span>
+                    <span className="text-xs text-text-muted uppercase tracking-wider block">{t('pos.flow.cash.expectedTheoretical')}</span>
                     <span className="text-sm font-medium font-mono text-text-secondary">
                       {formatCurrency(expectedAmountInMicrounits / 1_000_000)}
                     </span>
                   </div>
 
                   <div className="border-t border-border/50 pt-2">
-                    <span className="text-xs text-text-muted uppercase tracking-wider block">Écart de Caisse</span>
+                    <span className="text-xs text-text-muted uppercase tracking-wider block">{t('pos.flow.cash.variance')}</span>
                     <span className={`text-lg font-bold font-mono ${discrepancy === 0 ? 'text-emerald-400' : discrepancy > 0 ? 'text-blue-400' : 'text-rose-400'}`}>
                       {discrepancy > 0 ? '+' : ''}{formatCurrency(discrepancy / 1_000_000)}
                     </span>

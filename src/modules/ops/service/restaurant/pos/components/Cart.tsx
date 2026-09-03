@@ -196,7 +196,7 @@ export function Cart({ items, onUpdateQuantity, onClearCart, onCheckout, onSendT
                         >
                             <ChefHat className="w-10 h-10 mb-3 opacity-30" />
                             <p className="text-sm font-medium">{t('pos.cart.empty')}</p>
-                            <p className="text-xs text-text-muted mt-1">Sélectionnez des articles pour commencer</p>
+                            <p className="text-xs text-text-muted mt-1">{t('pos.flow.cart.selectItems')}</p>
                         </motion.div>
                     ) : (
                         <div>

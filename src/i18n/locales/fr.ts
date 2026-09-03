@@ -374,6 +374,36 @@ const fr: SovereignData = {
     },
     "pos": {
         "title": "Point de Vente (Caisse)",
+        "flow": {
+            "payment": {
+                "conecsNetwork": "Réseau CONECS (Edenred / Swile / Pluxee / Up / Bimpli)",
+                "conecsEligible": "Part CONECS éligible :",
+                "remainingDue": "Reste à charge :"
+            },
+            "terminal": {
+                "presentCard": "Le client peut présenter sa carte",
+                "declined": "Paiement refusé"
+            },
+            "cash": {
+                "coins": "Pièces",
+                "summary": "Récapitulatif",
+                "totalCounted": "Total Compté",
+                "expectedTheoretical": "Théorique Attendu",
+                "variance": "Écart de Caisse"
+            },
+            "split": {
+                "tableSummary": "Résumé de la Table"
+            },
+            "table": {
+                "noneEligible": "Aucune table éligible",
+                "legendTitle": "Légende des Protocoles",
+                "installed": "Installés",
+                "ordered": "Commandé"
+            },
+            "cart": {
+                "selectItems": "Sélectionnez des articles pour commencer"
+            }
+        },
         "search_placeholder": "Rechercher un plat, une boisson...",
         "fallback_description": "Plat préparé sur place avec des ingrédients frais sélectionnés.",
         "table": "Table",

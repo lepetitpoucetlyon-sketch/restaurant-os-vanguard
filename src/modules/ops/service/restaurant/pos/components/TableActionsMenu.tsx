@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ArrowLeftRight, Combine, UserRoundCog, ScanEye, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/ui.foundations';
+import { useLanguage } from '@/shared/hooks';
 
 interface TableLike {
     id: string;
@@ -35,6 +36,7 @@ export function TableActionsMenu({
     onHandoffTable,
     onScanDineAndDash,
 }: Props) {
+    const { t } = useLanguage();
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState<Mode>(null);
     const [operatorId, setOperatorId] = useState('');
@@ -115,7 +117,7 @@ export function TableActionsMenu({
                                 {mode === 'transfer' ? 'Transférer vers' : 'Fusionner la commande de'}
                             </p>
                             {otherTables.length === 0 && (
-                                <p className="px-2 py-2 text-xs text-text-muted italic">Aucune table éligible</p>
+                                <p className="px-2 py-2 text-xs text-text-muted italic">{t('pos.flow.table.noneEligible')}</p>
                             )}
                             {otherTables.map(t => (
                                 <MenuItem
