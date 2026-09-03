@@ -17,6 +17,7 @@ import type { Reservation, Recipe } from '@nexus/contracts';
 import { fadeInUp, cinematicContainer, cinematicItem } from '@/shared/utils/motion';
 import { smartQuantity } from './recipeUtils';
 import { useNotifications } from '@/shared/contexts/NotificationsContext';
+import { useLanguage } from "@/shared/hooks";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -78,6 +79,7 @@ export interface DailyPrepListProps {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export function DailyPrepList({ recipes, className }: DailyPrepListProps) {
+    const { t } = useLanguage();
   const todayISO = format(new Date(), 'yyyy-MM-dd');
   const todayLabel = format(new Date(), 'EEEE d MMMM yyyy', { locale: fr });
 
@@ -243,7 +245,7 @@ export function DailyPrepList({ recipes, className }: DailyPrepListProps) {
           className="flex flex-col items-center justify-center py-20 bg-bg-secondary rounded-2xl border border-border text-center"
         >
           <Users className="w-12 h-12 text-text-muted mb-4" strokeWidth={1} />
-          <p className="font-serif text-xl text-text-primary mb-2">Aucune réservation aujourd'hui</p>
+          <p className="font-serif text-xl text-text-primary mb-2">{t('kitchen.dailyPrep.noReservation')}</p>
           <p className="text-text-muted text-[13px]">
             Les réservations confirmées apparaîtront ici.
           </p>
@@ -256,7 +258,7 @@ export function DailyPrepList({ recipes, className }: DailyPrepListProps) {
           className="flex flex-col items-center justify-center py-20 bg-bg-secondary rounded-2xl border border-border text-center"
         >
           <ChefHat className="w-12 h-12 text-text-muted mb-4" strokeWidth={1} />
-          <p className="font-serif text-xl text-text-primary mb-2">Aucun ingrédient à préparer</p>
+          <p className="font-serif text-xl text-text-primary mb-2">{t('kitchen.dailyPrep.noIngredientToPrep')}</p>
           <p className="text-text-muted text-[13px]">
             Ajoutez des recettes avec des ingrédients pour voir la liste.
           </p>

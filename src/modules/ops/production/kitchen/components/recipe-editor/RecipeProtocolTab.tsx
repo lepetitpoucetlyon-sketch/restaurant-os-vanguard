@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, Clock, Timer, AlertTriangle } from "lucide-react";
 import { Button } from "@ui/Button";
 import { Recipe, RecipeStep } from "@nexus/contracts";
+import { useLanguage } from "@/shared/hooks";
 
 interface RecipeProtocolTabProps {
     formData: Partial<Recipe>;
@@ -21,10 +22,11 @@ export function RecipeProtocolTab({
     handleAddStep,
     handleRemoveStep
 }: RecipeProtocolTabProps) {
+    const { t } = useLanguage();
     return (
         <div className="space-y-10">
             <div className="bg-bg-tertiary p-8 rounded-[3rem] border-2 border-dashed border-border text-primary">
-                <h3 className="font-serif font-black text-xl mb-6">Nouvelle Étape Opérationnelle</h3>
+                <h3 className="font-serif font-black text-xl mb-6">{t('kitchen.recipeEditor.newStep')}</h3>
                 <div className="space-y-4">
                     <textarea
                         placeholder="Instruction technique détaillée..."
@@ -64,7 +66,7 @@ export function RecipeProtocolTab({
             </div>
 
             <div className="space-y-6">
-                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Chronologie d'Exécution</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">{t('kitchen.recipeEditor.executionTimeline')}</label>
                 <AnimatePresence mode="popLayout">
                     {formData.steps?.map((step: RecipeStep, _idx: number) => (
                         <motion.div

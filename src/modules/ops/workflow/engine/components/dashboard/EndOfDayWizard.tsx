@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { dashboardRevenueSelector, dashboardActiveTablesSelector } from '@/store/dashboardAtoms';
-import { useTenant } from '@/shared/hooks';
+import { useTenant, useLanguage } from '@/shared/hooks';
 import { useToast } from '@ui/Toast';
 import {
     CheckCircle2,
@@ -87,6 +87,7 @@ function formatZReceipt(z: ZReportSnapshot): string {
 }
 
 export const EndOfDayWizard: React.FC = () => {
+    const { t } = useLanguage();
     const { activeTenantId } = useTenant();
     const { showToast } = useToast();
     const [isClosing, setIsClosing] = useState(false);
@@ -149,7 +150,7 @@ export const EndOfDayWizard: React.FC = () => {
         return (
             <div className="p-8 bg-status-success/10 border border-emerald-500/20 rounded-2xl text-center">
                 <CheckCircle2 className="mx-auto text-status-success mb-4" size={48} />
-                <h2 className="text-xl font-bold text-text-primary mb-2">Journée Clôturée</h2>
+                <h2 className="text-xl font-bold text-text-primary mb-2">{t('workflow.dayClosed')}</h2>
                 <p className="text-status-success/70 text-sm mb-6">
                     Tous les registres fiscaux ont été scellés et archivés (NF525).
                 </p>
@@ -173,18 +174,18 @@ export const EndOfDayWizard: React.FC = () => {
                     <Lock size={24} />
                 </div>
                 <div>
-                    <h2 className="text-xl font-bold text-text-primary">Clôture de Journée</h2>
+                    <h2 className="text-xl font-bold text-text-primary">{t('workflow.title')}</h2>
                     <p className="text-muted text-sm">Certification NF525 & HACCP</p>
                 </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="p-4 bg-surface-glass rounded-xl border border-border">
-                    <p className="text-xs text-secondary uppercase font-bold mb-1">CA à Sceller</p>
+                    <p className="text-xs text-secondary uppercase font-bold mb-1">{t('workflow.revenueToSeal')}</p>
                     <p className="text-lg font-bold text-text-primary">{(revenue / 1_000_000).toFixed(2)} €</p>
                 </div>
                 <div className="p-4 bg-surface-glass rounded-xl border border-border">
-                    <p className="text-xs text-secondary uppercase font-bold mb-1">État Tables</p>
+                    <p className="text-xs text-secondary uppercase font-bold mb-1">{t('workflow.tableStatus')}</p>
                     <p className={`text-lg font-bold ${activeTables > 0 ? 'text-status-warning' : 'text-status-success'}`}>
                         {activeTables > 0 ? `${activeTables} Active(s)` : 'Toutes closes'}
                     </p>
@@ -194,7 +195,7 @@ export const EndOfDayWizard: React.FC = () => {
             {activeTables > 0 && (
                 <div className="flex items-center gap-2 p-3 bg-status-danger/10 text-status-danger rounded-lg text-xs mb-6">
                     <AlertCircle size={16} />
-                    <span>Attention : Vous ne pouvez pas clôturer avec des tables ouvertes.</span>
+                    <span>{t('workflow.openTablesWarning')}</span>
                 </div>
             )}
 

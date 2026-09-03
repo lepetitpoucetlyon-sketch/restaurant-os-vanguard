@@ -9,6 +9,7 @@ const formatMu = (mu: number): string =>
   new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(mu / 1_000_000);
 import type { Product } from "@nexus/contracts";
 import type { JsonObject } from "@/shared/types/json";
+import { useLanguage } from "@/shared/hooks";
 
 interface ProductCardGridProps {
     products: Product[];
@@ -25,6 +26,7 @@ export function ProductCardGrid({
     onOpenEditor,
     onCreateProduct,
 }: ProductCardGridProps) {
+    const { t } = useLanguage();
     return (
         <div className="flex-1 flex flex-col bg-bg-secondary rounded-[2.5rem] border border-border shadow-premium overflow-hidden">
             <div className="p-6 border-b border-border/50 flex items-center justify-between">
@@ -50,7 +52,7 @@ export function ProductCardGrid({
 
             <div className="flex-1 overflow-y-auto p-6">
                 {products.length === 0 && (
-                    <p className="text-center text-text-muted py-12 font-medium">Aucun produit dans cette catégorie.</p>
+                    <p className="text-center text-text-muted py-12 font-medium">{t('menu.noProductInCategory')}</p>
                 )}
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                     {products.map(product => {

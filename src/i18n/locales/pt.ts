@@ -375,6 +375,16 @@ const pt: SovereignData = {
     "pos": {
         "title": "Ponto de Venda (POS)",
         "flow": {
+            "amountToPay": "Valor a pagar",
+            "product": {
+                "shaken": "Batido (shaken)",
+                "stirred": "Mexido no copo de mistura (stirred)",
+                "blended": "Batido / blended",
+                "layered": "Em camadas (layered)",
+                "defineIngredients": "Defina os ingredientes para calcular a margem bruta.",
+                "productionSteps": "Etapas de produção",
+                "staffSeesProtocol": "A equipa de cozinha verá este protocolo durante a execução."
+            },
             "payment": {
                 "conecsNetwork": "Rede CONECS (Edenred / Swile / Pluxee / Up / Bimpli)",
                 "conecsEligible": "Valor CONECS elegível:",
@@ -576,6 +586,37 @@ const pt: SovereignData = {
         }
     },
     "kitchen": {
+        "plateAudit": {
+            "noStandard": "Nenhum padrão registado",
+            "realCapture": "CAPTURA REAL",
+            "aiCompliance": "Verificação de conformidade por IA"
+        },
+        "prepTask": {
+            "protocol": "Protocolo de execução",
+            "alphaPriority": "Prioridade Alfa"
+        },
+        "recipeDetail": {
+            "foodCostPerPortion": "Custo de matéria / porção",
+            "ingredients": "Ingredientes",
+            "allergenAlerts": "Alertas de alérgenos",
+            "prepAbbr": "Prep.",
+            "preciseSteps": "Etapas de preparação precisas"
+        },
+        "recipeEditor": {
+            "costHT": "Custo de produção (s/ imposto)",
+            "suggestedPrice": "Preço de venda sugerido",
+            "estimatedMargin": "Margem bruta estimada",
+            "commercialName": "Denominação comercial",
+            "addElement": "Adicionar um elemento",
+            "ingredientList": "Lista de ingredientes",
+            "noIngredient": "Nenhum ingrediente definido para esta receita.",
+            "newStep": "Nova etapa operacional",
+            "executionTimeline": "Cronologia de execução"
+        },
+        "dailyPrep": {
+            "noReservation": "Nenhuma reserva hoje",
+            "noIngredientToPrep": "Nenhum ingrediente para preparar"
+        },
         "allergens": {
             "title": "Alérgenos e dietas",
             "subtitle": "Conformidade regulamentar e informação ao cliente",
@@ -625,6 +666,23 @@ const pt: SovereignData = {
             "servingTemp": "Temperatura de serviço",
             "pairings": "Harmonizações sugeridas"
         }
+    },
+    "menu": {
+        "categories": "Categorias",
+        "noCategory": "Nenhuma categoria. Crie uma para começar.",
+        "noProductInCategory": "Nenhum produto nesta categoria."
+    },
+    "kiosk": {
+        "takeaway": "Para levar",
+        "orderConfirmed": "Pedido confirmado!",
+        "orderNumber": "Número do pedido"
+    },
+    "workflow": {
+        "dayClosed": "Dia encerrado",
+        "title": "Encerramento do dia",
+        "revenueToSeal": "Receita a selar",
+        "tableStatus": "Estado das mesas",
+        "openTablesWarning": "Atenção: não é possível encerrar com mesas abertas."
     },
     "inventory": {
         "title": "Stock & Inventário",

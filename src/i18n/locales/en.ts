@@ -375,6 +375,16 @@ const en: SovereignData = {
     "pos": {
         "title": "Point of Sale",
         "flow": {
+            "amountToPay": "Amount to pay",
+            "product": {
+                "shaken": "Shaken",
+                "stirred": "Stirred",
+                "blended": "Blended",
+                "layered": "Layered",
+                "defineIngredients": "Define the ingredients to compute the gross margin.",
+                "productionSteps": "Production steps",
+                "staffSeesProtocol": "Kitchen staff will see this protocol during execution."
+            },
             "payment": {
                 "conecsNetwork": "CONECS network (Edenred / Swile / Pluxee / Up / Bimpli)",
                 "conecsEligible": "Eligible CONECS amount:",
@@ -576,6 +586,37 @@ const en: SovereignData = {
         }
     },
     "kitchen": {
+        "plateAudit": {
+            "noStandard": "No standard recorded",
+            "realCapture": "ACTUAL CAPTURE",
+            "aiCompliance": "AI compliance check"
+        },
+        "prepTask": {
+            "protocol": "Execution protocol",
+            "alphaPriority": "Alpha priority"
+        },
+        "recipeDetail": {
+            "foodCostPerPortion": "Food cost / portion",
+            "ingredients": "Ingredients",
+            "allergenAlerts": "Allergen alerts",
+            "prepAbbr": "Prep",
+            "preciseSteps": "Precise preparation steps"
+        },
+        "recipeEditor": {
+            "costHT": "Cost price (excl. tax)",
+            "suggestedPrice": "Suggested selling price",
+            "estimatedMargin": "Estimated gross margin",
+            "commercialName": "Commercial name",
+            "addElement": "Add an element",
+            "ingredientList": "Ingredient list",
+            "noIngredient": "No ingredient defined for this recipe.",
+            "newStep": "New operational step",
+            "executionTimeline": "Execution timeline"
+        },
+        "dailyPrep": {
+            "noReservation": "No reservations today",
+            "noIngredientToPrep": "No ingredients to prepare"
+        },
         "allergens": {
             "title": "Allergens & Diets",
             "subtitle": "Regulatory compliance and customer information",
@@ -625,6 +666,23 @@ const en: SovereignData = {
             "servingTemp": "Serving temperature",
             "pairings": "Suggested pairings"
         }
+    },
+    "menu": {
+        "categories": "Categories",
+        "noCategory": "No categories. Create one to get started.",
+        "noProductInCategory": "No products in this category."
+    },
+    "kiosk": {
+        "takeaway": "Takeaway",
+        "orderConfirmed": "Order confirmed!",
+        "orderNumber": "Order number"
+    },
+    "workflow": {
+        "dayClosed": "Day closed",
+        "title": "End-of-day close",
+        "revenueToSeal": "Revenue to seal",
+        "tableStatus": "Table status",
+        "openTablesWarning": "Warning: you cannot close with open tables."
     },
     "inventory": {
         "title": "Inventory & Stock",

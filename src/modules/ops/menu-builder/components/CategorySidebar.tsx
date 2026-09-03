@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Plus, GripVertical, Check, X } from "lucide-react";
 import type { Category } from "@nexus/contracts";
+import { useLanguage } from "@/shared/hooks";
 
 interface CategorySidebarProps {
     categories: Category[];
@@ -17,6 +18,7 @@ export function CategorySidebar({
     onSelectCategory,
     onCreateCategory,
 }: CategorySidebarProps) {
+    const { t } = useLanguage();
     // Saisie en place plutôt qu'une fenêtre : créer une catégorie tient en un mot,
     // et l'écran de carte se manipule souvent sur tablette en plein service.
     const [isNaming, setIsNaming] = useState(false);
@@ -38,7 +40,7 @@ export function CategorySidebar({
     return (
         <div className="w-80 flex flex-col bg-bg-secondary rounded-[2.5rem] border border-border shadow-premium overflow-hidden">
             <div className="p-6 border-b border-border/50">
-                <h2 className="text-xl font-brand font-black text-text-primary mb-4">Catégories</h2>
+                <h2 className="text-xl font-brand font-black text-text-primary mb-4">{t('menu.categories')}</h2>
 
                 {isNaming ? (
                     <div className="flex items-center gap-2">
@@ -87,7 +89,7 @@ export function CategorySidebar({
 
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
                 {categories.length === 0 && (
-                    <p className="text-sm text-text-muted p-4 text-center">Aucune catégorie. Créez-en une pour commencer.</p>
+                    <p className="text-sm text-text-muted p-4 text-center">{t('menu.noCategory')}</p>
                 )}
                 {categories.map((cat) => (
                     <button

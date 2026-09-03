@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import type { Recipe } from "@nexus/contracts";
 import { RecipeBOMCostService } from "../../../kds/services/RecipeBOMCostService";
 import { cn } from "@/lib/ui.foundations";
+import { useLanguage } from "@/shared/hooks";
 
 interface Props {
     recipe: Recipe;
@@ -18,6 +19,7 @@ const fmtEur = (mu: number) => `${(mu / 1_000_000).toFixed(2)} €`;
  * (BOM valorisée au prix d'achat courant) + ratio food-cost et marge brute.
  */
 export function RecipeCostSummary({ recipe, currentPortions }: Props) {
+    const { t } = useLanguage();
     const analysis = useMemo(() => {
         const sellingTtc = recipe.sellingPriceInMicrounits
             ?? (recipe.sellingPriceInCents ?? 0) * 10_000;
@@ -49,7 +51,7 @@ export function RecipeCostSummary({ recipe, currentPortions }: Props) {
     return (
         <div className="space-y-2">
             <div className="flex justify-between text-sm">
-                <span className="text-text-muted">Coût matière / portion</span>
+                <span className="text-text-muted">{t('kitchen.recipeDetail.foodCostPerPortion')}</span>
                 <span className="tabular-nums font-medium text-text-primary">{fmtEur(analysis.foodCostInMicrounits)}</span>
             </div>
             <div className="flex justify-between text-sm">

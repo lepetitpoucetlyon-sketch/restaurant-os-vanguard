@@ -6,6 +6,7 @@ import { Plus, Trash2, UtensilsCrossed, DollarSign } from "lucide-react";
 import { Button } from "@ui/Button";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { Recipe, RecipeIngredient } from "@nexus/contracts";
+import { useLanguage } from "@/shared/hooks";
 
 interface RecipeCompositionTabProps {
     formData: Partial<Recipe>;
@@ -22,10 +23,11 @@ export function RecipeCompositionTab({
     handleAddIngredient,
     handleRemoveIngredient
 }: RecipeCompositionTabProps) {
+    const { t } = useLanguage();
     return (
         <div className="space-y-10">
             <div className="bg-bg-tertiary p-8 rounded-[3rem] border-2 border-dashed border-border">
-                <h3 className="font-serif font-black text-xl mb-6">Ajouter un Élement</h3>
+                <h3 className="font-serif font-black text-xl mb-6">{t('kitchen.recipeEditor.addElement')}</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
                     <div className="sm:col-span-12 md:col-span-8">
                         <input
@@ -73,7 +75,7 @@ export function RecipeCompositionTab({
             </div>
 
             <div className="space-y-4">
-                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Nomenclature des Ingrédients</label>
+                <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">{t('kitchen.recipeEditor.ingredientList')}</label>
                 <AnimatePresence mode="popLayout">
                     {formData.ingredients?.map((ing, idx) => (
                         <motion.div
@@ -107,7 +109,7 @@ export function RecipeCompositionTab({
                 {(!formData.ingredients || formData.ingredients.length === 0) && (
                     <div className="py-20 text-center bg-bg-tertiary rounded-[3rem] border border-border/50">
                         <UtensilsCrossed className="w-12 h-12 text-text-muted/20 mx-auto mb-4" />
-                        <p className="text-text-muted font-bold italic">Aucun ingrédient défini pour cette recette.</p>
+                        <p className="text-text-muted font-bold italic">{t('kitchen.recipeEditor.noIngredient')}</p>
                     </div>
                 )}
             </div>

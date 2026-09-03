@@ -2,7 +2,7 @@
   "_note": "FICHIER GÉNÉRÉ — ne pas éditer à la main. Régénère: node scripts/generate-architecture-map.mjs",
   "totals": {
     "files": 3752,
-    "loc": 364256,
+    "loc": 364581,
     "pages": 87,
     "apiRoutes": 221
   },
@@ -118,23 +118,23 @@
   "godFiles": [
     {
       "file": "src/i18n/locales/en.ts",
-      "loc": 770
+      "loc": 828
     },
     {
       "file": "src/i18n/locales/es.ts",
-      "loc": 770
+      "loc": 828
     },
     {
       "file": "src/i18n/locales/fr.ts",
-      "loc": 770
+      "loc": 828
     },
     {
       "file": "src/i18n/locales/ja.ts",
-      "loc": 770
+      "loc": 828
     },
     {
       "file": "src/i18n/locales/pt.ts",
-      "loc": 770
+      "loc": 828
     },
     {
       "file": "src/shared/components/ui/PageShell.tsx",

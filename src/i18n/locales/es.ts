@@ -375,6 +375,16 @@ const es: SovereignData = {
     "pos": {
         "title": "Punto de Venta (TPV)",
         "flow": {
+            "amountToPay": "Importe a pagar",
+            "product": {
+                "shaken": "Batido (shaken)",
+                "stirred": "Removido en vaso mezclador (stirred)",
+                "blended": "Licuado / blended",
+                "layered": "En capas (layered)",
+                "defineIngredients": "Define los ingredientes para calcular el margen bruto.",
+                "productionSteps": "Pasos de producción",
+                "staffSeesProtocol": "El personal de cocina verá este protocolo durante la ejecución."
+            },
             "payment": {
                 "conecsNetwork": "Red CONECS (Edenred / Swile / Pluxee / Up / Bimpli)",
                 "conecsEligible": "Importe CONECS elegible:",
@@ -576,6 +586,37 @@ const es: SovereignData = {
         }
     },
     "kitchen": {
+        "plateAudit": {
+            "noStandard": "Ningún estándar registrado",
+            "realCapture": "CAPTURA REAL",
+            "aiCompliance": "Control de conformidad por IA"
+        },
+        "prepTask": {
+            "protocol": "Protocolo de ejecución",
+            "alphaPriority": "Prioridad Alfa"
+        },
+        "recipeDetail": {
+            "foodCostPerPortion": "Coste de materia / porción",
+            "ingredients": "Ingredientes",
+            "allergenAlerts": "Alertas de alérgenos",
+            "prepAbbr": "Prep.",
+            "preciseSteps": "Pasos de elaboración precisos"
+        },
+        "recipeEditor": {
+            "costHT": "Coste de producción (sin IVA)",
+            "suggestedPrice": "Precio de venta recomendado",
+            "estimatedMargin": "Margen bruto estimado",
+            "commercialName": "Denominación comercial",
+            "addElement": "Añadir un elemento",
+            "ingredientList": "Lista de ingredientes",
+            "noIngredient": "Ningún ingrediente definido para esta receta.",
+            "newStep": "Nuevo paso operativo",
+            "executionTimeline": "Cronología de ejecución"
+        },
+        "dailyPrep": {
+            "noReservation": "Ninguna reserva hoy",
+            "noIngredientToPrep": "Ningún ingrediente que preparar"
+        },
         "allergens": {
             "title": "Alérgenos y dietas",
             "subtitle": "Cumplimiento normativo e información al cliente",
@@ -625,6 +666,23 @@ const es: SovereignData = {
             "servingTemp": "Temperatura de servicio",
             "pairings": "Maridajes sugeridos"
         }
+    },
+    "menu": {
+        "categories": "Categorías",
+        "noCategory": "Sin categorías. Crea una para empezar.",
+        "noProductInCategory": "No hay productos en esta categoría."
+    },
+    "kiosk": {
+        "takeaway": "Para llevar",
+        "orderConfirmed": "¡Pedido confirmado!",
+        "orderNumber": "Número de pedido"
+    },
+    "workflow": {
+        "dayClosed": "Jornada cerrada",
+        "title": "Cierre del día",
+        "revenueToSeal": "Ingresos a sellar",
+        "tableStatus": "Estado de mesas",
+        "openTablesWarning": "Atención: no puede cerrar con mesas abiertas."
     },
     "inventory": {
         "title": "Stock e Inventario",

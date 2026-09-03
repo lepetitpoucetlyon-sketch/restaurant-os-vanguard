@@ -267,7 +267,7 @@ export function PaymentDialog({ isOpen, total, tvaInMicrounits, orderId, tenantI
                         {/* Amount */}
                         <div className="bg-bg-tertiary/40 border-y border-border/50 px-10 md:px-14 py-8 md:py-10 flex items-center justify-between shrink-0">
                             <div className="flex flex-col items-center">
-                                <span className="text-nano font-bold uppercase tracking-widest text-text-primary/40 mb-1">Montant à régler</span>
+                                <span className="text-nano font-bold uppercase tracking-widest text-text-primary/40 mb-1">{t('pos.flow.amountToPay')}</span>
                                 <span className="text-4xl md:text-5xl font-serif font-black text-accent-gold italic drop-shadow-sm">{formatCurrency(total)}</span>
                             </div>
                             {tvaInMicrounits !== undefined && (

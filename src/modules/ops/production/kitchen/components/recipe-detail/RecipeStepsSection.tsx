@@ -5,12 +5,14 @@ import { ChefHat, CheckCircle2 } from "lucide-react";
 import { Button } from "@ui/Button";
 import { staggerContainer, staggerItem } from "@/shared/utils/motion";
 import type { Recipe } from "@nexus/contracts";
+import { useLanguage } from "@/shared/hooks";
 
 interface RecipeStepsSectionProps {
     recipe: Recipe;
 }
 
 export function RecipeStepsSection({ recipe }: RecipeStepsSectionProps) {
+    const { t } = useLanguage();
     const steps = (recipe.recipeSteps ?? recipe.steps ?? []) as Array<{
         id?: string;
         instruction?: string;
@@ -34,7 +36,7 @@ export function RecipeStepsSection({ recipe }: RecipeStepsSectionProps) {
                         </div>
                         <div>
                             <h2 className="text-[14px] font-black uppercase tracking-[0.5em] text-secondary">Le Protocole</h2>
-                            <p className="font-serif italic opacity-60 transition-colors text-primary">Étapes de réalisation précises</p>
+                            <p className="font-serif italic opacity-60 transition-colors text-primary">{t('kitchen.recipeDetail.preciseSteps')}</p>
                         </div>
                     </div>
 

@@ -15,6 +15,7 @@ interface RecipeSidebarHeroProps {
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { useLanguage } from "@/shared/hooks";
 
 export function RecipeSidebarHero({
     recipe,
@@ -24,6 +25,7 @@ export function RecipeSidebarHero({
     handleReset,
     onClose,
 }: RecipeSidebarHeroProps) {
+    const { t } = useLanguage();
     const isScaled = currentPortions !== basePortions;
     const [isFavorite, setIsFavorite] = useState(false);
 
@@ -127,7 +129,7 @@ export function RecipeSidebarHero({
             {/* Prep time + difficulty */}
             <div className="grid grid-cols-2 gap-6 mb-8">
                 <div className="p-6 rounded-[2rem] border group hover:border-accent/30 transition-all duration-500 bg-surface-card border-border">
-                    <span className="text-micro font-black uppercase text-secondary tracking-[0.3em] block mb-2">Prép.</span>
+                    <span className="text-micro font-black uppercase text-secondary tracking-[0.3em] block mb-2">{t('kitchen.recipeDetail.prepAbbr')}</span>
                     <div className="flex items-center gap-3">
                         <Clock className="w-5 h-5 text-accent" />
                         <span className="text-xl font-serif font-black transition-colors text-primary">

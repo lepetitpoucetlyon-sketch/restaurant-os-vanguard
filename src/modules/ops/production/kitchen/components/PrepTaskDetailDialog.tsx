@@ -7,6 +7,7 @@ import { Modal } from "@ui/Modal";
 import { motion } from "framer-motion";
 import { staggerContainer, staggerItem } from "@/shared/utils/motion";
 import type { MiseEnPlaceTask } from "@nexus/contracts";
+import { useLanguage } from "@/shared/hooks";
 
 interface PrepTaskDetailDialogProps {
     isOpen: boolean;
@@ -16,6 +17,7 @@ interface PrepTaskDetailDialogProps {
 }
 
 export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: PrepTaskDetailDialogProps) {
+    const { t } = useLanguage();
     // Forced to light mode
 
     if (!task) return null;
@@ -103,7 +105,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                         <div className="md:col-span-2 space-y-10">
                             <div>
                                 <div className="flex items-center justify-between mb-8">
-                                    <h3 className="text-[12px] font-black uppercase tracking-[0.4em] text-text-primary">Protocole d'Exécution</h3>
+                                    <h3 className="text-[12px] font-black uppercase tracking-[0.4em] text-text-primary">{t('kitchen.prepTask.protocol')}</h3>
                                     <div className="h-px flex-1 bg-border/50 mx-6" />
                                 </div>
 
@@ -150,7 +152,7 @@ export function PrepTaskDetailDialog({ isOpen, onClose, task, onToggleStatus }: 
                                                         {item.duration} ESTIMÉ
                                                     </span>
                                                     {!item.done && (
-                                                        <span className="text-nano font-black text-accent uppercase tracking-widest bg-accent/10 px-2 py-0.5 rounded">Priorité Alpha</span>
+                                                        <span className="text-nano font-black text-accent uppercase tracking-widest bg-accent/10 px-2 py-0.5 rounded">{t('kitchen.prepTask.alphaPriority')}</span>
                                                     )}
                                                 </div>
                                             </div>

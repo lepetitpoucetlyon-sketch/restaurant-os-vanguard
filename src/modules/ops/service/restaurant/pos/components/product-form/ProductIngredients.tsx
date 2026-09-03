@@ -6,6 +6,7 @@ import { Button } from "@ui/Button";
 import { PremiumSelect } from "@ui/PremiumSelect";
 
 import type { Ingredient as MasterIngredient } from "@nexus/contracts";
+import { useLanguage } from "@/shared/hooks";
 
 interface RecipeIngredientSlot {
     ingredientId: string;
@@ -27,6 +28,7 @@ export function ProductIngredients({
     updateIngredient,
     removeIngredient
 }: ProductIngredientsProps) {
+    const { t } = useLanguage();
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between px-2">
@@ -46,7 +48,7 @@ export function ProductIngredients({
             <div className="space-y-3">
                 {recipeIngredients.length === 0 ? (
                     <div className="py-12 bg-bg-tertiary/50 border-2 border-dashed border-border rounded-[2rem] text-center">
-                        <p className="text-text-muted font-bold italic text-sm">Définissez les ingrédients pour calculer la marge brute.</p>
+                        <p className="text-text-muted font-bold italic text-sm">{t('pos.flow.product.defineIngredients')}</p>
                     </div>
                 ) : (
                     recipeIngredients.map((ing, i) => (

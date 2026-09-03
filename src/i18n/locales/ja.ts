@@ -375,6 +375,16 @@ const ja: SovereignData = {
     "pos": {
         "title": "POSレジ",
         "flow": {
+            "amountToPay": "支払金額",
+            "product": {
+                "shaken": "シェイク",
+                "stirred": "ステア",
+                "blended": "ブレンド",
+                "layered": "レイヤード",
+                "defineIngredients": "粗利益を計算するには材料を設定してください。",
+                "productionSteps": "調理ステップ",
+                "staffSeesProtocol": "調理スタッフは実行時にこの手順を確認します。"
+            },
             "payment": {
                 "conecsNetwork": "CONECSネットワーク（Edenred / Swile / Pluxee / Up / Bimpli）",
                 "conecsEligible": "CONECS対象額：",
@@ -576,6 +586,37 @@ const ja: SovereignData = {
         }
     },
     "kitchen": {
+        "plateAudit": {
+            "noStandard": "基準が登録されていません",
+            "realCapture": "実撮影",
+            "aiCompliance": "AI適合チェック"
+        },
+        "prepTask": {
+            "protocol": "実行手順",
+            "alphaPriority": "最優先"
+        },
+        "recipeDetail": {
+            "foodCostPerPortion": "原価 / 一人前",
+            "ingredients": "材料",
+            "allergenAlerts": "アレルゲン警告",
+            "prepAbbr": "仕込",
+            "preciseSteps": "詳細な調理手順"
+        },
+        "recipeEditor": {
+            "costHT": "原価（税抜）",
+            "suggestedPrice": "推奨販売価格",
+            "estimatedMargin": "粗利益（見込）",
+            "commercialName": "商品名",
+            "addElement": "要素を追加",
+            "ingredientList": "材料表",
+            "noIngredient": "このレシピの材料が未設定です。",
+            "newStep": "新しい作業ステップ",
+            "executionTimeline": "実行タイムライン"
+        },
+        "dailyPrep": {
+            "noReservation": "本日の予約はありません",
+            "noIngredientToPrep": "仕込む材料はありません"
+        },
         "allergens": {
             "title": "アレルゲン・食事制限",
             "subtitle": "法令順守と顧客への情報提供",
@@ -625,6 +666,23 @@ const ja: SovereignData = {
             "servingTemp": "提供温度",
             "pairings": "おすすめペアリング"
         }
+    },
+    "menu": {
+        "categories": "カテゴリ",
+        "noCategory": "カテゴリがありません。作成してください。",
+        "noProductInCategory": "このカテゴリに商品がありません。"
+    },
+    "kiosk": {
+        "takeaway": "テイクアウト",
+        "orderConfirmed": "注文が確定しました！",
+        "orderNumber": "注文番号"
+    },
+    "workflow": {
+        "dayClosed": "営業日締め完了",
+        "title": "日次締め",
+        "revenueToSeal": "封印する売上",
+        "tableStatus": "テーブル状況",
+        "openTablesWarning": "注意：オープン中のテーブルがあると締められません。"
     },
     "inventory": {
         "title": "在庫 & 棚卸",

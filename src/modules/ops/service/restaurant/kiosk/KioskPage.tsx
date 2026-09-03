@@ -17,6 +17,7 @@ import { cn } from "@/lib/ui.foundations";
 import { useProducts, useCategories } from "@/modules/logistics";
 import { formatCurrency } from "@/lib/formatters";
 import type { Product } from "@nexus/contracts";
+import { useLanguage } from "@/shared/hooks";
 
 interface CartItem {
   product: Product;
@@ -24,6 +25,7 @@ interface CartItem {
 }
 
 export function KioskPage() {
+    const { t } = useLanguage();
   const { data: products = [], isLoading: productsLoading } = useProducts();
   const { data: categories = [], isLoading: categoriesLoading } = useCategories();
 
@@ -118,7 +120,7 @@ export function KioskPage() {
               <div className="w-16 h-16 rounded-2xl bg-surface-bg flex items-center justify-center text-action-primary group-hover:scale-110 transition-transform">
                 <ShoppingBag className="w-8 h-8" />
               </div>
-              <span className="text-xl font-bold text-text-primary">À Emporter</span>
+              <span className="text-xl font-bold text-text-primary">{t('kiosk.takeaway')}</span>
             </button>
           </div>
         </motion.div>
@@ -137,12 +139,12 @@ export function KioskPage() {
           <div className="w-20 h-20 mx-auto rounded-full bg-status-success/10 text-status-success flex items-center justify-center">
             <CheckCircle2 className="w-10 h-10" />
           </div>
-          <h2 className="text-3xl font-serif font-bold text-text-primary">Commande Validée !</h2>
+          <h2 className="text-3xl font-serif font-bold text-text-primary">{t('kiosk.orderConfirmed')}</h2>
           <p className="text-sm text-text-muted">
             Votre commande est envoyée directement en cuisine. Merci de récupérer votre ticket.
           </p>
           <div className="p-4 rounded-2xl bg-surface-bg border border-border-default">
-            <span className="text-xs text-text-muted uppercase font-bold">Numéro de Commande</span>
+            <span className="text-xs text-text-muted uppercase font-bold">{t('kiosk.orderNumber')}</span>
             <p className="text-4xl font-serif font-black text-action-primary mt-1">#{Math.floor(100 + Math.random() * 900)}</p>
           </div>
           <button

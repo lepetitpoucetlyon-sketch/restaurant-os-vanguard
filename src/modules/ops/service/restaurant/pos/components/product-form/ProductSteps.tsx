@@ -3,6 +3,7 @@
 import { Clock, Plus, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@ui/Button";
+import { useLanguage } from "@/shared/hooks";
 
 interface RecipeStep {
     order: number;
@@ -23,12 +24,13 @@ export function ProductSteps({
     updateStep,
     removeStep
 }: ProductStepsProps) {
+    const { t } = useLanguage();
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between px-2">
                 <div className="flex items-center gap-3">
                     <Clock className="w-4 h-4 text-accent" />
-                    <h3 className="text-nano font-black uppercase tracking-[0.2em] text-text-muted">Étapes de Production</h3>
+                    <h3 className="text-nano font-black uppercase tracking-[0.2em] text-text-muted">{t('pos.flow.product.productionSteps')}</h3>
                 </div>
                 <Button
                     type="button"
@@ -42,7 +44,7 @@ export function ProductSteps({
             <div className="space-y-4">
                 {recipeSteps.length === 0 ? (
                     <div className="py-12 bg-bg-tertiary/50 border-2 border-dashed border-border rounded-[2rem] text-center">
-                        <p className="text-text-muted font-bold italic text-sm">Le personnel de cuisine verra ce protocole lors de l'exécution.</p>
+                        <p className="text-text-muted font-bold italic text-sm">{t('pos.flow.product.staffSeesProtocol')}</p>
                     </div>
                 ) : (
                     recipeSteps.map((step, i) => (

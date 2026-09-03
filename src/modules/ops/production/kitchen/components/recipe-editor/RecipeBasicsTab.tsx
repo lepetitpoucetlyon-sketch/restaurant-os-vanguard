@@ -5,6 +5,7 @@ import { Clock, Timer, Users } from "lucide-react";
 import { PremiumSelect } from "@ui/PremiumSelect";
 import { cn } from "@/lib/ui.foundations";
 import { Recipe } from "@nexus/contracts";
+import { useLanguage } from "@/shared/hooks";
 
 interface RecipeBasicsTabProps {
     formData: Partial<Recipe>;
@@ -21,11 +22,12 @@ export function RecipeBasicsTab({
     categories,
     colors
 }: RecipeBasicsTabProps) {
+    const { t } = useLanguage();
     return (
         <div className="space-y-10">
             <div className="grid grid-cols-2 gap-8">
                 <div className="col-span-2 lg:col-span-1">
-                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">Dénomination Commerciale</label>
+                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] mb-4 block">{t('kitchen.recipeEditor.commercialName')}</label>
                     <input
                         type="text"
                         value={formData.name as string}

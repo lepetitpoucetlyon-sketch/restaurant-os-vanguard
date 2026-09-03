@@ -6,6 +6,7 @@ import { staggerContainer, staggerItem } from "@/shared/utils/motion";
 import type { Recipe, RecipeIngredient } from "@nexus/contracts";
 import { RecipeCostBadge } from '../../../recipes/RecipeCostBadge';
 import { scaleIngredient } from "../../../recipes/recipeUtils";
+import { useLanguage } from "@/shared/hooks";
 
 interface RecipeIngredientsSectionProps {
     recipe: Recipe;
@@ -18,11 +19,12 @@ export function RecipeIngredientsSection({
     basePortions,
     currentPortions,
 }: RecipeIngredientsSectionProps) {
+    const { t } = useLanguage();
     return (
         <div className="space-y-10">
             <div>
                 <div className="flex items-center justify-between mb-8">
-                    <h3 className="text-micro font-black uppercase tracking-[0.4em] transition-colors text-primary">Ingrédients</h3>
+                    <h3 className="text-micro font-black uppercase tracking-[0.4em] transition-colors text-primary">{t('kitchen.recipeDetail.ingredients')}</h3>
                     <div className="h-px w-20 transition-colors bg-border" />
                 </div>
                 <motion.ul
@@ -61,7 +63,7 @@ export function RecipeIngredientsSection({
                 >
                     <div className="flex items-center gap-3 mb-4">
                         <AlertTriangle className="w-5 h-5 text-error" />
-                        <span className="text-nano font-black uppercase text-error tracking-[0.3em]">Alertes Allergènes</span>
+                        <span className="text-nano font-black uppercase text-error tracking-[0.3em]">{t('kitchen.recipeDetail.allergenAlerts')}</span>
                     </div>
                     <div className="flex flex-wrap gap-2">
                         {recipe.allergens.map((a: string) => (

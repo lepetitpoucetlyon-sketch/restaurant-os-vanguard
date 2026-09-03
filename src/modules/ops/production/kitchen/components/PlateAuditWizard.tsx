@@ -11,6 +11,7 @@ export interface PlateAuditResult {
     detectedIssues: string[];
 }
 import { cn } from '@/lib/ui.foundations';
+import { useLanguage } from "@/shared/hooks";
 
 interface PlateAuditWizardProps {
     recipeName: string;
@@ -20,6 +21,7 @@ interface PlateAuditWizardProps {
 }
 
 export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClose }: PlateAuditWizardProps) {
+    const { t } = useLanguage();
     const [isScanning, setIsScanning] = useState(false);
     const [capturedImage, setCapturedImage] = useState<string | null>(null);
     const [auditResult, setAuditResult] = useState<PlateAuditResult | null>(null);
@@ -83,7 +85,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                                 ) : (
                                     <div className="w-full h-full flex flex-col items-center justify-center text-secondary">
                                         <Sparkles size={40} className="mb-4 opacity-20" />
-                                        <p className="text-nano font-bold uppercase tracking-widest text-center px-6">Aucun standard enregistré</p>
+                                        <p className="text-nano font-bold uppercase tracking-widest text-center px-6">{t('kitchen.plateAudit.noStandard')}</p>
                                     </div>
                                 )}
                             </div>
@@ -91,7 +93,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
 
                         {/* Captured Image */}
                         <div className="space-y-4 relative">
-                            <p className="text-nano font-black text-status-warning uppercase tracking-[0.3em] text-center font-bold">CAPTURE RÉELLE</p>
+                            <p className="text-nano font-black text-status-warning uppercase tracking-[0.3em] text-center font-bold">{t('kitchen.plateAudit.realCapture')}</p>
                             <div className="aspect-square rounded-[2rem] bg-surface-glass border-2 border-dashed border-action-primary/30 overflow-hidden relative">
                                 {capturedImage ? (
                                     <img src={capturedImage} className="w-full h-full object-cover" alt="Capture" />
@@ -136,7 +138,7 @@ export function PlateAuditWizard({ recipeName, standardImage, onComplete, onClos
                             <div className="w-20 h-20 bg-surface-card/5 rounded-3xl flex items-center justify-center mx-auto">
                                 <Zap className="text-primary" size={32} />
                             </div>
-                            <h4 className="text-xl font-serif italic text-text-primary">Contrôle de Conformité IA</h4>
+                            <h4 className="text-xl font-serif italic text-text-primary">{t('kitchen.plateAudit.aiCompliance')}</h4>
                             <p className="text-micro font-bold text-secondary leading-relaxed uppercase tracking-widest">
                                 Prenez une photo pour comparer <br />l'assiette avec le standard technique.
                             </p>

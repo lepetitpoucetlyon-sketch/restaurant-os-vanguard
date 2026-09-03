@@ -3,6 +3,7 @@
 import React from "react";
 import { GlassWater, Plus, Trash2 } from "lucide-react";
 import type { ServingMethod } from "@nexus/contracts";
+import { useLanguage } from "@/shared/hooks";
 
 interface ProductBarFieldsProps {
   baseSpirit: string;
@@ -33,6 +34,7 @@ export function ProductBarFields({
   glassType,
   setGlassType,
 }: ProductBarFieldsProps) {
+    const { t } = useLanguage();
   return (
     <div className="space-y-4 pt-4 border-t border-subtle">
       <div className="flex items-center gap-2 text-xs font-bold text-amber-500 uppercase tracking-wider">
@@ -63,10 +65,10 @@ export function ProductBarFields({
             className="w-full h-10 px-3 bg-surface-card border border-subtle rounded-lg text-sm text-text-primary focus:outline-none focus:border-amber-500 transition-colors"
           >
             <option value="built">Direct au verre (Built)</option>
-            <option value="shaken">Shaké (Shaken)</option>
-            <option value="stirred">Mélangé au verre à mélange (Stirred)</option>
-            <option value="blended">Mixé / Blended</option>
-            <option value="layered">Etagé (Layered)</option>
+            <option value="shaken">{t('pos.flow.product.shaken')}</option>
+            <option value="stirred">{t('pos.flow.product.stirred')}</option>
+            <option value="blended">{t('pos.flow.product.blended')}</option>
+            <option value="layered">{t('pos.flow.product.layered')}</option>
           </select>
         </div>
       </div>
