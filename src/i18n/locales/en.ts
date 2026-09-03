@@ -207,6 +207,17 @@ const en: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "quietHours": {
+            "title": "Quiet hours",
+            "subtitle": "During this window, non-critical alerts do not send a push notification: they stay visible in the notification centre.",
+            "permanentLabel": "Permanent silent mode",
+            "permanentHint": "No push, whatever the time.",
+            "fromLabel": "From",
+            "toLabel": "to",
+            "criticalNote": "Critical alerts (temperature, product recall, fiscal chain) are always delivered, even during quiet hours.",
+            "saving": "Saving…",
+            "saved": "Saved"
+        },
         "title": "Application Settings",
         "tab_logic": "Configuration",
         "tab_style": "Customization",

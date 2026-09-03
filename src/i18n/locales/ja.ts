@@ -207,6 +207,17 @@ const ja: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "quietHours": {
+            "title": "サイレント時間帯",
+            "subtitle": "この時間帯は、重要でないアラートはプッシュ通知を送信しません（通知センターには表示されます）。",
+            "permanentLabel": "常時サイレントモード",
+            "permanentHint": "時間に関係なくプッシュなし。",
+            "fromLabel": "開始",
+            "toLabel": "終了",
+            "criticalNote": "重大なアラート（温度、製品リコール、会計チェーン）はサイレント時間帯でも常に配信されます。",
+            "saving": "保存中…",
+            "saved": "保存しました"
+        },
         "title": "アプリ設定",
         "tab_logic": "基本構成",
         "tab_style": "デザイン設定",

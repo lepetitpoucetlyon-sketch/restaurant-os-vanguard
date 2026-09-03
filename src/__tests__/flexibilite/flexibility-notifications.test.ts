@@ -60,6 +60,8 @@ describe('Système de Rappels, d Alertes et de Notifications de Flexibilité', (
 
     expect(capturedCreated).toBeDefined();
     expect((capturedCreated as { title: string }).title).toBe('Fiche Technique Manquante');
+    // N3 : l'alerte est actionnable — elle mène à l'écran où on la traite.
+    expect((capturedCreated as { action?: { href: string } }).action?.href).toBe('/menu-builder');
     expect((capturedCreated as { message: string }).message).toContain('vendu sans fiche technique');
   });
 

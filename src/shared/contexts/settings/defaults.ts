@@ -271,8 +271,8 @@ export const defaultSecurityConfig: SecurityConfig = {
 export const defaultNotificationsConfig: NotificationsConfig = {
     globalSound: true,
     doNotDisturb: false,
-    dndStartTime: '22:00',
-    dndEndTime: '08:00',
+    dndStartTime: '00:00',
+    dndEndTime: '07:00',
 };
 
 export const defaultIntegrationsConfig: IntegrationsConfig = {

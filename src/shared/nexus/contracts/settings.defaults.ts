@@ -264,7 +264,7 @@ export const defaultSettings: GlobalSettings = {
     notifications: {
         globalSound: true,
         doNotDisturb: false,
-        dndStartTime: "23:00",
+        dndStartTime: "00:00",
         dndEndTime: "07:00"
     },
     reportSchedules: [],

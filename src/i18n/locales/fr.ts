@@ -207,6 +207,17 @@ const fr: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "quietHours": {
+            "title": "Heures calmes",
+            "subtitle": "Pendant cette plage, les alertes non critiques n'envoient pas de notification push : elles restent visibles dans le centre de notifications.",
+            "permanentLabel": "Mode silencieux permanent",
+            "permanentHint": "Aucun push, quelle que soit l'heure.",
+            "fromLabel": "De",
+            "toLabel": "à",
+            "criticalNote": "Les alertes critiques (température, rappel produit, chaîne fiscale) sont toujours transmises, même en heures calmes.",
+            "saving": "Enregistrement…",
+            "saved": "Enregistré"
+        },
         "title": "Paramètres de l'Application",
         "tab_logic": "Configuration",
         "tab_style": "Personnalisation",

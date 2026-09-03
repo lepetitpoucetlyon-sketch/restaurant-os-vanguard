@@ -207,6 +207,17 @@ const pt: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "quietHours": {
+            "title": "Horário silencioso",
+            "subtitle": "Durante este período, os alertas não críticos não enviam notificação push: permanecem visíveis na central de notificações.",
+            "permanentLabel": "Modo silencioso permanente",
+            "permanentHint": "Sem push, seja qual for a hora.",
+            "fromLabel": "De",
+            "toLabel": "até",
+            "criticalNote": "Os alertas críticos (temperatura, recolha de produto, cadeia fiscal) são sempre entregues, mesmo no horário silencioso.",
+            "saving": "A guardar…",
+            "saved": "Guardado"
+        },
         "title": "Definições da Aplicação",
         "tab_logic": "Configuração",
         "tab_style": "Personalização",
