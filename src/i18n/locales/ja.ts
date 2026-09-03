@@ -243,6 +243,125 @@ const ja: SovereignData = {
             "large": "大"
         }
     },
+    "commerce": {
+        "landing": {
+            "realData": "実データ • Firestore"
+        },
+        "crm": {
+            "basketBasis": "直近500件の注文に基づく",
+            "noData": "データがありません",
+            "top5Products": "注文数トップ5商品",
+            "avgSpendByFrequency": "来店頻度別の平均支出",
+            "emailAutomationsDesc": "顧客イベントに応じて自動的に実行されるシナリオ",
+            "bulkSendResend": "Resend による一括送信",
+            "specialOfferPlaceholder": "特別なオファーがあります…",
+            "loyaltyPoints": "ロイヤルティポイント",
+            "noCustomerToSegment": "セグメント対象の顧客がいません",
+            "recency": "最新性",
+            "createPromoCode": "プロモコードを作成",
+            "uiUpdatedInstantly": "インターフェースは即座に更新されました。",
+            "fullPalette": "フルパレット",
+            "uiPreview": "インターフェースのプレビュー"
+        },
+        "marketing": {
+            "sent": "送信済み",
+            "createYourContent": "コンテンツを作成",
+            "selectPlatforms": "プラットフォームを選択",
+            "contentAndMedia": "コンテンツとメディア",
+            "filterCriteria": "絞り込み条件",
+            "estimatedAudience": "推定オーディエンス"
+        },
+        "quotes": {
+            "itemLibrary": "項目ライブラリ",
+            "entityType": "エンティティ種別",
+            "denomination": "名称",
+            "saving": "保存中…",
+            "generateQuote": "見積書を作成",
+            "designationAndItem": "内容と項目",
+            "quantity": "数量",
+            "emptyMatrix": "空のマトリクス • 項目を追加"
+        },
+        "seo": {
+            "profileNotConnected": "プロフィール未接続",
+            "integrationRollingOut": "統合を展開中",
+            "establishment": "店舗",
+            "lastSync": "最終同期",
+            "topKeywords": "効果的なキーワード",
+            "topKeywordsShort": "キーワード上位",
+            "keyword": "キーワード",
+            "integrations": "統合"
+        },
+        "onboarding": {
+            "howToExport": "データのエクスポート方法は？",
+            "replaceSampleRows": "サンプル行を実際のデータに置き換えてください（ヘッダーは残す）。",
+            "unknownColumnsIgnored": "認識されない列はエラーなく無視されます。",
+            "guidedFloorPlan": "ガイド付きフロアプラン",
+            "detectFormat": "形式・エンコード・元ソフトを検出",
+            "first10Preview": "— 先頭10件のプレビュー",
+            "apiKey": "APIキー",
+            "checkData": "データを確認",
+            "importDone": "インポート完了",
+            "messageSent": "メッセージを送信しました！",
+            "replyWithin2h": "チームは平均2時間以内に返信します。",
+            "describeIssue": "問題を説明してください",
+            "directOrOcr": "ファイルがスキャンならOCR、そうでなければ直接インポート",
+            "sslCert": "• 専用のLet’s Encrypt HTTPS SSL証明書、生涯自動更新。",
+            "infraManaged": "• インフラは Restaurant OS Master MCC が管理します。"
+        },
+        "floorPlan": {
+            "batchGenerationFor": "一括生成の対象：",
+            "startingAtTableNo": "開始テーブル番号",
+            "saved": "フロアプランを保存しました",
+            "number": "番号",
+            "capacity": "定員",
+            "selectZones": "店舗にあるゾーンを選択してください：",
+            "selectAtLeastOneZone": "少なくとも1つのゾーンを選択してください。",
+            "chooseTemplateOrScratch": "開始テンプレートを選ぶか、プランを一から作成します：",
+            "customPlan": "カスタムプラン",
+            "fromScratch": "一から作成",
+            "selectedTable": "選択中のテーブル："
+        },
+        "widgets": {
+            "reservationGuarantee": "予約保証",
+            "noImmediateCharge": "即時課金なし",
+            "neverCharged": "課金されません",
+            "loadingSecureForm": "安全なフォームを読み込み中…",
+            "noAvailability": "この日付は空きがありません。別の日をお試しください。"
+        },
+        "customers": {
+            "create": "作成",
+            "certifiedRegistration": "認証済み顧客登録",
+            "identityAndContact": "個人情報と連絡先",
+            "firstName": "顧客の名",
+            "preferencesAndDiets": "好みと食事制限",
+            "noHistory": "履歴が見つかりません"
+        },
+        "franchise": {
+            "masterRestaurant": "1. マスター店舗",
+            "networkTargets": "2. ネットワーク対象",
+            "incrementalUpdate": "増分更新（在庫を上書きしない）",
+            "selectTargetRestaurant": "対象店舗を選択…",
+            "quantity": "数量",
+            "noRecentTransfer": "最近の拠点間移動はありません",
+            "transferRef": "移動参照"
+        },
+        "reservations": {
+            "reservation": "予約",
+            "terraceClosed": "テラス閉鎖",
+            "book": "予約する",
+            "required": "必須",
+            "summary": "概要",
+            "guarantee": "予約保証",
+            "cardStoredNotCharged": "カードは保存されますが、来店すれば課金されません",
+            "neverCharged": "課金されません"
+        },
+        "pos": {
+            "sent": "送信済み",
+            "theoreticalFloat": "理論在高",
+            "variance": "差異",
+            "negative": "マイナス"
+        }
+    },
     "common": {
         "loading": "読み込み中...",
         "error": "エラーが発生しました",
@@ -821,6 +940,14 @@ const ja: SovereignData = {
             "new": "新規",
             "lost": "休眠"
         }
+    },
+    "flexibility": {
+        "negative_stock_title": "在庫マイナス警告",
+        "missing_recipe_title": "レシピ未登録通知",
+        "reconciled_title": "在庫遡及調整完了",
+        "variance_title": "仕入原価差異検出",
+        "shift_regularized_title": "勤怠遡及承認",
+        "batch_closed_title": "複数日一括締め完了"
     }
 };
 

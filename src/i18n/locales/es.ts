@@ -243,6 +243,125 @@ const es: SovereignData = {
             "large": "Redondeado"
         }
     },
+    "commerce": {
+        "landing": {
+            "realData": "Datos Reales • Firestore"
+        },
+        "crm": {
+            "basketBasis": "Basado en los últimos 500 pedidos",
+            "noData": "No hay datos disponibles",
+            "top5Products": "Top 5 productos pedidos",
+            "avgSpendByFrequency": "Gasto medio por frecuencia de visita",
+            "emailAutomationsDesc": "Escenarios activados automáticamente según los eventos del cliente",
+            "bulkSendResend": "Envío masivo mediante Resend",
+            "specialOfferPlaceholder": "Tenemos una oferta especial para ti...",
+            "loyaltyPoints": "puntos de fidelidad",
+            "noCustomerToSegment": "No hay clientes para segmentar",
+            "recency": "Recencia",
+            "createPromoCode": "Crear un código promocional",
+            "uiUpdatedInstantly": "La interfaz se actualizó al instante.",
+            "fullPalette": "Paleta completa",
+            "uiPreview": "Vista previa de la interfaz"
+        },
+        "marketing": {
+            "sent": "Enviados",
+            "createYourContent": "Crea tu contenido",
+            "selectPlatforms": "Seleccionar plataformas",
+            "contentAndMedia": "Contenido y multimedia",
+            "filterCriteria": "Criterios de filtrado",
+            "estimatedAudience": "Audiencia estimada"
+        },
+        "quotes": {
+            "itemLibrary": "Biblioteca de artículos",
+            "entityType": "Tipo de entidad",
+            "denomination": "Denominación",
+            "saving": "Guardando...",
+            "generateQuote": "Generar presupuesto",
+            "designationAndItem": "Descripción y artículo",
+            "quantity": "Cantidad",
+            "emptyMatrix": "Matriz vacía • Añadir artículo"
+        },
+        "seo": {
+            "profileNotConnected": "Perfil no conectado",
+            "integrationRollingOut": "Integración en despliegue",
+            "establishment": "Establecimiento",
+            "lastSync": "Última sincronización",
+            "topKeywords": "Palabras clave destacadas",
+            "topKeywordsShort": "Top palabras clave",
+            "keyword": "Palabra clave",
+            "integrations": "Integraciones"
+        },
+        "onboarding": {
+            "howToExport": "¿Cómo exportar sus datos?",
+            "replaceSampleRows": "Sustituya las filas de ejemplo por sus datos reales (conserve los encabezados).",
+            "unknownColumnsIgnored": "Las columnas no reconocidas se ignoran sin error.",
+            "guidedFloorPlan": "Plano de sala guiado",
+            "detectFormat": "Detección de formato · codificación · software de origen",
+            "first10Preview": "— vista previa de las 10 primeras",
+            "apiKey": "Clave API",
+            "checkData": "Verifique los datos",
+            "importDone": "Importación completada",
+            "messageSent": "¡Mensaje enviado!",
+            "replyWithin2h": "Nuestro equipo responde en 2 h de media.",
+            "describeIssue": "Describa su problema",
+            "directOrOcr": "Importación directa u OCR si el archivo está escaneado",
+            "sslCert": "• Certificado SSL HTTPS Let’s Encrypt dedicado y renovado de por vida.",
+            "infraManaged": "• Infraestructura gestionada por Restaurant OS Master MCC."
+        },
+        "floorPlan": {
+            "batchGenerationFor": "Generación masiva para:",
+            "startingAtTableNo": "A partir de la mesa n.º",
+            "saved": "Plano de sala guardado",
+            "number": "Número",
+            "capacity": "Capacidad",
+            "selectZones": "Seleccione las zonas que tiene su establecimiento:",
+            "selectAtLeastOneZone": "Seleccione al menos una zona.",
+            "chooseTemplateOrScratch": "Elija una plantilla inicial o cree su plano desde cero:",
+            "customPlan": "Plano personalizado",
+            "fromScratch": "Desde cero",
+            "selectedTable": "Mesa seleccionada:"
+        },
+        "widgets": {
+            "reservationGuarantee": "Garantía de reserva",
+            "noImmediateCharge": "Sin cargo inmediato",
+            "neverCharged": "nunca se cobra",
+            "loadingSecureForm": "Cargando el formulario seguro…",
+            "noAvailability": "No hay disponibilidad para esta fecha. Pruebe otro día."
+        },
+        "customers": {
+            "create": "Crear",
+            "certifiedRegistration": "Registro de cliente certificado",
+            "identityAndContact": "Datos personales y contacto",
+            "firstName": "Nombre del cliente",
+            "preferencesAndDiets": "Preferencias y dietas",
+            "noHistory": "No se encontró historial"
+        },
+        "franchise": {
+            "masterRestaurant": "1. Restaurante maestro",
+            "networkTargets": "2. Objetivos de la red",
+            "incrementalUpdate": "Actualización incremental (sin sobrescribir el stock)",
+            "selectTargetRestaurant": "Seleccionar un restaurante de destino...",
+            "quantity": "Cantidad",
+            "noRecentTransfer": "No hay transferencias entre sedes recientes",
+            "transferRef": "Ref. transferencia"
+        },
+        "reservations": {
+            "reservation": "Reserva",
+            "terraceClosed": "Terraza cerrada",
+            "book": "Reservar",
+            "required": "Exigido",
+            "summary": "Resumen",
+            "guarantee": "Garantía de reserva",
+            "cardStoredNotCharged": "La tarjeta se guarda pero nunca se cobra si el cliente acude",
+            "neverCharged": "nunca se cobra"
+        },
+        "pos": {
+            "sent": "Enviado",
+            "theoreticalFloat": "Fondo teórico",
+            "variance": "Diferencia",
+            "negative": "negativa"
+        }
+    },
     "common": {
         "loading": "Cargando...",
         "error": "Ocurrió un error",
@@ -821,6 +940,14 @@ const es: SovereignData = {
             "new": "Nuevo",
             "lost": "Inactivo"
         }
+    },
+    "flexibility": {
+        "negative_stock_title": "Alerta de Stock Negativo",
+        "missing_recipe_title": "Ficha Técnica Pendiente",
+        "reconciled_title": "Stock Reconciliado Retroactivamente",
+        "variance_title": "Diferencia de Precio de Compra",
+        "shift_regularized_title": "Turno Regularizado",
+        "batch_closed_title": "Cierre Multidía Completado"
     }
 };
 

@@ -243,6 +243,125 @@ const en: SovereignData = {
             "large": "Rounded"
         }
     },
+    "commerce": {
+        "landing": {
+            "realData": "Live Data • Firestore"
+        },
+        "crm": {
+            "basketBasis": "Based on the last 500 orders",
+            "noData": "No data available",
+            "top5Products": "Top 5 ordered products",
+            "avgSpendByFrequency": "Avg. spend by visit frequency",
+            "emailAutomationsDesc": "Scenarios triggered automatically based on customer events",
+            "bulkSendResend": "Bulk send via Resend",
+            "specialOfferPlaceholder": "We have a special offer for you...",
+            "loyaltyPoints": "loyalty points",
+            "noCustomerToSegment": "No customers to segment",
+            "recency": "Recency",
+            "createPromoCode": "Create a promo code",
+            "uiUpdatedInstantly": "The interface was updated instantly.",
+            "fullPalette": "Full palette",
+            "uiPreview": "Interface preview"
+        },
+        "marketing": {
+            "sent": "Sent",
+            "createYourContent": "Create your content",
+            "selectPlatforms": "Select platforms",
+            "contentAndMedia": "Content & Media",
+            "filterCriteria": "Filter criteria",
+            "estimatedAudience": "Estimated audience"
+        },
+        "quotes": {
+            "itemLibrary": "Item library",
+            "entityType": "Entity type",
+            "denomination": "Name",
+            "saving": "Saving...",
+            "generateQuote": "Generate quote",
+            "designationAndItem": "Description & item",
+            "quantity": "Quantity",
+            "emptyMatrix": "Empty matrix • Add item"
+        },
+        "seo": {
+            "profileNotConnected": "Profile not connected",
+            "integrationRollingOut": "Integration rolling out",
+            "establishment": "Establishment",
+            "lastSync": "Last sync",
+            "topKeywords": "Top keywords",
+            "topKeywordsShort": "Top keywords",
+            "keyword": "Keyword",
+            "integrations": "Integrations"
+        },
+        "onboarding": {
+            "howToExport": "How to export your data?",
+            "replaceSampleRows": "Replace the sample rows with your real data (keep the headers).",
+            "unknownColumnsIgnored": "Unrecognized columns are ignored without error.",
+            "guidedFloorPlan": "Guided floor plan",
+            "detectFormat": "Detecting format · encoding · source software",
+            "first10Preview": "— preview of the first 10",
+            "apiKey": "API key",
+            "checkData": "Check the data",
+            "importDone": "Import complete",
+            "messageSent": "Message sent!",
+            "replyWithin2h": "Our team replies within 2h on average.",
+            "describeIssue": "Describe your issue",
+            "directOrOcr": "Direct import or OCR if the file is scanned",
+            "sslCert": "• Dedicated Let's Encrypt HTTPS SSL certificate, renewed for life.",
+            "infraManaged": "• Infrastructure managed by Restaurant OS Master MCC."
+        },
+        "floorPlan": {
+            "batchGenerationFor": "Bulk generation for:",
+            "startingAtTableNo": "Starting at table no.",
+            "saved": "Floor plan saved",
+            "number": "Number",
+            "capacity": "Capacity",
+            "selectZones": "Select the zones your establishment has:",
+            "selectAtLeastOneZone": "Select at least one zone.",
+            "chooseTemplateOrScratch": "Choose a starting template or build your plan from scratch:",
+            "customPlan": "Custom plan",
+            "fromScratch": "From scratch",
+            "selectedTable": "Selected table:"
+        },
+        "widgets": {
+            "reservationGuarantee": "Reservation guarantee",
+            "noImmediateCharge": "No immediate charge",
+            "neverCharged": "never charged",
+            "loadingSecureForm": "Loading secure form…",
+            "noAvailability": "No availability for this date. Try another day."
+        },
+        "customers": {
+            "create": "Create",
+            "certifiedRegistration": "Certified customer registration",
+            "identityAndContact": "Identity & contact",
+            "firstName": "Customer first name",
+            "preferencesAndDiets": "Preferences & diets",
+            "noHistory": "No history found"
+        },
+        "franchise": {
+            "masterRestaurant": "1. Master restaurant",
+            "networkTargets": "2. Network targets",
+            "incrementalUpdate": "Incremental update (without overwriting stock)",
+            "selectTargetRestaurant": "Select a target restaurant...",
+            "quantity": "Quantity",
+            "noRecentTransfer": "No recent inter-site transfer",
+            "transferRef": "Transfer ref."
+        },
+        "reservations": {
+            "reservation": "Reservation",
+            "terraceClosed": "Terrace closed",
+            "book": "Book",
+            "required": "Required",
+            "summary": "Summary",
+            "guarantee": "Reservation guarantee",
+            "cardStoredNotCharged": "The card is stored but never charged if the customer shows up",
+            "neverCharged": "never charged"
+        },
+        "pos": {
+            "sent": "Sent",
+            "theoreticalFloat": "Theoretical float",
+            "variance": "Variance",
+            "negative": "negative"
+        }
+    },
     "common": {
         "loading": "Loading...",
         "error": "An error occurred",
@@ -818,9 +937,17 @@ const en: SovereignData = {
         "segments": {
             "vip": "VIP",
             "regular": "Regular",
-            "new": "New Guest",
-            "lost": "Inactive"
+            "new": "New guest",
+            "lost": "Needs reactivation"
         }
+    },
+    "flexibility": {
+        "negative_stock_title": "Negative Stock Alert",
+        "missing_recipe_title": "Missing Recipe Specification",
+        "reconciled_title": "Stocks Reconciled Retroactively",
+        "variance_title": "Purchase Price Variance Detected",
+        "shift_regularized_title": "Timeclock Shift Regularized",
+        "batch_closed_title": "Multi-Day Batch Close Completed"
     }
 };
 

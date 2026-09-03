@@ -20,6 +20,7 @@ import type { Notification, NotificationType } from "@nexus/contracts";
 import { formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import { motion, AnimatePresence } from "framer-motion";
+import { FlexibilityAlertBanner, type FlexibilityAlert } from "./FlexibilityAlertBanner";
 
 const TYPE_CONFIG: Record<NotificationType, { icon: React.ElementType; bgColor: string; textColor: string; borderColor: string; badgeColor: string; animate: boolean }> = {
     critical: {
@@ -83,6 +84,31 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
         return acc;
     }, {});
 
+    const flexibilityAlerts: FlexibilityAlert[] = (notifications || [])
+        .filter(n => !n.read && (
+            n.type === 'critical' ||
+            (typeof n.title === 'string' && (
+                n.title.toLowerCase().includes('stock') ||
+                n.title.toLowerCase().includes('rupture') ||
+                n.title.toLowerCase().includes('recette')
+            ))
+        ))
+        .slice(0, 3)
+        .map(n => ({
+            id: n.id,
+            type: (typeof n.title === 'string' && n.title.toLowerCase().includes('recette'))
+                ? ('pending_recipe' as const)
+                : ('negative_stock' as const),
+            title: n.title || 'Alerte',
+            message: n.message || '',
+            actionLabel: n.action?.label,
+            onAction: n.action?.href ? () => {
+                markAsRead(n.id);
+                router.push(n.action!.href!);
+                onClose();
+            } : undefined,
+        }));
+
     if (!isOpen) return null;
 
     return (
@@ -93,30 +119,24 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 aria-hidden="true"
-                className="fixed inset-0 z-[150] bg-black/50 backdrop-blur-sm transition-opacity duration-300"
                 onClick={onClose}
+                className="fixed inset-0 bg-bg-primary/80 dark:bg-bg-secondary/90 backdrop-blur-md z-40"
             />
 
-            {/* Executive Archive Panel */}
+            {/* Notification Drawer - Executive Monolith */}
             <motion.div
-                role="dialog"
-                aria-modal="true"
-                aria-label="Archive des Alertes"
-                initial={{ x: 400, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: 400, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="fixed top-2 right-2 bottom-2 z-[200] w-[calc(100%-1rem)] md:w-[30rem] bg-surface-card border border-border rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col"
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                className="fixed right-0 top-0 bottom-0 w-full sm:w-[480px] md:w-[540px] bg-surface-card dark:bg-surface-card border-l border-subtle dark:border-white/10 z-50 flex flex-col shadow-2xl overflow-hidden font-sans"
             >
-                {/* Visual Glow (Dark Mode Only) */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-accent-gold/5 blur-[100px] pointer-events-none hidden dark:block" />
-
-                {/* Master UI Header */}
-                <div className="p-6 md:p-10 border-b border-border flex items-center justify-between relative z-10 bg-surface-card">
+                {/* Header Profile - Pure Luxury */}
+                <div className="p-8 md:p-10 border-b border-subtle dark:border-white/5 flex items-center justify-between relative z-10 bg-surface-card dark:bg-surface-card/[0.02]">
                     <div className="flex items-center gap-4 md:gap-6">
                         <div className="relative">
-                            <div className="w-12 h-12 md:w-16 md:h-16 rounded-[18px] md:rounded-[22px] bg-surface-bg dark:bg-accent-gold/10 flex items-center justify-center border border-subtle dark:border-accent-gold/20 shadow-lg dark:shadow-glow group transition-all duration-700 hover:rotate-6">
-                                <Bell className="w-5 h-5 md:w-7 md:h-7 text-primary dark:text-accent-gold" strokeWidth={1.5} />
+                            <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-action-primary text-text-on-primary flex items-center justify-center shadow-lg shadow-black/20">
+                                <Bell className="w-6 h-6 md:w-7 md:h-7" strokeWidth={1.5} />
                             </div>
                             {unreadCount > 0 && (
                                 <span className="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 rounded-full bg-status-danger border-4 border-white dark:border-black animate-pulse" />
@@ -142,6 +162,9 @@ export function NotificationPanel({ isOpen, onClose }: NotificationPanelProps) {
 
                 {/* Notifications List */}
                 <div className="flex-1 overflow-y-auto elegant-scrollbar p-6 space-y-6 relative z-10 bg-surface-bg/50 dark:bg-transparent">
+                    {flexibilityAlerts.length > 0 && (
+                        <FlexibilityAlertBanner alerts={flexibilityAlerts} onDismissAlert={removeNotification} />
+                    )}
                     {notifications.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center py-20">
                             <div className="w-24 h-24 rounded-full bg-surface-bg dark:bg-accent-gold/5 mb-10 flex items-center justify-center border border-subtle dark:border-accent-gold/10">

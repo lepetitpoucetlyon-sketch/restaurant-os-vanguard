@@ -243,6 +243,125 @@ const pt: SovereignData = {
             "large": "Arredondado"
         }
     },
+    "commerce": {
+        "landing": {
+            "realData": "Dados Reais • Firestore"
+        },
+        "crm": {
+            "basketBasis": "Com base nos últimos 500 pedidos",
+            "noData": "Nenhum dado disponível",
+            "top5Products": "Top 5 produtos pedidos",
+            "avgSpendByFrequency": "Gasto médio por frequência de visita",
+            "emailAutomationsDesc": "Cenários acionados automaticamente conforme os eventos do cliente",
+            "bulkSendResend": "Envio em massa via Resend",
+            "specialOfferPlaceholder": "Temos uma oferta especial para você...",
+            "loyaltyPoints": "pontos de fidelidade",
+            "noCustomerToSegment": "Nenhum cliente para segmentar",
+            "recency": "Recência",
+            "createPromoCode": "Criar um código promocional",
+            "uiUpdatedInstantly": "A interface foi atualizada instantaneamente.",
+            "fullPalette": "Paleta completa",
+            "uiPreview": "Pré-visualização da interface"
+        },
+        "marketing": {
+            "sent": "Enviados",
+            "createYourContent": "Crie o seu conteúdo",
+            "selectPlatforms": "Selecionar plataformas",
+            "contentAndMedia": "Conteúdo e mídia",
+            "filterCriteria": "Critérios de filtragem",
+            "estimatedAudience": "Público estimado"
+        },
+        "quotes": {
+            "itemLibrary": "Biblioteca de itens",
+            "entityType": "Tipo de entidade",
+            "denomination": "Denominação",
+            "saving": "Salvando...",
+            "generateQuote": "Gerar orçamento",
+            "designationAndItem": "Descrição e item",
+            "quantity": "Quantidade",
+            "emptyMatrix": "Matriz vazia • Adicionar item"
+        },
+        "seo": {
+            "profileNotConnected": "Perfil não conectado",
+            "integrationRollingOut": "Integração em implantação",
+            "establishment": "Estabelecimento",
+            "lastSync": "Última sincronização",
+            "topKeywords": "Palavras-chave de destaque",
+            "topKeywordsShort": "Top palavras-chave",
+            "keyword": "Palavra-chave",
+            "integrations": "Integrações"
+        },
+        "onboarding": {
+            "howToExport": "Como exportar os seus dados?",
+            "replaceSampleRows": "Substitua as linhas de exemplo pelos seus dados reais (mantenha os cabeçalhos).",
+            "unknownColumnsIgnored": "Colunas não reconhecidas são ignoradas sem erro.",
+            "guidedFloorPlan": "Plano de sala guiado",
+            "detectFormat": "Detecção de formato · codificação · software de origem",
+            "first10Preview": "— pré-visualização das 10 primeiras",
+            "apiKey": "Chave de API",
+            "checkData": "Verifique os dados",
+            "importDone": "Importação concluída",
+            "messageSent": "Mensagem enviada!",
+            "replyWithin2h": "A nossa equipa responde em média em 2h.",
+            "describeIssue": "Descreva o seu problema",
+            "directOrOcr": "Importação direta ou OCR se o ficheiro estiver digitalizado",
+            "sslCert": "• Certificado SSL HTTPS Let’s Encrypt dedicado e renovado vitaliciamente.",
+            "infraManaged": "• Infraestrutura gerida pelo Restaurant OS Master MCC."
+        },
+        "floorPlan": {
+            "batchGenerationFor": "Geração em massa para:",
+            "startingAtTableNo": "A partir da mesa n.º",
+            "saved": "Plano de sala guardado",
+            "number": "Número",
+            "capacity": "Capacidade",
+            "selectZones": "Selecione as zonas que o seu estabelecimento possui:",
+            "selectAtLeastOneZone": "Selecione pelo menos uma zona.",
+            "chooseTemplateOrScratch": "Escolha um modelo inicial ou crie o seu plano do zero:",
+            "customPlan": "Plano personalizado",
+            "fromScratch": "Do zero",
+            "selectedTable": "Mesa selecionada:"
+        },
+        "widgets": {
+            "reservationGuarantee": "Garantia de reserva",
+            "noImmediateCharge": "Sem débito imediato",
+            "neverCharged": "nunca debitada",
+            "loadingSecureForm": "A carregar o formulário seguro…",
+            "noAvailability": "Sem disponibilidade para esta data. Tente outro dia."
+        },
+        "customers": {
+            "create": "Criar",
+            "certifiedRegistration": "Registo de cliente certificado",
+            "identityAndContact": "Identidade e contacto",
+            "firstName": "Primeiro nome do cliente",
+            "preferencesAndDiets": "Preferências e dietas",
+            "noHistory": "Nenhum histórico encontrado"
+        },
+        "franchise": {
+            "masterRestaurant": "1. Restaurante mestre",
+            "networkTargets": "2. Alvos da rede",
+            "incrementalUpdate": "Atualização incremental (sem substituir o stock)",
+            "selectTargetRestaurant": "Selecionar um restaurante de destino...",
+            "quantity": "Quantidade",
+            "noRecentTransfer": "Nenhuma transferência entre locais recente",
+            "transferRef": "Ref. transferência"
+        },
+        "reservations": {
+            "reservation": "Reserva",
+            "terraceClosed": "Esplanada fechada",
+            "book": "Reservar",
+            "required": "Exigido",
+            "summary": "Resumo",
+            "guarantee": "Garantia de reserva",
+            "cardStoredNotCharged": "O cartão é guardado mas nunca debitado se o cliente comparecer",
+            "neverCharged": "nunca debitado"
+        },
+        "pos": {
+            "sent": "Enviado",
+            "theoreticalFloat": "Fundo teórico",
+            "variance": "Diferença",
+            "negative": "negativa"
+        }
+    },
     "common": {
         "loading": "A carregar...",
         "error": "Ocorreu um erro",
@@ -821,6 +940,14 @@ const pt: SovereignData = {
             "new": "Novo",
             "lost": "Inativo"
         }
+    },
+    "flexibility": {
+        "negative_stock_title": "Alerta de Stock Negativo",
+        "missing_recipe_title": "Ficha Técnica em Falta",
+        "reconciled_title": "Stocks Reconciliados Retroativamente",
+        "variance_title": "Divergência de Preço de Compra",
+        "shift_regularized_title": "Turno Regularizado",
+        "batch_closed_title": "Fecho Multi-Dias Concluído"
     }
 };
 

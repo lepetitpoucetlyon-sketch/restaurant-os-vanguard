@@ -243,6 +243,125 @@ const fr: SovereignData = {
             "large": "Arrondi"
         }
     },
+    "commerce": {
+        "landing": {
+            "realData": "Données Réelles • Firestore"
+        },
+        "crm": {
+            "basketBasis": "Basé sur les 500 dernières commandes",
+            "noData": "Aucune donnée disponible",
+            "top5Products": "Top 5 produits commandés",
+            "avgSpendByFrequency": "Dépense moy. par fréquence de visite",
+            "emailAutomationsDesc": "Scénarios déclenchés automatiquement selon les événements client",
+            "bulkSendResend": "Envoi groupé via Resend",
+            "specialOfferPlaceholder": "Nous avons une offre spéciale pour vous...",
+            "loyaltyPoints": "points de fidélité",
+            "noCustomerToSegment": "Aucun client à segmenter",
+            "recency": "Récence",
+            "createPromoCode": "Créer un code promo",
+            "uiUpdatedInstantly": "L'interface a été mise à jour instantanément.",
+            "fullPalette": "Palette complète",
+            "uiPreview": "Aperçu interface"
+        },
+        "marketing": {
+            "sent": "Envoyés",
+            "createYourContent": "Créez votre contenu",
+            "selectPlatforms": "Sélectionner les plateformes",
+            "contentAndMedia": "Contenu & Média",
+            "filterCriteria": "Critères de filtrage",
+            "estimatedAudience": "Audience estimée"
+        },
+        "quotes": {
+            "itemLibrary": "Bibliothèque Artefacts",
+            "entityType": "Type d'entité",
+            "denomination": "Dénomination",
+            "saving": "Mémorisation...",
+            "generateQuote": "Générer le Devis",
+            "designationAndItem": "Désignation & Artefact",
+            "quantity": "Quantité",
+            "emptyMatrix": "Matrice Vide • Insérer Artefact"
+        },
+        "seo": {
+            "profileNotConnected": "Profil non connecté",
+            "integrationRollingOut": "Intégration en cours de déploiement",
+            "establishment": "Établissement",
+            "lastSync": "Dernière sync",
+            "topKeywords": "Mots-clés performants",
+            "topKeywordsShort": "Top mots-clés",
+            "keyword": "Mot-clé",
+            "integrations": "Intégrations"
+        },
+        "onboarding": {
+            "howToExport": "Comment exporter vos données ?",
+            "replaceSampleRows": "Remplacez les lignes d'exemple par vos données réelles (conservez les en-têtes).",
+            "unknownColumnsIgnored": "Les colonnes non reconnues sont ignorées sans erreur.",
+            "guidedFloorPlan": "Plan de salle guidé",
+            "detectFormat": "Détection format · encodage · logiciel source",
+            "first10Preview": "— aperçu des 10 premières",
+            "apiKey": "Clé API",
+            "checkData": "Vérifiez les données",
+            "importDone": "Import terminé",
+            "messageSent": "Message envoyé !",
+            "replyWithin2h": "Notre équipe vous répond sous 2h en moyenne.",
+            "describeIssue": "Décrivez votre blocage",
+            "directOrOcr": "Import direct ou OCR si fichier scanné",
+            "sslCert": "Certificat SSL HTTPS Let’s Encrypt dédié et renouvelé à vie.",
+            "infraManaged": "Gestion de l’infrastructure assurée par Restaurant OS Master MCC."
+        },
+        "floorPlan": {
+            "batchGenerationFor": "Génération en masse pour :",
+            "startingAtTableNo": "À la table n°",
+            "saved": "Plan de salle enregistré",
+            "number": "Numéro",
+            "capacity": "Capacité",
+            "selectZones": "Sélectionnez les zones que possède votre établissement :",
+            "selectAtLeastOneZone": "Sélectionnez au moins une zone.",
+            "chooseTemplateOrScratch": "Choisissez un template de départ ou créez votre plan de zéro :",
+            "customPlan": "Plan personnalisé",
+            "fromScratch": "Partir de zéro",
+            "selectedTable": "Table sélectionnée :"
+        },
+        "widgets": {
+            "reservationGuarantee": "Garantie de réservation",
+            "noImmediateCharge": "Aucun débit immédiat",
+            "neverCharged": "jamais débitée",
+            "loadingSecureForm": "Chargement du formulaire sécurisé…",
+            "noAvailability": "Aucune disponibilité pour cette date. Essayez un autre jour."
+        },
+        "customers": {
+            "create": "Créer",
+            "certifiedRegistration": "Enregistrement Customer Certifié",
+            "identityAndContact": "État Civil & Contact",
+            "firstName": "Prénom du client",
+            "preferencesAndDiets": "Préférences & Régimes",
+            "noHistory": "Aucun historique trouvé"
+        },
+        "franchise": {
+            "masterRestaurant": "1. Restaurant Maître",
+            "networkTargets": "2. Cibles Réseau",
+            "incrementalUpdate": "Mise à jour incrémentale (sans écraser les stocks)",
+            "selectTargetRestaurant": "Sélectionner un restaurant cible...",
+            "quantity": "Quantité",
+            "noRecentTransfer": "Aucun transfert inter-sites récent",
+            "transferRef": "Réf Transfert"
+        },
+        "reservations": {
+            "reservation": "Réservation",
+            "terraceClosed": "Terrasse fermée",
+            "book": "Réserver",
+            "required": "Exigé",
+            "summary": "Résumé",
+            "guarantee": "Garantie Réservation",
+            "cardStoredNotCharged": "La carte est enregistrée mais jamais débitée si le client vient",
+            "neverCharged": "jamais débitée"
+        },
+        "pos": {
+            "sent": "Envoyé",
+            "theoreticalFloat": "Fond théorique",
+            "variance": "Écart",
+            "negative": "négative"
+        }
+    },
     "common": {
         "loading": "Chargement...",
         "error": "Une erreur est survenue",
@@ -821,6 +940,14 @@ const fr: SovereignData = {
             "new": "Nouveau client",
             "lost": "À relancer"
         }
+    },
+    "flexibility": {
+        "negative_stock_title": "Alerte Rupture de Stock",
+        "missing_recipe_title": "Fiche Technique Manquante",
+        "reconciled_title": "Stocks Régularisés Rétroactivement",
+        "variance_title": "Écart Prix Achat Détecté",
+        "shift_regularized_title": "Pointage Régularisé",
+        "batch_closed_title": "Clôture Multi-Jours Validée"
     }
 };
 
