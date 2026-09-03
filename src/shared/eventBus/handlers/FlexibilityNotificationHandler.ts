@@ -22,21 +22,23 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
     NexusEventBus.on('stock.negative_alert', async (payload) => {
       try {
         const itemId = payload.itemId ?? 'inconnu';
-        const notifId = `notif_neg_stock_${itemId}_${Date.now()}`;
+        // Correctif N0-5 : id déterministe (une alerte par article, pas par occurrence).
+        const notifId = `notif_neg_stock_${itemId}`;
         const message = `Stock négatif détecté sur l'article ${payload.itemName || itemId} (Déficit : ${payload.deficit}, Quantité actuelle : ${payload.currentQuantity}).`;
 
-        // Alerte push urgente pour cuisine et direction
+        // Alerte push urgente pour cuisine et direction.
+        // Correctif N0-3 : rôles canoniques (minuscules) — sinon sendToRole ne résout personne.
         await NexusEventBus.emit('notification.urgent', {
           v: 1,
           tenantId: payload.tenantId,
-          roles: ['ADMIN', 'MANAGER', 'CHEF_CUISINIER'],
+          roles: ['admin', 'manager', 'chef_cuisinier'],
           message,
           priority: 'HIGH',
           metadata: { itemId, deficit: payload.deficit },
         });
 
         // Notification persistante in-app
-        await NexusEventBus.emitDurable('notification.created', {
+        await NexusEventBus.emit('notification.created', {
           v: 1,
           tenantId: payload.tenantId,
           id: notifId,
@@ -60,7 +62,7 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
         const notifId = `notif_pending_recipe_${payload.deductionId}`;
         const message = `L'article ${payload.productId} a été vendu sans fiche technique. Créez la recette pour régulariser automatiquement les stocks.`;
 
-        await NexusEventBus.emitDurable('notification.created', {
+        await NexusEventBus.emit('notification.created', {
           v: 1,
           tenantId: payload.tenantId,
           id: notifId,
@@ -81,10 +83,11 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
   unsubscribers.push(
     NexusEventBus.on('stock.deductions_reconciled', async (payload) => {
       try {
-        const notifId = `notif_reconciled_${payload.recipeId}_${Date.now()}`;
+        // Correctif N0-5 : id déterministe par recette réconciliée.
+        const notifId = `notif_reconciled_${payload.recipeId}`;
         const message = `La recette ${payload.recipeId} a permis de réconcilier rétroactivement ${payload.reconciledCount} déduction(s) en attente.`;
 
-        await NexusEventBus.emitDurable('notification.created', {
+        await NexusEventBus.emit('notification.created', {
           v: 1,
           tenantId: payload.tenantId,
           id: notifId,
@@ -110,7 +113,7 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
         const sign = payload.varianceAmountCts > 0 ? '+' : '';
         const message = `Écart de coût constaté sur ${payload.stockItemId} (Facture ${payload.invoiceId}) : ${sign}${diffEuro} € par rapport au prix estimé.`;
 
-        await NexusEventBus.emitDurable('notification.created', {
+        await NexusEventBus.emit('notification.created', {
           v: 1,
           tenantId: payload.tenantId,
           id: notifId,
@@ -136,7 +139,7 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
         const mins = payload.durationMinutes % 60;
         const message = `Vacation du ${payload.businessDay} régularisée pour l'employé ${payload.employeeId} (${hours}h${mins > 0 ? mins : ''}) par ${payload.approvedByManagerId}.`;
 
-        await NexusEventBus.emitDurable('notification.created', {
+        await NexusEventBus.emit('notification.created', {
           v: 1,
           tenantId: payload.tenantId,
           id: notifId,
@@ -161,7 +164,7 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
         const caEuro = (payload.totalInMicrounits / 1_000_000).toFixed(2);
         const message = `Clôture en rafale de ${payload.closedDays.length} journée(s) scellée(s) (du ${payload.fromDay} au ${payload.toDay}). CA total : ${caEuro} €.`;
 
-        await NexusEventBus.emitDurable('notification.created', {
+        await NexusEventBus.emit('notification.created', {
           v: 1,
           tenantId: payload.tenantId,
           id: notifId,

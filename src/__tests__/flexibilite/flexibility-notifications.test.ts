@@ -32,7 +32,9 @@ describe('Système de Rappels, d Alertes et de Notifications de Flexibilité', (
     });
 
     expect(capturedUrgent).toBeDefined();
-    expect((capturedUrgent as { roles: string[] }).roles).toContain('CHEF_CUISINIER');
+    // Correctif N0-3 : rôles canoniques (minuscules) — sinon WebPushService.sendToRole
+    // ne résout aucun utilisateur et l'alerte n'atteint personne.
+    expect((capturedUrgent as { roles: string[] }).roles).toContain('chef_cuisinier');
     expect((capturedUrgent as { message: string }).message).toContain('Stock négatif détecté');
 
     expect(capturedCreated).toBeDefined();
