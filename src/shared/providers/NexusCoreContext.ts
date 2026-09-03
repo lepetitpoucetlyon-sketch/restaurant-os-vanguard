@@ -10,12 +10,22 @@ export const useNexusCore = () => {
     return ctx;
 };
 
+const DEFAULT_LANG_CTX = {
+    language: 'fr' as const,
+    setLanguage: () => {},
+    t: (key: string) => key,
+    dir: 'ltr' as const,
+};
+
 export const useAuth = () => useNexusCore().auth;
 export const useTenantCtx = () => useNexusCore().tenant;
 export const useUI = () => useNexusCore().ui;
 export const useSettings = () => useNexusCore().settings;
-export const useLang = () => useNexusCore().lang;
-export const useLanguage = () => useNexusCore().lang;
+export const useLanguage = () => {
+    const ctx = useContext(NexusCoreContext);
+    return ctx?.lang ?? DEFAULT_LANG_CTX;
+};
+export const useLang = useLanguage;
 export const useNotif = () => useNexusCore().notif;
 export const useNotifications = () => useNexusCore().notif;
 export const useFleet = () => useNexusCore().fleet;

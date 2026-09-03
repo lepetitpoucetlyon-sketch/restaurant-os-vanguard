@@ -14,6 +14,6 @@ vi.mock('@/lib/nexus/NexusAdapter', () => ({
 
 test('CardImprintStep renders successfully', () => {
   render(<CardImprintStep penalty={10} cardImprintConfig={{} as never} stripeLoading={false} stripeError={null} stripeReady={true} cardMountRef={{ current: null }} submitting={false} btnPrimary="test" btnSecondary="test" onBack={() => {}} onConfirmCard={async () => {}} />);
-  const stepElement = screen.getByText(/Garantie de réservation/i);
+  const stepElement = screen.getByText(/Garantie de réservation|commerce\.widgets\.reservationGuarantee/i);
   expect(stepElement).toBeDefined();
 });

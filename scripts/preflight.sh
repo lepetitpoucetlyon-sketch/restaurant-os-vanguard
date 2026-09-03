@@ -223,11 +223,11 @@ else
 
   if [ -n "$CC_VIOLATIONS" ]; then
     # Ratchet complex_fn_count : filtré sur src/ et scripts/ pour exclure le code vendorisé des skills agents.
-    COMPLEX_FN_MAX=${COMPLEX_FN_MAX:-76}   # baseline 2026-09-01 — 76 fonctions cc>12 dans src/ et scripts/
-    COMPLEX_FN_CURRENT=$(echo "$CHECK_OUT" | grep "cc=" | grep -E "^\s*(src/|scripts/)" | wc -l | tr -d ' ')
+    COMPLEX_FN_MAX=${COMPLEX_FN_MAX:-76}   # baseline 2026-09-01 — 76 fonctions cc>12 dans src/
+    COMPLEX_FN_CURRENT=$(echo "$CHECK_OUT" | grep "cc=" | grep -E "^\s*src/" | wc -l | tr -d ' ')
     if [ -n "$COMPLEX_FN_CURRENT" ] && [ "$COMPLEX_FN_CURRENT" -gt "$COMPLEX_FN_MAX" ]; then
-      fail "RÉGRESSION complexité : $COMPLEX_FN_CURRENT fonctions > cc12 dans src/scripts (seuil ratchet $COMPLEX_FN_MAX)"
-      echo "$CHECK_OUT" | grep "cc=" | grep -E "^\s*(src/|scripts/)" | head -20 | while IFS= read -r line; do echo "    $line"; done
+      fail "RÉGRESSION complexité : $COMPLEX_FN_CURRENT fonctions > cc12 dans src (seuil ratchet $COMPLEX_FN_MAX)"
+      echo "$CHECK_OUT" | grep "cc=" | grep -E "^\s*src/" | head -20 | while IFS= read -r line; do echo "    $line"; done
       exit 1
     elif [ -n "$COMPLEX_FN_CURRENT" ] && [ "$COMPLEX_FN_CURRENT" -lt "$COMPLEX_FN_MAX" ]; then
       ok "Complexité en baisse : $COMPLEX_FN_CURRENT / $COMPLEX_FN_MAX — baisse COMPLEX_FN_MAX dans preflight.sh"

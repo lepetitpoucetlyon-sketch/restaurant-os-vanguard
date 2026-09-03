@@ -13,12 +13,14 @@ import { printerService } from "../../../core/printing";
 import { PaymentSuccessView } from "./payment-dialog/PaymentSuccessView";
 import { TerminalStatePanel, type TerminalState } from "./payment-dialog/TerminalStatePanel";
 import { PaymentMethodSelector, type PaymentMethod } from "./payment-dialog/PaymentMethodSelector";
-import { CashDrawerTriggerService } from "../services/CashDrawerTriggerService";
-import { ExactChangeAssistanceService } from "../services/ExactChangeAssistanceService";
-import { ChangeAsTipService } from "../services/ChangeAsTipService";
-import { BilingualTipGratuityHelper } from "../services/BilingualTipGratuityHelper";
-import { MealVoucherLimitGuard } from "../services/MealVoucherLimitGuard";
-import { TpeReconciliationService } from "../services/TpeReconciliationService";
+import {
+    CashDrawerTriggerService,
+    ExactChangeAssistanceService,
+    ChangeAsTipService,
+    BilingualTipGratuityHelper,
+    MealVoucherLimitGuard,
+    TpeReconciliationService,
+} from "../services/posServices";
 
 interface PaymentDialogProps {
     isOpen: boolean;

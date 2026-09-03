@@ -15,6 +15,35 @@ import {
  * À la clôture du Ticket Z (finance.ticket_z_closed), calcule automatiquement la répartition
  * équitable des pourboires CB entre les membres du personnel ayant pointé sur la journée.
  */
+function buildStaffParticipations(entries: ClockEntry[]): StaffShiftParticipation[] {
+  const openMap: Record<string, number> = {};
+  const hoursMap: Record<string, { hours: number; name: string; role: string }> = {};
+
+  for (const entry of entries) {
+    const empId = entry.employeeId;
+    const timeMs = new Date(entry.timestamp).getTime();
+    const meta = (entry.metadata as Record<string, unknown>) || {};
+    const userName = (meta.userName as string) || empId;
+    const userRole = (meta.role as string) || 'serveur';
+
+    if (entry.type === 'clock_in') {
+      openMap[empId] = timeMs;
+    } else if (entry.type === 'clock_out' && openMap[empId]) {
+      const worked = (timeMs - openMap[empId]) / 3600000;
+      const current = hoursMap[empId] || { hours: 0, name: userName, role: userRole };
+      hoursMap[empId] = { ...current, hours: current.hours + worked };
+      delete openMap[empId];
+    }
+  }
+
+  return Object.entries(hoursMap).map(([staffId, data]) => ({
+    staffId,
+    staffName: data.name,
+    role: data.role,
+    hoursWorked: Number(data.hours.toFixed(2)),
+  }));
+}
+
 export function registerAutoTipDistributionHandler(): () => void {
   return NexusEventBus.on(
     'finance.ticket_z_closed',
@@ -39,36 +68,7 @@ export function registerAutoTipDistributionHandler(): () => void {
           `tenants/${tenantId}/timeclock/${date}`
         );
         const entries = rawPunches ? Object.values(rawPunches) : [];
-
-        // Calculer les heures travaillées par employé
-        const openMap: Record<string, number> = {};
-        const hoursMap: Record<string, { hours: number; name: string; role: string }> = {};
-
-        for (const entry of entries) {
-          const empId = entry.employeeId;
-          const timeMs = new Date(entry.timestamp).getTime();
-          const meta = (entry.metadata as Record<string, unknown>) || {};
-          const userName = (meta.userName as string) || empId;
-          const userRole = (meta.role as string) || 'serveur';
-
-          if (entry.type === 'clock_in') {
-            openMap[empId] = timeMs;
-          } else if (entry.type === 'clock_out' && openMap[empId]) {
-            const worked = (timeMs - openMap[empId]) / 3600000;
-            const current = hoursMap[empId] || { hours: 0, name: userName, role: userRole };
-            hoursMap[empId] = { ...current, hours: current.hours + worked };
-            delete openMap[empId];
-          }
-        }
-
-        const participants: StaffShiftParticipation[] = Object.entries(hoursMap).map(
-          ([staffId, data]) => ({
-            staffId,
-            staffName: data.name,
-            role: data.role,
-            hoursWorked: Number(data.hours.toFixed(2)),
-          })
-        );
+        const participants = buildStaffParticipations(entries);
 
         if (participants.length === 0) {
           logger.info(`[AutoTipDistribution] Aucun personnel éligible trouvé pour la répartition des pourboires`);

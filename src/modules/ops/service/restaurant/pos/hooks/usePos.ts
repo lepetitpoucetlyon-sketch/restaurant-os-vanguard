@@ -16,12 +16,14 @@ import { CartItem, CourseType, SovereignProduct } from "../../../../workflow/eng
 import { applyItemDiscount, applyItemOffer } from "../domain/cartDiscounts";
 import type { ConsumptionMode } from "../../../../workflow/engine/types";
 import { POSService } from "../domain";
-import { PosIdempotencyGuard } from "../services/PosIdempotencyGuard";
-import { HardenedTouchUiHelper } from "../services/HardenedTouchUiHelper";
-import { TableTransferService } from "../services/TableTransferService";
-import { TableMergeService } from "../services/TableMergeService";
-import { TableHandoffService } from "../services/TableHandoffService";
-import { DineAndDashDetectorService } from "../services/DineAndDashDetectorService";
+import {
+    PosIdempotencyGuard,
+    HardenedTouchUiHelper,
+    TableTransferService,
+    TableMergeService,
+    TableHandoffService,
+    DineAndDashDetectorService,
+} from "../services/posServices";
 
 // Pure helpers (zéro effets de bord)
 import {

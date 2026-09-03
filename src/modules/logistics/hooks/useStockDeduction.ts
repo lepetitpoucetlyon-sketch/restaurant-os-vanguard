@@ -55,6 +55,49 @@ interface StockItemDoc {
  * Note: deductions happen automatically on order completion — the inventory
  * page shows a reminder about this behaviour in its header text.
  */
+
+async function deductIngredientStock(
+    tenantId: string | null | undefined,
+    ing: RecipeIngredient,
+    orderQuantity: number
+): Promise<void> {
+    const stockId = ing.stockItemId ?? ing.ingredientId;
+    if (!stockId) return;
+
+    const itemPath = tenantId
+        ? `tenants/${tenantId}/stockItems/${stockId}`
+        : `stockItems/${stockId}`;
+
+    try {
+        const deductQty = ing.quantity * orderQuantity * (1 + (ing.lossRate ?? 0));
+        await Nexus.adapter.increment(itemPath, 'quantityInStock', -deductQty);
+        await Nexus.adapter.increment(itemPath, 'quantity', -deductQty);
+
+        logger.debug(
+            `[useStockDeduction] ⚛️ stockItems/${stockId}: -${deductQty} (atomique, loss×${1 + (ing.lossRate ?? 0)})`
+        );
+
+        const stockItem = await Nexus.adapter.get<StockItemDoc>(itemPath);
+        if (!stockItem) return;
+
+        const newQty = stockItem.quantityInStock ?? stockItem.quantity ?? 0;
+        const minQty = stockItem.minQuantity;
+        if (minQty !== undefined && newQty <= minQty) {
+            const ingredientName = stockItem.ingredientName ?? ing.ingredientId;
+            toast.warning(`Stock bas : ${ingredientName}`);
+            if (tenantId) {
+                pushToRole(tenantId, 'chef_cuisinier', {
+                    title: 'Alerte stock critique',
+                    body: `${ingredientName} : stock bas (${newQty} ${ing.unit ?? ''})`,
+                    url: '/inventory',
+                });
+            }
+        }
+    } catch (err) {
+        logger.error(`[useStockDeduction] Failed to deduct ingredient ${stockId}`, err);
+    }
+}
+
 export function useStockDeduction() {
     const { tenantId } = useTenant();
     const deductForOrder = useCallback(async (items: OrderLine[]): Promise<void> => {
@@ -87,51 +130,7 @@ export function useStockDeduction() {
             }
 
             for (const ing of recipe.ingredients) {
-                // Prefer explicit stockItemId, fall back to ingredientId
-                const stockId = ing.stockItemId ?? ing.ingredientId;
-                if (!stockId) continue;
-
-                const itemPath = tenantId
-                    ? `tenants/${tenantId}/stockItems/${stockId}`
-                    : `stockItems/${stockId}`;
-
-                try {
-                    // ⚛️ Invariant #2 : décrémenter via adapter.increment() — atomique
-                    // Traduit en FieldValue.increment (Firestore) ou transaction CAS (Mock)
-                    const deductQty =
-                        ing.quantity * line.quantity * (1 + (ing.lossRate ?? 0));
-
-                    await Nexus.adapter.increment(itemPath, 'quantityInStock', -deductQty);
-                    // Mise à jour du champ legacy 'quantity' en parallèle (même montant)
-                    await Nexus.adapter.increment(itemPath, 'quantity', -deductQty);
-
-                    logger.debug(
-                        `[useStockDeduction] ⚛️ stockItems/${stockId}: -${deductQty} (atomique, loss×${1 + (ing.lossRate ?? 0)})`
-                    );
-
-                    // Lecture post-incrément pour l'alerte seuil bas (eventual consistency OK)
-                    const stockItem = await Nexus.adapter.get<StockItemDoc>(itemPath);
-                    if (!stockItem) continue;
-
-                    const newQty = stockItem.quantityInStock ?? stockItem.quantity ?? 0;
-                    const minQty = stockItem.minQuantity;
-                    if (minQty !== undefined && newQty <= minQty) {
-                        const ingredientName =
-                            stockItem.ingredientName ?? ing.ingredientId;
-                        toast.warning(`Stock bas : ${ingredientName}`);
-                        // Push WebPush critique au chef cuisinier
-                        if (tenantId) pushToRole(tenantId, 'chef_cuisinier', {
-                            title: 'Alerte stock critique',
-                            body: `${ingredientName} : stock bas (${newQty} ${ing.unit ?? ''})`,
-                            url: '/inventory',
-                        });
-                    }
-                } catch (err) {
-                    logger.error(
-                        `[useStockDeduction] ⚛️ Atomic decrement failed for stockItems/${stockId}`,
-                        err
-                    );
-                }
+                await deductIngredientStock(tenantId, ing, line.quantity);
             }
         }
     }, [tenantId]);
