@@ -69,7 +69,7 @@ export function Header() {
         return pathToPageKey[segment] || null;
     };
 
-    const { t, language, setLanguage: _setLanguage } = useLanguage();
+    const { t, language, setLanguage } = useLanguage();
 
     const currentPageKey = getPageKeyFromPath(pathname);
     const pageSettings = currentPageKey ? getPageSettings(currentPageKey) : null;
@@ -150,15 +150,45 @@ export function Header() {
                         <div className="w-px h-6 bg-surface-bg dark:bg-surface-card/10 mx-1" />
 
                         {/* 2. Language Button */}
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                            className="relative w-11 h-11 flex items-center justify-center group overflow-hidden rounded-full"
-                        >
-                            <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[var(--shadow-glow-accent,0_0_15px_rgba(0,0,0,0.15))]" />
-                            <span className="text-lg relative z-10 grayscale group-hover:grayscale-0 transition-all duration-300 transform scale-110">{selectedLanguage?.flag}</span>
-                        </motion.button>
+                        <div className="relative">
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                aria-label={t('common.changeLanguage', 'Changer de langue')}
+                                aria-haspopup="listbox"
+                                aria-expanded={isLangMenuOpen}
+                                onClick={(e) => { e.stopPropagation(); setIsLangMenuOpen(!isLangMenuOpen); }}
+                                className="relative w-11 h-11 flex items-center justify-center group overflow-hidden rounded-full"
+                            >
+                                <div className="absolute inset-0 rounded-full border border-accent-gold/30 dark:border-subtle group-hover:bg-accent-gold/5 transition-all duration-500 group-hover:shadow-[var(--shadow-glow-accent,0_0_15px_rgba(0,0,0,0.15))]" />
+                                <span className="text-lg relative z-10 grayscale group-hover:grayscale-0 transition-all duration-300 transform scale-110">{selectedLanguage?.flag}</span>
+                            </motion.button>
+
+                            {isLangMenuOpen && (
+                                <div
+                                    role="listbox"
+                                    aria-label={t('common.language', 'Langue')}
+                                    className="absolute right-0 top-full mt-2 min-w-[11rem] bg-surface-card border border-border-default rounded-2xl shadow-premium overflow-hidden z-[70]"
+                                >
+                                    {LANGUAGES.map((lng) => (
+                                        <button
+                                            key={lng.code}
+                                            type="button"
+                                            role="option"
+                                            aria-selected={language === lng.code}
+                                            onClick={(e) => { e.stopPropagation(); setLanguage(lng.code); setIsLangMenuOpen(false); }}
+                                            className={cn(
+                                                'w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors',
+                                                language === lng.code ? 'bg-surface-subtle text-text-primary' : 'text-text-secondary hover:bg-surface-subtle',
+                                            )}
+                                        >
+                                            <span className="text-lg">{lng.flag}</span>
+                                            <span className="text-xs font-bold uppercase tracking-wider">{lng.nativeName}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
 
                         {/* 4. Notifications Button */}
                         <motion.button

@@ -3,7 +3,8 @@ import React, { useState, useEffect, useMemo, useCallback, useContext, ReactNode
 import { NexusCoreContext, useNexusCore } from './NexusCoreContext';
 import { loadTranslations, Language } from '@/i18n/translations';
 import { LANGUAGES } from '@/config/languages';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
+import { currentLanguageAtom } from '@/shared/store/languageAtoms';
 import { SovereignData, SovereignValue } from "@/shared/nexus/contracts";
 import { unreadNotificationsCountAtom } from '@nexus/state/SovereignGenome';
 import type {
@@ -31,7 +32,10 @@ const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
     if (!uiThemeContext || !notifContext) throw new Error("Missing providers");
 
     // 4. LANGUAGE MODULE
-    const [currentLanguage, setCurrentLanguage] = useState<Language>('fr');
+    // La langue courante est persistée (localStorage `nexus_language` via
+    // `currentLanguageAtom`) : le choix survit au rechargement et l'app démarre
+    // dans la dernière langue choisie.
+    const [currentLanguage, setCurrentLanguage] = useAtom(currentLanguageAtom);
     const [activeDictionary, setActiveDictionary] = useState<SovereignData | null>(null);
     const [frDictionary, setFrDictionary] = useState<SovereignData | null>(null);
 
@@ -45,6 +49,11 @@ const NexusCoreLogic: React.FC<{ children: ReactNode }> = ({ children }) => {
             if (isMounted) setActiveDictionary(dict);
         }).catch((e) => console.error("[NexusCore] i18n", e));
         return () => { isMounted = false; };
+    }, [currentLanguage]);
+
+    // Synchro <html lang> : lecteurs d'écran, moteurs, césure typographique.
+    useEffect(() => {
+        if (typeof document !== 'undefined') document.documentElement.lang = currentLanguage;
     }, [currentLanguage]);
 
     const t = useCallback((key: string, fallback?: string): string => {

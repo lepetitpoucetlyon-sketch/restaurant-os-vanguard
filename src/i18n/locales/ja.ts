@@ -260,7 +260,9 @@ const ja: SovereignData = {
         "covers": "名",
         "enabled": "有効",
         "disabled": "無効",
-        "success": "成功"
+        "success": "成功",
+        "changeLanguage": "言語を変更",
+        "language": "言語"
     },
     "allergens": {
         "gluten": "小麦・グルテン",

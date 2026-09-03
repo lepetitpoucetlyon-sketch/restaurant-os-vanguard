@@ -260,7 +260,9 @@ const en: SovereignData = {
         "covers": "Cvts",
         "enabled": "Enabled",
         "disabled": "Disabled",
-        "success": "Success"
+        "success": "Success",
+        "changeLanguage": "Change language",
+        "language": "Language"
     },
     "allergens": {
         "gluten": "Gluten",
