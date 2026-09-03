@@ -9,21 +9,21 @@ pydantic==2.13.4
 python-dotenv==1.2.2
 httpx==0.28.1
 python-multipart==0.0.28
-aiofiles
+aiofiles==24.1.0
 numpy==2.4.5
 sentence-transformers==5.5.0
 rank-bm25==0.2.2
-PyMuPDF
+PyMuPDF==1.25.5
 scikit-learn==1.8.0
-jieba
+jieba==0.42.1
 
 # Production
-gunicorn
+gunicorn==23.0.0  # CVE-2024-1135 (request smuggling) corrigé en 22.0
 tenacity==9.1.4
 pyyaml==6.0.3
 
 # Auth — utilisateurs + JWT + hachage mots de passe + 2FA
-python-jose[cryptography]==3.5.0
+PyJWT==2.10.1  # ex python-jose : retire la dép transitive ecdsa (Minerva timing, GHSA-wj6h-64fc-37mp, sans correctif amont). Service en HS256 uniquement — ecdsa n'était jamais exécuté, mais on l'élimine.
 bcrypt==5.0.0
 pyotp==2.10.0
 
@@ -38,5 +38,5 @@ stripe==15.3.0
 pytest==9.1.1
 pytest-asyncio==1.4.0
 pytest-cov==7.1.0
-ragas
+ragas==0.2.15
 datasets==5.0.0

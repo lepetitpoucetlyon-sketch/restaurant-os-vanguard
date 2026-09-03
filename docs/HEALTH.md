@@ -1,6 +1,6 @@
 # Health Dashboard — RESTAURANT-OS-CORE
 
-> Auto-généré le **2026-08-25 17:24 UTC** · commit `78f9f38e9`
+> Auto-généré le **2026-09-03 00:04 UTC** · commit `ff7ab3267`
 > Source : `scripts/health-snapshot.sh` (Zero-Claim Policy)
 
 ---
@@ -21,12 +21,12 @@
 
 | Métrique | Valeur | Statut / Seuil |
 |---|---|---|
-| Sentrux gate vs baseline | ✅ | Bloquant au push |
-| Score qualité | 3258 -> 3261 | |
-| Couplage | 0.45 → 0.44 | |
-| Cycles import (Sentrux) | 2 → 2 | max = 0 |
+| Sentrux gate vs baseline | ❌ | Bloquant au push |
+| Score qualité | 4071 -> 3570 | |
+| Couplage | 0.45 → 0.45 | |
+| Cycles import (Sentrux) | 0 → 1 | max = 0 |
 | Cycles import (Madge, alias @/ résolus) | 0 | Seuil ratchet = 0 |
-| God files | 18 → 17 | max = 0 |
+| God files | 0 → 2 | max = 0 |
 | TypeScript erreurs | 0 | Bloquant au push (0 toléré) |
 
 ---
@@ -35,7 +35,7 @@
 
 | Pilier | Tests colocalisés | État |
 |---|---|---|
-| `ops` | 14 tests | |
+| `ops` | 13 tests | |
 | `finance` | 5 tests | |
 | `logistics` | 14 tests | |
 | `commerce` | 4 tests | |
@@ -51,10 +51,10 @@
 
 | Métrique | Mesure réelle |
 |---|---|
-| Fichiers `.tsx` avec `t()` | **33 / 908** (114 appels) |
-| Clés `fr.ts` (référence) | 482 clés |
-| Clés `en.ts` | 500 clés |
-| Clés `es.ts` / `pt.ts` / `ja.ts` | 127 / 107 / 107 clés (squelettes partiels ~25%) |
+| Fichiers `.tsx` avec `t()` | **36 / 965** (158 appels) |
+| Clés `fr.ts` (référence) | 617 clés |
+| Clés `en.ts` | 617 clés |
+| Clés `es.ts` / `pt.ts` / `ja.ts` | 617 / 617 / 617 clés (squelettes partiels ~25%) |
 
 ---
 
@@ -62,10 +62,11 @@
 
 | Indicateur | Mesure | Seuil / Objectif |
 |---|---|---|
-| Occurrences `*InCents` (code source) | **818** | Ratchet preflight ≤ 818 |
+| Occurrences `*InCents` (code source) | **813** | Ratchet preflight ≤ 818 |
 | InCents dans `src/domain/` (schémas canoniques) | **0** | doit rester à 0 |
-| Imports profonds (Barrel violations) | **45** | dont 8 documentés dans `docs/BARREL-EXCEPTIONS.md` |
-| Verticales déployées | **12** | `PLATFORM_VARIANTS` en déclare 12 (INV-8) |
+| Imports profonds (Barrel violations) | **33** | dont 8 documentés dans `docs/BARREL-EXCEPTIONS.md` |
+| Verticales déployées | **12** | `PLATFORM_VARIANTS` en déclare 0
+? (INV-8) |
 
 ---
 
@@ -73,9 +74,9 @@
 
 | Indicateur | Mesure | Seuil / Note |
 |---|---|---|
-| Routes API sans garde détectée | **39** / 210 | Certaines sont légitimement publiques — cf. `AUDIT-23-AXES` |
-| Pages d'erreur (`error.tsx`, `not-found`, `global-error`) | **5** | 0 = écran blanc Next en cas d'exception |
-| Attributs `aria-` | 98 sur 908 fichiers `.tsx` | Indicateur d'accessibilité |
+| Routes API sans garde détectée | **40** / 221 | Certaines sont légitimement publiques — cf. `AUDIT-23-AXES` |
+| Pages d'erreur (`error.tsx`, `not-found`, `global-error`) | **9** | 0 = écran blanc Next en cas d'exception |
+| Attributs `aria-` | 526 sur 965 fichiers `.tsx` | Indicateur d'accessibilité |
 
 ---
 
@@ -86,11 +87,11 @@
 
 | Brique | Consommateurs `.tsx` |
 |---|---|
-| `useLexicon()` (lexique par verticale) | 0 |
+| `useLexicon()` (lexique par verticale) | 3 |
 | `DashboardWidgetGrid` | 0 |
 | `CustomFieldRenderer` | 0 |
 | `DynamicLayoutRenderer` | 0 |
-| `FiscalReceiptSealZone` | 0 |
+| `FiscalReceiptSealZone` | 1 |
 
 **Règle :** une brique à 0 consommateur depuis plus d'un mois doit être branchée,
 supprimée, ou documentée comme gelée.
@@ -99,7 +100,7 @@ supprimée, ou documentée comme gelée.
 
 ## 8. 💾 Synchronisation & Sauvegarde
 
-- **Commits locaux en avance sur `origin/main`** : `85` commit(s).
+- **Commits locaux en avance sur `origin/main`** : `1` commit(s).
 
 ---
 

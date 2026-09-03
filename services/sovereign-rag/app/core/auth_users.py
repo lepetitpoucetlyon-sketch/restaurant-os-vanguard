@@ -22,7 +22,8 @@ from typing import Optional
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import APIKeyHeader, OAuth2PasswordBearer
 import bcrypt as _bcrypt
-from jose import JWTError, jwt
+import jwt
+from jwt import PyJWTError as JWTError  # migré de python-jose (retire la dép ecdsa, GHSA-wj6h-64fc-37mp)
 
 from infra.db.database import get_db_connection
 

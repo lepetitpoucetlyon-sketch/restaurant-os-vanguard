@@ -22,3 +22,10 @@ openai==2.32.0
 # raganything tire sa propre chaîne (torch, transformers…) : pas d'épinglage strict
 # ici, mais borné pour empêcher une majeure non testée d'entrer silencieusement.
 raganything[all]>=0.1.0,<0.2.0
+
+# Planchers explicites sur la chaîne ML tirée par raganything : Dependabot
+# signalait `transformers` / `torch` au plancher (RCE désérialisation, ReDoS).
+# Si raganything 0.1.x refuse ces versions, l'install échoue franchement — à
+# ajuster alors, jamais en retirant la contrainte.
+transformers>=4.48.0
+torch>=2.6.0
