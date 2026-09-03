@@ -207,6 +207,25 @@ const es: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "alertRouting": {
+            "title": "Quién recibe qué",
+            "subtitle": "Para cada categoría de alerta, elija qué roles reciben aviso. Desmarque una categoría para silenciar sus notificaciones.",
+            "rolesLabel": "Roles avisados",
+            "defaultHint": "Predeterminado",
+            "mutedWarn": "Nadie recibe aviso",
+            "criticalNote": "Las alertas críticas (temperatura, retirada de producto, cadena fiscal) siempre se entregan, aunque la categoría esté silenciada.",
+            "saving": "Guardando…",
+            "saved": "Guardado",
+        },
+        "responsibilities": {
+            "RESP_SERVICE": "Servicio de sala",
+            "RESP_STOCK": "Stock y aprovisionamiento",
+            "RESP_HYGIENE": "Higiene y APPCC",
+            "RESP_FISCAL": "Caja y contabilidad",
+            "RESP_RH": "Personal y nóminas",
+            "RESP_TECHNIQUE": "Equipos y técnica",
+            "RESP_DIRECTION": "Dirección",
+        },
         "quietHours": {
             "title": "Horas de silencio",
             "subtitle": "Durante este intervalo, las alertas no críticas no envían notificación push: permanecen visibles en el centro de notificaciones.",

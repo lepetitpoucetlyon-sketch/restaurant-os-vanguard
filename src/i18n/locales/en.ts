@@ -207,6 +207,25 @@ const en: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "alertRouting": {
+            "title": "Who receives what",
+            "subtitle": "For each alert category, choose which roles are notified. Uncheck a category to mute its notifications.",
+            "rolesLabel": "Notified roles",
+            "defaultHint": "Default",
+            "mutedWarn": "Nobody is notified",
+            "criticalNote": "Critical alerts (temperature, product recall, fiscal chain) are always delivered, even if the category is muted.",
+            "saving": "Saving…",
+            "saved": "Saved",
+        },
+        "responsibilities": {
+            "RESP_SERVICE": "Front of house",
+            "RESP_STOCK": "Stock & supply",
+            "RESP_HYGIENE": "Hygiene & HACCP",
+            "RESP_FISCAL": "Register & accounting",
+            "RESP_RH": "Staff & payroll",
+            "RESP_TECHNIQUE": "Equipment & technical",
+            "RESP_DIRECTION": "Management",
+        },
         "quietHours": {
             "title": "Quiet hours",
             "subtitle": "During this window, non-critical alerts do not send a push notification: they stay visible in the notification centre.",

@@ -35,19 +35,30 @@ describe('AlertRouter — routage par responsabilité (N6/N7)', () => {
     expect(r.roles).not.toContain('kitchen_chef');
   });
 
-  it('entrée désactivée : ignorée → défauts', () => {
+  it('entrée désactivée : coupe la responsabilité (muted), pas de repli sur les défauts', () => {
     const routings: AlertRoutingEntry[] = [
       { responsibility: 'RESP_RH', recipients: ['u_x'], enabled: false },
     ];
     const r = resolveResponsibility('RESP_RH', routings);
+    expect(r.muted).toBe(true);
     expect(r.userIds).toEqual([]);
-    expect(r.roles).toEqual(DEFAULT_RESPONSIBILITY_ROLES.RESP_RH.map(String));
+    expect(r.roles).toEqual([]);
   });
 
   it('responsabilité inconnue (typo) : repli direction + routingMissing', () => {
     const r = resolveResponsibility('RESP_INEXISTANTE');
     expect(r.routingMissing).toBe(true);
     expect(r.roles).toEqual(DEFAULT_RESPONSIBILITY_ROLES.RESP_DIRECTION.map(String));
+  });
+
+  it('entrée coupée (enabled:false) : muted, aucun destinataire, pas de repli', () => {
+    const routings: AlertRoutingEntry[] = [
+      { responsibility: 'RESP_SERVICE', roles: ['manager'], enabled: false },
+    ];
+    const r = resolveResponsibility('RESP_SERVICE', routings);
+    expect(r.muted).toBe(true);
+    expect(r.roles).toEqual([]);
+    expect(r.userIds).toEqual([]);
   });
 
   it('compat contrat legacy : matching par eventType', () => {

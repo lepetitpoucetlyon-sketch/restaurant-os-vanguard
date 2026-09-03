@@ -60,6 +60,13 @@ export function registerNotificationUrgentDispatchHandler(): () => void {
       if (responsibility) {
         const routings = settings?.notificationRoutings ?? settings?.alerts;
         const resolved = resolveResponsibility(responsibility as Responsibility, routings);
+        // Le gérant a coupé cette responsabilité : on ne pousse rien (l'alerte reste au centre).
+        if (resolved.muted && severity !== 'CRITICAL') {
+          logger.info(
+            `[NotificationUrgentDispatch] Responsabilité ${responsibility} coupée par le tenant ${tenantId} — push supprimé (alerte conservée au centre)`
+          );
+          return;
+        }
         namedUserIds.push(...resolved.userIds);
         responsibilityRoles.push(...resolved.roles);
         if (resolved.routingMissing) {

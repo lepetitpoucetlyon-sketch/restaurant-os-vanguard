@@ -48,6 +48,8 @@ export interface ResolvedRecipients {
   roles: string[];
   /** true = aucun destinataire propre trouvé → repli sur la direction. */
   routingMissing: boolean;
+  /** true = le tenant a explicitement coupé cette responsabilité (entrée enabled:false). */
+  muted: boolean;
 }
 
 function normalizeRoles(roles: readonly string[] | undefined): string[] {
@@ -78,18 +80,22 @@ export function resolveResponsibility(
       userIds: [],
       roles: DEFAULT_RESPONSIBILITY_ROLES.RESP_DIRECTION.map((r) => String(r)),
       routingMissing: true,
+      muted: false,
     };
   }
 
-  const entry = (routings ?? []).find(
-    (r) =>
-      r.enabled !== false &&
-      (r.responsibility === responsibility || r.eventType === responsibility)
+  // Le tenant a-t-il coupé explicitement cette responsabilité ?
+  const anyEntry = (routings ?? []).find(
+    (r) => r.responsibility === responsibility || r.eventType === responsibility
   );
+  if (anyEntry && anyEntry.enabled === false) {
+    return { userIds: [], roles: [], routingMissing: false, muted: true };
+  }
 
+  const entry = anyEntry && anyEntry.enabled !== false ? anyEntry : undefined;
   const userIds = Array.from(new Set(entry?.recipients ?? []));
   const configuredRoles = normalizeRoles(entry?.roles);
   const roles = configuredRoles.length > 0 ? configuredRoles : defaults.map((r) => String(r));
 
-  return { userIds, roles, routingMissing: false };
+  return { userIds, roles, routingMissing: false, muted: false };
 }

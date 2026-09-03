@@ -207,6 +207,25 @@ const fr: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "alertRouting": {
+            "title": "Qui reçoit quoi",
+            "subtitle": "Pour chaque catégorie d'alerte, choisissez les rôles prévenus. Décochez la catégorie pour couper ses notifications.",
+            "rolesLabel": "Rôles prévenus",
+            "defaultHint": "Défaut",
+            "mutedWarn": "Personne n'est prévenu",
+            "criticalNote": "Les alertes critiques (température, rappel produit, chaîne fiscale) restent toujours transmises, même si la catégorie est coupée.",
+            "saving": "Enregistrement…",
+            "saved": "Enregistré",
+        },
+        "responsibilities": {
+            "RESP_SERVICE": "Service en salle",
+            "RESP_STOCK": "Stocks & approvisionnement",
+            "RESP_HYGIENE": "Hygiène & HACCP",
+            "RESP_FISCAL": "Caisse & comptabilité",
+            "RESP_RH": "Personnel & paie",
+            "RESP_TECHNIQUE": "Matériel & technique",
+            "RESP_DIRECTION": "Direction",
+        },
         "quietHours": {
             "title": "Heures calmes",
             "subtitle": "Pendant cette plage, les alertes non critiques n'envoient pas de notification push : elles restent visibles dans le centre de notifications.",

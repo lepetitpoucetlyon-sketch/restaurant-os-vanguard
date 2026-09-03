@@ -24,6 +24,7 @@ import {
 // Nexus-Sync Schema Orchestration
 import { StandardSettingsEngine } from "@/shared/components/settings/ui/StandardSettingsEngine";
 import { QuietHoursSettings } from "@/shared/components/settings/QuietHoursSettings";
+import { AlertRoutingSettings } from "@/shared/components/settings/AlertRoutingSettings";
 import { 
     IDENTITY_SCHEMA, 
     CONTACT_SCHEMA, 
@@ -216,6 +217,7 @@ export function SettingsDashboard() {
                 <div className="space-y-6">
                     <StandardSettingsEngine schema={NOTIFICATIONS_SCHEMA} />
                     <QuietHoursSettings />
+                    <AlertRoutingSettings />
                 </div>
             );
             case 'goals': return <LazyGoalsSettings />; // Goals has complex UI, keeping it for now

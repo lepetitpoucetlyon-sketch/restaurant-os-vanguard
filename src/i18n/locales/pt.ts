@@ -207,6 +207,25 @@ const pt: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "alertRouting": {
+            "title": "Quem recebe o quê",
+            "subtitle": "Para cada categoria de alerta, escolha quais funções são avisadas. Desmarque uma categoria para silenciar as suas notificações.",
+            "rolesLabel": "Funções avisadas",
+            "defaultHint": "Padrão",
+            "mutedWarn": "Ninguém é avisado",
+            "criticalNote": "Os alertas críticos (temperatura, recolha de produto, cadeia fiscal) são sempre entregues, mesmo se a categoria estiver silenciada.",
+            "saving": "A guardar…",
+            "saved": "Guardado",
+        },
+        "responsibilities": {
+            "RESP_SERVICE": "Serviço de sala",
+            "RESP_STOCK": "Stock e aprovisionamento",
+            "RESP_HYGIENE": "Higiene e HACCP",
+            "RESP_FISCAL": "Caixa e contabilidade",
+            "RESP_RH": "Pessoal e salários",
+            "RESP_TECHNIQUE": "Equipamento e técnica",
+            "RESP_DIRECTION": "Direção",
+        },
         "quietHours": {
             "title": "Horário silencioso",
             "subtitle": "Durante este período, os alertas não críticos não enviam notificação push: permanecem visíveis na central de notificações.",

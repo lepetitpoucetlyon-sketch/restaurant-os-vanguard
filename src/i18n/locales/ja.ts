@@ -207,6 +207,25 @@ const ja: SovereignData = {
         "os": "OS"
     },
     "settings": {
+        "alertRouting": {
+            "title": "誰が何を受け取るか",
+            "subtitle": "アラートの種類ごとに通知する役割を選びます。カテゴリのチェックを外すと通知が停止します。",
+            "rolesLabel": "通知する役割",
+            "defaultHint": "既定",
+            "mutedWarn": "誰にも通知されません",
+            "criticalNote": "重大なアラート（温度、製品リコール、会計チェーン）はカテゴリを停止しても常に配信されます。",
+            "saving": "保存中…",
+            "saved": "保存しました",
+        },
+        "responsibilities": {
+            "RESP_SERVICE": "ホール業務",
+            "RESP_STOCK": "在庫・仕入れ",
+            "RESP_HYGIENE": "衛生・HACCP",
+            "RESP_FISCAL": "レジ・会計",
+            "RESP_RH": "従業員・給与",
+            "RESP_TECHNIQUE": "設備・技術",
+            "RESP_DIRECTION": "経営",
+        },
         "quietHours": {
             "title": "サイレント時間帯",
             "subtitle": "この時間帯は、重要でないアラートはプッシュ通知を送信しません（通知センターには表示されます）。",

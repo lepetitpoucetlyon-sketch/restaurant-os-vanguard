@@ -169,6 +169,34 @@ describe('Lot N0 — câblage notifications (livraison, pas seulement émission)
     expect((doc?.action as { label?: string } | undefined)?.label).toBe('Voir le stock');
   });
 
+  it('N2-b : une responsabilité coupée (enabled:false) supprime le push d\'une alerte HAUTE', async () => {
+    registerNotificationUrgentDispatchHandler();
+    store.set('tenants/t1/settings/global', {
+      notificationRoutings: [{ responsibility: 'RESP_RH', roles: ['manager'], enabled: false }],
+    });
+
+    await NexusEventBus.emit('notification.urgent', {
+      v: 1, tenantId: 't1', roles: [], responsibility: 'RESP_RH',
+      message: 'Pointage oublié', priority: 'HIGH',
+    });
+
+    expect(sendToRole).not.toHaveBeenCalled();
+  });
+
+  it('N2-b : une responsabilité coupée NE supprime PAS une alerte CRITIQUE', async () => {
+    registerNotificationUrgentDispatchHandler();
+    store.set('tenants/t1/settings/global', {
+      notificationRoutings: [{ responsibility: 'RESP_HYGIENE', roles: ['chef_cuisinier'], enabled: false }],
+    });
+
+    await NexusEventBus.emit('notification.urgent', {
+      v: 1, tenantId: 't1', roles: ['manager'], responsibility: 'RESP_HYGIENE',
+      message: 'Chambre froide +8°C', priority: 'CRITICAL',
+    });
+
+    expect(sendToRole).toHaveBeenCalled();
+  });
+
   it('N0-5 : deux notifications de même sujet fusionnent (une ligne, occurrences=2)', async () => {
     registerNotificationCreatedHandler();
 
