@@ -183,4 +183,19 @@ export interface HUMANEvents {
   'hr.dpae_submitted': { v:1; tenantId: string; employeeId: string; urssafDpaeReference: string; hireDateIso: string; submittedAt: number };
 
   'hr.weekly_rest_proof_recorded': { v:1; tenantId: string; employeeId: string; weekIso: string; consecutiveRestHours: number; isLegalCompliant: boolean; recordedAt: number };
+
+  'hr.shift_regularized': {
+    v: 1;
+    tenantId: string;
+    employeeId: string;
+    shiftId: string;
+    businessDay: string;
+    occurredStartIso: string;
+    occurredEndIso: string;
+    recordedAtIso: string;
+    isRetroactive: boolean;
+    durationMinutes: number;
+    reason: string;
+    approvedByManagerId: string;
+  };
 }
