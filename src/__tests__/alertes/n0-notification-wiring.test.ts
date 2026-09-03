@@ -110,6 +110,45 @@ describe('Lot N0 — câblage notifications (livraison, pas seulement émission)
     expect(sendToRole).toHaveBeenCalled(); // critique : jamais bâillonnée
   });
 
+  it('N2-b : une alerte ciblant une responsabilité résout les rôles (RESP_HYGIENE → chef_cuisinier)', async () => {
+    registerNotificationUrgentDispatchHandler();
+    // pas de table de routage configurée → défauts de la responsabilité
+
+    await NexusEventBus.emit('notification.urgent', {
+      v: 1,
+      tenantId: 't1',
+      roles: [],
+      responsibility: 'RESP_HYGIENE',
+      message: 'Chambre froide +8°C',
+      priority: 'CRITICAL',
+    });
+
+    const dispatchedRoles = sendToRole.mock.calls.map((c) => c[1]);
+    expect(dispatchedRoles).toContain('chef_cuisinier'); // le chef reçoit l'alerte hygiène
+    expect(dispatchedRoles).toContain('manager');
+  });
+
+  it('N2-b : les destinataires nommés de la table de routage reçoivent un push ciblé', async () => {
+    registerNotificationUrgentDispatchHandler();
+    store.set('tenants/t1/settings/global', {
+      notificationRoutings: [
+        { responsibility: 'RESP_FISCAL', recipients: ['u_claire'], enabled: true },
+      ],
+    });
+
+    await NexusEventBus.emit('notification.urgent', {
+      v: 1,
+      tenantId: 't1',
+      roles: [],
+      responsibility: 'RESP_FISCAL',
+      message: 'Écart de caisse',
+      priority: 'CRITICAL',
+    });
+
+    const targetedUsers = sendToUser.mock.calls.map((c) => c[1]);
+    expect(targetedUsers).toContain('u_claire');
+  });
+
   it('N0-5 : deux notifications de même sujet fusionnent (une ligne, occurrences=2)', async () => {
     registerNotificationCreatedHandler();
 

@@ -55,7 +55,10 @@ export function registerFridgeTempAlertHandler() {
           v: 1,
           tenantId,
           message: `ALERTE SÉCURITÉ ALIMENTAIRE: Le capteur ${sensorId} affiche ${temperature}°C depuis ${durationInMinutes} minutes. Blocage préventif des stocks liés.`,
-          roles: ['admin', 'manager', 'kitchen_chef'],
+          // N2-b : ciblage par responsabilité (résolu via la table de routage du tenant
+          // ou les défauts RESP_HYGIENE). `roles` conservé en repli de sécurité.
+          responsibility: 'RESP_HYGIENE',
+          roles: ['admin', 'manager', 'chef_cuisinier'],
           priority: 'CRITICAL',
         });
         

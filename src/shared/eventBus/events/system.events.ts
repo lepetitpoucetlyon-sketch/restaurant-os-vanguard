@@ -184,6 +184,8 @@ export interface SYSTEMEvents {
     message: string;
     metadata?: Record<string, unknown>;
     roles: string[];
+    /** Responsabilité métier ciblée (RESP_HYGIENE…) — résolue par AlertRouter au dispatch. */
+    responsibility?: string;
     priority?: 'CRITICAL' | 'HIGH';
   };
 
