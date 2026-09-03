@@ -57,16 +57,17 @@ export class IdempotencyGuard {
         }
 
         // 3. Check Nexus / Firestore côté serveur si tenantId fourni
-        const adapter = _persistenceAdapter ?? (globalThis as unknown as { __nexusAdapter?: PersistenceAdapter }).__nexusAdapter;
-        if (tenantId && adapter) {
+        if (_persistenceAdapter && tenantId) {
             try {
-                const doc = await adapter.get<ProcessedEventLog>(`tenants/${tenantId}/events_processed_log/${key}`);
-                if (doc) {
+                const record = await _persistenceAdapter.get<ProcessedEventLog>(
+                    `tenants/${tenantId}/events_processed_log/${key}`
+                );
+                if (record) {
                     this.memoryCache.add(key);
                     return true;
                 }
-            } catch {
-                // Ignore
+            } catch (err) {
+                logger.warn(`[IdempotencyGuard] Failed to check processed event in Nexus`, err);
             }
         }
 
@@ -74,7 +75,7 @@ export class IdempotencyGuard {
     }
 
     /**
-     * Enregistre un événement comme traité de manière atomique.
+     * Enregistre un événement comme traité
      */
     static async markProcessed(
         eventId: string,
@@ -103,10 +104,9 @@ export class IdempotencyGuard {
             }
         }
 
-        const adapter = _persistenceAdapter ?? (globalThis as unknown as { __nexusAdapter?: PersistenceAdapter }).__nexusAdapter;
-        if (tenantId && adapter) {
+        if (_persistenceAdapter && tenantId) {
             try {
-                await adapter.set(`tenants/${tenantId}/events_processed_log/${key}`, record);
+                await _persistenceAdapter.set(`tenants/${tenantId}/events_processed_log/${key}`, record);
             } catch (err) {
                 logger.warn(`[IdempotencyGuard] Failed to write processed event to Nexus`, err);
             }
@@ -114,29 +114,43 @@ export class IdempotencyGuard {
     }
 
     /**
+     * Résout un identifiant d'événement unique et déterministe pour tout type de payload
+     * (y compris les événements de vente et opérations n'ayant pas encore migré vers eventId).
+     */
+    static resolveEventKey(eventName: string, payload: unknown): string | undefined {
+        if (!payload || typeof payload !== 'object') return undefined;
+        const p = payload as Record<string, unknown>;
+        const rawId = p.eventId ?? p.orderId ?? p.transactionId ?? p.invoiceId ?? p.tableId ?? p.reservationId ?? p.planId ?? p.id ?? (p.entry && typeof p.entry === 'object' ? (p.entry as Record<string, unknown>).id : undefined);
+        if (rawId !== undefined && rawId !== null && rawId !== '') {
+            return `${eventName}:${String(rawId)}`;
+        }
+        return undefined;
+    }
+
+    /**
      * Helper pour enrober un handler de fonction avec la protection d'idempotence automatique.
      */
-    static withIdempotencyGuard<T extends { eventId?: string; tenantId?: string }>(
+    static withIdempotencyGuard<T>(
         handlerId: string,
         eventName: string,
         fn: (payload: T) => Promise<void> | void
     ): (payload: T) => Promise<void> {
         return async (payload: T) => {
-            const eventId = payload?.eventId;
-            const tenantId = payload?.tenantId;
+            const eventKey = IdempotencyGuard.resolveEventKey(eventName, payload);
+            const tenantId = (payload as Record<string, unknown>)?.tenantId as string | undefined;
 
-            if (eventId) {
-                const duplicate = await IdempotencyGuard.isDuplicate(eventId, handlerId, tenantId);
+            if (eventKey) {
+                const duplicate = await IdempotencyGuard.isDuplicate(eventKey, handlerId, tenantId);
                 if (duplicate) {
-                    logger.info(`[IdempotencyGuard] Duplicate event detected for ${eventName}#${handlerId} (eventId: ${eventId}) — skipping execution.`);
+                    logger.info(`[IdempotencyGuard] Duplicate event detected for ${eventName}#${handlerId} (key: ${eventKey}) — skipping execution.`);
                     return;
                 }
             }
 
             await fn(payload);
 
-            if (eventId) {
-                await IdempotencyGuard.markProcessed(eventId, handlerId, eventName, tenantId);
+            if (eventKey) {
+                await IdempotencyGuard.markProcessed(eventKey, handlerId, eventName, tenantId);
             }
         };
     }

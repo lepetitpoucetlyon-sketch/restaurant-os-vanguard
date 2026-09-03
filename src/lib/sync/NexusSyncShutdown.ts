@@ -49,9 +49,13 @@ export async function shutdownNexusSync(handles: NexusSyncRuntimeHandles): Promi
   stopDLQRetryService();
 
   try {
-    await db.clearAll();
-    logger.info('[NexusSyncService] Offline cache cleared.');
+    const pendingOps = await db.syncQueue.count();
+    if (pendingOps > 0) {
+      logger.info(`[NexusSyncService] Preserving ${pendingOps} pending offline mutations in syncQueue.`);
+    }
+    await db.clearReadCaches();
+    logger.info('[NexusSyncService] Offline read caches cleared.');
   } catch (error) {
-    logger.error('[NexusSyncService] Failed to clear offline cache!', error);
+    logger.error('[NexusSyncService] Failed to clear offline read caches!', error);
   }
 }

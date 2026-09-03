@@ -18,7 +18,9 @@ export function NexusSyncProvider({ children }: { children: React.ReactNode }) {
     const tenantId = useAtomValue(tenantIdAtom) as string;
     const store = useStore();
     const taskContext = useTaskContext();
+    const taskId = taskContext.taskId;
 
+    // Cycle de vie principal de synchronisation lié au tenant actif
     useEffect(() => {
         if (isMCCMode()) {
             logger.info('[NexusSyncProvider] MCC mode — tenant sync engines disabled');
@@ -27,14 +29,20 @@ export function NexusSyncProvider({ children }: { children: React.ReactNode }) {
         if (!tenantId) return;
 
         NexusSyncService.init(tenantId, taskContext);
-        TelemetryHook.emit('CORE', 'module_accessed', { context: 'NexusSyncProvider', tenantId, task: taskContext.taskId });
+        TelemetryHook.emit('CORE', 'module_accessed', { context: 'NexusSyncProvider', tenantId, task: taskId });
         const purgeInterval = setInterval(() => GlobalRegistryService.purgeInactive(store), 120000);
 
         return () => {
             NexusSyncService.stopAll();
             clearInterval(purgeInterval);
         };
-    }, [tenantId, taskContext, store]);
+    }, [tenantId, store]);
+
+    // Mise à jour télémétrique lors des navigations (sans arrêt/redémarrage destructeur)
+    useEffect(() => {
+        if (isMCCMode() || !tenantId) return;
+        TelemetryHook.emit('CORE', 'module_accessed', { context: 'NexusSyncProvider', tenantId, task: taskId });
+    }, [tenantId, taskId]);
 
     return <>{children}</>;
 }

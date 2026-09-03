@@ -1,6 +1,8 @@
 import { CryptoService } from '@/lib/CryptoService';
 import { SharedKernel } from '@/lib/shared-kernel';
 import { empireAudit } from '@/lib/audit';
+import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { logger } from '@/lib/logger';
 import type { JournalEntry, FiscalSeal, JournalEntryStatus } from '@nexus/contracts';
 import { TaxCalculator } from '../fiscalite/TaxCalculator';
 import { FiscalSealer } from '../fiscalite/FiscalSealer';
@@ -46,7 +48,25 @@ export const FinancialNexusBridge = {
     const { totalTTCInMicrounits, tvaBreakdown } = TaxCalculator.calculateTotals(resolvedItems);
     const ttcByRateAndAxis = computeTtcByRateAndAxis(resolvedItems);
 
-    const entryId = SharedKernel.generateId('JE');
+    const effectiveKey = payload.idempotencyKey ?? payload.orderId;
+    const entryId = effectiveKey
+      ? (effectiveKey.startsWith('JE') ? effectiveKey : `JE_${effectiveKey}`)
+      : SharedKernel.generateId('JE');
+
+    // Garde d'Idempotence stricte (Loi 12 & Invariant #1) :
+    // Si cette écriture comptable et son sceau fiscal existent déjà, on les renvoie
+    // sans forger un second sceau ni décaler la chaîne NF525.
+    if (effectiveKey) {
+      const existingEntry = await Nexus.adapter.get<JournalEntry>(`tenants/${tenantId}/journalEntries/${entryId}`);
+      if (existingEntry) {
+        const existingSeal = await Nexus.adapter.get<FiscalSeal>(`tenants/${tenantId}/fiscalSeals/${existingEntry.id}`);
+        if (existingSeal) {
+          logger.info(`[FinancialNexusBridge] Idempotent replay: returning existing sealed JournalEntry ${entryId}`);
+          return { journalEntry: existingEntry, seal: existingSeal };
+        }
+      }
+    }
+
     const now = new Date().toISOString();
 
     const buildSnapshot = (pieceNumber: string): string =>
@@ -65,7 +85,7 @@ export const FinancialNexusBridge = {
       date: now,
       pieceNumber,
       description: `Vente POS — Table ${tableId ?? 'Emporté'} — ${pieceNumber}`,
-      referenceId: tableId ?? undefined,
+      referenceId: payload.orderId ?? tableId ?? undefined,
       referenceType: 'order' as const,
       isSystemGenerated: true,
       isValidated: status === 'validated',

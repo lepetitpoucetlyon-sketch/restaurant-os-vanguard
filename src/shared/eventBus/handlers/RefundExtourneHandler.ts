@@ -3,6 +3,8 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { FinancialNexusBridge } from '@/modules/finance';
 import type { JournalEntry } from '@nexus/contracts';
 
+import { IdempotencyGuard } from '../IdempotencyGuard';
+
 export function registerRefundExtourneHandler() {
   return NexusEventBus.on(
     'order.refunded',
@@ -11,11 +13,7 @@ export function registerRefundExtourneHandler() {
       const reason = 'Remboursement';
       
       // 1. Lire le JournalEntry original de la commande
-      // Attention : l'identifiant peut avoir été indexé sous `Z_orderId` ou juste `orderId` selon le bridge
-      // Dans processOrder, il utilise SharedKernel.generateId('JE') qui génère par ex `JE_xyz`. 
-      // Si l'orderId passé dans l'event est l'ID du JournalEntry, on l'utilise directement.
       const original = await Nexus.adapter.get<JournalEntry>(`tenants/${tenantId}/journalEntries/${orderId}`);
-      
       if (!original) {
         throw new Error(`RefundExtourneHandler: Original JournalEntry not found for orderId ${orderId}`);
       }

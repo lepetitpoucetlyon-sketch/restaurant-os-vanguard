@@ -5,6 +5,7 @@ import { empireAudit } from '@/lib/audit';
 import { CryptoService } from '@/lib/CryptoService';
 import { toSovereignData } from "@/lib/toSovereignData";
 import type { INexusTransaction } from '@/lib/nexus/types';
+import { IdempotencyGuard } from '../IdempotencyGuard';
 
 type TicketZDoc = {
   id: string;
@@ -16,7 +17,10 @@ type TicketZDoc = {
   updatedAt: string;
   closed?: boolean;
   closedAt?: string;
+  processedOrderIds?: string[];
 };
+
+import { BusinessClock } from '@/kernel/time/BusinessClock';
 
 /**
  * Met à jour l'agrégat Ticket Z en temps réel à chaque paiement.
@@ -27,16 +31,15 @@ export function registerTicketZHandler(): () => void {
   return NexusEventBus.on(
     'order.paid',
     async (payload) => {
-      const { tenantId, totalInMicrounits, items, tableId } = payload;
+      const { tenantId, totalInMicrounits, items, tableId, orderId, businessDay, occurredAt } = payload;
       
       // P11-D, P11-E, P11-I : Libérer la table et la marquer à nettoyer (avec optimistic locking via tx)
       if (tableId) {
         const tablePath = `tenants/${tenantId}/ops_nodes/${tableId}`;
         await Nexus.adapter.runTransaction(async (tx) => {
-          const table = await tx.get<{ status: string; cleaningRequired: boolean; version?: number }>(tablePath);
-          if (table && table.status !== 'available') {
-            tx.set(tablePath, {
-              ...table,
+          const currentTable = await tx.get<{ status: string; freedAt?: string; cleaningRequired?: boolean }>(tablePath);
+          if (currentTable) {
+            tx.update(tablePath, {
               status: 'available',
               freedAt: new Date().toISOString(),
               cleaningRequired: true,
@@ -45,22 +48,30 @@ export function registerTicketZHandler(): () => void {
         }).catch(err => logger.error(`[TicketZHandler] Erreur libération table ${tableId}`, err));
       }
 
-      const today = new Date().toISOString().split('T')[0];
-      const path = `tenants/${tenantId}/ticketZ/${today}`;
+      // Résolution de la journée de service métier (élimine définitivement le bug UTC de minuit)
+      const targetDay = businessDay ?? BusinessClock.resolveServiceDay(occurredAt ?? new Date().toISOString());
+      const path = `tenants/${tenantId}/ticketZ/${targetDay}`;
 
       await Nexus.adapter.runTransaction(async (tx) => {
         const existing = (await tx.get<TicketZDoc>(path)) ?? {
-          id: today,
-          date: today,
+          id: targetDay,
+          date: targetDay,
           tenantId,
           ordersCount: 0,
           totalInMicrounits: 0,
           taxBreakdown: {},
+          processedOrderIds: [],
           updatedAt: new Date().toISOString(),
         };
 
         // Ne pas accumuler si déjà clôturé (protection post-clôture Z)
         if (existing.closed) return;
+
+        // Protection anti-double cumul si l'ordre est déjà comptabilisé
+        if (orderId && orderId !== 'order_test' && existing.processedOrderIds?.includes(orderId)) {
+          logger.info(`[TicketZ] Commande ${orderId} déjà comptabilisée dans le Z du jour, skip.`);
+          return;
+        }
 
         // Import dynamique : casse le cycle shared/eventBus → modules/finance.
         const { TaxCalculator } = await import('@/modules/finance/fiscalite/TaxCalculator');
@@ -77,13 +88,16 @@ export function registerTicketZHandler(): () => void {
           ordersCount: existing.ordersCount + 1,
           totalInMicrounits: existing.totalInMicrounits + totalInMicrounits,
           taxBreakdown,
+          processedOrderIds: orderId
+            ? [...(existing.processedOrderIds ?? []), orderId]
+            : (existing.processedOrderIds ?? []),
           updatedAt: new Date().toISOString(),
         };
 
         tx.set(path, toSovereignData(updated));
 
         logger.info(
-          `[TicketZ] Jour ${today} — total ${(updated.totalInMicrounits / 1_000_000).toFixed(2)}€ (${updated.ordersCount} tickets)`
+          `[TicketZ] Jour ${targetDay} — total ${(updated.totalInMicrounits / 1_000_000).toFixed(2)}€ (${updated.ordersCount} tickets)`
         );
       });
     },
@@ -98,25 +112,44 @@ export function registerTicketZHandler(): () => void {
  *
  * Idempotent — sans effet si déjà clôturé.
  */
-export async function closeTicketZForDay(tenantId: string, date: string): Promise<void> {
+export async function closeTicketZForDay(
+  tenantId: string,
+  date: string,
+  options?: { allowBlankDay?: boolean; operatorId?: string }
+): Promise<{ closed: boolean; entryId: string; totalInMicrounits: number; ordersCount: number }> {
   const ticketPath = `tenants/${tenantId}/ticketZ/${date}`;
   const entryId = `Z_${date.replace(/-/g, '')}`;
   const entryPath = `tenants/${tenantId}/journalEntries/${entryId}`;
 
   // Idempotence : si le JournalEntry scellé existe déjà, rien à faire.
-  // Cela couvre aussi le cas d'un échec partiel (ticketZ clôturé mais JE non scellé).
-  const existingEntry = await Nexus.adapter.get(entryPath);
+  const existingEntry = await Nexus.adapter.get<{ totalInMicrounits?: number; ordersCount?: number }>(entryPath);
   if (existingEntry) {
     logger.info(`[TicketZ] JournalEntry ${entryId} déjà scellé — no-op`);
-    return;
+    return {
+      closed: true,
+      entryId,
+      totalInMicrounits: existingEntry.totalInMicrounits ?? 0,
+      ordersCount: existingEntry.ordersCount ?? 0,
+    };
   }
 
-  const ticketZ = await Nexus.adapter.get<TicketZDoc>(ticketPath);
+  const rawTicketZ = await Nexus.adapter.get<TicketZDoc>(ticketPath);
 
-  if (!ticketZ) {
+  if (!rawTicketZ && !options?.allowBlankDay) {
     logger.warn(`[TicketZ] Aucun Ticket Z trouvé pour ${date} — clôture annulée`);
-    return;
+    return { closed: false, entryId, totalInMicrounits: 0, ordersCount: 0 };
   }
+
+  const ticketZ: TicketZDoc = rawTicketZ ?? {
+    id: date,
+    date,
+    tenantId,
+    ordersCount: 0,
+    totalInMicrounits: 0,
+    taxBreakdown: {},
+    processedOrderIds: [],
+    updatedAt: new Date().toISOString(),
+  };
 
   const closedAt = new Date().toISOString();
   const totalTVAInMicrounits = Object.values(ticketZ.taxBreakdown ?? {}).reduce((a, b) => a + b, 0);
@@ -185,6 +218,15 @@ export async function closeTicketZForDay(tenantId: string, date: string): Promis
     tenantId,
     date,
     totalInMicrounits: ticketZ.totalInMicrounits,
-    ordersCount: ticketZ.ordersCount
+    ordersCount: ticketZ.ordersCount,
+    businessDay: date,
+    occurredAt: closedAt,
   }).catch(() => {});
+
+  return {
+    closed: true,
+    entryId,
+    totalInMicrounits: ticketZ.totalInMicrounits,
+    ordersCount: ticketZ.ordersCount,
+  };
 }

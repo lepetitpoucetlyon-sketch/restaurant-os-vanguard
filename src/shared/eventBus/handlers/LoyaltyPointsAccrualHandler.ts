@@ -8,6 +8,8 @@ interface CustomerProfile {
   totalSpentInMicrounits?: number;
 }
 
+import { IdempotencyGuard } from '../IdempotencyGuard';
+
 export function registerLoyaltyPointsAccrualHandler() {
   return NexusEventBus.on(
     'order.paid',

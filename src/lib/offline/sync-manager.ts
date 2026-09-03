@@ -32,6 +32,8 @@ export class SyncManager {
 
     /** Au-delà : on continue de retenter (jamais de drop fiscal) mais on loggue en critique. */
     private static readonly ALERT_ATTEMPTS = 10;
+    /** Au-delà : mise en quarantaine pour préserver les ressources CPU et la fluidité. */
+    private static readonly QUARANTINE_ATTEMPTS = 15;
 
     /**
      * Ajoute une opération à la file d'attente et tente une synchro si possible.
@@ -79,6 +81,7 @@ export class SyncManager {
 
         // ⚠️ Rejouer AUSSI les 'failed' : les laisser de côté = ticket NF525
         // perdu au premier échec. Une op fiscale n'est JAMAIS abandonnée.
+        // Les 'quarantined' sont exclus du rejeu automatique chaud.
         const pendingOps = (await db.syncQueue
             .where('status')
             .anyOf('pending', 'failed')
@@ -89,37 +92,46 @@ export class SyncManager {
         if (pendingOps.length === 0) return;
 
         this.isSyncing = true;
-        logger.info('SyncManager: Starting synchronization process', { count: pendingOps.length });
+        try {
+            logger.info('SyncManager: Starting synchronization process', { count: pendingOps.length });
 
-        for (const op of pendingOps) {
-            try {
-                await this.executeOperation(op);
-                // Mark as synced and delete from queue if successful
-                await db.syncQueue.delete(op.id!);
-                logger.info('SyncManager: Operation synced and removed', { id: op.id, type: op.type });
-            } catch (error) {
-                const err = error as Error;
-                const errorMessage = err.message || toError(error).message;
-                logger.error('SyncManager: Sync failed for operation', { id: op.id, error: errorMessage });
-                
-                await db.syncQueue.update(op.id!, {
-                    status: 'failed',
-                    attempts: op.attempts + 1,
-                    lastError: errorMessage
-                });
+            for (const op of pendingOps) {
+                try {
+                    await this.executeOperation(op);
+                    // Mark as synced and delete from queue if successful
+                    await db.syncQueue.delete(op.id!);
+                    logger.info('SyncManager: Operation synced and removed', { id: op.id, type: op.type });
+                } catch (error) {
+                    const err = error as Error;
+                    const errorMessage = err.message || toError(error).message;
+                    logger.error('SyncManager: Sync failed for operation', { id: op.id, error: errorMessage });
+                    
+                    const nextAttempts = op.attempts + 1;
+                    const isQuarantined = nextAttempts >= this.QUARANTINE_ATTEMPTS;
 
-                if (op.attempts + 1 >= this.ALERT_ATTEMPTS) {
-                    logger.error('SyncManager: CRITICAL — operation stuck after repeated attempts', {
-                        id: op.id, type: op.type, attempts: op.attempts + 1
+                    await db.syncQueue.update(op.id!, {
+                        status: isQuarantined ? 'quarantined' : 'failed',
+                        attempts: nextAttempts,
+                        lastError: errorMessage
                     });
+
+                    if (isQuarantined) {
+                        logger.error('SyncManager: CRITICAL — operation quarantined after repeated failures', {
+                            id: op.id, type: op.type, attempts: nextAttempts, error: errorMessage
+                        });
+                    } else if (nextAttempts >= this.ALERT_ATTEMPTS) {
+                        logger.error('SyncManager: CRITICAL — operation stuck after repeated attempts', {
+                            id: op.id, type: op.type, attempts: nextAttempts
+                        });
+                    }
+
+                    // Si c'est une erreur de connexion, on arrête la boucle
+                    if (!checkOnlineStatus()) break;
                 }
-
-                // Si c'est une erreur de connexion, on arrête la boucle
-                if (!checkOnlineStatus()) break;
             }
+        } finally {
+            this.isSyncing = false;
         }
-
-        this.isSyncing = false;
         
         // Relancer si de nouveaux items PENDING sont arrivés entre temps.
         // (Les 'failed' attendent le prochain déclencheur — online/boot/enqueue —

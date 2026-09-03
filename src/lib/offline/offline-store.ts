@@ -44,7 +44,7 @@ export interface SyncOperation {
     targetId: string;
     payload: SovereignField; // Données complètes de la transaction ou du changement
     timestamp: string;
-    status: 'pending' | 'syncing' | 'failed';
+    status: 'pending' | 'syncing' | 'failed' | 'quarantined';
     priority: number; // 0: Normal, 1: High (Fiscal)
     attempts: number;
     lastError?: string;
@@ -129,17 +129,33 @@ export class RestaurantOfflineDB extends Dexie {
     }
 
     /**
-     * Initialise la base de données avec des valeurs par défaut si vide
+     * Purge uniquement les caches de lecture opérationnels.
+     * NE TOUCHE JAMAIS à la syncQueue, aux processedEvents ni à la Boîte Noire immunityLogs.
      */
-    async clearAll() {
+    async clearReadCaches() {
         await this.orders.clear();
         await this.stockItems.clear();
         await this.inventoryMovements.clear();
         await this.journalEntries.clear();
         await this.fiscalSeals.clear();
+    }
+
+    /**
+     * @deprecated Utiliser clearReadCaches().
+     * Pour préserver l'inaltérabilité et la résilience hors-ligne (F5),
+     * cette méthode purge les caches de lecture mais NE PURGE PLUS la syncQueue.
+     */
+    async clearAll() {
+        await this.clearReadCaches();
+        // syncQueue n'est intentionnellement PAS purgée ici pour éviter la perte
+        // de tickets ou de mutations hors-ligne lors des transitions de routes.
+    }
+
+    /**
+     * Réservé aux tests unitaires isolés nécessitant une réinitialisation absolue.
+     */
+    async dangerouslyClearSyncQueue() {
         await this.syncQueue.clear();
-        // Note: immunityLogs n'est PAS purgé par clearAll.
-        // La Boîte Noire est inaltérable par conception.
     }
 }
 

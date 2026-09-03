@@ -17,60 +17,74 @@ interface StockRecord {
   quantity: number;
 }
 
+import { IdempotencyGuard } from '../IdempotencyGuard';
+
+async function restoreIngredients(tenantId: string, items: Array<{ productId: string; quantity: number }>) {
+  for (const item of items) {
+    const recipe = await Nexus.adapter.get<RecipeRecord>(`tenants/${tenantId}/recipes/${item.productId}`);
+    if (!recipe?.ingredients) continue;
+    for (const ing of recipe.ingredients) {
+      const qtyToRestore = ing.quantity * item.quantity;
+      await Nexus.adapter.runTransaction(async (transaction) => {
+        const stockItem = await transaction.get<StockRecord>(`tenants/${tenantId}/stockItems/${ing.stockItemId}`);
+        if (stockItem) {
+          transaction.update(`tenants/${tenantId}/stockItems/${ing.stockItemId}`, {
+            quantity: stockItem.quantity + qtyToRestore,
+          });
+        }
+      });
+      logger.debug(`[Restock] Restitué ${qtyToRestore} de ${ing.stockItemId}`);
+    }
+  }
+}
+
 export function registerOrderCancelRestockHandler() {
   return NexusEventBus.on(
     'order.cancelled',
-    async (payload) => {
-      const { tenantId, orderId } = payload;
-      
-      const order = await Nexus.adapter.get<Order>(`tenants/${tenantId}/ops_flows/${orderId}`);
-      if (!order || !order.items) return;
-      
-      // Si la commande n'était pas encore lancée en cuisine, on peut restituer le stock
-      if (order.status !== 'preparing' && order.status !== 'ready' && order.status !== 'delivered') {
-        logger.info(`[Restock] Restitution des stocks pour la commande annulée ${orderId}`);
+    IdempotencyGuard.withIdempotencyGuard(
+      'order-cancel-restock-handler',
+      'order.cancelled',
+      async (payload) => {
+        const { tenantId, orderId } = payload;
         
-        // Pour chaque article, on pourrait exploser la recette et incrémenter les ingrédients
-        // C'est l'opération inverse de StockDeductionHandler
-        for (const item of order.items) {
-          const recipe = await Nexus.adapter.get<RecipeRecord>(`tenants/${tenantId}/recipes/${item.productId}`);
-          if (recipe && recipe.ingredients) {
-            for (const ing of recipe.ingredients) {
-              const qtyToRestore = ing.quantity * item.quantity;
-              
-              await Nexus.adapter.runTransaction(async (transaction) => {
-                const stockItem = await transaction.get<StockRecord>(`tenants/${tenantId}/stockItems/${ing.stockItemId}`);
-                if (stockItem) {
-                  transaction.update(`tenants/${tenantId}/stockItems/${ing.stockItemId}`, {
-                    quantity: stockItem.quantity + qtyToRestore,
-                  });
-                }
-              });
-              
-              logger.debug(`[Restock] Restitué ${qtyToRestore} de ${ing.stockItemId}`);
-            }
+        const order = await Nexus.adapter.get<Order>(`tenants/${tenantId}/ops_flows/${orderId}`);
+        if (!order?.items || order.status === 'cancelled') {
+          if (order?.status === 'cancelled') {
+            logger.info(`[Restock] Commande déjà marquée annulée et restituée, skip.`, { orderId });
           }
+          return;
         }
         
-        if (order.tableId) {
-          await NexusEventBus.emitDurable('table.released', {
-            v: 1,
-            tenantId,
-            tableId: order.tableId,
-            orderId,
-          });
-          logger.info(`[Restock] Table ${order.tableId} libérée suite à l'annulation de la commande ${orderId}`);
-        }
+        const isKitchenStarted = ['preparing', 'ready', 'delivered'].includes(order.status);
+        if (!isKitchenStarted) {
+          logger.info(`[Restock] Restitution des stocks pour la commande annulée ${orderId}`);
+          await restoreIngredients(tenantId, order.items);
 
-        empireAudit.log({
-          module: 'inventory',
-          action: 'ORDER_RESTOCKED',
-          details: { orderId, tableId: order.tableId },
-          severity: 'low',
-          timestamp: new Date(),
-        });
+          await Nexus.adapter.update(`tenants/${tenantId}/ops_flows/${orderId}`, {
+            status: 'cancelled',
+            updatedAt: new Date().toISOString(),
+          });
+          
+          if (order.tableId) {
+            await NexusEventBus.emitDurable('table.released', {
+              v: 1,
+              tenantId,
+              tableId: order.tableId,
+              orderId,
+            });
+            logger.info(`[Restock] Table ${order.tableId} libérée suite à l'annulation de la commande ${orderId}`);
+          }
+
+          empireAudit.log({
+            module: 'inventory',
+            action: 'ORDER_RESTOCKED',
+            details: { orderId, tableId: order.tableId },
+            severity: 'low',
+            timestamp: new Date(),
+          });
+        }
       }
-    },
-    { id: 'order-cancel-restock-handler', priority: 'BACKGROUND' }
+    ),
+    { id: 'order-cancel-restock-handler', priority: 'BACKGROUND', idempotent: true }
   );
 }
