@@ -9,6 +9,8 @@ export interface OPSEvents {
     tenantId: string;
     operatorId: string;
     items: CartItem[];
+    occurredAt?: string;
+    businessDay?: string;
   };
 
   'order.paid': {
@@ -23,6 +25,8 @@ export interface OPSEvents {
     totalInMicrounits: number;
     paymentMode: string;
     splits?: { amount: number; mode: string }[];
+    occurredAt?: string;
+    businessDay?: string;
   };
 
   'order.comp': {
@@ -35,6 +39,8 @@ export interface OPSEvents {
     items: CartItem[];
     totalValueInMicrounits: number;
     reason: string;
+    occurredAt?: string;
+    businessDay?: string;
   };
 
   'order.cancelled': {
@@ -44,6 +50,8 @@ export interface OPSEvents {
     tenantId: string;
     operatorId: string;
     reason?: string;
+    occurredAt?: string;
+    businessDay?: string;
   };
 
   'order.split': {
@@ -55,6 +63,8 @@ export interface OPSEvents {
     operatorId: string;
     totalInMicrounits: number;
     payments: Array<{ amountInMicrounits: number; guest: number; method: string }>;
+    occurredAt?: string;
+    businessDay?: string;
   };
 
   'order.refunded': {
@@ -65,6 +75,8 @@ export interface OPSEvents {
     operatorId: string;
     amountInMicrounits: number;
     originalPaymentMode: string;
+    occurredAt?: string;
+    businessDay?: string;
   };
 
   'stock.low': {
@@ -114,11 +126,47 @@ export interface OPSEvents {
     reason: string;
   };
 
+  'recipe.created': {
+    v: 1;
+    tenantId: string;
+    recipeId: string;
+    productId: string;
+  };
+
   'recipe.updated': {
     v: 1;
     tenantId: string;
     recipeId: string;
     productId: string;
+  };
+
+  'stock.negative_alert': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    itemId: string;
+    itemName: string;
+    currentQuantity: number;
+    deficit: number;
+  };
+
+  'stock.pending_recipe_deduction': {
+    v: 1;
+    tenantId: string;
+    deductionId: string;
+    orderId: string;
+    productId: string;
+    quantity: number;
+    soldAt: string;
+    businessDay?: string;
+  };
+
+  'stock.deductions_reconciled': {
+    v: 1;
+    tenantId: string;
+    productId: string;
+    recipeId: string;
+    reconciledCount: number;
   };
 
   'stock.zero': {
@@ -225,6 +273,8 @@ export interface OPSEvents {
     tenantId: string;
     wasteId: string;
     items: Array<{ productId: string; quantity: number }>;
+    occurredAt?: string;
+    businessDay?: string;
   };
 
   // ── Déduction stock post-commande ─────────────────────────────────────────

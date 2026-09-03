@@ -64,6 +64,21 @@ export interface FINANCEEvents {
     approvedBy: string;
   };
 
+  'finance.purchase_variance_detected': {
+    v: 1;
+    isSimulation?: boolean;
+    tenantId: string;
+    supplierId: string;
+    invoiceId: string;
+    receiptId: string;
+    stockItemId: string;
+    quantity: number;
+    provisionalPriceCts: number;
+    actualPriceCts: number;
+    varianceAmountCts: number;
+    reconciledBy?: string;
+  };
+
   'finance.payment_dispatched': {
     v: 1;
     isSimulation?: boolean;
@@ -120,12 +135,28 @@ export interface FINANCEEvents {
     date: string;
     totalInMicrounits: number;
     ordersCount: number;
+    occurredAt?: string;
+    businessDay?: string;
+  };
+
+  'finance.period_closed_batch': {
+    v: 1;
+    tenantId: string;
+    fromDay: string;
+    toDay: string;
+    closedDays: string[];
+    skippedDays: string[];
+    totalInMicrounits: number;
+    totalOrdersCount: number;
+    operatorId: string;
   };
 
   'finance.daily_audit': {
     v: 1;
     tenantId: string;
     date: string;
+    occurredAt?: string;
+    businessDay?: string;
   };
 
   'finance.month_closed': {

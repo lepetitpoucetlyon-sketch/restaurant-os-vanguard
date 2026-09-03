@@ -47,41 +47,47 @@ async function resolveActiveAccountingProvider(tenantId: string): Promise<{
  *
  * Priorité BACKGROUND : la vente NF525 n'attend jamais Pennylane.
  */
+import { IdempotencyGuard } from '../IdempotencyGuard';
+
 export function registerAccountingSyncHandler(): () => void {
     const unsubOrder = NexusEventBus.on(
         'order.paid',
-        async (payload) => {
-            try {
-                const active = await resolveActiveAccountingProvider(payload.tenantId);
-                if (!active) return;
+        IdempotencyGuard.withIdempotencyGuard(
+            'accounting-sync-order-paid',
+            'order.paid',
+            async (payload) => {
+                try {
+                    const active = await resolveActiveAccountingProvider(payload.tenantId);
+                    if (!active) return;
 
-                const provider = AccountingProviderFactory.get(active.providerId, active.credentials);
-                // Pennylane travaille en euros (float), notre bus en microunits.
-                const amountEuros = payload.totalInMicrounits / 1_000_000;
+                    const provider = AccountingProviderFactory.get(active.providerId, active.credentials);
+                    // Pennylane travaille en euros (float), notre bus en microunits.
+                    const amountEuros = payload.totalInMicrounits / 1_000_000;
+                    const saleDate = payload.businessDay ?? (payload.occurredAt ? payload.occurredAt.slice(0, 10) : new Date().toISOString().slice(0, 10));
 
-                await provider.pushEntry({
-                    id: payload.orderId,
-                    amount: amountEuros,
-                    label: `Vente POS ${payload.orderId}`,
-                    date: new Date().toISOString().slice(0, 10),
-                    type: 'credit',
-                    accountCode: '70100000',
-                });
+                    await provider.pushEntry({
+                        id: payload.orderId,
+                        amount: amountEuros,
+                        label: `Vente POS ${payload.orderId}`,
+                        date: saleDate,
+                        type: 'credit',
+                        accountCode: '70100000',
+                    });
 
-                logger.info(
-                    `[AccountingSync] order.paid → ${active.providerId} orderId=${payload.orderId} tenantId=${payload.tenantId}`
-                );
-            } catch (err) {
-                // On log mais on ne throw pas — la vente NF525 est déjà scellée,
-                // Pennylane est un canal secondaire. Une DLQ dédiée sera un
-                // chantier séparé si besoin.
-                logger.error(
-                    `[AccountingSync] order.paid push failed tenantId=${payload.tenantId} orderId=${payload.orderId}`,
-                    toError(err).message
-                );
+                    logger.info(
+                        `[AccountingSync] order.paid → ${active.providerId} orderId=${payload.orderId} tenantId=${payload.tenantId} date=${saleDate}`
+                    );
+                } catch (err) {
+                    // On log mais on ne throw pas — la vente NF525 est déjà scellée,
+                    // Pennylane est un canal secondaire.
+                    logger.error(
+                        `[AccountingSync] order.paid push failed tenantId=${payload.tenantId} orderId=${payload.orderId}`,
+                        toError(err).message
+                    );
+                }
             }
-        },
-        { id: 'accounting-sync-order-paid', priority: 'BACKGROUND' }
+        ),
+        { id: 'accounting-sync-order-paid', priority: 'BACKGROUND', idempotent: true }
     );
 
     const unsubSupplier = NexusEventBus.on(

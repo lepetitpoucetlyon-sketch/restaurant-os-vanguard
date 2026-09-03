@@ -8,6 +8,7 @@ import { registerMarginWarningHandler } from '../handlers/MarginWarningHandler';
 import { registerStockZeroBlockerHandler } from '../handlers/StockZeroBlockerHandler';
 import { registerOrderCancelRestockHandler } from '../handlers/OrderCancelRestockHandler';
 import { registerStockAdjustedHandler } from '../handlers/StockAdjustedHandler';
+import { registerRecipeReconciliationHandler } from '../handlers/RecipeReconciliationHandler';
 
 export function registerStockHandlers(): Array<() => void> {
   return [
@@ -22,5 +23,6 @@ export function registerStockHandlers(): Array<() => void> {
     registerStockZeroBlockerHandler(),
     registerOrderCancelRestockHandler(),
     registerStockAdjustedHandler(),
+    registerRecipeReconciliationHandler(),
   ];
 }

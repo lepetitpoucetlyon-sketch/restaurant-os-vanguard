@@ -27,9 +27,20 @@ export function registerReconciliationEngineHandler() {
       if (targetPath) {
         await Nexus.adapter.update(targetPath, {
           status: 'reconciled',
-          reconciliationId
+          reconciliationId,
         });
       }
+
+      // Enregistrement du lien de lettrage dans la collection dédiée 'reconciliations'
+      await Nexus.adapter.set(`tenants/${tenantId}/reconciliations/${reconciliationId}`, {
+        id: reconciliationId,
+        bankTransactionId,
+        matchedEntityId,
+        matchedEntityType,
+        reconciledBy,
+        reconciledAt: Date.now(),
+        status: 'reconciled',
+      });
 
       empireAudit.log({
         module: 'finance',
