@@ -176,6 +176,8 @@ export interface SYSTEMEvents {
     priority: 'low' | 'medium' | 'high' | 'critical';
     read: boolean;
     timestamp: string;
+    /** Lien d'action : où aller pour traiter l'alerte (rendu cliquable par NotificationPanel). */
+    action?: { label: string; href: string };
   };
 
   'notification.urgent': {

@@ -37,6 +37,7 @@ import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { IdempotencyGuard } from '@/shared/eventBus/IdempotencyGuard';
 import { registerNotificationUrgentDispatchHandler } from '@/shared/eventBus/handlers/NotificationUrgentDispatchHandler';
 import { registerNotificationCreatedHandler } from '@/shared/eventBus/handlers/NotificationCreatedHandler';
+import { registerFlexibilityNotificationHandler } from '@/shared/eventBus/handlers/FlexibilityNotificationHandler';
 
 describe('Lot N0 — câblage notifications (livraison, pas seulement émission)', () => {
   beforeEach(() => {
@@ -147,6 +148,25 @@ describe('Lot N0 — câblage notifications (livraison, pas seulement émission)
 
     const targetedUsers = sendToUser.mock.calls.map((c) => c[1]);
     expect(targetedUsers).toContain('u_claire');
+  });
+
+  it('N3 : une alerte de flexibilité est actionnable — la notification persistée porte un lien de traitement', async () => {
+    registerFlexibilityNotificationHandler();
+    registerNotificationCreatedHandler();
+
+    await NexusEventBus.emit('stock.negative_alert', {
+      v: 1,
+      tenantId: 't1',
+      itemId: 'sku_42',
+      itemName: 'Cèpes séchés',
+      deficit: 3,
+      currentQuantity: -3,
+    });
+
+    const doc = store.get('tenants/t1/notifications/notif_neg_stock_sku_42');
+    expect(doc).toBeDefined();
+    expect((doc?.action as { href?: string } | undefined)?.href).toBe('/inventory');
+    expect((doc?.action as { label?: string } | undefined)?.label).toBe('Voir le stock');
   });
 
   it('N0-5 : deux notifications de même sujet fusionnent (une ligne, occurrences=2)', async () => {

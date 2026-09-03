@@ -23,7 +23,7 @@ export function registerNotificationCreatedHandler(): () => void {
   return NexusEventBus.on(
     'notification.created',
     async (payload) => {
-      const { tenantId, id, type, title, message, priority, read, timestamp } = payload;
+      const { tenantId, id, type, title, message, priority, read, timestamp, action } = payload;
       const path = `tenants/${tenantId}/notifications/${id}`;
       const now = timestamp ?? new Date().toISOString();
 
@@ -56,6 +56,7 @@ export function registerNotificationCreatedHandler(): () => void {
           firstSeenAt: now,
           lastSeenAt: now,
           occurrences: 1,
+          ...(action ? { action } : {}),
         });
         logger.info(`[NotificationCreatedHandler] Notification persistante enregistrée: ${title} (${id})`);
       } catch (err) {

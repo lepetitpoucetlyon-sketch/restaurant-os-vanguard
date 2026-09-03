@@ -48,6 +48,7 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
           priority: 'high',
           read: false,
           timestamp: new Date().toISOString(),
+          action: { label: 'Voir le stock', href: '/inventory' },
         });
       } catch (err) {
         logger.error('[FlexibilityNotif] Échec alerte stock négatif', err);
@@ -72,6 +73,7 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
           priority: 'medium',
           read: false,
           timestamp: new Date().toISOString(),
+          action: { label: 'Créer la fiche technique', href: '/menu-builder' },
         });
       } catch (err) {
         logger.error('[FlexibilityNotif] Échec rappel fiche technique', err);
@@ -97,6 +99,7 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
           priority: 'low',
           read: false,
           timestamp: new Date().toISOString(),
+          action: { label: 'Voir le stock', href: '/inventory' },
         });
       } catch (err) {
         logger.error('[FlexibilityNotif] Échec notification réconciliation', err);
@@ -123,6 +126,7 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
           priority: 'medium',
           read: false,
           timestamp: new Date().toISOString(),
+          action: { label: 'Voir l\'écart', href: '/suppliers' },
         });
       } catch (err) {
         logger.error('[FlexibilityNotif] Échec notification écart achat', err);
@@ -149,6 +153,7 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
           priority: 'low',
           read: false,
           timestamp: new Date().toISOString(),
+          action: { label: 'Voir les pointages', href: '/timeclock' },
         });
       } catch (err) {
         logger.error('[FlexibilityNotif] Échec notification RH', err);
@@ -174,6 +179,7 @@ export function registerFlexibilityNotificationHandler(): Array<() => void> {
           priority: 'medium',
           read: false,
           timestamp: new Date().toISOString(),
+          action: { label: 'Voir la clôture', href: '/finance' },
         });
       } catch (err) {
         logger.error('[FlexibilityNotif] Échec notification batch close', err);
