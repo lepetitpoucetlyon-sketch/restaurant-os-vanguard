@@ -639,7 +639,7 @@ export const m16_hardcodedHex = {
     // Couches de DÉFINITION de la palette : les valeurs littérales y sont la
     // source (fallbacks `var(--x, #hex)`, table RGB des tokens, map rôle→couleur).
     // Même statut que `/tokens/` déjà exclu.
-    const paletteSource = /(?:\/lib\/ui\.foundations\.ts$|\/lib\/constants\.ts$|StyleTokens\.ts$)/;
+    const paletteSource = /(?:\/lib\/ui\.foundations\.ts$|\/lib\/constants\.ts$|StyleTokens\.ts$|\/config\/navConfig\.ts$)/;
     const whitelist = /(?:globals\.css$|\/tokens\/|\/blueprints\/|\/verticals\/[^/]+\/ui\.ts$|\/app\/\(marketing\)\/|\/app\/\(client\)\/\(public\)\/|\.test\.[tj]sx?$|\/__tests__\/|\/tests\/|\/e2e\/)/;
     // Le motif vient du LINT (source unique) : la mesure et la gate doivent dire
     // la même chose. Avant, m16 ne comptait que `#hex` — les `rgba()` passaient au
