@@ -5,19 +5,19 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3752** · LOC : **364 581**
+- Fichiers `.ts/.tsx` : **3772** · LOC : **368 260**
 - Pages : **87** · Routes API : **221**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1620 |
-| `src/shared/` | 740 |
+| `src/modules/` | 1625 |
+| `src/shared/` | 744 |
 | `src/app/` | 469 |
 | `src/verticals/` | 253 |
 | `src/lib/` | 230 |
 | `src/infrastructure/` | 42 |
-| `src/kernel/` | 39 |
+| `src/kernel/` | 40 |
 | `src/store/` | 24 |
 | `src/config/` | 9 |
 | `src/i18n/` | 6 |
@@ -35,8 +35,8 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 226 |
-| `shared/components/` | 205 |
+| `shared/eventBus/` | 228 |
+| `shared/components/` | 206 |
 | `shared/nexus/` | 140 |
 | `shared/hooks/` | 52 |
 | `shared/providers/` | 31 |
@@ -53,21 +53,21 @@
 | `shared/types/` | 3 |
 | `shared/atoms/` | 2 |
 | `shared/domain/` | 2 |
+| `shared/security/` | 2 |
 | `shared/store/` | 2 |
 | `shared/constants/` | 1 |
-| `shared/security/` | 1 |
 | `shared/validation/` | 1 |
 
 ## Piliers métier (`src/modules/`)
 | Pilier | Fichiers | Barrel `index.ts` |
 |---|---:|:---:|
 | `commerce` | 352 | ✅ |
-| `ops` | 296 | ✅ |
-| `finance` | 245 | ✅ |
+| `ops` | 297 | ✅ |
+| `finance` | 247 | ✅ |
 | `compliance` | 184 | ✅ |
 | `intelligence` | 172 | ✅ |
-| `logistics` | 149 | ✅ |
-| `human` | 141 | ✅ |
+| `logistics` | 150 | ✅ |
+| `human` | 142 | ✅ |
 | `facility` | 74 | ✅ |
 | `system` ⚠️ | 6 | ✅ |
 
@@ -79,18 +79,18 @@
 ## Top 15 gros fichiers (candidats god-file)
 | Fichier | LOC |
 |---|---:|
-| `src/i18n/locales/en.ts` | 828 |
-| `src/i18n/locales/es.ts` | 828 |
-| `src/i18n/locales/fr.ts` | 828 |
-| `src/i18n/locales/ja.ts` | 828 |
-| `src/i18n/locales/pt.ts` | 828 |
+| `src/i18n/locales/en.ts` | 955 |
+| `src/i18n/locales/es.ts` | 955 |
+| `src/i18n/locales/fr.ts` | 955 |
+| `src/i18n/locales/ja.ts` | 955 |
+| `src/i18n/locales/pt.ts` | 955 |
 | `src/shared/components/ui/PageShell.tsx` | 734 |
 | `src/__tests__/handlers/saga-handlers.test.ts` | 675 |
 | `src/__tests__/architecture/invariants.test.ts` | 631 |
 | `src/shared/components/settings/BrandingPanel.tsx` | 617 |
 | `src/__tests__/helpers/saga.intelligence.test.ts` | 607 |
 | `src/__tests__/helpers/saga.ops2.test.ts` | 586 |
+| `src/shared/eventBus/events/ops.events.ts` | 574 |
 | `src/__tests__/helpers/saga.finance2.test.ts` | 571 |
 | `src/config/navConfig.ts` | 539 |
-| `src/shared/eventBus/events/ops.events.ts` | 524 |
 | `src/app/(admin)/admin/mcc/components/TenantChangelogPanel.tsx` | 503 |
