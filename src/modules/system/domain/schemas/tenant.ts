@@ -165,6 +165,9 @@ export const TenantConfigSchema = z
         overrides: TenantOverridesSchema.optional(),
         customFeatures: z.record(z.string(), z.boolean()).optional(),
         firebase: z.record(z.string(), z.string().optional()).optional(),
+        /** Configuration de la journée de service métier (BusinessClock - Lot 1) */
+        timezone: z.string().optional(),
+        cutoverHour: z.number().min(0).max(12).optional(),
     })
     .catchall(z.any());
 
