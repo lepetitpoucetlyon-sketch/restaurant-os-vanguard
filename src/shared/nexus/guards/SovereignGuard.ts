@@ -16,6 +16,32 @@ export { isFleetVisible };
  * 🛡️ SovereignGuard - Restaurant OS (Shadow Context 5.4)
  * The Atomic Context Barrier with Hardware-level isolation simulation.
  */
+/**
+ * Résout le tenant courant pour la validation d'isolation (audit S2).
+ *
+ * Sur le SERVEUR : lit le contexte tenant ANCRÉ PAR REQUÊTE
+ * (`globalThis.__nexusServerTenant`, posé par `runWithServerTenant` — déjà la
+ * source de vérité de `NexusAdapter.activeTenant`). On NE lit PLUS en priorité le
+ * store Jotai global, qui n'est jamais écrit côté serveur (valeur constante →
+ * source non fiable ET désalignée de l'adapter). Fallback identique à l'existant
+ * (store puis 'main') pour ne rien casser tant que `runWithServerTenant` n'est pas
+ * câblé sur toutes les routes ; une fois câblé, l'isolation devient stricte par
+ * requête (fin de la course théorique via un état partagé). Sur le CLIENT
+ * (mono-utilisateur), on garde le store Jotai — sûr et inchangé.
+ *
+ * ⚠️ Lecture d'un simple global (pas d'import `node:async_hooks`) pour rester
+ * compatible bundle client (cf. NexusAdapter.activeTenant).
+ */
+function resolveCurrentTenant(anchoredTenantId?: string): string {
+    if (anchoredTenantId) return anchoredTenantId;
+    if (typeof window === 'undefined') {
+        const g = globalThis as unknown as { __nexusServerTenant?: { tenantId?: string } };
+        const serverTenant = g.__nexusServerTenant?.tenantId;
+        if (typeof serverTenant === 'string' && serverTenant.length > 0) return serverTenant;
+    }
+    return (getDefaultStore().get(tenantIdAtom) as string | undefined) || 'main';
+}
+
 export const SovereignGuard = {
     SIGNED_WRITE_COLLECTIONS: new Set([
         'ops_flows',
@@ -128,8 +154,7 @@ export const SovereignGuard = {
     },
 
     resolveTenantForPath(path: string, anchoredTenantId?: string): string {
-        const store = getDefaultStore();
-        const currentTenant = anchoredTenantId || store.get(tenantIdAtom) || 'main';
+        const currentTenant = resolveCurrentTenant(anchoredTenantId);
         const pathParts = path.split('/');
         return pathParts[0] === 'tenants' ? pathParts[1] : currentTenant;
     },
@@ -296,8 +321,7 @@ export const SovereignGuard = {
      * TRIGGER: Global Logout Fail-Safe if mismatch is detected.
      */
     async validateAccess(path: string, anchoredTenantId?: string) {
-        const store = getDefaultStore();
-        const currentTenant = anchoredTenantId || store.get(tenantIdAtom) || 'main';
+        const currentTenant = resolveCurrentTenant(anchoredTenantId);
 
         const pathParts = path.split('/');
         const pathTenantId = pathParts[0] === 'tenants' ? pathParts[1] : 'main';
@@ -318,7 +342,13 @@ export const SovereignGuard = {
             'time_sync',
             'auth',
         ]);
-        const isWhitelisted = pathParts.some((seg) => WHITELIST.has(seg));
+        // 🛡️ Audit S4 : ne whitelister QUE les collections globales de PREMIER niveau
+        // (`heartbeat/…`, `system/…`, `config/…`, `time_sync/…`). L'ancien `.some(seg)`
+        // autorisait n'importe quel chemin contenant un segment whitelisté — ex.
+        // `tenants/{victime}/config/secret` devenait lisible cross-tenant (fuite). On
+        // ancre donc la whitelist sur la RACINE du chemin ; les chemins `tenants/…`
+        // restent soumis à l'isolation stricte (exception suzerain `restaurant-os` mise à part).
+        const isWhitelisted = WHITELIST.has(pathParts[0] ?? '');
         if (pathTenantId !== currentTenant && currentTenant !== 'restaurant-os' && !isWhitelisted) {
             if (process.env.NODE_ENV === 'test' && !process.env.STRICT_ISOLATION_TEST) {
                 return;
