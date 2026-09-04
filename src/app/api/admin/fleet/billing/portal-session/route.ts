@@ -9,7 +9,7 @@
  */
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import { getStripe } from '@/lib/payments/stripeClient';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const stripe = getStripe(process.env.STRIPE_SECRET_KEY ?? '');
 
   const session = await stripe.billingPortal.sessions.create({
     customer: stripeCustomerId,

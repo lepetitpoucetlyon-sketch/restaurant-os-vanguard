@@ -2,7 +2,7 @@ import { logger } from '@/lib/logger';
 import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
 import { hashPin } from '@/lib/shared-kernel';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import Stripe from 'stripe';
+import { getStripe } from '@/lib/payments/stripeClient';
 import { Resend } from 'resend';
 import { fleetTelemetry } from '@/shared/providers/fleet/FleetTelemetryService';
 import { sovereignCreateWorkspace } from '@/lib/rag/SovereignRAGClient';
@@ -19,7 +19,7 @@ export async function setupStripeCustomer(tenantId: string, request: Provisionin
     const stripeKey = process.env.STRIPE_SECRET_KEY;
     let stripeCustomerId: string;
     if (stripeKey) {
-        const stripe = new Stripe(stripeKey, { apiVersion: '2026-08-26.dahlia' });
+        const stripe = getStripe(stripeKey);
         const customer = await stripe.customers.create({
             email: request.ownerEmail,
             name: request.companyName,

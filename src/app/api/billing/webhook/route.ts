@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getStripe } from '@/lib/payments/stripeClient';
  
 import { BillingService } from '@/modules/finance';
 import { logger } from '@/lib/logger';
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
 
   let event: Stripe.Event;
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', { apiVersion: '2026-08-26.dahlia' });
+    const stripe = getStripe(process.env.STRIPE_SECRET_KEY ?? '');
     event = stripe.webhooks.constructEvent(body, sig, secret);
   } catch (err) {
     logger.warn('[webhook] Signature verification failed', toError(err).message);

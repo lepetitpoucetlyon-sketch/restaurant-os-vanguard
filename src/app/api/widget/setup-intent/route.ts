@@ -1,7 +1,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import Stripe from 'stripe';
+import { getStripe } from '@/lib/payments/stripeClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { TenantConfigSchema } from '@/modules/system';
 import { logger } from '@/lib/logger';
@@ -13,10 +13,10 @@ const QuerySchema = z.object({
   covers: z.coerce.number().int().min(1).max(100).optional().default(1),
 });
 
-function getStripe(): Stripe {
+function getConfiguredStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error('STRIPE_SECRET_KEY not configured');
-  return new Stripe(key, { apiVersion: '2026-08-26.dahlia' });
+  return getStripe(key); // fabrique centralisée (timeout+retries, audit S10)
 }
 
 export async function GET(request: NextRequest) {
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Create Stripe SetupIntent
-    const setupIntent = await getStripe().setupIntents.create({
+    const setupIntent = await getConfiguredStripe().setupIntents.create({
       usage: 'off_session',
       metadata: { tenantId, covers: String(covers) },
     });

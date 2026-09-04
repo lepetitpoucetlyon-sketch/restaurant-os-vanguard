@@ -22,6 +22,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { CryptoService } from '@/lib/CryptoService';
 import { logger } from '@/lib/logger';
 import Stripe from 'stripe';
+import { getStripe } from '@/lib/payments/stripeClient';
 import { toError } from "@/lib/toError";
 
 const MICROUNITS_PER_CENT = 10; // 1 microunit = 0.000001€, 1 cent = 0.01€ = 10 000 µ
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'STRIPE_SECRET_KEY non configuré' }, { status: 503 });
   }
 
-  const stripe     = new Stripe(stripeKey, { apiVersion: '2026-08-26.dahlia' });
+  const stripe     = getStripe(stripeKey);
   const amountCents = Math.round(amountInMicrounits / MICROUNITS_PER_CENT);
   const appUrl     = process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.restaurantos.app';
 
@@ -97,7 +98,7 @@ async function handleStripeWebhook(req: NextRequest): Promise<NextResponse> {
 
   let event: Stripe.Event;
   try {
-    const stripe = new Stripe(stripeKey, { apiVersion: '2026-08-26.dahlia' });
+    const stripe = getStripe(stripeKey);
     event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
   } catch (err) {
     logger.warn(`[Deposit/webhook] Signature invalide: ${toError(err).message}`);

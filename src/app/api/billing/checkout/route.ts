@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import { getStripe } from '@/lib/payments/stripeClient';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { getStripePriceId } from '@/shared/constants/pricing';
 import type { PricingTier } from '@/shared/constants/pricing';
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     const cancelUrl  = body.cancelUrl  ?? `${appUrl}/settings?tab=billing&status=cancelled`;
 
     try {
-        const stripe = new Stripe(secret, { apiVersion: '2026-08-26.dahlia' });
+        const stripe = getStripe(secret);
 
         const session = await stripe.checkout.sessions.create({
             mode: 'subscription',

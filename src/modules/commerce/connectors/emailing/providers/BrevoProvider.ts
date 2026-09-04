@@ -1,5 +1,6 @@
 import type { IEmailMarketingProvider, Campaign, CampaignStats, Contact, AutomationTrigger } from '../types';
 import { logger } from '@/lib/logger';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 const BREVO_BASE = 'https://api.brevo.com/v3';
 
@@ -18,7 +19,7 @@ export class BrevoProvider implements IEmailMarketingProvider {
     }
 
     private async fetch<T>(path: string, options?: RequestInit): Promise<T> {
-        const res = await fetch(`${BREVO_BASE}${path}`, {
+        const res = await fetchWithTimeout(`${BREVO_BASE}${path}`, {
             ...options,
             headers: {
                 'api-key': this.apiKey,

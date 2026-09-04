@@ -1,6 +1,7 @@
 import type { IReviewProvider, Review } from '../types';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 /**
  * Google Business Profile — My Business API v4.
@@ -21,7 +22,7 @@ export class GoogleBusinessProvider implements IReviewProvider {
         if (Date.now() > (stored.expires_at ?? 0)) {
             const clientId     = process.env.GOOGLE_BUSINESS_CLIENT_ID;
             const clientSecret = process.env.GOOGLE_BUSINESS_CLIENT_SECRET;
-            const res = await fetch('https://oauth2.googleapis.com/token', {
+            const res = await fetchWithTimeout('https://oauth2.googleapis.com/token', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({
@@ -49,7 +50,7 @@ export class GoogleBusinessProvider implements IReviewProvider {
             const token   = await this.getAccessToken(tenantId);
             const account = process.env.GOOGLE_BUSINESS_ACCOUNT_ID ?? '';
             const location = process.env.GOOGLE_BUSINESS_LOCATION_ID ?? '';
-            const res = await fetch(
+            const res = await fetchWithTimeout(
                 `https://mybusiness.googleapis.com/v4/accounts/${account}/locations/${location}/reviews`,
                 { headers: { 'Authorization': `Bearer ${token}` } }
             );

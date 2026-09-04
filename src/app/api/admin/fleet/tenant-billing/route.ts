@@ -7,13 +7,11 @@ import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
-import Stripe from 'stripe';
+import { getStripe } from '@/lib/payments/stripeClient';
 import { logger } from '@/lib/logger';
 
-// Initialisation de Stripe (le SDK est présent)
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2026-08-26.dahlia',
-});
+// Initialisation de Stripe (timeout + retries centralisés — audit S10)
+const stripe = getStripe(process.env.STRIPE_SECRET_KEY || '');
 
 interface TenantConfig {
   name?: string;

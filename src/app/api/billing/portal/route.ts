@@ -16,7 +16,7 @@
  */
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import { getStripe } from '@/lib/payments/stripeClient';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const returnUrl = requested && requested.startsWith(appUrl) ? requested : `${appUrl}/settings?tab=billing`;
 
     try {
-        const stripe = new Stripe(secret, { apiVersion: '2026-08-26.dahlia' });
+        const stripe = getStripe(secret);
         const session = await stripe.billingPortal.sessions.create({
             customer: stripeCustomerId,
             return_url: returnUrl,

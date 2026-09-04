@@ -1,7 +1,7 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import Stripe from 'stripe';
+import { getStripe } from '@/lib/payments/stripeClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
@@ -36,10 +36,10 @@ const BodySchema = z.discriminatedUnion('action', [
   ActionChargeSchema,
 ]);
 
-function getStripe(): Stripe {
+function getConfiguredStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error('STRIPE_SECRET_KEY is not configured');
-  return new Stripe(key, { apiVersion: '2026-08-26.dahlia' });
+  return getStripe(key); // fabrique centralisée (timeout+retries, audit S10)
 }
 
 export async function POST(request: NextRequest) {
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ required: false });
       }
 
-      const stripe = getStripe();
+      const stripe = getConfiguredStripe();
       const setupIntent = await stripe.setupIntents.create({
         usage: 'off_session',
         metadata: {
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
       const penaltyEur = (resaConfig?.cardImprintPenaltyAmount as number | undefined) ?? 20;
       const amountInCents = penaltyEur * 100;
 
-      const stripe = getStripe();
+      const stripe = getConfiguredStripe();
       const paymentIntent = await stripe.paymentIntents.create({
         amount: amountInCents,
         currency: 'eur',
