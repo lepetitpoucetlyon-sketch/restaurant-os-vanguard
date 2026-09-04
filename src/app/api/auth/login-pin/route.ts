@@ -7,6 +7,7 @@ import { hashPin } from '@/lib/shared-kernel';
 import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
+import { getRateLimiter } from '@/lib/rate-limiter';
 
 /**
  * POST /api/auth/login-pin
@@ -79,6 +80,15 @@ function toSafeUser(user: RootUserDoc) {
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
+    // Audit S8 : rate-limit IP en défense supplémentaire du lockout par compte
+    // (le lockout ne protège pas contre l'énumération userId cross-comptes depuis
+    // une même IP — un attaquant peut cibler 100 comptes à 4 essais chacun).
+    const ip = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? 'unknown';
+    const rl = await getRateLimiter().check(`auth:login-pin:${ip}`, 20, 15 * 60 * 1000);
+    if (!rl.allowed) {
+        return NextResponse.json({ error: 'Trop de tentatives — réessayez plus tard.' }, { status: 429 });
+    }
+
     let body: { userId?: string; pin?: string };
     try {
         body = (await req.json()) as typeof body;

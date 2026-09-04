@@ -1,6 +1,7 @@
 import 'server-only';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { getRateLimiter } from '@/lib/rate-limiter';
 
 /**
  * GET /api/auth/login-profiles
@@ -41,7 +42,14 @@ function getAccessLevel(user: Pick<RootUserDoc, 'role' | 'accessLevel'>): number
     return user.accessLevel ?? ROLE_LEVELS[user.role] ?? 0;
 }
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(req: NextRequest): Promise<NextResponse> {
+    // Audit S8 : rate-limit IP — l'endpoint est public (pré-auth) et énumère les
+    // profils staff ; on plafonne pour éviter le scraping massif.
+    const ip = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? 'unknown';
+    const rl = await getRateLimiter().check(`auth:login-profiles:${ip}`, 30, 60 * 1000);
+    if (!rl.allowed) {
+        return NextResponse.json({ error: 'Trop de requêtes.' }, { status: 429 });
+    }
     const users = await Nexus.adapter.query<RootUserDoc>('users');
     const safeUsers = users
         .map((u) => ({

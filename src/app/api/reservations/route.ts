@@ -23,6 +23,7 @@ import { z } from 'zod';
 import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 type ReservationStatus = 'pending' | 'confirmed' | 'arrived' | 'completed' | 'cancelled' | 'no_show';
 const VALID_STATUSES: ReservationStatus[] = ['pending', 'confirmed', 'arrived', 'completed', 'cancelled', 'no_show'];
@@ -50,11 +51,19 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const { tenantId } = caller as { tenantId: string };
 
   const date = req.nextUrl.searchParams.get('date');
+  // Audit S7 : pagination cursor-based (utile même quand `date` filtre, pour les gros jours).
+  const pagination = parsePaginationParams(req.url);
 
-  const all = await Nexus.adapter.query(`tenants/${tenantId}/reservations`) as Array<{ date?: string }>;
+  const all = await Nexus.adapter.query(`tenants/${tenantId}/reservations`) as Array<{ id?: string; date?: string }>;
   const filtered = date ? all.filter(r => r.date === date) : all;
+  const page = paginateAfterId(filtered, pagination);
 
-  return NextResponse.json({ reservations: filtered, date: date ?? 'all', total: filtered.length });
+  return NextResponse.json({
+    reservations: page.items,
+    date: date ?? 'all',
+    total: page.total,
+    nextCursor: page.nextCursor,
+  });
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {

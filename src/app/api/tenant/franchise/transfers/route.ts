@@ -10,6 +10,7 @@ import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { FranchiseService } from '@/modules/commerce';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 import type { InterSiteTransfer } from '@/shared/nexus/contracts/franchise.types';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -19,11 +20,18 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const { tenantId } = caller as { tenantId: string };
 
     try {
+        // Audit S7 : pagination cursor-based
+        const pagination = parsePaginationParams(req.url);
         const transfers = await Nexus.adapter.query<InterSiteTransfer>(
             `tenants/${tenantId}/transfers`
         ).catch(() => []);
+        const page = paginateAfterId(transfers as Array<InterSiteTransfer & { id?: string }>, pagination);
 
-        return NextResponse.json({ transfers });
+        return NextResponse.json({
+            transfers: page.items,
+            total: page.total,
+            nextCursor: page.nextCursor,
+        });
     } catch (error) {
         logger.error('[FranchiseAPI] Erreur de récupération des transferts', { error });
         return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
