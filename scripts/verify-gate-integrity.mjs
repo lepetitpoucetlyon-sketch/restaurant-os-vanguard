@@ -16,6 +16,12 @@ import { createHash } from 'node:crypto';
 
 const ROOT = process.cwd();
 const read = (p) => (existsSync(p) ? readFileSync(p, 'utf8') : '');
+const GATE_SCRIPTS = [
+  'scripts/gate-bootstrap-wired.mjs',
+  'scripts/gate-idempotency.mjs',
+  'scripts/gate-event-pairing.mjs',
+];
+const digest = (value) => createHash('sha256').update(value).digest('hex');
 
 function fingerprint() {
   const cfg = read('eslint.config.mjs');
@@ -48,18 +54,30 @@ function fingerprint() {
     verticalScreensUnwired: num(/VERTICAL_SCREENS_UNWIRED_MAX\s*=\s*(\d+)/),
     verticalServicesUnwired: num(/VERTICAL_SERVICES_UNWIRED_MAX\s*=\s*(\d+)/),
   };
+  const gateScripts = Object.fromEntries(
+    GATE_SCRIPTS.map((path) => [path, digest(read(path))]),
+  );
 
-  const hash = createHash('sha256').update(JSON.stringify({ globs, off, ratchets })).digest('hex').slice(0, 16);
-  return { globCount: globs.length, off, ratchets, hash, globs };
+  const hash = createHash('sha256').update(JSON.stringify({ globs, off, ratchets, gateScripts })).digest('hex').slice(0, 16);
+  return { globCount: globs.length, off, ratchets, gateScripts, hash, globs };
 }
 
 const fp = fingerprint();
 const BASE_PATH = 'src/../.gate-baseline.json'.replace('src/../', ''); // = .gate-baseline.json
 
 if (process.argv.includes('--freeze')) {
+  if (existsSync(BASE_PATH)) {
+    const base = JSON.parse(read(BASE_PATH));
+    const errors = integrityErrors(fp, base, { requireGateScripts: false });
+    if (errors.length) {
+      console.error('❌ Refus de refiger une baseline plus permissive :');
+      for (const error of errors) console.error('   • ' + error);
+      process.exit(1);
+    }
+  }
   writeFileSync(BASE_PATH, JSON.stringify({
     _note: "Baseline anti-desserrement (ADR-015 / AGENTS.md). N'AUGMENTE jamais globCount/off ni les ratchets. Re-freeze uniquement en DIMINUANT après avoir corrigé le code.",
-    hash: fp.hash, globCount: fp.globCount, off: fp.off, ratchets: fp.ratchets,
+    hash: fp.hash, globCount: fp.globCount, off: fp.off, ratchets: fp.ratchets, gateScripts: fp.gateScripts,
   }, null, 2) + '\n');
   console.log(`🧊 Baseline figée : hash=${fp.hash} globs=${fp.globCount} off=${fp.off} cycles≤${fp.ratchets.cycles} barrel≤${fp.ratchets.barrel}`);
   process.exit(0);
@@ -69,21 +87,34 @@ if (!existsSync(BASE_PATH)) {
   // Auto-freeze à la première exécution — zéro étape manuelle (tout automatique).
   writeFileSync(BASE_PATH, JSON.stringify({
     _note: "Baseline AUTO-figée. N'augmente jamais globCount/off ni les ratchets. Re-freeze uniquement en DIMINUANT (--freeze) après avoir corrigé le code.",
-    hash: fp.hash, globCount: fp.globCount, off: fp.off, ratchets: fp.ratchets,
+    hash: fp.hash, globCount: fp.globCount, off: fp.off, ratchets: fp.ratchets, gateScripts: fp.gateScripts,
   }, null, 2) + '\n');
   console.log(`🧊 Baseline auto-figée (1re exécution) : globs=${fp.globCount} off=${fp.off} cycles≤${fp.ratchets.cycles} barrel≤${fp.ratchets.barrel}`);
   process.exit(0);
 }
 
 const base = JSON.parse(read(BASE_PATH));
-const errs = [];
-if (fp.globCount > base.globCount) errs.push(`Exemptions eslint élargies : ${fp.globCount} globs > baseline ${base.globCount}. Une gate barrel a été desserrée.`);
-if (fp.off > base.off) errs.push(`Barrel Contract désactivé sur plus de zones : ${fp.off} > ${base.off}.`);
-for (const k of ['cycles', 'barrel', 'interModule', 'bundle',
-                 'orphans', 'unreadSettings', 'missingI18n', 'inertProps', 'nonCanonicalSeal', 'fakeMetrics', 'dsAdoption', 'a11yMuets', 'a11yModales', 'a11yKeyboard', 'verticalStubs', 'verticalScreensUnwired', 'verticalServicesUnwired']) {
-  const cur = fp.ratchets[k], b = base.ratchets?.[k];
-  if (cur != null && b != null && cur > b) errs.push(`Ratchet '${k}' relevé : ${cur} > baseline ${b}.`);
+function integrityErrors(current, baseline, { requireGateScripts = true } = {}) {
+  const errs = [];
+  if (current.globCount > baseline.globCount) errs.push(`Exemptions eslint élargies : ${current.globCount} globs > baseline ${baseline.globCount}. Une gate barrel a été desserrée.`);
+  if (current.off > baseline.off) errs.push(`Barrel Contract désactivé sur plus de zones : ${current.off} > ${baseline.off}.`);
+  for (const k of ['cycles', 'barrel', 'interModule', 'bundle',
+                   'orphans', 'unreadSettings', 'missingI18n', 'inertProps', 'nonCanonicalSeal', 'fakeMetrics', 'dsAdoption', 'a11yMuets', 'a11yModales', 'a11yKeyboard', 'verticalStubs', 'verticalScreensUnwired', 'verticalServicesUnwired']) {
+    const cur = current.ratchets[k], b = baseline.ratchets?.[k];
+    if (cur != null && b != null && cur > b) errs.push(`Ratchet '${k}' relevé : ${cur} > baseline ${b}.`);
+  }
+  if (requireGateScripts && !baseline.gateScripts) {
+    errs.push('Baseline obsolète : les scripts de gate ne sont pas scellés. Exécute --freeze après revue.');
+  } else if (baseline.gateScripts) {
+    for (const path of GATE_SCRIPTS) {
+      if (current.gateScripts[path] !== baseline.gateScripts[path]) {
+        errs.push(`Script de gate modifié : ${path}. Revue explicite et re-freeze requis.`);
+      }
+    }
+  }
+  return errs;
 }
+const errs = integrityErrors(fp, base);
 
 
 if (errs.length) {

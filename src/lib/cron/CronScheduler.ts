@@ -1,86 +1,17 @@
 import { logger } from '@/lib/logger';
-import { ZReportAutoJob } from './ZReportAutoJob';
-import { BirthdayScanJob } from './BirthdayScanJob';
-import { ContractExpiryJob } from './ContractExpiryJob';
-import { DailyDigestJob } from './DailyDigestJob';
-import { PromotionExpiryJob } from './PromotionExpiryJob';
-import { MiseEnPlaceJob } from './MiseEnPlaceJob';
-import { DraftPOEscalationJob } from './DraftPOEscalationJob';
-import { StaffingPlannerJob } from './StaffingPlannerJob';
-import { SaaSBillingJob } from './SaaSBillingJob';
-import { UrssafVigilanceJob } from './UrssafVigilanceJob';
 import { toError } from "@/lib/toError";
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { isCronDueWithin } from './cronMatch';
-
-export interface CronJobDefinition {
-  name: string;
-  schedule: string;
-  runForTenant: (tenantId: string) => Promise<void>;
-}
+import { cronJobs } from './cronJobs';
+export type { CronJobDefinition } from './cronJobs';
 
 /**
  * CronScheduler (P0-2.1)
  * Moteur central d'exécution et d'orchestration des jobs cron pour tous les tenants de la flotte.
  * Intégré au cycle de vie de l'application.
  */
-import { NoShowDetectorJob } from './NoShowDetectorJob';
-import { ReservationReminderJob } from './ReservationReminderJob';
-import { ServerDLQRetryJob } from './ServerDLQRetryJob';
-import { GrandTotalScheduler } from './GrandTotalScheduler';
-import { InvoiceOverdueScannerJob } from './InvoiceOverdueScannerJob';
-
-/** Helper : label de la période précédente au format ISO tronqué (YYYY-MM ou YYYY). */
-function previousPeriodLabel(now: Date, kind: 'monthly' | 'annual'): string {
-  if (kind === 'annual') return String(now.getUTCFullYear() - 1);
-  const prev = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1));
-  return `${prev.getUTCFullYear()}-${String(prev.getUTCMonth() + 1).padStart(2, '0')}`;
-}
-
 export const CronScheduler = {
-  jobs: [
-    ZReportAutoJob,
-    BirthdayScanJob,
-    ContractExpiryJob,
-    DailyDigestJob,
-    PromotionExpiryJob,
-    MiseEnPlaceJob,
-    DraftPOEscalationJob,
-    StaffingPlannerJob,
-    SaaSBillingJob,
-    UrssafVigilanceJob,
-    ServerDLQRetryJob,
-    // audit P2 event-pairing — scan quotidien des factures en retard (émission `invoice.overdue`)
-    InvoiceOverdueScannerJob,
-    // NF525 Art. 88 CGI — grand total mensuel scellé (audit 2026-09, orphelin trouvé par gate-bootstrap-wired)
-    {
-      name: 'GrandTotalMonthlyJob',
-      schedule: GrandTotalScheduler.scheduleMonthly,
-      runForTenant: (tenantId: string) =>
-        GrandTotalScheduler.runForTenant(tenantId, 'monthly', previousPeriodLabel(new Date(), 'monthly')),
-    },
-    // NF525 Art. 88 CGI — grand total annuel scellé
-    {
-      name: 'GrandTotalAnnualJob',
-      schedule: GrandTotalScheduler.scheduleAnnual,
-      runForTenant: (tenantId: string) =>
-        GrandTotalScheduler.runForTenant(tenantId, 'annual', previousPeriodLabel(new Date(), 'annual')),
-    },
-    {
-      name: 'NoShowDetectorJob',
-      schedule: '*/5 * * * *',
-      runForTenant: async (_tenantId: string) => {
-        await NoShowDetectorJob.run();
-      },
-    },
-    {
-      name: 'ReservationReminderJob',
-      schedule: '0 * * * *',
-      runForTenant: async (_tenantId: string) => {
-        await ReservationReminderJob.run();
-      },
-    },
-  ] as CronJobDefinition[],
+  jobs: cronJobs,
 
   activeIntervals: [] as Array<ReturnType<typeof setInterval>>,
 

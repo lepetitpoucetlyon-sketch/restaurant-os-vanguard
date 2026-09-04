@@ -1,6 +1,6 @@
 {
   "_note": "Baseline anti-desserrement (ADR-015 / AGENTS.md). N'AUGMENTE jamais globCount/off ni les ratchets. Re-freeze uniquement en DIMINUANT après avoir corrigé le code.",
-  "hash": "c59a52a3baad0e26",
+  "hash": "8226964b1afe36b6",
   "globCount": 17,
   "off": 2,
   "ratchets": {
@@ -21,5 +21,10 @@
     "verticalStubs": 0,
     "verticalScreensUnwired": 0,
     "verticalServicesUnwired": 0
+  },
+  "gateScripts": {
+    "scripts/gate-bootstrap-wired.mjs": "6eee1e9cdb4e8517fc0ef461574c1fe403c04275c2ff7dc2136ac25a9a2acf49",
+    "scripts/gate-idempotency.mjs": "7601e0fc3953c4e950bb26081abc8da0660ebcf50635706502efafe910c31fae",
+    "scripts/gate-event-pairing.mjs": "5230bd3630c2bbd2a14804214d130da8fd39ac9159a006da40310feb5d906c45"
   }
 }

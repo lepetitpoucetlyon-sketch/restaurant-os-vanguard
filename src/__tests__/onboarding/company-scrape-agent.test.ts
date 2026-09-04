@@ -26,6 +26,12 @@ import {
 } from '@/modules/commerce/acquisition/onboarding/services/CompanyScrapeAgent';
 import { emptyCompanyProfile } from '@/modules/commerce/acquisition/onboarding/schemas/companyProfile';
 
+// Le scrape e2e utilise example.com avec fetch mocké : la résolution DNS doit
+// rester locale au test pour que la suite soit reproductible hors réseau.
+vi.mock('node:dns/promises', () => ({
+    lookup: vi.fn(async () => ({ address: '93.184.216.34', family: 4 })),
+}));
+
 // ── 1. SSRF guard ───────────────────────────────────────────────────────────────
 
 describe('SSRF guard — isPrivateIp', () => {

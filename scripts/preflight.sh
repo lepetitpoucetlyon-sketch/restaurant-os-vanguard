@@ -316,10 +316,20 @@ node scripts/verify-gate-integrity.mjs
 ok "Intégrité des gates : aucune gate desserrée vs baseline"
 
 # ────────────────────────────────────────────────────────────────
+step "🔒 [11/13] Bootstrap métier — services critiques câblés"
+node scripts/gate-bootstrap-wired.mjs
+
+step "🔒 [12/13] Idempotence — mutations métier protégées"
+node scripts/gate-idempotency.mjs
+
+step "🔒 [13/13] Appariement des événements sensibles"
+node scripts/gate-event-pairing.mjs --strict
+
+# ────────────────────────────────────────────────────────────────
 # RÉCAPITULATIF — MÉTRIQUES RÉELLES (jamais hardcodées)
 # Ce bloc affiche les variables capturées pendant l'exécution.
 # Si un chiffre est faux ici, c'est que la capture est cassée, pas qu'on ment.
-step "🔗 [11/11] Dernier kilomètre — ce qui est écrit est-il atteint ?"
+step "🔗 [14/14] Dernier kilomètre — ce qui est écrit est-il atteint ?"
 if node scripts/gate-last-mile.mjs; then
   ok "Dernier kilomètre : aucun compteur en hausse."
 else

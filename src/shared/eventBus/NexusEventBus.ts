@@ -42,6 +42,120 @@ class NexusEventBusClass {
   private callStackDepth = 0;
   private readonly MAX_CALL_STACK_DEPTH = 15;
 
+  private normalizePayload<E extends NexusEventName>(event: E, payload: NexusEventPayload<E>) {
+    const rawPayload = (payload || {}) as Record<string, unknown>;
+    const hasExplicitEventId = Boolean(rawPayload.eventId);
+    const businessId = rawPayload.id || rawPayload.orderId || rawPayload.transactionId || rawPayload.invoiceId || rawPayload.tableId || rawPayload.reservationId;
+    const eventId = String(rawPayload.eventId || (businessId ? `${event}:${businessId}` : crypto.randomUUID()));
+    const effectivePayload: NexusEventPayload<E> = (payload && typeof payload === 'object' && !hasExplicitEventId)
+      ? ({ ...payload, eventId } as unknown as NexusEventPayload<E>)
+      : payload;
+
+    return { eventId, effectivePayload };
+  }
+
+  private async saveOutbox<E extends NexusEventName>(
+    outboxId: string,
+    event: E,
+    payload: NexusEventPayload<E>,
+  ): Promise<boolean> {
+    if (typeof window === 'undefined' || !db?.busOutbox) return false;
+
+    try {
+      const existing = await db.busOutbox.get(outboxId);
+      if (existing?.status === 'done') return true;
+      await db.busOutbox.put({
+        id: outboxId,
+        eventName: event,
+        payload,
+        createdAt: Date.now(),
+        attempts: (existing?.attempts ?? 0) + 1,
+        status: 'pending',
+      });
+    } catch (err) {
+      logger.error(`[EventBus] Failed to write to Outbox for ${event}`, err);
+    }
+
+    return false;
+  }
+
+  private async completeOutbox(outboxId: string, event: NexusEventName): Promise<void> {
+    if (typeof window === 'undefined' || !db?.busOutbox) return;
+    try {
+      await db.busOutbox.update(outboxId, { status: 'done' });
+    } catch (err) {
+      logger.error(`[EventBus] Failed to mark Outbox as done for ${event}`, err);
+    }
+  }
+
+  private async writeDeadLetter<E extends NexusEventName>(
+    event: E,
+    payload: NexusEventPayload<E>,
+    handlerId: string,
+    error: unknown,
+    skipDLQWrite?: boolean,
+    context = '',
+  ): Promise<void> {
+    if (typeof window === 'undefined' || skipDLQWrite) return;
+    await db.deadLetterEvents.put({
+      id: crypto.randomUUID(),
+      eventName: event,
+      payload,
+      handlerId,
+      error: toError(error).message,
+      failedAt: Date.now(),
+      attempts: 1,
+      nextRetryAt: Date.now() + 2000,
+      status: 'retry',
+    }).catch((writeError) => logger.error(`[EventBus] DLQ write failed${context}`, writeError));
+  }
+
+  private async dispatchCritical<E extends NexusEventName>(
+    event: E,
+    payload: NexusEventPayload<E>,
+    handlers: RegisteredHandler<E>[],
+    skipDLQWrite?: boolean,
+  ): Promise<void> {
+    for (const handler of handlers) {
+      try {
+        await handler.handler(payload);
+      } catch (err) {
+        logger.error(`[EventBus][CRITICAL] ${event}#${handler.id} failed`, err);
+        await this.writeDeadLetter(event, payload, handler.id, err, skipDLQWrite);
+        throw err;
+      }
+    }
+  }
+
+  private async dispatchHigh<E extends NexusEventName>(
+    event: E,
+    payload: NexusEventPayload<E>,
+    handlers: RegisteredHandler<E>[],
+    skipDLQWrite?: boolean,
+  ): Promise<void> {
+    const results = await Promise.allSettled(handlers.map((handler) => handler.handler(payload)));
+    await Promise.all(results.map(async (result, index) => {
+      if (result.status !== 'rejected') return;
+      const handler = handlers[index];
+      logger.error(`[EventBus][HIGH] ${event}#${handler.id} failed`, result.reason);
+      await this.writeDeadLetter(event, payload, handler.id, result.reason, skipDLQWrite);
+    }));
+  }
+
+  private dispatchBackground<E extends NexusEventName>(
+    event: E,
+    payload: NexusEventPayload<E>,
+    handlers: RegisteredHandler<E>[],
+    skipDLQWrite?: boolean,
+  ): void {
+    handlers.forEach((handler) => {
+      Promise.resolve().then(() => handler.handler(payload)).catch(async (err) => {
+        logger.warn(`[EventBus][BACKGROUND] ${event}#${handler.id} failed`, err);
+        await this.writeDeadLetter(event, payload, handler.id, err, skipDLQWrite, ' (BACKGROUND)');
+      });
+    });
+  }
+
   /**
    * Souscrit à un événement.
    * priority CRITICAL  → s'exécute en premier, bloquant si nécessaire (idempotent par défaut)
@@ -96,49 +210,16 @@ class NexusEventBusClass {
     event: E,
     payload: NexusEventPayload<E>
   ): Promise<void> {
-    // V3-BUS-05: Normalisation de l'eventId obligatoire (ADR-001) sans mutation destructive
-    const rawPayload = (payload || {}) as Record<string, unknown>;
-    const hasExplicitEventId = Boolean(rawPayload.eventId);
-    const businessId = rawPayload.id || rawPayload.orderId || rawPayload.transactionId || rawPayload.invoiceId || rawPayload.tableId || rawPayload.reservationId;
-    const eventId = String(rawPayload.eventId || (businessId ? (event + ":" + businessId) : crypto.randomUUID()));
-    const effectivePayload: NexusEventPayload<E> = (payload && typeof payload === 'object' && !hasExplicitEventId)
-      ? ({ ...payload, eventId } as unknown as NexusEventPayload<E>)
-      : payload;
+    const { eventId, effectivePayload } = this.normalizePayload(event, payload);
 
     const outboxId = `outbox_${eventId}_${event}`;
-    
-    // 1. Outbox : Vérifier si déjà traité (dedup replay) et persister l'intention d'émettre
-    if (typeof window !== 'undefined' && db?.busOutbox) {
-      try {
-        const existing = await db.busOutbox.get(outboxId);
-        if (existing && existing.status === 'done') {
-          logger.info(`[EventBus] Replay dedup: outbox event ${outboxId} already completed — skipping`);
-          return;
-        }
-        await db.busOutbox.put({
-          id: outboxId,
-          eventName: event,
-          payload: effectivePayload,
-          createdAt: Date.now(),
-          attempts: (existing?.attempts ?? 0) + 1,
-          status: 'pending'
-        });
-      } catch (err) {
-        logger.error(`[EventBus] Failed to write to Outbox for ${event}`, err);
-      }
+    if (await this.saveOutbox(outboxId, event, effectivePayload)) {
+      logger.info(`[EventBus] Replay dedup: outbox event ${outboxId} already completed — skipping`);
+      return;
     }
 
-    // 2. Émettre en RAM
     await this.emit(event, effectivePayload);
-
-    // 3. Outbox : Marquer comme terminé
-    if (typeof window !== 'undefined' && db?.busOutbox) {
-      try {
-        await db.busOutbox.update(outboxId, { status: 'done' });
-      } catch (err) {
-        logger.error(`[EventBus] Failed to mark Outbox as done for ${event}`, err);
-      }
-    }
+    await this.completeOutbox(outboxId, event);
   }
 
   /**
@@ -160,15 +241,8 @@ class NexusEventBusClass {
     payload: NexusEventPayload<E>,
     options?: { skipDLQWrite?: boolean }
   ): Promise<void> {
-    const rawPayload = (payload || {}) as Record<string, unknown>;
-    const hasExplicitEventId = Boolean(rawPayload.eventId);
-    // Audit archi 2026-09 (Étape B) : dériver l'eventId de l'id MÉTIER (aligné sur emitDurable)
-    // plutôt qu'un UUID aléatoire — sinon la déduplication par id métier (orderId…) est défaite.
-    const businessId = rawPayload.id || rawPayload.orderId || rawPayload.transactionId || rawPayload.invoiceId || rawPayload.tableId || rawPayload.reservationId;
-    const eventId = String(rawPayload.eventId || (businessId ? (event + ":" + businessId) : crypto.randomUUID()));
-    const effectivePayload: NexusEventPayload<E> = (payload && typeof payload === 'object' && !hasExplicitEventId)
-      ? ({ ...payload, eventId } as unknown as NexusEventPayload<E>)
-      : payload;
+    // Dérive l'eventId de l'id métier : un replay conserve la même identité.
+    const { eventId, effectivePayload } = this.normalizePayload(event, payload);
 
     // V3-BUS-04: inFlight qualifié par emissionId pour débloquer le parallélisme multi-caisse
     const emissionKey = `${event}:${eventId}`;
@@ -188,81 +262,16 @@ class NexusEventBusClass {
     this.inFlight.add(emissionKey);
     this.callStackDepth++;
 
-    const critical    = all.filter(h => h.priority === 'CRITICAL');
-    const high        = all.filter(h => h.priority === 'HIGH');
-    const background  = all.filter(h => h.priority === 'BACKGROUND');
+    const critical = all.filter((handler) => handler.priority === 'CRITICAL');
+    const high = all.filter((handler) => handler.priority === 'HIGH');
+    const background = all.filter((handler) => handler.priority === 'BACKGROUND');
 
     const start = performance.now();
 
     try {
-      // 1 — CRITICAL : séquentiel, bloquant
-      for (const h of critical) {
-        try {
-          await h.handler(effectivePayload);
-        } catch (err) {
-          logger.error(`[EventBus][CRITICAL] ${event}#${h.id} failed`, err);
-          if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
-            await db.deadLetterEvents.put({
-              id: crypto.randomUUID(),
-              eventName: event,
-              payload: effectivePayload,
-              handlerId: h.id,
-              error: toError(err).message,
-              failedAt: Date.now(),
-              attempts: 1,
-              nextRetryAt: Date.now() + 2000,
-              status: 'retry'
-            }).catch(e => logger.error('[EventBus] DLQ write failed', e));
-          }
-          throw err; // remonte — critique = non négociable
-        }
-      }
-
-      // 2 — HIGH : parallèle, on attend la résolution
-      if (high.length > 0) {
-        const results = await Promise.allSettled(
-          high.map(h => h.handler(effectivePayload))
-        );
-        await Promise.all(results.map(async (r, i) => {
-          if (r.status === 'rejected') {
-            const h = high[i];
-            logger.error(`[EventBus][HIGH] ${event}#${h.id} failed`, r.reason);
-            if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
-              await db.deadLetterEvents.put({
-                id: crypto.randomUUID(),
-                eventName: event,
-                payload: effectivePayload,
-                handlerId: h.id,
-                error: toError(r.reason).message,
-                failedAt: Date.now(),
-                attempts: 1,
-                nextRetryAt: Date.now() + 2000,
-                status: 'retry'
-              }).catch(e => logger.error('[EventBus] DLQ write failed', e));
-            }
-          }
-        }));
-      }
-
-      // 3 — BACKGROUND : fire-and-forget AVEC écriture DLQ en cas d'échec
-      background.forEach(h => {
-        Promise.resolve().then(() => h.handler(effectivePayload)).catch(async (err) => {
-          logger.warn(`[EventBus][BACKGROUND] ${event}#${h.id} failed`, err);
-          if (typeof window !== 'undefined' && !options?.skipDLQWrite) {
-            await db.deadLetterEvents.put({
-              id: crypto.randomUUID(),
-              eventName: event,
-              payload: effectivePayload,
-              handlerId: h.id,
-              error: toError(err).message,
-              failedAt: Date.now(),
-              attempts: 1,
-              nextRetryAt: Date.now() + 2000,
-              status: 'retry'
-            }).catch(e => logger.error('[EventBus] DLQ write failed (BACKGROUND)', e));
-          }
-        });
-      });
+      await this.dispatchCritical(event, effectivePayload, critical, options?.skipDLQWrite);
+      await this.dispatchHigh(event, effectivePayload, high, options?.skipDLQWrite);
+      this.dispatchBackground(event, effectivePayload, background, options?.skipDLQWrite);
 
       const ms = (performance.now() - start).toFixed(1);
       // Audit S9 : propager un correlationId dans les logs pour tracer les cascades
