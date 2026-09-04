@@ -5,6 +5,7 @@ import type { Customer } from '@nexus/contracts';
 import { TrendingUp, Clock, Repeat, Banknote, Crown, AlertTriangle, Moon, Star, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/ui.foundations';
 
+import { useLanguage } from "@/shared/hooks";
 // ── RFM helpers ────────────────────────────────────────────────────────────────
 
 function daysSince(dateStr?: string): number {
@@ -72,6 +73,7 @@ interface Props {
 }
 
 export function RFMSegmentation({ customers }: Props) {
+    const { t } = useLanguage();
     const rows = useMemo<RFMRow[]>(() => {
         if (!customers.length) return [];
 
@@ -112,7 +114,7 @@ export function RFMSegmentation({ customers }: Props) {
         return (
             <div className="flex flex-col items-center justify-center py-20 text-text-muted gap-3">
                 <TrendingUp className="w-10 h-10 opacity-30" />
-                <p className="text-sm">Aucun client à segmenter</p>
+                <p className="text-sm">{t('commerce.crm.noCustomerToSegment')}</p>
             </div>
         );
     }
@@ -164,7 +166,7 @@ export function RFMSegmentation({ customers }: Props) {
                                     <tr className="bg-surface-glass text-text-muted border-b border-border">
                                         <th className="px-4 py-2 text-left font-medium">Client</th>
                                         <th className="px-3 py-2 text-center font-medium">
-                                            <span className="flex items-center justify-center gap-1"><Clock className="w-3 h-3" /> Récence</span>
+                                            <span className="flex items-center justify-center gap-1"><Clock className="w-3 h-3" />{t('commerce.crm.recency')}</span>
                                         </th>
                                         <th className="px-3 py-2 text-center font-medium">
                                             <span className="flex items-center justify-center gap-1"><Repeat className="w-3 h-3" /> Visites</span>

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { authedFetch } from '@/lib/client/authedFetch';
 import { Button } from "@/shared/components/ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 interface OnboardingHelpButtonProps {
   currentStep?: string;
   category?: string;
@@ -10,6 +11,7 @@ interface OnboardingHelpButtonProps {
 }
 
 export function OnboardingHelpButton({ currentStep, category, errorContext }: OnboardingHelpButtonProps) {
+    const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
@@ -73,13 +75,13 @@ export function OnboardingHelpButton({ currentStep, category, errorContext }: On
             {sent ? (
               <div className="text-center py-6">
                 <div className="text-4xl mb-2">✅</div>
-                <p className="font-medium text-emerald-700">Message envoyé !</p>
-                <p className="text-sm text-gray-500 mt-1">Notre équipe vous répond sous 2h en moyenne.</p>
+                <p className="font-medium text-emerald-700">{t('commerce.onboarding.messageSent')}</p>
+                <p className="text-sm text-gray-500 mt-1">{t('commerce.onboarding.replyWithin2h')}</p>
               </div>
             ) : (
               <>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700">
-                  <strong>Décrivez votre blocage</strong> et notre équipe support vous aidera à importer vos données.
+                  <strong>{t('commerce.onboarding.describeIssue')}</strong> et notre équipe support vous aidera à importer vos données.
                   {currentStep && <span className="block mt-1 text-blue-500">Étape : {currentStep}{category ? ` · ${category}` : ''}</span>}
                 </div>
 

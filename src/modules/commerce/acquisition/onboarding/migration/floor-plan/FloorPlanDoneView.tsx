@@ -2,6 +2,7 @@
 
 import { Check } from 'lucide-react';
 
+import { useLanguage } from "@/shared/hooks";
 interface FloorPlanDoneViewProps {
   tablesCount: number;
   zonesCount: number;
@@ -13,12 +14,13 @@ export function FloorPlanDoneView({
   zonesCount,
   onReset,
 }: FloorPlanDoneViewProps) {
+    const { t } = useLanguage();
   return (
     <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
       <div className="w-16 h-16 rounded-full bg-status-success/15 flex items-center justify-center">
         <Check className="w-8 h-8 text-status-success" />
       </div>
-      <h2 className="text-xl font-semibold text-text-primary">Plan de salle enregistré</h2>
+      <h2 className="text-xl font-semibold text-text-primary">{t('commerce.floorPlan.saved')}</h2>
       <p className="text-sm text-text-muted max-w-sm">
         {tablesCount} table(s) créées dans {zonesCount} zone(s).
         Elles sont maintenant disponibles dans le module Réservations et le POS.

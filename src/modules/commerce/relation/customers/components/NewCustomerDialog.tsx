@@ -10,6 +10,7 @@ import { Button } from "@ui/Button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from "@ui/Modal";
 
+import { useLanguage } from "@/shared/hooks";
 interface NewCustomerDialogProps {
     isOpen: boolean;
     onClose: () => void;
@@ -17,6 +18,7 @@ interface NewCustomerDialogProps {
 }
 
 export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialogProps) {
+    const { t } = useLanguage();
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -111,7 +113,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                                     <Sparkles className="w-5 h-5 text-accent animate-pulse" />
                                 </h2>
                                 <div className="flex items-center gap-4 mt-1">
-                                    <span className="text-text-muted text-nano font-black uppercase tracking-[0.3em]">Enregistrement Customer Certifié</span>
+                                    <span className="text-text-muted text-nano font-black uppercase tracking-[0.3em]">{t('commerce.customers.certifiedRegistration')}</span>
                                     <div className="h-1 w-1 rounded-full bg-surface-card/10" />
                                     <div className="flex items-center gap-2">
                                         <ShieldCheck className="w-3 h-3 text-accent" />
@@ -140,12 +142,12 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                         <motion.div variants={itemVariants} className="space-y-8">
                             <div className="flex items-center gap-4 border-b border-border pb-6">
                                 <Gem className="w-5 h-5 text-accent" />
-                                <h3 className="text-micro font-black uppercase tracking-[0.3em] text-text-primary">État Civil & Contact</h3>
+                                <h3 className="text-micro font-black uppercase tracking-[0.3em] text-text-primary">{t('commerce.customers.identityAndContact')}</h3>
                             </div>
 
                             <div className="grid grid-cols-2 gap-10">
                                 <div className="space-y-4">
-                                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4">Prénom du client</label>
+                                    <label className="text-nano font-black text-text-muted uppercase tracking-[0.2em] px-4">{t('commerce.customers.firstName')}</label>
                                     <input
                                         required
                                         value={formData.firstName}
@@ -199,7 +201,7 @@ export function NewCustomerDialog({ isOpen, onClose, onSave }: NewCustomerDialog
                         <motion.div variants={itemVariants} className="space-y-8">
                             <div className="flex items-center gap-4 border-b border-border pb-6">
                                 <Heart className="w-5 h-5 text-accent" />
-                                <h3 className="text-micro font-black uppercase tracking-[0.3em] text-text-primary">Préférences & Régimes</h3>
+                                <h3 className="text-micro font-black uppercase tracking-[0.3em] text-text-primary">{t('commerce.customers.preferencesAndDiets')}</h3>
                             </div>
 
                             {[

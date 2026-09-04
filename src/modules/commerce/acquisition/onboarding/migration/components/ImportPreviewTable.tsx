@@ -4,6 +4,7 @@ import { AlertTriangle, XCircle, Info } from 'lucide-react';
 import type { ImportCategory, ImportWarning } from '../types';
 import { Button } from "@/shared/components/ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 export function WarningBadge({ w }: { w: ImportWarning }) {
   const map = {
     error:   { cls: 'bg-destructive/10 text-destructive border-destructive/30', Icon: XCircle },
@@ -38,6 +39,7 @@ export function ImportPreviewTable({
   onImport,
   onBack,
 }: ImportPreviewTableProps) {
+  const { t } = useLanguage();
   const preview = rows.slice(0, 10);
   const allWarnings = [...extraWarnings, ...warnings.slice(0, 5)];
   const hasErrors = allWarnings.some(w => w.severity === 'error');
@@ -47,7 +49,7 @@ export function ImportPreviewTable({
       <div className="flex items-center justify-between text-sm">
         <span className="text-muted-foreground">
           <span className="font-semibold text-foreground">{rows.length}</span> lignes détectées
-          {rows.length > 10 && <span className="text-muted-foreground"> — aperçu des 10 premières</span>}
+          {rows.length > 10 && <span className="text-muted-foreground">{t('commerce.onboarding.first10Preview')}</span>}
         </span>
         <span className="text-muted-foreground">{headers.length} colonnes</span>
       </div>

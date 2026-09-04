@@ -5,12 +5,14 @@ import { ConnectorRegistry } from '../migration/connectors';
 import { ExportGuidePanel } from '../guides';
 import { Button } from "@/shared/components/ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 interface ConnectorOAuthPanelProps {
   connectorId: ConnectorId;
   onConnected: (credentials: ConnectorCredentials, accountInfo?: Record<string, unknown>) => void;
 }
 
 export function ConnectorOAuthPanel({ connectorId, onConnected }: ConnectorOAuthPanelProps) {
+    const { t } = useLanguage();
   const meta = ConnectorRegistry.get(connectorId).meta;
   const [creds, setCreds] = useState<ConnectorCredentials>({});
   const [testing, setTesting] = useState(false);
@@ -62,7 +64,7 @@ export function ConnectorOAuthPanel({ connectorId, onConnected }: ConnectorOAuth
       <div className="space-y-3">
         {meta.authMethod === 'api_key' && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Clé API</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('commerce.onboarding.apiKey')}</label>
             <input
               type="password"
               placeholder="sk-..."

@@ -3,6 +3,7 @@
 import { Download } from 'lucide-react';
 import { downloadCSVTemplate, type CSVTemplateKey } from './csvTemplates';
 
+import { useLanguage } from "@/shared/hooks";
 interface TemplateInfo {
   key: CSVTemplateKey;
   label: string;
@@ -50,6 +51,7 @@ const TEMPLATES: TemplateInfo[] = [
 ];
 
 export default function CSVTemplateDownloads() {
+    const { t } = useLanguage();
   return (
     <div className="space-y-6">
       <header>
@@ -101,9 +103,9 @@ export default function CSVTemplateDownloads() {
         <p className="font-medium text-text-primary">Conseils d'utilisation</p>
         <ul className="list-disc list-inside space-y-0.5">
           <li>Ouvrez le fichier CSV dans Excel ou Google Sheets.</li>
-          <li>Remplacez les lignes d'exemple par vos données réelles (conservez les en-têtes).</li>
+          <li>{t('commerce.onboarding.replaceSampleRows')}</li>
           <li>Enregistrez en CSV UTF-8 avant de l'importer.</li>
-          <li>Les colonnes non reconnues sont ignorées sans erreur.</li>
+          <li>{t('commerce.onboarding.unknownColumnsIgnored')}</li>
         </ul>
       </div>
     </div>

@@ -16,6 +16,7 @@ import { cn } from "@/lib/ui.foundations";
 import { CashDrawerSession, microunitsToEuros, eurosToMicrounits, parseEuros } from './cashDrawerTypes';
 import { toast } from "sonner";
 
+import { useLanguage } from "@/shared/hooks";
 interface CashDrawerCloseSectionProps {
   session: CashDrawerSession;
   collectedInMicrounits: number;
@@ -35,6 +36,7 @@ export function CashDrawerCloseSection({
   onChangeActualInput,
   onCloseSession,
 }: CashDrawerCloseSectionProps) {
+    const { t } = useLanguage();
   const theoreticalMu = session.openingInMicrounits + collectedInMicrounits - changeGivenInMicrounits;
   const actualMu = eurosToMicrounits(parseEuros(actualInput));
   const diffMu = actualInput.trim() ? actualMu - theoreticalMu : null;
@@ -78,7 +80,7 @@ export function CashDrawerCloseSection({
         </div>
         <div className="h-px bg-border/50" />
         <div className="flex items-center justify-between text-[12px]">
-          <span className="font-black text-text-primary uppercase tracking-wider">Fond théorique</span>
+          <span className="font-black text-text-primary uppercase tracking-wider">{t('commerce.pos.theoreticalFloat')}</span>
           <span className="font-mono font-black text-accent-gold">
             {microunitsToEuros(theoreticalMu)} €
           </span>
@@ -123,7 +125,7 @@ export function CashDrawerCloseSection({
             ) : (
               <AlertCircle className="w-4 h-4" />
             )}
-            <span className="uppercase tracking-widest">Écart</span>
+            <span className="uppercase tracking-widest">{t('commerce.pos.variance')}</span>
           </div>
           <span className="font-mono text-base">
             {diffMu >= 0 ? "+" : ""}{(diffMu / 1_000_000).toFixed(2)} €

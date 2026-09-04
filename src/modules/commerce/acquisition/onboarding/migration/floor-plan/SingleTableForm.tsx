@@ -5,12 +5,14 @@ import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { nextKey, type TableShape, type WizardTable } from './BatchTableForm';
 
+import { useLanguage } from "@/shared/hooks";
 interface SingleTableFormProps {
   zone: string;
   onAdd: (table: WizardTable) => void;
 }
 
 export function SingleTableForm({ zone, onAdd }: SingleTableFormProps) {
+    const { t } = useLanguage();
   const [number, setNumber] = useState('');
   const [seats, setSeats] = useState(4);
   const [shape, setShape] = useState<TableShape>('rect');
@@ -26,7 +28,7 @@ export function SingleTableForm({ zone, onAdd }: SingleTableFormProps) {
     <div className="flex flex-wrap items-end gap-2 rounded-lg border border-border bg-bg-tertiary p-3">
       <p className="w-full text-xs font-semibold uppercase tracking-widest text-text-muted mb-0">Ajout manuel — {zone}</p>
       <label className="space-y-1 flex-1 min-w-[80px]">
-        <span className="text-xs text-text-muted">Numéro</span>
+        <span className="text-xs text-text-muted">{t('commerce.floorPlan.number')}</span>
         <input
           type="text"
           placeholder="ex: 12A"
@@ -36,7 +38,7 @@ export function SingleTableForm({ zone, onAdd }: SingleTableFormProps) {
         />
       </label>
       <label className="space-y-1 flex-1 min-w-[80px]">
-        <span className="text-xs text-text-muted">Capacité</span>
+        <span className="text-xs text-text-muted">{t('commerce.floorPlan.capacity')}</span>
         <input
           type="number"
           min={1}

@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Users, X, Filter, TrendingUp, Clock, ShoppingBag } from "lucide-react";
 import { Button } from "@ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 interface NewSegmentModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -19,6 +20,7 @@ const CRITERIA_OPTIONS = [
 ];
 
 export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProps) {
+    const { t } = useLanguage();
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [criteria, setCriteria] = useState<Record<string, string>>({});
@@ -122,7 +124,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
 
                             {/* Criteria */}
                             <div>
-                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-4 block">Critères de filtrage</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1 mb-4 block">{t('commerce.marketing.filterCriteria')}</label>
                                 <div className="space-y-6">
                                     {CRITERIA_OPTIONS.map((criterion) => (
                                         <div key={criterion.id}>
@@ -159,7 +161,7 @@ export function NewSegmentModal({ isOpen, onClose, onSave }: NewSegmentModalProp
                                 >
                                     <div className="flex items-center gap-3">
                                         <Users className="w-5 h-5 text-status-success" />
-                                        <span className="text-xs font-black uppercase tracking-widest text-text-primary">Audience estimée</span>
+                                        <span className="text-xs font-black uppercase tracking-widest text-text-primary">{t('commerce.marketing.estimatedAudience')}</span>
                                     </div>
                                     <span className="text-3xl font-serif font-bold text-status-success">~{estimatedSize}</span>
                                 </motion.div>

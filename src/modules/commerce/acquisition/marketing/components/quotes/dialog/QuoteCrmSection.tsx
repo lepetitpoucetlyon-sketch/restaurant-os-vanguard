@@ -3,6 +3,7 @@
 import { Building2, User } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 
+import { useLanguage } from "@/shared/hooks";
 interface QuoteCrmSectionProps {
     crmType: 'individual' | 'company';
     setCRMType: (type: 'individual' | 'company') => void;
@@ -24,6 +25,7 @@ export function QuoteCrmSection({
     subject,
     setSubject,
 }: QuoteCrmSectionProps) {
+    const { t } = useLanguage();
     return (
         <section className="space-y-8">
             <div className="flex items-center gap-4 px-2">
@@ -36,7 +38,7 @@ export function QuoteCrmSection({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 {/* Type Toggle */}
                 <div className="space-y-4">
-                    <label className="text-nano font-black text-text-muted uppercase tracking-widest block ml-2">Type d'entité</label>
+                    <label className="text-nano font-black text-text-muted uppercase tracking-widest block ml-2">{t('commerce.quotes.entityType')}</label>
                     <div className="flex p-1.5 bg-bg-secondary rounded-[24px] border border-border shadow-inner">
                         <button
                             onClick={() => setCRMType('company')}
@@ -63,7 +65,7 @@ export function QuoteCrmSection({
 
                 {/* Name Input */}
                 <div className="space-y-4">
-                    <label className="text-nano font-black text-text-muted uppercase tracking-widest block ml-2">Dénomination</label>
+                    <label className="text-nano font-black text-text-muted uppercase tracking-widest block ml-2">{t('commerce.quotes.denomination')}</label>
                     <input
                         type="text"
                         value={crmName}

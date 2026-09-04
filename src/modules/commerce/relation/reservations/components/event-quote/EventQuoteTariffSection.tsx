@@ -4,6 +4,7 @@ import React from "react";
 import { Coins } from "lucide-react";
 import { Input } from "@/shared/components/ui/Input";
 
+import { useLanguage } from "@/shared/hooks";
 interface EventQuoteTariffSectionProps {
   montantHT: number;
   acompte30: number;
@@ -30,6 +31,7 @@ export function EventQuoteTariffSection({
   onChange,
   inputClass,
 }: EventQuoteTariffSectionProps) {
+    const { t } = useLanguage();
   return (
     <section className="space-y-4">
       <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em] border-b border-border pb-2 flex items-center gap-2">
@@ -50,7 +52,7 @@ export function EventQuoteTariffSection({
         <Field label="Acompte 30 % (€)">
           <div className="h-12 bg-bg-secondary border border-border rounded-2xl px-4 flex items-center justify-between font-mono font-bold text-accent">
             <span>{acompte30.toLocaleString("fr-FR", { minimumFractionDigits: 2 })} €</span>
-            <span className="text-nano text-text-muted font-sans font-normal">Exigé</span>
+            <span className="text-nano text-text-muted font-sans font-normal">{t('commerce.reservations.required')}</span>
           </div>
         </Field>
         <Field label="Total TTC estimé (TVA 20%)">

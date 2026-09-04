@@ -6,6 +6,7 @@ import { Fingerprint, Users, Euro, CreditCard, Clock } from 'lucide-react';
 import { useSettings } from '@/shared/contexts/SettingsContext';
 import { cn } from '@/lib/ui.foundations';
 
+import { useLanguage } from "@/shared/hooks";
 type Config = ReturnType<typeof useSettings>['settings']['reservationConfig'];
 
 interface Props {
@@ -26,6 +27,7 @@ const IMPRINT_CONDITIONS = [
 ] as const;
 
 export function ReservationCardImprintSection({ config, setConfig }: Props) {
+    const { t } = useLanguage();
   const groupMin   = config.cardImprintGroupMin  ?? 5;
   const amountMin  = config.cardImprintAmountMin ?? 100;
   const penalty    = config.cardImprintPenaltyAmount ?? 20;
@@ -40,7 +42,7 @@ export function ReservationCardImprintSection({ config, setConfig }: Props) {
           <Fingerprint className="w-6 h-6" />
         </motion.div>
         <div>
-          <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">Garantie Réservation</h3>
+          <h3 className="text-2xl font-serif text-text-primary uppercase tracking-tight italic">{t('commerce.reservations.guarantee')}</h3>
           <p className="text-nano font-bold text-text-muted uppercase tracking-widest">Empreinte Bancaire — Stripe Setup Intent</p>
         </div>
       </div>
@@ -56,7 +58,7 @@ export function ReservationCardImprintSection({ config, setConfig }: Props) {
             </motion.div>
             <div>
               <p className="font-serif text-text-primary uppercase tracking-tight italic">Activer l&apos;empreinte bancaire</p>
-              <p className="text-nano font-bold text-text-muted uppercase tracking-widest mt-1">La carte est enregistrée mais jamais débitée si le client vient</p>
+              <p className="text-nano font-bold text-text-muted uppercase tracking-widest mt-1">{t('commerce.reservations.cardStoredNotCharged')}</p>
             </div>
           </div>
           <button
@@ -141,7 +143,7 @@ export function ReservationCardImprintSection({ config, setConfig }: Props) {
                 <div className="flex items-start gap-3 p-5 bg-bg-secondary rounded-2xl border border-border">
                   <Fingerprint className="w-4 h-4 text-status-success mt-0.5 flex-shrink-0" />
                   <p className="text-nano font-bold text-text-muted uppercase tracking-widest leading-relaxed">
-                    La carte n&apos;est <span className="text-status-success">jamais débitée</span> si le client vient.
+                    La carte n&apos;est <span className="text-status-success">{t('commerce.reservations.neverCharged')}</span> si le client vient.
                     En cas de no-show, <span className="text-text-primary">{penalty} €</span> sont prélevés automatiquement le lendemain.
                     Annulation gratuite jusqu&apos;à <span className="text-text-primary">{cancelHrs}h</span> avant.
                   </p>

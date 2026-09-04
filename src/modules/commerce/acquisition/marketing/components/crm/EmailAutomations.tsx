@@ -16,6 +16,7 @@ import {
 import { cn } from '@/lib/ui.foundations';
 import { authedFetch } from '@/lib/client/authedFetch';
 
+import { useLanguage } from "@/shared/hooks";
 // ── Types ───────────────────────────────────────────────────────────────────
 
 interface AutomationConfig {
@@ -57,6 +58,7 @@ const AUTOMATION_META: Record<AutomationKey, { icon: React.ElementType; label: s
 // ── Component ────────────────────────────────────────────────────────────────
 
 export function EmailAutomations() {
+    const { t } = useLanguage();
     const [configs, setConfigs] = useState<Record<AutomationKey, AutomationConfig>>(DEFAULTS);
     const [expanded, setExpanded] = useState<AutomationKey | null>(null);
     const [running, setRunning] = useState<AutomationKey | null>(null);
@@ -88,7 +90,7 @@ export function EmailAutomations() {
                 <Zap className="w-5 h-5 text-action-primary" />
                 <div>
                     <h2 className="text-lg font-bold text-text-primary">Automations Email</h2>
-                    <p className="text-xs text-text-muted mt-0.5">Scénarios déclenchés automatiquement selon les événements client</p>
+                    <p className="text-xs text-text-muted mt-0.5">{t('commerce.crm.emailAutomationsDesc')}</p>
                 </div>
             </div>
 

@@ -6,6 +6,7 @@ import { Palette, RefreshCcw, Check, Loader2 } from 'lucide-react';
 import { Button } from '@ui/Button';
 import { ExtractedTokens, deriveSwatches, textOn } from './prospectingConstants';
 
+import { useLanguage } from "@/shared/hooks";
 interface ProspectingTokensPreviewProps {
   tokens: ExtractedTokens;
   isSaving: boolean;
@@ -21,6 +22,7 @@ export function ProspectingTokensPreview({
   onReset,
   onApply,
 }: ProspectingTokensPreviewProps) {
+    const { t } = useLanguage();
   const swatches = deriveSwatches(tokens);
 
   return (
@@ -91,7 +93,7 @@ export function ProspectingTokensPreview({
       {/* Swatches palette */}
       {swatches.length > 0 && (
         <div className="px-8 py-6 space-y-3">
-          <p className="text-xs font-black uppercase tracking-widest text-text-muted">Palette complète</p>
+          <p className="text-xs font-black uppercase tracking-widest text-text-muted">{t('commerce.crm.fullPalette')}</p>
           <div className="flex flex-wrap gap-4">
             {swatches.map(s => (
               <div key={s.label} className="flex flex-col items-center gap-2">
@@ -131,7 +133,7 @@ export function ProspectingTokensPreview({
       {/* Mini UI preview */}
       {tokens.primaryColor && (
         <div className="px-8 pb-8 border-t border-border/30 pt-5 space-y-3">
-          <p className="text-xs font-black uppercase tracking-widest text-text-muted">Aperçu interface</p>
+          <p className="text-xs font-black uppercase tracking-widest text-text-muted">{t('commerce.crm.uiPreview')}</p>
           <div
             className="rounded-2xl p-5 space-y-3"
             style={{ backgroundColor: tokens.surfaceBg ?? '#0A0A0A' }}

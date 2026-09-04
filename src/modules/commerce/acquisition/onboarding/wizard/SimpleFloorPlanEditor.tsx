@@ -2,6 +2,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { Button } from "@/shared/components/ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 export interface SimpleTable {
   id: string;
   x: number;
@@ -68,6 +69,7 @@ const TEMPLATES = [
 const ZONE_COLORS = ['#EFF6FF', '#F0FDF4', '#FEF3C7', '#FDF4FF', '#FFF1F2'];
 
 export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
+    const { t } = useLanguage();
   const [tables, setTables] = useState<SimpleTable[]>([]);
   const [zones, setZones] = useState<SimpleZone[]>([{ id: 'z1', name: 'Salle', color: '#EFF6FF' }]);
   const [dragging, setDragging] = useState<{ id: string; offsetX: number; offsetY: number } | null>(null);
@@ -127,7 +129,7 @@ export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
     <div className="space-y-4">
       {!templateApplied && (
         <div>
-          <p className="text-sm text-gray-600 mb-3">Choisissez un template de départ ou créez votre plan de zéro :</p>
+          <p className="text-sm text-gray-600 mb-3">{t('commerce.floorPlan.chooseTemplateOrScratch')}</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {TEMPLATES.map((tpl, i) => (
               <Button variant="ghost"
@@ -145,8 +147,8 @@ export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
               className="p-3 border-2 border-dashed border-gray-300 rounded-xl text-left hover:border-indigo-300 transition-all"
             >
               <div className="text-lg mb-1">✏️</div>
-              <div className="text-xs font-medium text-gray-700">Plan personnalisé</div>
-              <div className="text-xs text-gray-400">Partir de zéro</div>
+              <div className="text-xs font-medium text-gray-700">{t('commerce.floorPlan.customPlan')}</div>
+              <div className="text-xs text-gray-400">{t('commerce.floorPlan.fromScratch')}</div>
             </Button>
           </div>
         </div>
@@ -250,7 +252,7 @@ export function SimpleFloorPlanEditor({ onSave }: SimpleFloorPlanEditorProps) {
           {/* Inspector */}
           {selectedTable && (
             <div className="flex items-center gap-4 bg-indigo-50 border border-indigo-200 rounded-xl p-3 text-sm">
-              <span className="font-medium text-indigo-800">Table sélectionnée :</span>
+              <span className="font-medium text-indigo-800">{t('commerce.floorPlan.selectedTable')}</span>
               <label className="flex items-center gap-1.5">
                 <span className="text-xs text-gray-600">Label</span>
                 <input

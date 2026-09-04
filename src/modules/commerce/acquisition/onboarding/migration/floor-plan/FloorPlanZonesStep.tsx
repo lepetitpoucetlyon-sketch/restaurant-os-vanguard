@@ -3,6 +3,7 @@
 import { ChevronRight } from 'lucide-react';
 import { Button } from "@/shared/components/ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 export const AVAILABLE_ZONES = ['Salle', 'Terrasse', 'Bar', 'Salon privé'] as const;
 export type ZoneName = (typeof AVAILABLE_ZONES)[number];
 
@@ -17,9 +18,10 @@ export function FloorPlanZonesStep({
   toggleZone,
   onNext,
 }: FloorPlanZonesStepProps) {
+    const { t } = useLanguage();
   return (
     <div className="space-y-4">
-      <p className="text-sm text-text-muted">Sélectionnez les zones que possède votre établissement :</p>
+      <p className="text-sm text-text-muted">{t('commerce.floorPlan.selectZones')}</p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {AVAILABLE_ZONES.map(zone => {
           const selected = selectedZones.includes(zone);
@@ -40,7 +42,7 @@ export function FloorPlanZonesStep({
         })}
       </div>
       {selectedZones.length === 0 && (
-        <p className="text-sm text-yellow-600 dark:text-yellow-400">Sélectionnez au moins une zone.</p>
+        <p className="text-sm text-yellow-600 dark:text-yellow-400">{t('commerce.floorPlan.selectAtLeastOneZone')}</p>
       )}
       <div className="flex justify-end pt-2">
         <Button variant="ghost"

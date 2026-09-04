@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 
+import { useLanguage } from "@/shared/hooks";
 interface QuoteTotals {
     totalHTInMicrounits: number;
     totalVATInMicrounits: number;
@@ -23,6 +24,7 @@ export function QuoteFooterBar({
     onClose,
     onSave,
 }: QuoteFooterBarProps) {
+    const { t } = useLanguage();
     return (
         <div className="p-8 px-12 bg-bg-secondary border-t border-border flex items-center justify-between relative z-10 shrink-0 shadow-[0_-10px_30px_-10px_rgba(0,0,0,0.1)]">
             <div className="flex items-center gap-16">
@@ -64,12 +66,12 @@ export function QuoteFooterBar({
                     {isSaving ? (
                         <>
                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin relative z-10" />
-                            <span className="relative z-10">Mémorisation...</span>
+                            <span className="relative z-10">{t('commerce.quotes.saving')}</span>
                         </>
                     ) : (
                         <>
                             <Sparkles className="w-5 h-5 relative z-10 group-hover:rotate-12 transition-transform group-hover:text-primary" />
-                            <span className="relative z-10 group-hover:text-primary">Générer le Devis</span>
+                            <span className="relative z-10 group-hover:text-primary">{t('commerce.quotes.generateQuote')}</span>
                         </>
                     )}
                 </motion.button>

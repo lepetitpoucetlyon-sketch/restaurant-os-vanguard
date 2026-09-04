@@ -4,6 +4,7 @@ import type { ConnectorId } from '../migration/connectors/types';
 import { ConnectorRegistry } from '../migration/connectors';
 import { Button } from "@/shared/components/ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 interface SourceSystemSelectorProps {
   selected: ConnectorId | null;
   onSelect: (id: ConnectorId) => void;
@@ -25,6 +26,7 @@ const CONNECTOR_GROUPS = [
 ];
 
 export function SourceSystemSelector({ selected, onSelect }: SourceSystemSelectorProps) {
+    const { t } = useLanguage();
   return (
     <div className="space-y-6">
       {CONNECTOR_GROUPS.map(group => {
@@ -89,7 +91,7 @@ export function SourceSystemSelector({ selected, onSelect }: SourceSystemSelecto
           <span className="text-2xl">📁</span>
           <div>
             <div className="text-sm font-medium text-gray-700">CSV / Excel / PDF</div>
-            <div className="text-xs text-gray-400">Import direct ou OCR si fichier scanné</div>
+            <div className="text-xs text-gray-400">{t('commerce.onboarding.directOrOcr')}</div>
           </div>
         </Button>
       </div>

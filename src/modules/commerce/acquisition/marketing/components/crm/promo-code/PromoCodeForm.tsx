@@ -3,6 +3,7 @@
 import { Loader2, Gift } from "lucide-react";
 import type { DEFAULT_FORM } from "./promoConstants";
 
+import { useLanguage } from "@/shared/hooks";
 interface PromoCodeFormProps {
   form: typeof DEFAULT_FORM;
   setForm: React.Dispatch<React.SetStateAction<typeof DEFAULT_FORM>>;
@@ -18,9 +19,10 @@ export function PromoCodeForm({
   onCancel,
   onSubmit,
 }: PromoCodeFormProps) {
+    const { t } = useLanguage();
   return (
     <div className="bg-surface-card border border-border rounded-2xl p-6 space-y-4">
-      <h3 className="text-sm font-semibold text-text-primary mb-4">Créer un code promo</h3>
+      <h3 className="text-sm font-semibold text-text-primary mb-4">{t('commerce.crm.createPromoCode')}</h3>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label className="text-xs font-medium text-text-muted uppercase tracking-wide">Code</label>

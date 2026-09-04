@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Plus, X } from 'lucide-react';
 import type { QuoteProduct } from '../new-quote/quoteHelpers';
 
+import { useLanguage } from "@/shared/hooks";
 interface QuoteCatalogSidebarProps {
     showCatalog: boolean;
     onCloseCatalog: () => void;
@@ -21,6 +22,7 @@ export function QuoteCatalogSidebar({
     filteredProducts,
     onSelectProduct,
 }: QuoteCatalogSidebarProps) {
+    const { t } = useLanguage();
     return (
         <AnimatePresence>
             {showCatalog && (
@@ -32,7 +34,7 @@ export function QuoteCatalogSidebar({
                     className="absolute top-0 right-0 w-[25rem] h-full bg-bg-secondary border-l border-border z-50 shadow-2xl p-8 flex flex-col"
                 >
                     <div className="flex items-center justify-between mb-10">
-                        <h4 className="text-micro font-black text-text-primary uppercase tracking-[0.4em]">Bibliothèque Artefacts</h4>
+                        <h4 className="text-micro font-black text-text-primary uppercase tracking-[0.4em]">{t('commerce.quotes.itemLibrary')}</h4>
                         <button aria-label="Fermer" onClick={onCloseCatalog} className="p-2 text-text-muted hover:text-text-primary">
                             <X className="w-5 h-5" />
                         </button>

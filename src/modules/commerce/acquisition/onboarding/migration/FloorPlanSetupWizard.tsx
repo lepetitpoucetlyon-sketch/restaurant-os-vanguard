@@ -17,9 +17,11 @@ import { FloorPlanZonesStep, type ZoneName } from './floor-plan/FloorPlanZonesSt
 import { FloorPlanPreviewStep } from './floor-plan/FloorPlanPreviewStep';
 import { FloorPlanDoneView } from './floor-plan/FloorPlanDoneView';
 
+import { useLanguage } from "@/shared/hooks";
 type WizardStep = 'zones' | 'tables' | 'preview';
 
 export default function FloorPlanSetupWizard() {
+    const { t } = useLanguage();
   const [step, setStep] = useState<WizardStep>('zones');
   const [selectedZones, setSelectedZones] = useState<ZoneName[]>(['Salle']);
   const [tables, setTables] = useState<WizardTable[]>([]);
@@ -96,7 +98,7 @@ export default function FloorPlanSetupWizard() {
     <div className="space-y-6 max-w-4xl">
       {/* Header */}
       <header>
-        <h2 className="text-xl font-semibold text-text-primary">Plan de salle guidé</h2>
+        <h2 className="text-xl font-semibold text-text-primary">{t('commerce.onboarding.guidedFloorPlan')}</h2>
         <p className="text-sm text-text-muted mt-1">
           Créez vos zones et tables en quelques étapes. Les tables seront disponibles immédiatement dans les Réservations et le POS.
         </p>

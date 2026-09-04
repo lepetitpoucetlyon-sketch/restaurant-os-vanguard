@@ -5,6 +5,7 @@ import { Package, Search, Plus, Trash2, FileText } from 'lucide-react';
 import { PremiumSelect } from '@ui/PremiumSelect';
 import type { QuoteLine } from '../../../types';
 
+import { useLanguage } from "@/shared/hooks";
 interface QuoteMatrixGridProps {
     lines: Partial<QuoteLine>[];
     onAddNewLine: () => void;
@@ -20,6 +21,7 @@ export function QuoteMatrixGrid({
     onUpdateLine,
     onRemoveLine,
 }: QuoteMatrixGridProps) {
+    const { t } = useLanguage();
     return (
         <section className="space-y-8">
             <div className="flex items-center justify-between px-2">
@@ -50,8 +52,8 @@ export function QuoteMatrixGrid({
 
             <div className="bg-bg-secondary/40 border border-border rounded-[42px] overflow-hidden backdrop-blur-md">
                 <div className="grid grid-cols-[1fr,100px,140px,100px,140px,60px] p-6 text-nano font-black text-text-muted uppercase tracking-[0.2em] border-b border-border/50 bg-bg-tertiary">
-                    <div>Désignation & Artefact</div>
-                    <div className="text-center">Quantité</div>
+                    <div>{t('commerce.quotes.designationAndItem')}</div>
+                    <div className="text-center">{t('commerce.quotes.quantity')}</div>
                     <div className="text-center">Prix Un. HT</div>
                     <div className="text-center">TVA %</div>
                     <div className="text-right">Total TTC</div>
@@ -120,7 +122,7 @@ export function QuoteMatrixGrid({
                     {lines.length === 0 && (
                         <div className="py-20 text-center space-y-4">
                             <FileText className="w-12 h-12 mx-auto text-text-muted/10" strokeWidth={1} />
-                            <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">Matrice Vide • Insérer Artefact</p>
+                            <p className="text-nano font-black text-text-muted uppercase tracking-[0.3em]">{t('commerce.quotes.emptyMatrix')}</p>
                         </div>
                     )}
                 </div>

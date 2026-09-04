@@ -8,6 +8,7 @@ import { Button } from "@ui/Button";
 
 import { useMarketing } from '../../hooks/useMarketing';
 
+import { useLanguage } from "@/shared/hooks";
 interface NewPostModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -15,6 +16,7 @@ interface NewPostModalProps {
 }
 
 export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalProps) {
+    const { t } = useLanguage();
     const { upsertPost } = useMarketing();
     const [caption, setCaption] = useState('');
     const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
@@ -76,7 +78,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-serif font-bold text-text-primary tracking-tight">Nouvelle Publication</h2>
-                                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider mt-1">Créez votre contenu</p>
+                                    <p className="text-xs font-bold text-text-muted uppercase tracking-wider mt-1">{t('commerce.marketing.createYourContent')}</p>
                                 </div>
                             </div>
                             <button onClick={onClose} aria-label="Fermer la boîte de dialogue" className="w-10 h-10 rounded-full bg-bg-tertiary hover:bg-surface-bg hover:text-status-danger flex items-center justify-center transition-colors">
@@ -86,7 +88,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
 
                         <div className="p-10 space-y-8 bg-bg-primary/30">
                             <div className="space-y-4">
-                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1">Sélectionner les plateformes</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1">{t('commerce.marketing.selectPlatforms')}</label>
                                 <div className="flex gap-4">
                                     {socialAccounts.map((account) => {
                                         const Icon = account.icon;
@@ -119,7 +121,7 @@ export function NewPostModal({ isOpen, onClose, socialAccounts }: NewPostModalPr
                             </div>
 
                             <div className="space-y-4">
-                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1">Contenu & Média</label>
+                                <label className="text-nano font-black text-text-muted uppercase tracking-widest pl-1">{t('commerce.marketing.contentAndMedia')}</label>
                                 <div className="relative">
                                     <textarea
                                         value={caption}

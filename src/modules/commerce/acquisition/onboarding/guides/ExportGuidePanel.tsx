@@ -5,12 +5,14 @@ import type { ImportCategory } from '../migration/types';
 import { getGuide, getGuidesForConnector } from './exportGuides';
 import { Button } from "@/shared/components/ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 interface ExportGuidePanelProps {
   connectorId: ConnectorId;
   category?: ImportCategory;
 }
 
 export function ExportGuidePanel({ connectorId, category }: ExportGuidePanelProps) {
+    const { t } = useLanguage();
   const guides = category
     ? [getGuide(connectorId, category)].filter(Boolean)
     : getGuidesForConnector(connectorId);
@@ -23,7 +25,7 @@ export function ExportGuidePanel({ connectorId, category }: ExportGuidePanelProp
     <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-3">
       <div className="flex items-center gap-2">
         <span className="text-lg">📖</span>
-        <h4 className="font-semibold text-blue-800 text-sm">Comment exporter vos données ?</h4>
+        <h4 className="font-semibold text-blue-800 text-sm">{t('commerce.onboarding.howToExport')}</h4>
       </div>
 
       {guides.length > 1 && (

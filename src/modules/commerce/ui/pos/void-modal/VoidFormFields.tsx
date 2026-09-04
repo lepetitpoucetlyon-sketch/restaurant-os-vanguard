@@ -5,6 +5,7 @@ import { AlertTriangle, ReceiptText, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import type { VoidMode } from "./voidHelpers";
 
+import { useLanguage } from "@/shared/hooks";
 interface VoidFormFieldsProps {
     mode: VoidMode;
     setMode: (m: VoidMode) => void;
@@ -40,13 +41,14 @@ export function VoidFormFields({
     isSubmitting,
     handleSubmit,
 }: VoidFormFieldsProps) {
+    const { t } = useLanguage();
     return (
         <div className="space-y-4">
             {/* NF525 notice */}
             <div className="flex items-start gap-2.5 p-3 rounded-2xl bg-status-warning/5 border border-status-warning/20">
                 <AlertTriangle className="w-4 h-4 text-status-warning shrink-0 mt-0.5" />
                 <p className="text-nano text-text-muted leading-relaxed">
-                    Conforme NF525 : une écriture <strong>négative</strong> est créée
+                    Conforme NF525 : une écriture <strong>{t('commerce.pos.negative')}</strong> est créée
                     dans journalEntries. Le ticket original n'est jamais modifié ni supprimé.
                 </p>
             </div>

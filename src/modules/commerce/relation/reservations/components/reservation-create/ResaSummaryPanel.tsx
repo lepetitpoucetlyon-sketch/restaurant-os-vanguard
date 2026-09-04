@@ -4,6 +4,7 @@ import { Users, Sparkles, ArrowRight } from "lucide-react";
 import type { Customer } from "@nexus/contracts";
 import type { Table } from "@/modules/ops";
 
+import { useLanguage } from "@/shared/hooks";
 interface ResaFormData {
     time: string;
     covers: number;
@@ -31,6 +32,7 @@ export function ResaSummaryPanel({
     saving,
     onSubmit,
 }: ResaSummaryPanelProps) {
+    const { t } = useLanguage();
     return (
         <div className="w-[18.75rem] bg-bg-secondary p-10 flex flex-col justify-between shrink-0 border-l border-border">
             <div className="space-y-6">
@@ -60,7 +62,7 @@ export function ResaSummaryPanel({
                         )}
 
                         <div className="p-5 rounded-2xl bg-accent/5 border border-accent/20">
-                            <p className="text-nano font-black text-accent uppercase tracking-widest mb-2">Résumé</p>
+                            <p className="text-nano font-black text-accent uppercase tracking-widest mb-2">{t('commerce.reservations.summary')}</p>
                             <p className="text-micro text-text-muted leading-relaxed">
                                 {formData.date} à {formData.time} — {formData.covers} couv.
                                 {(formData.tableId || suggestedTable) && (

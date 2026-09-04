@@ -9,12 +9,14 @@ import {
   type AnalyticsData,
   aggregateOrders,
 } from "./basket-analysis/basketAnalysisAggregator";
+import { useLanguage } from "@/shared/hooks";
 import {
   BarChartSVG,
   HorizontalBarsSVG,
 } from "./basket-analysis/BasketCharts";
 
 export function BasketAnalysis() {
+    const { t } = useLanguage();
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -58,7 +60,7 @@ export function BasketAnalysis() {
         </div>
         <div>
           <h2 className="text-lg font-semibold text-text-primary">Analyse du Panier</h2>
-          <p className="text-xs text-text-muted">Basé sur les 500 dernières commandes</p>
+          <p className="text-xs text-text-muted">{t('commerce.crm.basketBasis')}</p>
         </div>
       </div>
 
@@ -69,7 +71,7 @@ export function BasketAnalysis() {
           <h3 className="text-sm font-semibold text-text-primary">CA par jour de la semaine</h3>
         </div>
         {data.revenueByDay.every((d) => d.totalEur === 0) ? (
-          <p className="text-xs text-text-muted text-center py-6">Aucune donnée disponible</p>
+          <p className="text-xs text-text-muted text-center py-6">{t('commerce.crm.noData')}</p>
         ) : (
           <BarChartSVG
             data={data.revenueByDay.map((d) => ({ label: d.label, value: d.totalEur }))}
@@ -84,7 +86,7 @@ export function BasketAnalysis() {
       <div className="p-5 rounded-2xl bg-surface-card border border-border">
         <div className="flex items-center gap-2 mb-4">
           <ShoppingBag className="w-4 h-4 text-action-primary" />
-          <h3 className="text-sm font-semibold text-text-primary">Top 5 produits commandés</h3>
+          <h3 className="text-sm font-semibold text-text-primary">{t('commerce.crm.top5Products')}</h3>
         </div>
         {data.topProducts.length === 0 ? (
           <p className="text-xs text-text-muted text-center py-6">Aucune donnée disponible</p>
@@ -100,7 +102,7 @@ export function BasketAnalysis() {
       <div className="p-5 rounded-2xl bg-surface-card border border-border">
         <div className="flex items-center gap-2 mb-4">
           <BarChart2 className="w-4 h-4 text-action-primary" />
-          <h3 className="text-sm font-semibold text-text-primary">Dépense moy. par fréquence de visite</h3>
+          <h3 className="text-sm font-semibold text-text-primary">{t('commerce.crm.avgSpendByFrequency')}</h3>
         </div>
         {data.spendByFrequency.every((b) => b.avgSpendEur === 0) ? (
           <p className="text-xs text-text-muted text-center py-6">Aucune donnée disponible</p>

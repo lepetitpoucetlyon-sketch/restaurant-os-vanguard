@@ -6,6 +6,7 @@ import type { ImportCategory } from '../types';
 import { CATEGORY_CONFIGS } from '../types';
 import { Button } from "@/shared/components/ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 export function PasteZone({ onText }: { onText: (t: string) => void }) {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');
@@ -42,13 +43,14 @@ export function PasteZone({ onText }: { onText: (t: string) => void }) {
 }
 
 export function DetectingState({ fileName }: { fileName: string }) {
+  const { t } = useLanguage();
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-10">
       <Loader2 className="w-8 h-8 animate-spin text-primary" />
       <div className="text-center space-y-0.5">
         <p className="text-sm font-medium">Analyse du fichier…</p>
         <p className="text-xs text-muted-foreground font-mono">{fileName}</p>
-        <p className="text-xs text-muted-foreground">Détection format · encodage · logiciel source</p>
+        <p className="text-xs text-muted-foreground">{t('commerce.onboarding.detectFormat')}</p>
       </div>
     </div>
   );

@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/ui.foundations";
 import { PageShell } from "@ui/PageShell";
 
+import { useLanguage } from "@/shared/hooks";
 /**
  * ReservationsHeader — toolbar éditoriale de la page /reservations.
  *
@@ -58,6 +59,7 @@ export function ReservationsHeader({
     onNewGroup,
     onOpenEventQuote,
 }: ReservationsHeaderProps) {
+    const { t } = useLanguage();
     return (
         <PageShell.OperationalHeader dense className="py-1">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -142,7 +144,7 @@ export function ReservationsHeader({
                         )}
                     >
                         {terraceClosed
-                            ? <><UmbrellaOff className="w-[14px] h-[14px]" /> <span>Terrasse fermée</span></>
+                            ? <><UmbrellaOff className="w-[14px] h-[14px]" /> <span>{t('commerce.reservations.terraceClosed')}</span></>
                             : <><Umbrella className="w-[14px] h-[14px]" /> <span>Terrasse ouverte</span></>}
                     </button>
 
@@ -173,7 +175,7 @@ export function ReservationsHeader({
                                 <FileText className="w-[14px] h-[14px]" /> <span>Devis</span>
                             </PageShell.CTA>
                             <PageShell.CTA onClick={onNewReservation}>
-                                <Plus className="w-[15px] h-[15px]" /> <span>Réserver</span>
+                                <Plus className="w-[15px] h-[15px]" /> <span>{t('commerce.reservations.book')}</span>
                             </PageShell.CTA>
                         </>
                     )}

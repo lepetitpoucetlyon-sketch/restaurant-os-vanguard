@@ -13,6 +13,7 @@ import { ResaStepCustomer } from './reservation-create/ResaStepCustomer';
 import { ResaStepDetails } from './reservation-create/ResaStepDetails';
 import { ResaSummaryPanel } from './reservation-create/ResaSummaryPanel';
 
+import { useLanguage } from "@/shared/hooks";
 interface ReservationCreateDialogProps {
     isOpen: boolean;
     onClose: () => void;
@@ -33,6 +34,7 @@ export function ReservationCreateDialog({
     tables,
     terraceClosed = false,
 }: ReservationCreateDialogProps) {
+    const { t } = useLanguage();
     const [step, setStep] = useState<Step>(1);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
@@ -128,7 +130,7 @@ export function ReservationCreateDialog({
                             </div>
                             <div>
                                 <h2 className="text-2xl font-serif font-black tracking-tight italic flex items-center gap-2">
-                                    Nouvelle <span className="text-accent not-italic">Réservation</span>
+                                    Nouvelle <span className="text-accent not-italic">{t('commerce.reservations.reservation')}</span>
                                     <Sparkles className="w-4 h-4 text-accent animate-pulse" />
                                 </h2>
                                 <div className="flex items-center gap-3 mt-1">

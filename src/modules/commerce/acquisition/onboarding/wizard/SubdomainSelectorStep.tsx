@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Globe, CheckCircle2, AlertCircle, Loader2, Sparkles, ExternalLink } from 'lucide-react';
 
+import { useLanguage } from "@/shared/hooks";
 interface SubdomainSelectorStepProps {
   initialSlug?: string;
   onSelect: (subdomain: string) => void;
@@ -10,6 +11,7 @@ interface SubdomainSelectorStepProps {
 }
 
 export function SubdomainSelectorStep({ initialSlug = '', onSelect, onSkip }: SubdomainSelectorStepProps) {
+    const { t } = useLanguage();
   const [slug, setSlug] = useState(initialSlug);
   const [isChecking, setIsChecking] = useState(false);
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
@@ -121,9 +123,9 @@ export function SubdomainSelectorStep({ initialSlug = '', onSelect, onSkip }: Su
         <div className="p-3 bg-surface-glass rounded-xl border border-border-default space-y-2">
           <div className="text-xs font-semibold text-indigo-400">⚡ Inclus dans votre abonnement :</div>
           <ul className="text-micro text-text-muted space-y-1">
-            <li>• Certificat SSL HTTPS Let&apos;s Encrypt dédié et renouvelé à vie.</li>
+            <li>{t('commerce.onboarding.sslCert')}</li>
             <li>• Redirection transparente vers votre caisse et menu QR code.</li>
-            <li>• Gestion de l&apos;infrastructure assurée par Restaurant OS Master MCC.</li>
+            <li>{t('commerce.onboarding.infraManaged')}</li>
           </ul>
         </div>
       </div>

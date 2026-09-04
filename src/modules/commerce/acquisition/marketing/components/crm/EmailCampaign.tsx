@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { authedFetch } from "@/lib/client/authedFetch";
 import { useActionPermission } from "@/shared/hooks/useActionPermission";
 
+import { useLanguage } from "@/shared/hooks";
 type CampaignSegment = "all_active" | "inactive_3m" | "birthdays_this_month";
 
 interface SegmentOption {
@@ -89,6 +90,7 @@ function useRecipientCount(segment: CampaignSegment): { count: number; loading: 
 type SendStatus = "idle" | "sending" | "success";
 
 export function EmailCampaign() {
+    const { t } = useLanguage();
   const [segment, setSegment] = useState<CampaignSegment>("all_active");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
@@ -143,7 +145,7 @@ export function EmailCampaign() {
         </div>
         <div>
           <h2 className="text-lg font-semibold text-text-primary">Campagnes Email</h2>
-          <p className="text-xs text-text-muted">Envoi groupé via Resend</p>
+          <p className="text-xs text-text-muted">{t('commerce.crm.bulkSendResend')}</p>
         </div>
       </div>
 
@@ -205,7 +207,7 @@ export function EmailCampaign() {
         <textarea
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          placeholder={`<p>Bonjour {{prenom}},</p>\n<p>Nous avons une offre spéciale pour vous...</p>`}
+          placeholder={`<p>Bonjour {{prenom}},</p>\n<p>{t('commerce.crm.specialOfferPlaceholder')}</p>`}
           rows={8}
           className="w-full px-3 py-2.5 rounded-lg border border-border bg-surface-base text-sm text-text-primary font-mono focus:outline-none focus:border-action-primary resize-y"
         />

@@ -5,6 +5,7 @@ import { Fingerprint, ShieldCheck, AlertCircle, ChevronLeft, Loader2 } from 'luc
 import type { CardImprintConfig } from './reservation-widget-types';
 import { Button } from "@/shared/components/ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 interface Props {
   penalty: number;
   cardImprintConfig: CardImprintConfig | undefined;
@@ -23,6 +24,7 @@ export function CardImprintStep({
   penalty, cardImprintConfig, stripeLoading, stripeError, stripeReady,
   cardMountRef, submitting, btnPrimary, btnSecondary, onBack, onConfirmCard,
 }: Props) {
+    const { t } = useLanguage();
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
@@ -30,15 +32,15 @@ export function CardImprintStep({
           <Fingerprint className="w-5 h-5 text-amber-600" />
         </div>
         <div>
-          <h2 className="text-xl font-serif font-semibold text-gray-900">Garantie de réservation</h2>
-          <p className="text-xs text-text-secondary">Aucun débit immédiat</p>
+          <h2 className="text-xl font-serif font-semibold text-gray-900">{t('commerce.widgets.reservationGuarantee')}</h2>
+          <p className="text-xs text-text-secondary">{t('commerce.widgets.noImmediateCharge')}</p>
         </div>
       </div>
 
       <div className="rounded-2xl bg-amber-50 border border-amber-200 px-4 py-3 space-y-1 text-sm text-amber-800">
         <p className="flex items-center gap-2 font-medium">
           <ShieldCheck className="w-4 h-4 text-amber-600 flex-shrink-0" />
-          Votre carte est enregistrée comme garantie mais <strong>jamais débitée</strong> si vous venez.
+          Votre carte est enregistrée comme garantie mais <strong>{t('commerce.widgets.neverCharged')}</strong> si vous venez.
         </p>
         <p className="text-xs text-amber-600 pl-6">
           En cas de no-show, {penalty} € sont prélevés automatiquement le lendemain.
@@ -49,7 +51,7 @@ export function CardImprintStep({
       {stripeLoading && (
         <div className="flex flex-col items-center gap-3 py-8 text-text-secondary">
           <Loader2 className="w-7 h-7 animate-spin text-action-primary" />
-          <p className="text-sm">Chargement du formulaire sécurisé…</p>
+          <p className="text-sm">{t('commerce.widgets.loadingSecureForm')}</p>
         </div>
       )}
 

@@ -4,7 +4,9 @@ import { useAtomValue } from "jotai";
 
 import { seoProfileAtom, seoLoadingAtom } from "@/store/pillars/commerce";
 
+import { useLanguage } from "@/shared/hooks";
 export function GoogleProfileCard() {
+    const { t } = useLanguage();
     const profile = useAtomValue(seoProfileAtom);
     const isLoading = useAtomValue(seoLoadingAtom);
 
@@ -26,7 +28,7 @@ export function GoogleProfileCard() {
                         <MapPin className="w-6 h-6 text-text-muted" />
                     </div>
                     <div>
-                        <h3 className="font-bold text-text-primary">Profil non connecté</h3>
+                        <h3 className="font-bold text-text-primary">{t('commerce.seo.profileNotConnected')}</h3>
                         <p className="text-xs text-text-muted mt-1">Liez votre compte Google Business pour activer le suivi SEO.</p>
                     </div>
                     <div className="flex flex-col items-center gap-2">
@@ -37,7 +39,7 @@ export function GoogleProfileCard() {
                         >
                             Connecter
                         </button>
-                        <span className="text-[11px] text-text-muted italic">Intégration en cours de déploiement</span>
+                        <span className="text-[11px] text-text-muted italic">{t('commerce.seo.integrationRollingOut')}</span>
                     </div>
                 </div>
             </div>
@@ -65,7 +67,7 @@ export function GoogleProfileCard() {
 
             <div className="space-y-4">
                 <div className="flex items-center justify-between py-3 border-b border-border">
-                    <span className="text-chip-label text-text-muted">Établissement</span>
+                    <span className="text-chip-label text-text-muted">{t('commerce.seo.establishment')}</span>
                     <span className="text-sm font-bold text-text-primary">{profile.name || '—'}</span>
                 </div>
                 <div className="flex items-center justify-between py-3 border-b border-border">
@@ -83,7 +85,7 @@ export function GoogleProfileCard() {
                     )}
                 </div>
                 <div className="flex items-center justify-between py-3">
-                    <span className="text-chip-label text-text-muted">Dernière sync</span>
+                    <span className="text-chip-label text-text-muted">{t('commerce.seo.lastSync')}</span>
                     <span className="text-sm text-text-muted">
                         {profile.lastSync ? new Date(profile.lastSync).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Jamais synchronisé'}
                     </span>

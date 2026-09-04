@@ -3,6 +3,7 @@
 import { Package, CheckCircle2 } from 'lucide-react';
 import type { InterSiteTransfer } from '@/shared/nexus/contracts/franchise.types';
 
+import { useLanguage } from "@/shared/hooks";
 export function TransfersTable({
     transfers,
     onExecute,
@@ -10,11 +11,12 @@ export function TransfersTable({
     transfers: InterSiteTransfer[];
     onExecute: (transfer: InterSiteTransfer) => void;
 }) {
+    const { t } = useLanguage();
     if (transfers.length === 0) {
         return (
             <div className="p-12 text-center rounded-2xl border border-dashed border-border-subtle bg-surface-card space-y-3">
                 <Package className="w-8 h-8 text-text-secondary mx-auto opacity-50" />
-                <p className="text-sm font-bold text-text-primary">Aucun transfert inter-sites récent</p>
+                <p className="text-sm font-bold text-text-primary">{t('commerce.franchise.noRecentTransfer')}</p>
                 <p className="text-xs text-text-secondary max-w-md mx-auto">
                     Vous pouvez rééquilibrer vos stocks d’ingrédients entre vos restaurants en un clic.
                 </p>
@@ -28,7 +30,7 @@ export function TransfersTable({
                 <table className="w-full text-left text-xs">
                     <thead className="bg-bg-tertiary/40 text-text-secondary text-nano uppercase font-black tracking-wider border-b border-border-subtle">
                         <tr>
-                            <th className="px-6 py-4">Réf Transfert</th>
+                            <th className="px-6 py-4">{t('commerce.franchise.transferRef')}</th>
                             <th className="px-6 py-4">Origine</th>
                             <th className="px-6 py-4">Destination</th>
                             <th className="px-6 py-4">Articles</th>

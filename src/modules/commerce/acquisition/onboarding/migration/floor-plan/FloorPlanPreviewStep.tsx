@@ -3,6 +3,7 @@
 import { Trash2, ChevronLeft, Save, Loader2 } from 'lucide-react';
 import { SHAPE_LABELS, type WizardTable } from './BatchTableForm';
 
+import { useLanguage } from "@/shared/hooks";
 interface FloorPlanPreviewStepProps {
   tables: WizardTable[];
   updateTable: (key: string, field: keyof WizardTable, value: string | number) => void;
@@ -20,6 +21,7 @@ export function FloorPlanPreviewStep({
   onSave,
   saving,
 }: FloorPlanPreviewStepProps) {
+    const { t } = useLanguage();
   return (
     <div className="space-y-4">
       <p className="text-sm text-text-muted">
@@ -31,8 +33,8 @@ export function FloorPlanPreviewStep({
           <thead className="bg-bg-secondary text-text-muted text-xs uppercase tracking-wide">
             <tr>
               <th className="px-4 py-3 text-left">Zone</th>
-              <th className="px-4 py-3 text-left">Numéro</th>
-              <th className="px-4 py-3 text-left">Capacité</th>
+              <th className="px-4 py-3 text-left">{t('commerce.floorPlan.number')}</th>
+              <th className="px-4 py-3 text-left">{t('commerce.floorPlan.capacity')}</th>
               <th className="px-4 py-3 text-left">Forme</th>
               <th className="px-4 py-3 text-left">ID Nexus</th>
               <th className="px-4 py-3"></th>

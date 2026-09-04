@@ -2,7 +2,9 @@ import { Search } from "lucide-react";
 import { cn } from "@/lib/ui.foundations";
 import { MarketingEngine } from "../../services/marketing-engine";
 
+import { useLanguage } from "@/shared/hooks";
 export function KeywordsCard() {
+    const { t } = useLanguage();
     const keywords = MarketingEngine.getKeywords();
 
     return (
@@ -11,7 +13,7 @@ export function KeywordsCard() {
                 <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
                     <Search className="w-5 h-5 text-purple-500" />
                 </div>
-                <h3 className="text-nano font-black uppercase tracking-[0.2em] text-text-muted">Mots-clés performants</h3>
+                <h3 className="text-nano font-black uppercase tracking-[0.2em] text-text-muted">{t('commerce.seo.topKeywords')}</h3>
             </div>
 
             <div className="space-y-4">

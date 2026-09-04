@@ -8,6 +8,7 @@ import type { CartItem, CourseType } from "@/modules/ops";
 import { formatCurrency } from "@/lib/formatters";
 import { SovereignMath } from "@/shared/services/SovereignMath";
 
+import { useLanguage } from "@/shared/hooks";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface CourseManagerProps {
@@ -67,6 +68,7 @@ function CourseSection({
     onSendCourse: () => void;
     isSending: boolean;
 }) {
+    const { t } = useLanguage();
     const meta = COURSE_META[course];
     const Icon = meta.icon;
 
@@ -93,7 +95,7 @@ function CourseSection({
                 {allSent ? (
                     <div className="flex items-center gap-1.5 text-status-success">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span className="text-nano font-black uppercase tracking-wider">Envoyé</span>
+                        <span className="text-nano font-black uppercase tracking-wider">{t('commerce.pos.sent')}</span>
                     </div>
                 ) : pendingItems.length > 0 ? (
                     <button
@@ -158,6 +160,7 @@ function CourseSection({
 // ─── CourseManager ────────────────────────────────────────────────────────────
 
 export function CourseManager({ items, onSetCourse, onSendCourse, isLoading }: CourseManagerProps) {
+    const { t } = useLanguage();
     const [sending, setSending] = useState<CourseType | null>(null);
 
     const unassigned = items.filter((i) => !i.course);

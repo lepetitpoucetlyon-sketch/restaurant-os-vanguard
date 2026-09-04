@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import type { FormData, Step, TimeSlot } from './reservation-widget-types';
 import { Button } from "@/shared/components/ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 interface Props {
   step: 1 | 2 | 3;
   form: FormData;
@@ -21,6 +22,7 @@ interface Props {
 const DATE_OPTIONS = Array.from({ length: 90 }, (_, i) => addDays(new Date(), i + 1));
 
 export function ReservationStepsABC({ step, form, slots, loadingSlots, btnPrimary, btnSecondary, go, setField, fetchSlots }: Props) {
+    const { t } = useLanguage();
   if (step === 1) return (
     <div className="space-y-4">
       <h2 className="text-xl font-serif font-semibold text-gray-900">Choisissez une date</h2>
@@ -77,7 +79,7 @@ export function ReservationStepsABC({ step, form, slots, loadingSlots, btnPrimar
           <Loader2 className="w-8 h-8 animate-spin text-action-primary" />
         </div>
       ) : slots.length === 0 ? (
-        <p className="text-center text-text-muted py-10 text-sm">Aucune disponibilité pour cette date. Essayez un autre jour.</p>
+        <p className="text-center text-text-muted py-10 text-sm">{t('commerce.widgets.noAvailability')}</p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1">
           {slots.map((s) => (

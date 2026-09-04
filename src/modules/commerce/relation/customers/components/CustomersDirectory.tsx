@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import { UserPlus, Search, Star, X, Wifi, WifiOff } from 'lucide-react';
 import { useSovereignCustomers } from '../../../hooks/useSovereignCustomers';
 
+import { useLanguage } from "@/shared/hooks";
 interface CustomersDirectoryProps {
     tenantId: string;
 }
@@ -17,6 +18,7 @@ interface CustomersDirectoryProps {
 const SEGMENTS = ['all', 'new', 'regular', 'vip'] as const;
 
 export function CustomersDirectory({ tenantId }: CustomersDirectoryProps) {
+    const { t } = useLanguage();
     const [q, setQ] = useState('');
     const [seg, setSeg] = useState<'all' | 'new' | 'regular' | 'vip'>('all');
     const [creating, setCreating] = useState(false);
@@ -95,7 +97,7 @@ export function CustomersDirectory({ tenantId }: CustomersDirectoryProps) {
                         <button
                             onClick={() => void submit()}
                             className="text-xs px-3 py-1 bg-accent text-white rounded"
-                        >Créer</button>
+                        >{t('commerce.customers.create')}</button>
                     </div>
                 </div>
             )}

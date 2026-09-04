@@ -5,6 +5,7 @@ import { Star, Gift, Trophy, Loader2, Award } from "lucide-react";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
 import { toast } from "sonner";
 
+import { useLanguage } from "@/shared/hooks";
 interface LoyaltyData {
   loyaltyPoints: number;
   totalRevenue: number;
@@ -45,6 +46,7 @@ const REWARDS = [
 ] as const;
 
 export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
+    const { t } = useLanguage();
   const [loyalty, setLoyalty] = useState<LoyaltyData | null>(null);
   const [activeRewards, setActiveRewards] = useState<LoyaltyReward[]>([]);
   const [loading, setLoading] = useState(true);
@@ -151,7 +153,7 @@ export function LoyaltyCard({ customerId, customerName }: LoyaltyCardProps) {
           </p>
         </div>
         <p className="text-5xl font-mono font-light text-accent italic mb-1">{points}</p>
-        <p className="text-xs text-text-primary/40">points de fidélité</p>
+        <p className="text-xs text-text-primary/40">{t('commerce.crm.loyaltyPoints')}</p>
 
         {/* Progress bar */}
         <div className="mt-6">

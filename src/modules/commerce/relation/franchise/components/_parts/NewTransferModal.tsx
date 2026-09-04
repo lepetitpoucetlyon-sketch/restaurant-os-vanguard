@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { FranchiseSiteOverview } from '@/shared/nexus/contracts/franchise.types';
 
+import { useLanguage } from "@/shared/hooks";
 export function NewTransferModal({
     open,
     sites,
@@ -17,6 +18,7 @@ export function NewTransferModal({
     onClose: () => void;
     onSubmit: (params: { targetTenantId: string; itemName: string; quantity: number }) => Promise<void>;
 }) {
+    const { t } = useLanguage();
     const [targetId, setTargetId] = useState<string>('');
     const [itemName, setItemName] = useState<string>('Farine T55');
     const [quantity, setQuantity] = useState<number>(25);
@@ -53,7 +55,7 @@ export function NewTransferModal({
                                     onChange={(e) => setTargetId(e.target.value)}
                                     className="w-full mt-1 p-2.5 rounded-xl bg-bg-primary border border-border-subtle text-xs text-text-primary focus:outline-none focus:border-brand"
                                 >
-                                    <option value="">Sélectionner un restaurant cible...</option>
+                                    <option value="">{t('commerce.franchise.selectTargetRestaurant')}</option>
                                     {sites
                                         .filter((s) => s.tenantId !== currentTenantId)
                                         .map((s) => (
@@ -78,7 +80,7 @@ export function NewTransferModal({
                             </div>
 
                             <div>
-                                <label className="text-nano font-bold uppercase text-text-secondary">Quantité</label>
+                                <label className="text-nano font-bold uppercase text-text-secondary">{t('commerce.franchise.quantity')}</label>
                                 <input
                                     type="number"
                                     value={quantity}

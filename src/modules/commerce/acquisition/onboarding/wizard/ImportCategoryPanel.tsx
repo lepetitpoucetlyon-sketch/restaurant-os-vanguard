@@ -8,6 +8,7 @@ import { authedFetch } from '@/lib/client/authedFetch';
 import { toError } from "@/lib/toError";
 import { Button } from "@/shared/components/ui/Button";
 
+import { useLanguage } from "@/shared/hooks";
 interface ImportCategoryPanelProps {
   category: ImportCategory;
   categoryLabel: string;
@@ -34,6 +35,7 @@ export function ImportCategoryPanel({
   connectorCredentials,
   onImported,
 }: ImportCategoryPanelProps) {
+    const { t } = useLanguage();
   const [state, setState] = useState<PanelState>('idle');
   const [preview, setPreview] = useState<PreviewData | null>(null);
   const [progress, setProgress] = useState(0);
@@ -141,7 +143,7 @@ export function ImportCategoryPanel({
               </span>
             </div>
             {preview.confidence === 'low' && (
-              <span className="text-xs bg-red-50 text-red-600 px-2 py-1 rounded">Vérifiez les données</span>
+              <span className="text-xs bg-red-50 text-red-600 px-2 py-1 rounded">{t('commerce.onboarding.checkData')}</span>
             )}
           </div>
 
@@ -184,7 +186,7 @@ export function ImportCategoryPanel({
       {state === 'done' && (
         <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
           <div className="text-2xl mb-1">✅</div>
-          <p className="font-medium text-emerald-800">Import terminé</p>
+          <p className="font-medium text-emerald-800">{t('commerce.onboarding.importDone')}</p>
           <p className="text-sm text-emerald-600 mt-1">{rows.length} enregistrements importés</p>
           <Button variant="ghost"
             onClick={() => setState('idle')}

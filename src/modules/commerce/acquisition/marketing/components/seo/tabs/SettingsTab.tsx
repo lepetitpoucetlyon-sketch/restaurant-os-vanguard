@@ -3,7 +3,9 @@ import { motion } from 'framer-motion';
 import { Link2, Search, BarChart3, MapPin } from 'lucide-react';
 import { cn } from "@/lib/ui.foundations";
 
+import { useLanguage } from "@/shared/hooks";
 export const SettingsTab = () => {
+    const { t } = useLanguage();
     return (
         <motion.div
             key="settings"
@@ -17,7 +19,7 @@ export const SettingsTab = () => {
                     <div className="w-10 h-10 rounded-xl bg-status-info/10 flex items-center justify-center">
                         <Link2 className="w-5 h-5 text-blue-500" />
                     </div>
-                    <h3 className="text-nano font-black uppercase tracking-[0.2em] text-text-muted">Intégrations</h3>
+                    <h3 className="text-nano font-black uppercase tracking-[0.2em] text-text-muted">{t('commerce.seo.integrations')}</h3>
                 </div>
                 <div className="space-y-4">
                     {[

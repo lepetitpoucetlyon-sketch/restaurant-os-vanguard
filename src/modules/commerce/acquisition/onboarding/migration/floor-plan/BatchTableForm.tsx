@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { useLanguage } from "@/shared/hooks";
 export type TableShape = 'rect' | 'circle';
 
 export interface WizardTable {
@@ -30,6 +31,7 @@ interface BatchFormProps {
 }
 
 export function BatchTableForm({ zone, onAdd }: BatchFormProps) {
+  const { t } = useLanguage();
   const [from, setFrom] = useState(1);
   const [to, setTo] = useState(10);
   const [seats, setSeats] = useState(4);
@@ -48,7 +50,7 @@ export function BatchTableForm({ zone, onAdd }: BatchFormProps) {
 
   return (
     <div className="rounded-lg border border-border bg-bg-tertiary p-4 space-y-3">
-      <p className="text-xs font-semibold text-text-primary">Génération en masse pour : <span className="text-accent">{zone}</span></p>
+      <p className="text-xs font-semibold text-text-primary">{t('commerce.floorPlan.batchGenerationFor')}<span className="text-accent">{zone}</span></p>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
         <div>
           <label className="block text-text-muted mb-1">De la table n°</label>
@@ -61,7 +63,7 @@ export function BatchTableForm({ zone, onAdd }: BatchFormProps) {
           />
         </div>
         <div>
-          <label className="block text-text-muted mb-1">À la table n°</label>
+          <label className="block text-text-muted mb-1">{t('commerce.floorPlan.startingAtTableNo')}</label>
           <input
             type="number"
             min={1}

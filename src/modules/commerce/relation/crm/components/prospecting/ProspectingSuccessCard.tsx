@@ -6,12 +6,14 @@ import { Check, RefreshCcw, ArrowRight } from 'lucide-react';
 import { Button } from '@ui/Button';
 import type { ExtractedTokens } from './prospectingConstants';
 
+import { useLanguage } from "@/shared/hooks";
 interface ProspectingSuccessCardProps {
   tokens: ExtractedTokens | null;
   onReset: () => void;
 }
 
 export function ProspectingSuccessCard({ tokens, onReset }: ProspectingSuccessCardProps) {
+    const { t } = useLanguage();
   return (
     <motion.div
       key="done"
@@ -27,7 +29,7 @@ export function ProspectingSuccessCard({ tokens, onReset }: ProspectingSuccessCa
           <p className="text-base font-bold text-text-primary">
             {tokens?.brandName ?? 'Branding'} appliqué avec succès
           </p>
-          <p className="text-sm text-text-muted">L'interface a été mise à jour instantanément.</p>
+          <p className="text-sm text-text-muted">{t('commerce.crm.uiUpdatedInstantly')}</p>
         </div>
       </div>
       <div className="flex items-center gap-3">
