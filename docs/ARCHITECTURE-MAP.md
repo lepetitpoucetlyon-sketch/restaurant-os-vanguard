@@ -5,7 +5,7 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3789** · LOC : **370 641**
+- Fichiers `.ts/.tsx` : **3790** · LOC : **370 939**
 - Pages : **87** · Routes API : **222**
 
 ## Couches
@@ -15,7 +15,7 @@
 | `src/shared/` | 749 |
 | `src/app/` | 470 |
 | `src/verticals/` | 253 |
-| `src/lib/` | 237 |
+| `src/lib/` | 238 |
 | `src/kernel/` | 42 |
 | `src/infrastructure/` | 41 |
 | `src/store/` | 24 |
@@ -90,7 +90,7 @@
 | `src/shared/components/settings/BrandingPanel.tsx` | 617 |
 | `src/__tests__/helpers/saga.intelligence.test.ts` | 607 |
 | `src/__tests__/helpers/saga.ops2.test.ts` | 586 |
-| `src/shared/eventBus/events/ops.events.ts` | 574 |
 | `src/__tests__/helpers/saga.finance2.test.ts` | 571 |
+| `src/shared/eventBus/events/ops.events.ts` | 562 |
 | `src/config/navConfig.ts` | 539 |
 | `src/app/(admin)/admin/mcc/components/TenantChangelogPanel.tsx` | 503 |

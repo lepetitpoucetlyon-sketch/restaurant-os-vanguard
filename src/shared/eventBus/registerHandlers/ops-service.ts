@@ -5,7 +5,6 @@ import { registerDeliveryDriverUnlockHandler } from '../handlers/DeliveryDriverU
 import { registerFacilityHandlers } from '../handlers/FacilityHandlers';
 import { registerHRClockInGuardHandler } from '@/modules/human';
 import { registerPrinterMappingHandler } from '../handlers/PrinterMappingHandler';
-import { registerProformaHandler } from '../handlers/ProformaHandler';
 import { registerKDSTicketDoneNotifier } from '@/modules/ops';
 import { registerKDSRushAlertNotifier } from '@/modules/ops';
 
@@ -23,7 +22,6 @@ export function registerOpsServiceHandlers(): Array<() => void> {
     registerFacilityHandlers(),
     registerHRClockInGuardHandler(),
     registerPrinterMappingHandler(),
-    registerProformaHandler(),
     registerWaiterCallHandler(),
     registerSplitBillRegisteredHandler(),
   ];

@@ -395,18 +395,6 @@ export interface OPSEvents {
     loggedAt: number;
   };
 
-  // ── Proforma ──────────────────────────────────────────────────────────────
-  'order.proforma_printed': {
-    v: 1;
-    isSimulation?: boolean;
-    tenantId: string;
-    orderId: string;
-    tableId?: string;
-    operatorId: string;
-    totalInMicrounits: number;
-    printedAt: number;
-  };
-
   'table.assigned': {
     v: 1;
     isSimulation?: boolean;

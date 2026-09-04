@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Nexus } from "@/lib/nexus/NexusAdapter";
+import { NexusEventBus } from "@/shared/eventBus/NexusEventBus";
+import { useTenant } from "@/shared/hooks/useTenant";
 import type { StockItem } from '../types';
 import type { JsonObject } from "@/shared/types/json";
 
@@ -81,6 +83,7 @@ export function ThresholdModal({ item, onClose }: { item: StockItem; onClose: ()
 }
 
 export function PhysicalCountModal({ item, onClose }: { item: StockItem; onClose: () => void }) {
+    const { activeTenantId } = useTenant();
     const [counted, setCounted] = useState(String(item.quantity));
     const [saving, setSaving] = useState(false);
 
@@ -90,6 +93,17 @@ export function PhysicalCountModal({ item, onClose }: { item: StockItem; onClose
         setSaving(true);
         try {
             await Nexus.adapter.update(`stockItems/${item.id}`, { quantity: qty, lastPhysicalCountAt: new Date().toISOString() });
+            // Publier l'event canonique (P2 event pairing) : PhysicalInventoryHandler
+            // en dépend pour tracer le comptage dans l'audit et poser les diff.
+            if (activeTenantId) {
+                await NexusEventBus.emit('inventory.physical', {
+                    v: 1,
+                    tenantId: activeTenantId,
+                    inventoryId: `physcount_${item.id}_${Date.now()}`,
+                    items: [{ itemId: item.id, theoreticalQty: item.quantity, physicalQty: qty }],
+                    operatorId: 'unknown',
+                });
+            }
             toast.success("Comptage enregistré.");
             onClose();
         } catch { toast.error("Erreur lors de l'enregistrement du comptage."); }

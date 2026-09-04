@@ -26,7 +26,6 @@ export const MUTATION_EVENTS: ReadonlySet<string> = new Set<string>([
     'order.refunded',
     'order.comp',
     'order.split',
-    'order.proforma_printed',
     // ── Paiement ──────────────────────────────────────────────────────────────
     'payment.captured',
     'payment.refunded',

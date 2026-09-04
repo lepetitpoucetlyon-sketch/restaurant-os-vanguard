@@ -28,6 +28,7 @@ import { NoShowDetectorJob } from './NoShowDetectorJob';
 import { ReservationReminderJob } from './ReservationReminderJob';
 import { ServerDLQRetryJob } from './ServerDLQRetryJob';
 import { GrandTotalScheduler } from './GrandTotalScheduler';
+import { InvoiceOverdueScannerJob } from './InvoiceOverdueScannerJob';
 
 /** Helper : label de la période précédente au format ISO tronqué (YYYY-MM ou YYYY). */
 function previousPeriodLabel(now: Date, kind: 'monthly' | 'annual'): string {
@@ -49,6 +50,8 @@ export const CronScheduler = {
     SaaSBillingJob,
     UrssafVigilanceJob,
     ServerDLQRetryJob,
+    // audit P2 event-pairing — scan quotidien des factures en retard (émission `invoice.overdue`)
+    InvoiceOverdueScannerJob,
     // NF525 Art. 88 CGI — grand total mensuel scellé (audit 2026-09, orphelin trouvé par gate-bootstrap-wired)
     {
       name: 'GrandTotalMonthlyJob',

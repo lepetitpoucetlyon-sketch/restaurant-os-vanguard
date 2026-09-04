@@ -99,7 +99,6 @@ export * from './PinLockoutNotifierHandler';
 export * from './PrinterMappingHandler';
 export * from './PrivacyConsentHandler';
 export * from './ProcurementMismatchHandler';
-export * from './ProformaHandler';
 export * from './PromotionExpiryHandler';
 export * from './PromotionPriceHandler';
 export * from './QuarantineActivatedHandler';
