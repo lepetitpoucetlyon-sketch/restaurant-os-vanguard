@@ -9,6 +9,12 @@
 > **Date** — 2026-09-03 · **Session** — `claude-audit-plan-flexibilite`
 > **Portée** — bus d'événements, files (outbox/DLQ), chaîne fiscale NF525, stocks & BOM, RH,
 > achats, RBAC des actions rétroactives, reprise d'antériorité, câblage UI bout-en-bout.
+>
+> **Document complémentaire** — [`alertes.md`](./alertes.md) : le système de notification et
+> d'escalade qui rend ce plan-ci visible. Les points de contact référencés ici
+> (`PendingRegularizationBadge` § 9.2, `NotificationThresholdHandler` § 10.1, seuils § 11.2,
+> `OfflineBurstMonitor` § 9.9) y sont spécifiés en détail. **Aucun d'eux n'a de support
+> fonctionnel aujourd'hui** : le centre de notifications est structurellement vide.
 
 ---
 
