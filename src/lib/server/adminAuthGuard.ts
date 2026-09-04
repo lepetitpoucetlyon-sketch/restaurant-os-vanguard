@@ -7,6 +7,8 @@ import { PERMISSION_ROLE_LEVELS, type PermissionRole } from '@/shared/nexus/cont
 import { MCC_DEV_MODE_SERVER } from '@/lib/mcc/devMode';
 import { DEV_PIN_BYPASS_HEADER } from '@/lib/authConstants';
 import { isDeviceRevoked } from '@/lib/server/deviceRevocation';
+import { bindServerTenantContext } from '@/lib/server/ServerTenantStorage';
+import { getRateLimiter } from '@/lib/rate-limiter';
 import { toError } from "@/lib/toError";
 
 interface StoredDevice {
@@ -65,6 +67,22 @@ const MCC_ROLE_HIERARCHY: Record<MccRole, number> = {
     mcc_super_admin: 3,
 };
 
+const MCC_REQUEST_LIMIT = 120;
+const MCC_REQUEST_WINDOW_MS = 60_000;
+
+async function checkMccRequestRate(uid: string): Promise<NextResponse | null> {
+    const result = await getRateLimiter().check(`mcc:operator:${uid}`, MCC_REQUEST_LIMIT, MCC_REQUEST_WINDOW_MS);
+    if (result.allowed) return null;
+
+    return new NextResponse(JSON.stringify({ error: 'Trop de requêtes administratives. Réessayez dans un instant.' }), {
+        status: 429,
+        headers: {
+            'Content-Type': 'application/json',
+            'Retry-After': String(Math.max(1, Math.ceil((result.resetAt - Date.now()) / 1000))),
+        },
+    });
+}
+
 /**
  * Normalise un rôle brut vers un MccRole canonique.
  * Accepte l'alias legacy 'super_admin' pour ne pas casser les tokens Firebase existants.
@@ -116,6 +134,9 @@ export async function requireMccLevel(
             logger.warn(`[adminAuth] MCC RBAC denied: uid=${decoded.uid} role=${rawRole} needed=${minLevel}`);
             return hiddenDoor();
         }
+
+        const rateLimited = await checkMccRequestRate(decoded.uid);
+        if (rateLimited) return rateLimited;
 
         // MFA obligatoire pour les mcc_super_admin (mcc-core-3).
         const isFleetAdmin = callerLevel >= MCC_ROLE_HIERARCHY['mcc_super_admin'];
@@ -307,6 +328,9 @@ export async function requireFleetAdmin(request: Request): Promise<AdminCaller |
         const role = typeof decoded.role === 'string' ? decoded.role : '';
         if (!(FLEET_ROLES as readonly string[]).includes(role)) return hiddenDoor();
 
+        const rateLimited = await checkMccRequestRate(decoded.uid);
+        if (rateLimited) return rateLimited;
+
         const mfaDenied = await checkFleetAdminMFA(decoded.uid, decoded);
         if (mfaDenied) return mfaDenied;
 
@@ -342,6 +366,12 @@ export async function requireTenantAdmin(request: Request): Promise<(AdminCaller
     logger.warn(`[adminAuth] Cross-tenant attempt blocked: uid=${caller.uid} claims=${tenantId} header=${headerTenant}`);
     return hiddenDoor();
   }
+  bindServerTenantContext({
+    tenantId,
+    role: caller.role,
+    userId: caller.uid,
+    isMcc: isFleet,
+  });
   return { ...caller, tenantId };
 }
 
@@ -364,6 +394,12 @@ export async function requireTenantUser(
     : (caller.tenantId ?? hostTenant);
 
   if (!tenantId) return hiddenDoor();
+  bindServerTenantContext({
+    tenantId,
+    role: caller.role,
+    userId: caller.uid,
+    isMcc: isFleet,
+  });
   return { ...caller, tenantId };
 }
 

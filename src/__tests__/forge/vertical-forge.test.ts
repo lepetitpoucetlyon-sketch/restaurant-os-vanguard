@@ -55,6 +55,33 @@ describe('Vertical Forge — blueprint salon', () => {
   it('la génération ne remonte aucun problème (hardware cohérent)', () => {
     expect(out.issues).toEqual([]);
   });
+
+  it('refuse une verticale dont routes et événements ne sont pas structurés', () => {
+    const invalid = {
+      ...SALON_BLUEPRINT,
+      routes: [
+        ...SALON_BLUEPRINT.routes,
+        { ...SALON_BLUEPRINT.routes[0], path: 'agenda', componentExport: '' },
+      ],
+      events: [
+        ...SALON_BLUEPRINT.events,
+        { name: 'payment.completed', pillar: 'finance' as const },
+        { ...SALON_BLUEPRINT.events[0] },
+      ],
+      subVariants: [
+        { slug: 'spa', label: 'Spa bis' },
+        { slug: 'spa', label: 'Spa ter' },
+      ],
+    };
+
+    expect(validateBlueprint(invalid)).toEqual(expect.arrayContaining([
+      'route invalide (doit commencer par /) : "agenda"',
+      'route "agenda" : componentPath et componentExport sont requis',
+      'événement hors namespace de la verticale : "payment.completed"',
+      'événement dupliqué : "salon.appointment_completed"',
+      'sous-variante dupliquée: "spa"',
+    ]));
+  });
 });
 
 describe('Vertical Forge — génération L1 reproduit la structure salon', () => {

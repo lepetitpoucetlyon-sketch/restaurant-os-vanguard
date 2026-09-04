@@ -65,18 +65,15 @@ function generateSecurePin(): string {
 
 /**
  * Returns a safe PIN — generates one if the provided PIN is weak, blacklisted,
- * or absent. Logs a warning (with the generated PIN) when a replacement occurs.
+ * or absent. The replacement is deliberately never written to logs: a PIN is a
+ * credential, and logs are not an authorised delivery channel.
  */
-function resolveAdminPin(adminPin: string | undefined, adminEmail: string): string {
+function resolveAdminPin(adminPin: string | undefined): string {
   const validation = adminPin ? validatePin(adminPin) : { valid: false };
   if (validation.valid) return adminPin as string;
 
   const generated = generateSecurePin();
-  logger.warn(
-    `[TenantSeeder] Weak or missing adminPin detected for ${adminEmail}. ` +
-    `A secure PIN has been generated: ${generated}. ` +
-    `Please communicate this PIN to the admin securely.`
-  );
+  logger.warn('[TenantSeeder] Weak or missing adminPin replaced with a secure credential.');
   return generated;
 }
 
@@ -93,7 +90,7 @@ interface SeedResult {
 export const TenantSeeder = {
   async seed(input: SeedInput): Promise<SeedResult> {
     const { tenantId, name, adminEmail, siren, primaryColor, variant = 'restaurant', trialDays, brandingOverlay } = input;
-    const adminPin = resolveAdminPin(input.adminPin, input.adminEmail);
+    const adminPin = resolveAdminPin(input.adminPin);
     const seededPaths: string[] = [];
     const baseDNA = resolveDNA(variant);
 

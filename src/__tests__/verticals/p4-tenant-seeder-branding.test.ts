@@ -161,6 +161,22 @@ describe('TenantSeeder.seed — brandingOverlay', () => {
         expect(cfg.theme.primaryColor).toBe('#123456');
     });
 
+    it('ne journalise jamais le PIN ni l’adresse lorsque le PIN est généré', async () => {
+        const email = 'secret-owner@example.test';
+        await TenantSeeder.seed({
+            tenantId: 't_generated_pin',
+            name: 'Test PIN',
+            adminEmail: email,
+            variant: 'restaurant',
+        });
+
+        const warning = vi.mocked((await import('@/lib/logger')).logger.warn);
+        expect(warning).toHaveBeenCalled();
+        const logText = warning.mock.calls.flat().join(' ');
+        expect(logText).not.toContain(email);
+        expect(logText).not.toMatch(/\b\d{4}\b/);
+    });
+
     it('avec overlay → primaryColor scrapée gagne sur input.primaryColor + ajoute logo/font', async () => {
         const overlay: ScrapedBrandingOverlay = {
             primaryColor: '#FF6B35',

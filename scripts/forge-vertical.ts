@@ -247,8 +247,8 @@ async function main(): Promise<void> {
     }
 
     const problems = validateBlueprint(bp);
-    if (problems.length && !args.force) {
-        console.error(`❌ Blueprint invalide :\n  - ${problems.join('\n  - ')}\n(utilisez --force pour passer outre)`);
+    if (problems.length) {
+        console.error(`❌ Blueprint invalide :\n  - ${problems.join('\n  - ')}\n--force autorise seulement l'écrasement des fichiers existants ; il ne contourne jamais la validation métier.`);
         process.exit(1);
     }
 

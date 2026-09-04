@@ -245,14 +245,42 @@ export function validateBlueprint(bp: VerticalBlueprint): string[] {
     const issues: string[] = [];
     if (!bp.slug || !/^[a-z][a-z0-9_]*$/.test(bp.slug)) issues.push(`slug invalide: "${bp.slug}"`);
     if (!/Vertical$/.test(bp.className)) issues.push(`className doit finir par "Vertical": "${bp.className}"`);
+    if (!bp.meta.label.trim() || !bp.meta.name.trim() || !bp.meta.description.trim()) {
+        issues.push('meta.label, meta.name et meta.description sont requis');
+    }
     for (const k of Object.keys(bp.capabilities)) {
         if (!isKnownCapability(k)) issues.push(`capability inconnue: "${k}"`);
     }
     if (!bp.legalType) issues.push('legalType manquant');
+    if (bp.events.length === 0) issues.push('au moins un événement métier est requis');
+
+    const routePaths = new Set<string>();
+    for (const route of bp.routes) {
+        if (!route.path.startsWith('/')) issues.push(`route invalide (doit commencer par /) : "${route.path}"`);
+        if (routePaths.has(route.path)) issues.push(`route dupliquée : "${route.path}"`);
+        routePaths.add(route.path);
+        if (!route.componentPath || !route.componentExport) {
+            issues.push(`route "${route.path}" : componentPath et componentExport sont requis`);
+        }
+    }
+
+    const eventNames = new Set<string>();
+    for (const event of bp.events) {
+        if (!event.name.startsWith(`${bp.slug}.`)) {
+            issues.push(`événement hors namespace de la verticale : "${event.name}"`);
+        }
+        if (eventNames.has(event.name)) issues.push(`événement dupliqué : "${event.name}"`);
+        eventNames.add(event.name);
+    }
+
     if (precisionAtLeast(bp.precision, 'L2') && !bp.substance) {
         issues.push('substance (SectorStudy) requise pour precision ≥ L2');
     }
+    const subVariantSlugs = new Set<string>();
     for (const sv of bp.subVariants ?? []) {
+        if (!/^[a-z][a-z0-9_]*$/.test(sv.slug)) issues.push(`sous-variante invalide: "${sv.slug}"`);
+        if (subVariantSlugs.has(sv.slug)) issues.push(`sous-variante dupliquée: "${sv.slug}"`);
+        subVariantSlugs.add(sv.slug);
         for (const k of Object.keys(sv.capabilities ?? {})) {
             if (!isKnownCapability(k)) issues.push(`sous-variante ${sv.slug}: capability inconnue "${k}"`);
         }
