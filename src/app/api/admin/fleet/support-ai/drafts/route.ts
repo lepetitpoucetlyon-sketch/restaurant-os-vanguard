@@ -24,6 +24,7 @@ import { ChangelogService } from '@/lib/mcc/ChangelogService';
 import { SupportDraftSchema } from '@/shared/schemas';
 import type { SupportTicket, SupportTicketStatus } from '@/shared/schemas';
 import { logger } from '@/lib/logger';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 const QUEUE_STATUSES: SupportTicketStatus[] = ['new', 'analyzing', 'draft_ready', 'analysis_failed'];
 
@@ -68,8 +69,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
   const all = await Nexus.adapter.query<SupportTicket>('mcc/supportTickets', where.length ? { where } : undefined);
   const tickets = statusParam ? all : all.filter(t => QUEUE_STATUSES.includes(t.status));
+  const page = paginateAfterId(tickets, parsePaginationParams(req.url));
 
-  return NextResponse.json({ tickets });
+  return NextResponse.json({ tickets: page.items, total: page.total, nextCursor: page.nextCursor });
 }
 
 interface DraftActionBody {

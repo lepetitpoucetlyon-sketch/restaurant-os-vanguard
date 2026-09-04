@@ -12,6 +12,7 @@ import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
 import { toError } from "@/lib/toError";
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 const BackupBodySchema = z.object({
   tenantIds: z.array(z.string()).optional()
@@ -41,11 +42,17 @@ export async function GET(request: NextRequest) {
         const provider = getBackupProvider();
         const files = await provider.list('backups/');
         const manifests = await Nexus.adapter.query<BackupManifest>('mcc/backupManifests');
+        const page = paginateAfterId(
+            manifests.sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+            parsePaginationParams(request.url),
+        );
 
         return NextResponse.json({
             provider:  provider.name,
             files,
-            manifests: manifests.sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 50),
+            manifests: page.items,
+            total: page.total,
+            nextCursor: page.nextCursor,
         });
     } catch (err) {
         logger.error('[backup] GET error', err);

@@ -25,6 +25,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 const RolloutPostSchema = z.object({
   featureKey: z.string().min(1),
@@ -148,6 +149,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json(rollout);
   }
 
-  const rollouts = await Nexus.adapter.query('mcc/rollouts');
-  return NextResponse.json({ rollouts });
+  const rollouts = await Nexus.adapter.query<Rollout>('mcc/rollouts');
+  const page = paginateAfterId(rollouts, parsePaginationParams(req.url), rollout => rollout.featureKey);
+  return NextResponse.json({ rollouts: page.items, total: page.total, nextCursor: page.nextCursor });
 }
