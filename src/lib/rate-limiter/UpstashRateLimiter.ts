@@ -1,4 +1,5 @@
 import type { IRateLimiter, RateLimitResult } from './RateLimiter';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 // Utilise l'API REST Upstash (fetch natif — pas de SDK requis)
 export class UpstashRateLimiter implements IRateLimiter {
@@ -14,14 +15,16 @@ export class UpstashRateLimiter implements IRateLimiter {
     const windowSec = Math.ceil(windowMs / 1000);
     try {
       // INCR + EXPIRE via pipeline
-      const res = await fetch(`${this.url}/pipeline`, {
+      // Rate-limit dans le chemin chaud auth — timeout serré (2s) : mieux vaut
+      // fail-open (catch en bas) qu'attendre Upstash sur un problème réseau.
+      const res = await fetchWithTimeout(`${this.url}/pipeline`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${this.token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify([
           ['INCR', key],
           ['EXPIRE', key, windowSec, 'NX'],
         ]),
-      });
+      }, 2_000);
       const data = (await res.json()) as [{ result: number }, { result: number }];
       const count = data[0].result;
       const allowed = count <= limit;

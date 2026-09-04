@@ -1,6 +1,7 @@
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { toError } from "@/lib/toError";
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 export interface NotificationPayload {
     tenantId: string;
@@ -40,11 +41,11 @@ export class NotificationGateway {
                 } else {
                     const url = `https://api.twilio.com/2010-04-01/Accounts/${twilioSid}/Messages.json`;
                     const body = new URLSearchParams({ To: payload.to, From: twilioFrom, Body: payload.text });
-                    const res = await fetch(url, {
+                    const res = await fetchWithTimeout(url, {
                         method: 'POST',
                         headers: { Authorization: `Basic ${Buffer.from(`${twilioSid}:${twilioToken}`).toString('base64')}` },
                         body,
-                    });
+                    }, 8_000);
                     if (!res.ok) throw new Error(`Twilio HTTP ${res.status}`);
                     logger.info(`[NotificationGateway] SMS envoyé à ${payload.to} via Twilio`);
                     return;

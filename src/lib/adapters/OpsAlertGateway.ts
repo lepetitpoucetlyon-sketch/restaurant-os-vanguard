@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 // Transport d'alertes plate-forme (ops/oncall) — pas de Nexus, pas de tenant.
 // Cible : Slack / Discord / webhook générique JSON.
@@ -89,11 +90,11 @@ export class OpsAlertGateway {
         const body = buildBody(kind, alert);
 
         try {
-            const res = await fetch(webhookUrl, {
+            const res = await fetchWithTimeout(webhookUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body,
-            });
+            }, 8_000);
             if (!res.ok) {
                 logger.error(
                     `[OpsAlertGateway] Webhook HTTP ${res.status} pour alerte "${alert.title}"`,

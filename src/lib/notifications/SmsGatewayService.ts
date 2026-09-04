@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { empireAudit } from '@/lib/audit';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 export type SmsProvider = 'TWILIO' | 'BREVO' | 'OVH' | 'SANDBOX';
 
@@ -130,14 +131,14 @@ export class SmsGatewayService {
     params.append('From', from);
     params.append('Body', body);
 
-    const response = await fetch(url, {
+    const response = await fetchWithTimeout(url, {
       method: 'POST',
       headers: {
         Authorization: authHeader,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: params.toString(),
-    });
+    }, 8_000);
 
     if (!response.ok) {
       const errorData = await response.text();
@@ -156,7 +157,7 @@ export class SmsGatewayService {
 
   private static async sendViaBrevo(to: string, content: string, sender: string): Promise<SmsSendResult> {
     const apiKey = process.env.BREVO_API_KEY!;
-    const response = await fetch('https://api.brevo.com/v3/transactionalSMS/send', {
+    const response = await fetchWithTimeout('https://api.brevo.com/v3/transactionalSMS/send', {
       method: 'POST',
       headers: {
         'api-key': apiKey,
@@ -168,7 +169,7 @@ export class SmsGatewayService {
         content,
         type: 'transactional',
       }),
-    });
+    }, 8_000);
 
     if (!response.ok) {
       const errorData = await response.text();

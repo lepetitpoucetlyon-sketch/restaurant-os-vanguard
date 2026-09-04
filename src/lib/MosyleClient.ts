@@ -1,5 +1,6 @@
 import 'server-only';
 import { logger } from '@/lib/logger';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 const BASE_URL = 'https://businessapi.mosyle.com/v1';
 
@@ -22,10 +23,10 @@ function getHeaders(): HeadersInit {
 
 export const MosyleClient = {
   async listDevices(): Promise<MosyleDevice[]> {
-    const res = await fetch(`${BASE_URL}/listdevices`, {
+    const res = await fetchWithTimeout(`${BASE_URL}/listdevices`, {
       headers: getHeaders(),
       next: { revalidate: 30 },
-    });
+    }, 8_000);
     if (!res.ok) {
       logger.warn(`[Mosyle] listDevices error ${res.status}`);
       throw new Error(`Mosyle API ${res.status}`);
@@ -35,10 +36,10 @@ export const MosyleClient = {
   },
 
   async lockDevice(serialNumber: string): Promise<void> {
-    const res = await fetch(`${BASE_URL}/mdm/${serialNumber}/lock`, {
+    const res = await fetchWithTimeout(`${BASE_URL}/mdm/${serialNumber}/lock`, {
       method: 'PUT',
       headers: getHeaders(),
-    });
+    }, 8_000);
     if (!res.ok) {
       logger.warn(`[Mosyle] lock ${serialNumber} error ${res.status}`);
       throw new Error(`Mosyle lock error ${res.status}`);
@@ -46,10 +47,10 @@ export const MosyleClient = {
   },
 
   async eraseDevice(serialNumber: string): Promise<void> {
-    const res = await fetch(`${BASE_URL}/mdm/${serialNumber}/erase`, {
+    const res = await fetchWithTimeout(`${BASE_URL}/mdm/${serialNumber}/erase`, {
       method: 'PUT',
       headers: getHeaders(),
-    });
+    }, 8_000);
     if (!res.ok) {
       logger.warn(`[Mosyle] erase ${serialNumber} error ${res.status}`);
       throw new Error(`Mosyle erase error ${res.status}`);
