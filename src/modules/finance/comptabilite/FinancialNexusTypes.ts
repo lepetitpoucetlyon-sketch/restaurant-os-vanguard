@@ -20,6 +20,8 @@ export interface BridgePayload {
   isTrainingMode?: boolean;
   partialPayments?: { amountInMicrounits: number; guest: number; method?: string }[];
   orderId?: string;
+  /** Identifiant KDS conservé à travers l'encaissement pour les handlers aval. */
+  kitchenOrderId?: string;
   idempotencyKey?: string;
 }
 
@@ -36,4 +38,3 @@ export interface RefundPayload {
   tenantId: string;
   reason: string;
 }
-

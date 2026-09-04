@@ -17,6 +17,7 @@ export interface OPSEvents {
     v: 1;
     isSimulation?: boolean;
     orderId: string;
+    kitchenOrderId?: string;
     tableId: string | null;
     tenantId: string;
     operatorId: string;

@@ -1,9 +1,8 @@
 import Stripe from 'stripe';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { getStripe as getStripeClient } from '@/lib/payments/stripeClient';
 import { PRICING } from '@/shared/constants/pricing';
-
-const STRIPE_API_VERSION = '2026-08-26.dahlia' as const;
 
 export interface FleetTreasuryReport {
   /** MRR réel basé sur les abonnements Stripe actifs (€) */
@@ -23,7 +22,7 @@ export type PlanTier = keyof typeof PRICING;
 function getStripe(): Stripe {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error('[BillingService] STRIPE_SECRET_KEY env var not set');
-  return new Stripe(key, { apiVersion: STRIPE_API_VERSION });
+  return getStripeClient(key);
 }
 
 export const BillingService = {
@@ -160,7 +159,7 @@ export const BillingService = {
       return buildTheoreticalReport();
     }
 
-    const stripe = new Stripe(key, { apiVersion: STRIPE_API_VERSION });
+    const stripe = getStripeClient(key);
 
     try {
       // 1. MRR : abonnements actifs

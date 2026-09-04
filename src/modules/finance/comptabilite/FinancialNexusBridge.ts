@@ -162,7 +162,7 @@ export const FinancialNexusBridge = {
       updatedAt: now,
     };
 
-    emitPaymentEvents(entryId, payload, totalTTCInMicrounits, cartItems, paymentMode);
+    await emitPaymentEvents(entryId, payload, totalTTCInMicrounits, cartItems, paymentMode);
 
     empireAudit.log({
       module: 'accounting',

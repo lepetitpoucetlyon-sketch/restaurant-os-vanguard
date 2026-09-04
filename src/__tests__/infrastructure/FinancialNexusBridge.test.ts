@@ -65,6 +65,7 @@ describe('FinancialNexusBridge', () => {
       operatorId: 'op_1',
       tableId: 't_1',
       tenantId: 'tenant_1',
+      kitchenOrderId: 'kds_1',
     };
 
     const result = await FinancialNexusBridge.processOrder(payload);
@@ -84,6 +85,6 @@ describe('FinancialNexusBridge', () => {
       ])
     );
     expect(FiscalSealer.sealDataAtomically).toHaveBeenCalled();
-    expect(NexusEventBus.emitDurable).toHaveBeenCalledWith('order.paid', expect.any(Object));
+    expect(NexusEventBus.emitDurable).toHaveBeenCalledWith('order.paid', expect.objectContaining({ kitchenOrderId: 'kds_1' }));
   });
 });
