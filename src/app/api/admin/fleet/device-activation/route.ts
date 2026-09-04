@@ -21,6 +21,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 type DeviceType = 'ipad_pos' | 'kds' | 'tablet';
 
@@ -73,11 +74,15 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const token = req.nextUrl.searchParams.get('token');
 
   if (!token) {
-    // Liste les tokens actifs (super_admin requis)
+    // Liste les tokens actifs (super_admin requis) — paginée (audit S7)
     const caller = await requireMccLevel(req, 'mcc_super_admin');
     if (isDenied(caller)) return caller as NextResponse;
-    const tokens = await Nexus.adapter.query('mcc/deviceTokens');
-    return NextResponse.json({ tokens });
+    const tokens = await Nexus.adapter.query<{ tokenId?: string; createdAt?: string }>('mcc/deviceTokens');
+    // Tri décroissant par createdAt (les tokens récents en premier).
+    tokens.sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''));
+    const pagination = parsePaginationParams(req.url);
+    const paged = paginateAfterId(tokens, pagination, (t) => t.tokenId);
+    return NextResponse.json({ tokens: paged.items, total: paged.total, nextCursor: paged.nextCursor });
   }
 
   // Activation publique (token auto-signé — pas de guard MCC)

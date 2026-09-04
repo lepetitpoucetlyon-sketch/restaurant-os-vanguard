@@ -18,6 +18,7 @@ import { z } from 'zod';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { DSNBuilder } from '@/modules/human';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 const DsnPostSchema = z.object({
   period: z.string().regex(/^\d{4}-\d{2}$/, 'period requis au format YYYY-MM'),
@@ -63,10 +64,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller as { tenantId: string };
 
-  const docs = await Nexus.adapter.query(`tenants/${tenantId}/dsn`, {
-    orderBy: { field: 'period', direction: 'desc' },
-    limit: 24,
-  });
-
-  return NextResponse.json({ declarations: docs });
+  // Pagination cursor-based (audit S7) : garde le tri par période décroissante côté DB,
+  // découpe côté serveur via l'id du document (idéalement = période).
+  const pagination = parsePaginationParams(req.url);
+  const docs = await Nexus.adapter.query<{ id?: string; period?: string }>(
+    `tenants/${tenantId}/dsn`,
+    { orderBy: { field: 'period', direction: 'desc' }, limit: 500 },
+  );
+  const paged = paginateAfterId(docs, pagination, (d) => d.id ?? d.period);
+  return NextResponse.json({ declarations: paged.items, total: paged.total, nextCursor: paged.nextCursor });
 }

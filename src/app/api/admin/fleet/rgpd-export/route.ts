@@ -24,6 +24,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 const RgpdExportSchema = z.object({
     tenantId: z.string().min(1),
@@ -185,10 +186,15 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     }
 
     if (tenantId) {
-        const certs = await Nexus.adapter.query('mcc/rgpd-export-certificates', {
-            where: [{ field: 'tenantId', operator: '==', value: tenantId }],
-        });
-        return NextResponse.json({ count: certs.length, certificates: certs });
+        const certs = await Nexus.adapter.query<{ certificateId?: string; exportedAt?: string }>(
+            'mcc/rgpd-export-certificates',
+            { where: [{ field: 'tenantId', operator: '==', value: tenantId }] },
+        );
+        // Tri décroissant par exportedAt : les certificats récents en tête pour la pagination.
+        certs.sort((a, b) => (b.exportedAt ?? '').localeCompare(a.exportedAt ?? ''));
+        const pagination = parsePaginationParams(req.url);
+        const paged = paginateAfterId(certs, pagination, (c) => c.certificateId);
+        return NextResponse.json({ count: paged.total, certificates: paged.items, nextCursor: paged.nextCursor });
     }
 
     return NextResponse.json(

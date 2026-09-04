@@ -23,6 +23,7 @@ import { NexusInfra } from '@/lib/nexus/NexusInfra';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 const RestoreBodySchema = z.object({
   tenantId: z.string().min(1),
@@ -98,8 +99,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ jobs: job ? [job] : [], total: job ? 1 : 0 });
   }
 
-  const jobs = await Nexus.adapter.query('mcc/restoreJobs') as Array<{ tenantId?: string }>;
+  const jobs = await Nexus.adapter.query('mcc/restoreJobs') as Array<{ tenantId?: string; jobId?: string; initiatedAt?: string }>;
   const filtered = tenantId ? jobs.filter(j => j.tenantId === tenantId) : jobs;
+  // Tri décroissant par initiatedAt pour que la pagination cursor commence par les plus récents.
+  filtered.sort((a, b) => (b.initiatedAt ?? '').localeCompare(a.initiatedAt ?? ''));
 
-  return NextResponse.json({ jobs: filtered, total: filtered.length });
+  const pagination = parsePaginationParams(req.url);
+  const paged = paginateAfterId(filtered, pagination, (j) => j.jobId);
+
+  return NextResponse.json({ jobs: paged.items, total: paged.total, nextCursor: paged.nextCursor });
 }

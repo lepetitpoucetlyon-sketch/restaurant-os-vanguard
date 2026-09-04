@@ -50,7 +50,10 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     if (!rl.allowed) {
         return NextResponse.json({ error: 'Trop de requêtes.' }, { status: 429 });
     }
-    const users = await Nexus.adapter.query<RootUserDoc>('users');
+    // NB : liste bornée par tenant (effectif staff ≤ quelques dizaines) — l'écran de sélection
+    // pré-auth consomme la liste complète en un seul appel. On plafonne à 500 pour bloquer
+    // un tenant pathologique tout en gardant la sémantique historique (retour non paginé).
+    const users = await Nexus.adapter.query<RootUserDoc>('users', { limit: 500 });
     const safeUsers = users
         .map((u) => ({
             id: u.id,

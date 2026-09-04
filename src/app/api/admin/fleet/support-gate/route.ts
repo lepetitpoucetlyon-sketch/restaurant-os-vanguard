@@ -22,6 +22,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import { z } from 'zod';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 const SupportGatePostSchema = z.object({
   action: z.string().min(1),
@@ -123,8 +124,12 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   if (isDenied(caller)) return caller as NextResponse;
 
   const status = req.nextUrl.searchParams.get('status') ?? 'pending_human_approval';
-  const all    = await Nexus.adapter.query('mcc/supportGates') as Array<{ status?: string }>;
+  const all    = await Nexus.adapter.query('mcc/supportGates') as Array<{ status?: string; gateId?: string; createdAt?: string }>;
   const filtered = all.filter(g => !status || g.status === status);
+  // Tri décroissant : les plus récents en tête pour que le curseur reprenne cohérent.
+  filtered.sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''));
 
-  return NextResponse.json({ gates: filtered, total: filtered.length });
+  const pagination = parsePaginationParams(req.url);
+  const paged = paginateAfterId(filtered, pagination, (g) => g.gateId);
+  return NextResponse.json({ gates: paged.items, total: paged.total, nextCursor: paged.nextCursor });
 }
