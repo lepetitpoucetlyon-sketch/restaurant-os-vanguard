@@ -1,5 +1,6 @@
 import { logger } from '@/lib/logger';
 import { redactPII } from '@/lib/security/redactPII';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 export interface SlmQueryOptions {
   userRoleLevel?: number; // 10, 40, 70, 100
@@ -42,7 +43,7 @@ export class SovereignSlmClient {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/chat/completions`, {
+      const response = await fetchWithTimeout(`${this.baseUrl}/chat/completions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +65,7 @@ export class SovereignSlmClient {
           max_tokens: options?.maxTokens ?? 256,
           response_format: { type: 'json_object' },
         }),
-      });
+      }, 15_000);
 
       const latencyMs = Date.now() - startTime;
 

@@ -1,5 +1,6 @@
 import type { ILLMProvider, LLMTextRequest, LLMTextResponse, LLMVisionRequest } from './types';
 import { logger } from '@/lib/logger';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 const API_KEY = process.env.GEMINI_API_KEY || process.env.LLM_API_KEY || '';
 const BASE_URL = process.env.LLM_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta';
@@ -143,11 +144,11 @@ export class GeminiProvider implements ILLMProvider {
 
         logger.debug(`[GeminiProvider] POST ${model}:generateContent`);
 
-        const res = await fetch(url, {
+        const res = await fetchWithTimeout(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),
-        });
+        }, 20_000);
 
         if (!res.ok) {
             const errorBody = await res.text();

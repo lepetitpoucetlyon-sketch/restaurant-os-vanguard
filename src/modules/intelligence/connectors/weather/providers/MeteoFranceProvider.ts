@@ -1,6 +1,7 @@
 import type { IWeatherProvider, WeatherForecast } from '../types';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 /**
  * Météo France — API publique gratuite (api.meteo.fr / meteo.data.gouv.fr).
@@ -13,9 +14,9 @@ export class MeteoFranceProvider implements IWeatherProvider {
     async getForecast(lat: number, lng: number, days: number): Promise<WeatherForecast[]> {
         try {
             const url = `https://api.meteo.fr/v1/forecast?latitude=${lat}&longitude=${lng}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,weathercode&forecast_days=${Math.min(days, 14)}&timezone=Europe%2FParis`;
-            const res = await fetch(url, {
+            const res = await fetchWithTimeout(url, {
                 headers: { 'Accept': 'application/json' },
-            });
+            }, 8_000);
             if (!res.ok) throw new Error(`Météo France API → ${res.status}`);
             const data = await res.json() as {
                 daily: {

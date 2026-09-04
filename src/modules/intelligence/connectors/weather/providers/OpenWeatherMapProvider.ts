@@ -1,6 +1,7 @@
 import type { IWeatherProvider, WeatherForecast } from '../types';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 /**
  * OpenWeatherMap — gratuit jusqu'à 1 000 appels/jour.
@@ -20,7 +21,7 @@ export class OpenWeatherMapProvider implements IWeatherProvider {
         try {
             const cnt = Math.min(days * 8, 40); // OWM renvoie des tranches de 3h
             const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&cnt=${cnt}&appid=${this.apiKey}&units=metric&lang=fr`;
-            const res = await fetch(url);
+            const res = await fetchWithTimeout(url, {}, 8_000);
             if (!res.ok) throw new Error(`OpenWeatherMap → ${res.status}`);
             const data = await res.json() as { list: Array<Record<string, unknown>> };
 
