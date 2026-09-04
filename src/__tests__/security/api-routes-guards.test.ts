@@ -22,9 +22,7 @@ const WEBHOOK_GUARDS = [
 ];
 
 const CRON_GUARDS = [
-  'CRON_SECRET',
-  'x-vercel-cron-signature',
-  'x-cron-secret',
+  'isAuthorizedCronRequest',
 ];
 
 function findRouteFiles(dir: string, fileList: string[] = []): string[] {
@@ -76,4 +74,3 @@ describe('🔒 API Route Security Guards Gate (Priorité 1.3)', () => {
     }
   });
 });
-

@@ -5,6 +5,7 @@ import { Resend } from 'resend';
 import { buildWeeklyReportHTML } from '@/modules/intelligence';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
+import { isAuthorizedCronRequest } from '@/lib/server/cronAuth';
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL ?? 'rapports@restaurant-os.app';
@@ -18,20 +19,14 @@ interface TenantSettings {
 /**
  * GET /api/cron/weekly-report
  *
- * Protected by CRON_SECRET.  Vercel passes the secret via the
- * `x-vercel-cron-signature` header; for local testing pass it via
- * `x-cron-secret`.
+ * Protected by Vercel's `Authorization: Bearer $CRON_SECRET` contract.
  *
  * Builds the HTML report for the previous week and sends it via Resend
  * to the tenant owner's email address (settings/general → contact.emailGeneral).
  */
 export async function GET(req: NextRequest) {
   // ── Auth ──────────────────────────────────────────────────────────────────
-  const incomingSecret =
-    req.headers.get('x-vercel-cron-signature') ??
-    req.headers.get('x-cron-secret');
-
-  if (!incomingSecret || incomingSecret !== process.env.CRON_SECRET) {
+  if (!isAuthorizedCronRequest(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

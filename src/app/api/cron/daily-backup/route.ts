@@ -2,22 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { DailyBackupJob } from '@/lib/cron/DailyBackupJob';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
+import { isAuthorizedCronRequest } from '@/lib/server/cronAuth';
 
 /**
  * GET /api/cron/daily-backup
  *
  * Déclencheur automatique de sauvegarde quotidienne (Vercel Cron: "0 2 * * *").
- * Protégé par CRON_SECRET (`x-vercel-cron-signature` ou `x-cron-secret`).
+ * Protégé par le contrat Vercel : `Authorization: Bearer $CRON_SECRET`.
  */
 export async function GET(req: NextRequest) {
-    const incomingSecret =
-        req.headers.get('x-vercel-cron-signature') ??
-        req.headers.get('x-cron-secret') ??
-        req.nextUrl.searchParams.get('secret');
-
-    const expectedSecret = process.env.CRON_SECRET;
-
-    if (process.env.NODE_ENV === 'production' && (!expectedSecret || incomingSecret !== expectedSecret)) {
+    if (process.env.NODE_ENV === 'production' && !isAuthorizedCronRequest(req)) {
         logger.warn('[cron/daily-backup] Tentative d\'accès non autorisée');
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
