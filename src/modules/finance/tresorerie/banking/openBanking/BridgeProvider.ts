@@ -7,6 +7,7 @@ import type {
 } from './types';
 import type { BankTransaction } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 import type { JsonObject } from "@/shared/types/json";
 
 const BRIDGE_BASE = 'https://api.bridgeapi.io/v2';
@@ -107,7 +108,7 @@ export class BridgeProvider implements IOpenBankingProvider {
             'Client-Secret':  clientSecret,
         };
         if (userToken) headers['Authorization'] = `Bearer ${userToken}`;
-        const res = await fetch(`${BRIDGE_BASE}${path}`, { ...options, headers });
+        const res = await fetchWithTimeout(`${BRIDGE_BASE}${path}`, { ...options, headers }, 8_000);
         if (!res.ok) throw new Error(`Bridge ${path} → ${res.status}`);
         return res.json() as Promise<T>;
     }
