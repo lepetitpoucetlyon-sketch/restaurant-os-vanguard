@@ -150,6 +150,7 @@ export class FirebaseAuthProvider implements IServerAuthProvider {
 
 import jwt from 'jsonwebtoken';
 import { createPublicKey, type KeyObject } from 'crypto';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 // ─── Keycloak / OIDC (migration OVH) — squelette à compléter ─────────────────
 
@@ -171,7 +172,7 @@ async function fetchJwks(issuer: string, forceRefresh: boolean): Promise<Map<str
         return cached.keys;
     }
 
-    const res = await fetch(`${issuer}/protocol/openid-connect/certs`);
+    const res = await fetchWithTimeout(`${issuer}/protocol/openid-connect/certs`, {}, 5_000);
     if (!res.ok) {
         throw new Error(`[Keycloak] Échec récupération JWKS (${res.status}) — issuer=${issuer}`);
     }

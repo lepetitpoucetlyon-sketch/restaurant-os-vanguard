@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 import { getRateLimiter } from '@/infrastructure/services/rate-limiter';
 
 const BookSchema = z.object({
@@ -87,7 +88,7 @@ export async function POST(request: NextRequest) {
 
     // Fire-and-forget email confirmation
     try {
-      await fetch(`${request.nextUrl.origin}/api/email/reservation-confirm`, {
+      await fetchWithTimeout(`${request.nextUrl.origin}/api/email/reservation-confirm`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -104,7 +105,7 @@ export async function POST(request: NextRequest) {
           covers,
           notes,
         }),
-      });
+      }, 5_000);
     } catch (emailErr) {
       // Non-blocking: email failure must never block the booking
       logger.warn('[widget/book] Email confirmation failed (non-blocking)', String(emailErr));

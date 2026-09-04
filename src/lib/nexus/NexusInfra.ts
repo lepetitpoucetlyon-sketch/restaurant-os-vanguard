@@ -12,6 +12,7 @@
  *   mock | simulacra    — simulation en mémoire
  */
 import { logger } from '@/lib/logger';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 export interface PitrRestoreResult {
     jobId:            string;
@@ -40,7 +41,7 @@ class FirestoreInfraProvider implements INexusInfraProvider {
 
         try {
             // Firestore-only — PITR non-portable vers d'autres providers Nexus
-            const res = await fetch(
+            const res = await fetchWithTimeout(
                 `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default):restore`,
                 {
                     method: 'POST',
@@ -49,7 +50,8 @@ class FirestoreInfraProvider implements INexusInfraProvider {
                         backup:     `projects/${projectId}/locations/europe-west1/backups/${tenantId}_backup`,
                         databaseId: `restore-${tenantId}-${jobId.slice(0, 8)}`,
                     }),
-                }
+                },
+                10_000,
             );
             if (res.ok) {
                 const op = await res.json() as { name?: string };

@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { logger } from '@/lib/logger';
 import { OpsAlertGateway } from '@/lib/adapters/OpsAlertGateway';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 // ─────────────────────────────────────────────────────────────────
 // POST /api/ops/incident-webhook
@@ -165,14 +166,14 @@ async function autoRemediate(
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
       const cronSecret = process.env.CRON_SECRET;
       if (cronSecret) {
-        const res = await fetch(`${baseUrl}/api/cron/daily-backup`, {
+        const res = await fetchWithTimeout(`${baseUrl}/api/cron/daily-backup`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${cronSecret}`,
           },
           body: JSON.stringify({ tenantId: tenant }),
-        });
+        }, 10_000);
         if (!res.ok) throw new Error(`Backup retry failed: ${res.status}`);
       }
       break;
