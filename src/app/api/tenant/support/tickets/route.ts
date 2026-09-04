@@ -21,6 +21,7 @@ import { registerSupportTicketAnalysisHandler } from '@/shared/eventBus/handlers
 import { sanitized } from '@/shared/schemas/primitives';
 import type { SupportTicket } from '@/shared/schemas';
 import { logger } from '@/lib/logger';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 registerSupportTicketAnalysisHandler();
 
@@ -88,6 +89,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     where: [{ field: 'tenantId', operator: '==', value: tenantId }],
     orderBy: { field: 'createdAt', direction: 'desc' },
   });
+  const page = paginateAfterId(all, parsePaginationParams(req.url));
 
-  return NextResponse.json({ tickets: all });
+  return NextResponse.json({ tickets: page.items, total: page.total, nextCursor: page.nextCursor });
 }

@@ -22,6 +22,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { randomBytes } from 'node:crypto';
 import { logger } from '@/lib/logger';
 import type { JsonObject } from "@/shared/types/json";
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 const COMMISSION_RATE = 0.10; // 10%
 
@@ -33,8 +34,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'mcc_super_admin');
   if (isDenied(caller)) return caller as NextResponse;
 
-  const resellers = await Nexus.adapter.query('mcc/resellers', { limit: 200 });
-  return NextResponse.json({ resellers });
+  const resellers = await Nexus.adapter.query<{ id?: string }>('mcc/resellers');
+  const page = paginateAfterId(resellers, parsePaginationParams(req.url));
+  return NextResponse.json({ resellers: page.items, total: page.total, nextCursor: page.nextCursor });
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {

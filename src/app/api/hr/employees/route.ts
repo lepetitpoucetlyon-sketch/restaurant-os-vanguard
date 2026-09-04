@@ -22,6 +22,7 @@ import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 const EmployeeSchema = z.object({
   firstName:            z.string().min(1).max(80).trim(),
@@ -168,6 +169,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   if (isDenied(caller)) return caller as NextResponse;
   const { tenantId } = caller as { tenantId: string };
 
-  const employees = await Nexus.adapter.query(`tenants/${tenantId}/staff`);
-  return NextResponse.json({ employees, total: employees.length });
+  const employees = await Nexus.adapter.query<{ id?: string }>(`tenants/${tenantId}/staff`);
+  const page = paginateAfterId(employees, parsePaginationParams(req.url));
+  return NextResponse.json({ employees: page.items, total: page.total, nextCursor: page.nextCursor });
 }

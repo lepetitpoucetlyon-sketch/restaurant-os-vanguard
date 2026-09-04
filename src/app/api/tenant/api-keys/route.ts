@@ -6,6 +6,7 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { createHash } from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import { logger } from '@/lib/logger';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 const CreateKeySchema = z.object({
   name: z.string().min(1).max(120),
@@ -41,6 +42,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const { tenantId } = caller;
 
   const all = await Nexus.adapter.query<StoredApiKey>(`tenants/${tenantId}/apiKeys`);
+  const pagination = parsePaginationParams(req.url);
   const active = all
     .filter(k => !k.revokedAt)
     .map(k => ({
@@ -51,8 +53,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       createdAt: k.createdAt,
       lastUsedAt: k.lastUsedAt,
     }));
+  const page = paginateAfterId(active, pagination);
 
-  return NextResponse.json({ keys: active });
+  return NextResponse.json({ keys: page.items, total: page.total, nextCursor: page.nextCursor });
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
