@@ -17,6 +17,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 const CURRENT_CGV_VERSION = process.env.CGV_VERSION ?? '2025-01';
 
@@ -100,6 +101,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     });
   }
 
-  const contracts = await Nexus.adapter.query(`mcc/contracts/${tenantId}/versions`);
-  return NextResponse.json({ contracts });
+  const contracts = await Nexus.adapter.query<{ contractId?: string }>(`mcc/contracts/${tenantId}/versions`);
+  const page = paginateAfterId(contracts, parsePaginationParams(req.url), contract => contract.contractId);
+  return NextResponse.json({ contracts: page.items, total: page.total, nextCursor: page.nextCursor });
 }

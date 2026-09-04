@@ -18,6 +18,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 interface CampaignVariant {
   variantId:   string;
@@ -150,6 +151,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json(test);
   }
 
-  const tests = await Nexus.adapter.query(`tenants/${tenantId}/abTests`);
-  return NextResponse.json({ tests, total: tests.length });
+  const tests = await Nexus.adapter.query<ABTest>(`tenants/${tenantId}/abTests`);
+  const page = paginateAfterId(tests, parsePaginationParams(req.url), test => test.testId);
+  return NextResponse.json({ tests: page.items, total: page.total, nextCursor: page.nextCursor });
 }

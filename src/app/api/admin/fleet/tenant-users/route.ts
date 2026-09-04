@@ -9,6 +9,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import type { User } from '@/modules/human';
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const caller = await requireMccLevel(req, 'mcc_support');
@@ -30,8 +31,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       timestamp: new Date(),
     });
 
+    const page = paginateAfterId(users, parsePaginationParams(req.url));
     return NextResponse.json({
-      users: users.map(u => ({
+      users: page.items.map(u => ({
         id:         u.id,
         name:       u.name,
         email:      u.email ?? null,
@@ -39,6 +41,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         lastActive: u.lastActive ?? null,
         status:     u.status,
       })),
+      total: page.total,
+      nextCursor: page.nextCursor,
     });
   } catch (err) {
     return NextResponse.json(

@@ -47,5 +47,13 @@ describe('pagination (audit S7)', () => {
             const p = paginateAfterId(items, { limit: 3, cursor: 'ghost' });
             expect(p.items.map((i) => i.id)).toEqual(['id_0', 'id_1', 'id_2']);
         });
+
+        it('accepte un identifiant métier explicite autre que id', () => {
+            const devices = [{ deviceId: 'device_a' }, { deviceId: 'device_b' }];
+            const p = paginateAfterId(devices, { limit: 1 }, (device) => device.deviceId);
+
+            expect(p.items).toEqual([{ deviceId: 'device_a' }]);
+            expect(p.nextCursor).toBe('device_a');
+        });
     });
 });

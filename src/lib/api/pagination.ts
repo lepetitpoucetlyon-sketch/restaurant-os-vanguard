@@ -53,10 +53,14 @@ export function parsePaginationParams(url: URL | string): PaginationQuery {
  *
  * `getId` : fonction d'extraction de l'id d'un item (défaut : `item.id`).
  */
-export function paginateAfterId<T extends { id?: string }>(
+export function paginateAfterId<T>(
     items: readonly T[],
     query: PaginationQuery,
-    getId: (item: T) => string | undefined = (i) => i.id,
+    getId: (item: T) => string | undefined = (i) => (
+        typeof i === 'object' && i !== null && 'id' in i && typeof i.id === 'string'
+            ? i.id
+            : undefined
+    ),
 ): Paginated<T> {
     let startIdx = 0;
     if (query.cursor) {

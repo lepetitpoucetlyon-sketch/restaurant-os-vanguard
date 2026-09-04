@@ -6,6 +6,7 @@ import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
 import type { MccRole } from '@/lib/server/adminAuthGuard';
 import { toError } from "@/lib/toError";
+import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 
 export interface TrustedDevice {
     deviceId:      string;
@@ -42,8 +43,9 @@ export async function GET(request: NextRequest) {
             ...d,
             fingerprint: isFleetAdmin ? d.fingerprint : d.fingerprint.slice(0, 8) + '…',
         }));
+        const page = paginateAfterId(sanitized, parsePaginationParams(request.url), device => device.deviceId);
 
-        return NextResponse.json({ devices: sanitized });
+        return NextResponse.json({ devices: page.items, total: page.total, nextCursor: page.nextCursor });
     } catch (err) {
         logger.error('[trusted-devices] GET error', toError(err).message);
         return NextResponse.json({ error: 'Erreur interne.' }, { status: 500 });
