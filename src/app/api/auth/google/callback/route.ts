@@ -2,6 +2,7 @@ import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ?? '';
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET ?? '';
@@ -103,7 +104,7 @@ export async function GET(req: NextRequest) {
 
   try {
     // Échange du code contre des tokens
-    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+    const tokenRes = await fetchWithTimeout('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
@@ -113,7 +114,7 @@ export async function GET(req: NextRequest) {
         redirect_uri: GOOGLE_REDIRECT_URI,
         grant_type: 'authorization_code',
       }).toString(),
-    });
+    }, 8_000);
 
     const tokenData: GoogleTokenResponse = await tokenRes.json();
 

@@ -18,6 +18,7 @@ import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 const BASE_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN ?? 'restaurantos.app';
 
@@ -26,13 +27,14 @@ async function provisionVercelDomain(slug: string): Promise<string> {
   const token    = process.env.VERCEL_TOKEN!;
   const project  = process.env.VERCEL_PROJECT_ID!;
 
-  const res = await fetch(
+  const res = await fetchWithTimeout(
     `https://api.vercel.com/v9/projects/${project}/domains`,
     {
       method:  'POST',
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       body:    JSON.stringify({ name: domain }),
     },
+    10_000,
   );
 
   if (!res.ok) {
@@ -49,7 +51,7 @@ async function provisionCloudflareDns(slug: string): Promise<string> {
   const zone    = process.env.CLOUDFLARE_ZONE_ID!;
   const target  = process.env.CLOUDFLARE_CNAME_TARGET ?? BASE_DOMAIN;
 
-  const res = await fetch(
+  const res = await fetchWithTimeout(
     `https://api.cloudflare.com/client/v4/zones/${zone}/dns_records`,
     {
       method:  'POST',
@@ -62,6 +64,7 @@ async function provisionCloudflareDns(slug: string): Promise<string> {
         proxied: true,
       }),
     },
+    10_000,
   );
 
   if (!res.ok) {

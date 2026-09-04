@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
 import { logger } from '@/lib/logger';
 import crypto from 'crypto';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 /**
  * Generates an APNs (Apple Push Notification service) JWT token for MDM commands.
@@ -42,14 +43,14 @@ export async function POST(req: NextRequest) {
 
     try {
       if (process.env.MDM_SERVER_URL) {
-        const response = await fetch(`${mdmEndpoint}/${serialNumber}`, {
+        const response = await fetchWithTimeout(`${mdmEndpoint}/${serialNumber}`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${authToken}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify(mdmPayload)
-        });
+        }, 8_000);
 
         if (!response.ok) throw new Error(`MDM API returned ${response.status}`);
         logger.info(`[MDM Apple] APNs Push sent successfully to ${serialNumber}`);
