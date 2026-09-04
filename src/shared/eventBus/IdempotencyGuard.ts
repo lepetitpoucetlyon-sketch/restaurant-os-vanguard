@@ -29,6 +29,21 @@ export function setEventBusPersistenceAdapter(adapter: PersistenceAdapter | null
  */
 export class IdempotencyGuard {
     private static memoryCache = new Set<string>();
+    /** Plafond du cache mémoire de dedup — évite la fuite mémoire d'un process long/SSR (audit S5). */
+    private static readonly MEMORY_CACHE_MAX = 50_000;
+
+    /** Ajoute une clé au cache borné — éviction FIFO du plus ancien au-delà du plafond. */
+    private static rememberInMemory(key: string): void {
+        this.memoryCache.add(key);
+        if (this.memoryCache.size > this.MEMORY_CACHE_MAX) {
+            const overflow = this.memoryCache.size - this.MEMORY_CACHE_MAX;
+            let i = 0;
+            for (const k of this.memoryCache) {
+                if (i++ >= overflow) break;
+                this.memoryCache.delete(k); // Set = ordre d'insertion : on évince les plus anciens
+            }
+        }
+    }
 
     /**
      * Vérifie si un événement a déjà été traité par un handler donné.
@@ -48,7 +63,7 @@ export class IdempotencyGuard {
             try {
                 const existing = await db.processedEvents.get(key);
                 if (existing) {
-                    this.memoryCache.add(key);
+                    this.rememberInMemory(key);
                     return true;
                 }
             } catch {
@@ -63,7 +78,7 @@ export class IdempotencyGuard {
                     `tenants/${tenantId}/events_processed_log/${key}`
                 );
                 if (record) {
-                    this.memoryCache.add(key);
+                    this.rememberInMemory(key);
                     return true;
                 }
             } catch (err) {
@@ -85,7 +100,7 @@ export class IdempotencyGuard {
     ): Promise<void> {
         if (!eventId) return;
         const key = `${eventId}_${handlerId}`;
-        this.memoryCache.add(key);
+        this.rememberInMemory(key);
 
         const record: ProcessedEventLog = {
             id: key,

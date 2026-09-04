@@ -4,6 +4,8 @@ import { db } from '@/lib/offline/offline-store';
 import { toError } from "@/lib/toError";
 
 import { IdempotencyGuard } from './IdempotencyGuard';
+import { isMutationEvent } from './mutationEvents';
+import { getCorrelationContext, newCorrelationId } from './CorrelationContext';
 
 // ── Catalogue d'événements métier ─────────────────────────────────────────────
 
@@ -54,8 +56,13 @@ class NexusEventBusClass {
   ): () => void {
     const handlerId = options.id ?? crypto.randomUUID();
     const priority = options.priority ?? 'HIGH';
-    // V3-BUS-06: Les handlers CRITICAL sont idempotents par défaut pour éviter tout re-jeu corrompu
-    const isIdempotent = options.idempotent !== undefined ? options.idempotent : priority === 'CRITICAL';
+    // V3-BUS-06: Les handlers CRITICAL sont idempotents par défaut pour éviter tout re-jeu corrompu.
+    // Audit archi 2026-09 (R1) : les événements « à mutation » (argent/stock/paie) rendent AUSSI
+    // leurs handlers idempotents par défaut — un re-jeu ne doit jamais double-appliquer l'effet.
+    // Opt-out explicite via `options.idempotent: false` (handlers qui gèrent leur propre idempotence).
+    const isIdempotent = options.idempotent !== undefined
+      ? options.idempotent
+      : (priority === 'CRITICAL' || isMutationEvent(event as string));
 
     const effectiveHandler: Handler<E> = isIdempotent
       ? (IdempotencyGuard.withIdempotencyGuard(handlerId, event, handler as never) as unknown as Handler<E>)
@@ -155,7 +162,10 @@ class NexusEventBusClass {
   ): Promise<void> {
     const rawPayload = (payload || {}) as Record<string, unknown>;
     const hasExplicitEventId = Boolean(rawPayload.eventId);
-    const eventId = String(rawPayload.eventId || rawPayload.id || crypto.randomUUID());
+    // Audit archi 2026-09 (Étape B) : dériver l'eventId de l'id MÉTIER (aligné sur emitDurable)
+    // plutôt qu'un UUID aléatoire — sinon la déduplication par id métier (orderId…) est défaite.
+    const businessId = rawPayload.id || rawPayload.orderId || rawPayload.transactionId || rawPayload.invoiceId || rawPayload.tableId || rawPayload.reservationId;
+    const eventId = String(rawPayload.eventId || (businessId ? (event + ":" + businessId) : crypto.randomUUID()));
     const effectivePayload: NexusEventPayload<E> = (payload && typeof payload === 'object' && !hasExplicitEventId)
       ? ({ ...payload, eventId } as unknown as NexusEventPayload<E>)
       : payload;
@@ -255,7 +265,10 @@ class NexusEventBusClass {
       });
 
       const ms = (performance.now() - start).toFixed(1);
-      logger.info(`[EventBus] ${event} → ${all.length} handlers (${ms}ms sync)`);
+      // Audit S9 : propager un correlationId dans les logs pour tracer les cascades
+      // (une émission → N handlers → N sous-émissions partagent le même id).
+      const cor = getCorrelationContext()?.correlationId ?? newCorrelationId();
+      logger.info(`[EventBus] ${event} → ${all.length} handlers (${ms}ms sync) [cor:${cor}]`);
     } finally {
       this.callStackDepth = Math.max(0, this.callStackDepth - 1);
       this.inFlight.delete(emissionKey);

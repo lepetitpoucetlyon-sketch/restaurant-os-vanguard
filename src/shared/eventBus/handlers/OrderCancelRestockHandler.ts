@@ -85,6 +85,10 @@ export function registerOrderCancelRestockHandler() {
         }
       }
     ),
-    { id: 'order-cancel-restock-handler', priority: 'BACKGROUND', idempotent: true }
+    // `idempotent: false` = opt-out EXPLICITE de l'emballage automatique du bus :
+    // l'idempotence est déjà assurée par le `withIdempotencyGuard` manuel ci-dessus.
+    // Sans ce false, l'auto-idempotence des events de mutation (mutationEvents) créerait
+    // un DOUBLE-emballage → le wrap interne saute le vrai travail (audit 2026-09).
+    { id: 'order-cancel-restock-handler', priority: 'BACKGROUND', idempotent: false }
   );
 }

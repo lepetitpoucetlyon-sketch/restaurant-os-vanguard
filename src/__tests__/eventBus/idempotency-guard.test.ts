@@ -87,7 +87,11 @@ describe('Invariant #1 : Idempotence de l EventBus & De-duplication Log', () => 
         expect(loyaltyHandler).toHaveBeenCalledTimes(1);
     });
 
-    it('devrait laisser passer normalement les événements sans eventId si non spécifié', async () => {
+    it('déduplique un rejeu même SANS eventId explicite, via l id métier (orderId)', async () => {
+        // Audit archi 2026-09 (R1 + Étape B) : un événement de mutation rejoué avec le
+        // même orderId ne doit PAS ré-exécuter le handler (sinon double déstockage/points/…).
+        // `resolveEventKey` retombe sur orderId ; `emit()` dérive désormais l'eventId de
+        // l'id métier (plus d'UUID aléatoire qui masquait la dedup).
         const simpleHandler = vi.fn();
 
         NexusEventBus.on('order.paid', simpleHandler, {
@@ -107,6 +111,28 @@ describe('Invariant #1 : Idempotence de l EventBus & De-duplication Log', () => 
         await NexusEventBus.emit('order.paid', legacyPayload);
         await NexusEventBus.emit('order.paid', legacyPayload);
 
-        expect(simpleHandler).toHaveBeenCalledTimes(2);
+        expect(simpleHandler).toHaveBeenCalledTimes(1);
+    });
+
+    it('exécute à chaque émission un événement SANS aucun id métier résoluble', async () => {
+        // Sans eventId ni id/orderId/tableId/… résoluble, aucune clé de dedup n existe :
+        // le handler s exécute à chaque émission (comportement voulu pour les events non clés).
+        const keylessHandler = vi.fn();
+
+        NexusEventBus.on('order.paid', keylessHandler, {
+            id: 'keyless-handler',
+            idempotent: true,
+        });
+
+        const keylessPayload = {
+            tenantId: 'bistro-parisien',
+            amountInCents: 1000,
+            paymentMethod: 'card',
+        } as never;
+
+        await NexusEventBus.emit('order.paid', keylessPayload);
+        await NexusEventBus.emit('order.paid', keylessPayload);
+
+        expect(keylessHandler).toHaveBeenCalledTimes(2);
     });
 });

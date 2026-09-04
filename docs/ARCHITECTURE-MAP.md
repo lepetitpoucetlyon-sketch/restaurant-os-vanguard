@@ -5,19 +5,19 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3780** · LOC : **369 732**
-- Pages : **87** · Routes API : **221**
+- Fichiers `.ts/.tsx` : **3788** · LOC : **370 324**
+- Pages : **87** · Routes API : **222**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
-| `src/modules/` | 1625 |
-| `src/shared/` | 747 |
-| `src/app/` | 469 |
+| `src/modules/` | 1624 |
+| `src/shared/` | 749 |
+| `src/app/` | 470 |
 | `src/verticals/` | 253 |
-| `src/lib/` | 230 |
+| `src/lib/` | 237 |
 | `src/kernel/` | 42 |
-| `src/infrastructure/` | 42 |
+| `src/infrastructure/` | 41 |
 | `src/store/` | 24 |
 | `src/config/` | 9 |
 | `src/i18n/` | 6 |
@@ -35,7 +35,7 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 228 |
+| `shared/eventBus/` | 230 |
 | `shared/components/` | 209 |
 | `shared/nexus/` | 140 |
 | `shared/hooks/` | 52 |
@@ -66,7 +66,7 @@
 | `finance` | 247 | ✅ |
 | `compliance` | 184 | ✅ |
 | `intelligence` | 172 | ✅ |
-| `logistics` | 150 | ✅ |
+| `logistics` | 149 | ✅ |
 | `human` | 142 | ✅ |
 | `facility` | 74 | ✅ |
 | `system` ⚠️ | 6 | ✅ |

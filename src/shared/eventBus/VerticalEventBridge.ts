@@ -117,6 +117,17 @@ const BRIDGE_RULES: BridgeRule<BridgePayload>[] = [
       target: 'reservation.created',
       transform: (p) => ({ tenantId: p['tenantId'] as string, reservationId: p['appointmentId'] as string ?? '', customerId: p['patientRef'] as string ?? '', date: p['date'] as string ?? '', time: p['time'] as string ?? '', covers: 1 }) },
 
+    // Audit 2026-09 : gym & coworking étaient 100 % non bridgés ; on ajoute les 2 mappings
+    // sûrs vers le backbone générique (les 4 verticales gym/coworking/florist/veterinary
+    // ne déclarent pas d'event de vente canonique — décision produit distincte).
+    { source: 'gym.class_booked',
+      target: 'reservation.created',
+      transform: (p) => ({ tenantId: p['tenantId'] as string, reservationId: p['classId'] as string ?? '', customerId: p['memberId'] as string ?? '', date: (p['slot'] as string ?? '').slice(0, 10), time: (p['slot'] as string ?? '').slice(11, 16), covers: 1 }) },
+
+    { source: 'coworking.meeting_room_booked',
+      target: 'reservation.created',
+      transform: (p) => ({ tenantId: p['tenantId'] as string, reservationId: p['roomId'] as string ?? '', customerId: p['companyId'] as string ?? '', date: '', time: '', covers: p['hours'] as number ?? 1 }) },
+
     // ── RESERVATION.NO_SHOW — déclenche NoShowHandlers ──
 
     { source: 'salon.no_show',

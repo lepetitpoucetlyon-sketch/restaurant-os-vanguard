@@ -22,11 +22,14 @@ const FISCAL_CRITICAL_EVENTS = new Set([
 ]);
 
 /**
- * Calcule le délai de backoff exponentiel plafonné à 60s.
- * tentative 1 → 2s, 2 → 4s, 3+ → quarantaine (jamais re-tenté).
+ * Backoff exponentiel plafonné à 60s AVEC jitter (« equal jitter »).
+ * Audit S6 : sans jitter, toute la flotte re-tente en phase (scan fixe 30s) →
+ * tempête de reconnexion synchronisée. On étale : délai = cap/2 + random(0, cap/2).
+ * cap = min(2s·2^(n-1), 60s). Ex. tentative 1 → 1–2s, 2 → 2–4s, 3 → 4–8s…
  */
 function backoffMs(attempt: number): number {
-  return Math.min(2_000 * Math.pow(2, attempt - 1), 60_000);
+  const cap = Math.min(2_000 * Math.pow(2, attempt - 1), 60_000);
+  return Math.round(cap / 2 + Math.random() * (cap / 2));
 }
 
 async function processRetryQueue(): Promise<void> {

@@ -66,6 +66,9 @@ export function registerWasteDailyAggregatorHandler(): () => void {
         }
       }
     ),
-    { id: 'waste-daily-aggregator-handler', priority: 'BACKGROUND', idempotent: true }
+    // `idempotent: false` = opt-out EXPLICITE de l'auto-emballage du bus (mutationEvents) :
+    // idempotence déjà assurée par le `withIdempotencyGuard` manuel ci-dessus (+ dedup
+    // niveau données via processedWasteIds). Sans false → double-emballage (audit 2026-09).
+    { id: 'waste-daily-aggregator-handler', priority: 'BACKGROUND', idempotent: false }
   );
 }

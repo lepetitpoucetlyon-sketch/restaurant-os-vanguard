@@ -87,7 +87,9 @@ export function registerAccountingSyncHandler(): () => void {
                 }
             }
         ),
-        { id: 'accounting-sync-order-paid', priority: 'BACKGROUND', idempotent: true }
+        // `idempotent: false` = opt-out EXPLICITE de l'auto-emballage du bus (mutationEvents) :
+        // l'idempotence est déjà assurée par le `withIdempotencyGuard` manuel ci-dessus.
+        { id: 'accounting-sync-order-paid', priority: 'BACKGROUND', idempotent: false }
     );
 
     const unsubSupplier = NexusEventBus.on(
