@@ -4,8 +4,11 @@ import { Nexus } from '@/lib/nexus/NexusAdapter';
 /**
  * ⚛️ Invariant #2 : Décrémentation Atomique des Stocks Anti-Race-Condition
  *
- * Vérifie que useStockDeduction utilise adapter.increment() (atomique)
+ * Vérifie que la déduction de stock (via `StockDeductionHandler.deductStockItem`,
+ * consommateur réel de `order.paid`) s'appuie sur `adapter.increment()` (atomique)
  * plutôt que get() + update() (race condition sous charge POS).
+ * (Le hook orphelin `useStockDeduction`, doublon jamais monté, a été supprimé —
+ * audit R4 ; ce test valide la primitive atomique de l'adapter.)
  *
  * Scénario critique : 2 commandes simultanées déduisant 3 portions du
  * même ingrédient depuis un stock initial de 10.

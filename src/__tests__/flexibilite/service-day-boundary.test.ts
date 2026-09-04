@@ -13,6 +13,9 @@ describe('Lot 1 — Service Day Boundary & Ticket Z Aggregation Across Midnight'
 
   it('Les ventes de 23h30 et 01h30 s agrègent dans le Ticket Z de la MÊME journée de service', async () => {
     const store: Record<string, unknown> = {};
+    // Sérialisation des transactions = atomicité fidèle au vrai Nexus/Firestore.
+    // Supprime la course lecture-modif-écriture qui rendait ce test flaky (gate flaky, audit 2026-09).
+    let txChain: Promise<unknown> = Promise.resolve();
 
     vi.spyOn(Nexus.adapter, 'runTransaction').mockImplementation(async (callback) => {
       const tx = {
@@ -23,7 +26,9 @@ describe('Lot 1 — Service Day Boundary & Ticket Z Aggregation Across Midnight'
         },
         delete: async (path: string) => { delete store[path]; },
       };
-      return callback(tx as never);
+      const run = txChain.then(() => callback(tx as never));
+      txChain = run.catch(() => {});
+      return run;
     });
 
     const unsub = registerTicketZHandler();
