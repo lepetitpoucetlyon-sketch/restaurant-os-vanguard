@@ -60,6 +60,7 @@ export const FLORIST_BLUEPRINT: VerticalBlueprint = {
   ],
   events: [
     { name: 'florist.arrangement_created', pillar: 'ops', durable: true },
+    { name: 'florist.arrangement_sold', pillar: 'commerce', durable: true },
     { name: 'florist.perishable_stem_logged', pillar: 'logistics', durable: true },
     { name: 'florist.delivery_dispatched', pillar: 'logistics', durable: true },
   ],

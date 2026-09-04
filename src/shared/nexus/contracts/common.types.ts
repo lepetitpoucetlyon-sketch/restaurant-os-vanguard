@@ -30,6 +30,8 @@ export interface Notification {
     timestamp: Date;
     read: boolean;
     module?: string;
+    /** Sévérité persistée — 'critical' remonte dans le bandeau critique global. */
+    priority?: 'low' | 'medium' | 'high' | 'critical';
     action?: {
         label: string;
         href?: string;

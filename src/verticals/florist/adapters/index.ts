@@ -19,6 +19,9 @@ export const FloristMccAdapter = makeMccAdapter<{ deliveriesToday?: number; fres
 
 export const FloristCommerceAdapter = {
   ...makeCommerceAdapter(),
+  emitArrangementSold(payload: { tenantId: string; arrangementId: string; customerId?: string; totalInMicrounits: number; paymentMode: string }) {
+    NexusEventBus.emitDurable('florist.arrangement_sold', payload);
+  },
   emitOrderCustomArrangement(payload: { tenantId: string; orderId: string; customerId: string; flowers: string[] }) {
     NexusEventBus.emitDurable('florist.arrangement_created', payload);
   },

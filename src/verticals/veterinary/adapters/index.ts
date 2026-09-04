@@ -20,6 +20,9 @@ export const VeterinaryMccAdapter = makeMccAdapter<{ activePatients?: number; su
 
 export const VeterinaryCommerceAdapter = {
   ...makeCommerceAdapter(),
+  emitConsultationBilled(payload: { tenantId: string; consultationId: string; ownerId?: string; totalInMicrounits: number; paymentMode: string }) {
+    NexusEventBus.emitDurable('veterinary.consultation_billed', payload);
+  },
   emitVaccineReminderSent(payload: { tenantId: string; animalId: string; ownerId: string; vaccineName: string }) {
     NexusEventBus.emitDurable('veterinary.vaccine_reminder_sent', payload);
   },

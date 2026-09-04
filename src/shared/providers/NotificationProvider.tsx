@@ -41,6 +41,7 @@ function toAppNotification(doc: PersistedNotification): AppNotification {
         read: doc.read ?? false,
         timestamp: doc.timestamp ? new Date(doc.timestamp) : new Date(),
         module: doc.module,
+        priority: doc.priority as AppNotification['priority'],
         action: doc.action,
         createdAt: doc.timestamp ?? new Date().toISOString(),
         updatedAt: doc.timestamp ?? new Date().toISOString(),

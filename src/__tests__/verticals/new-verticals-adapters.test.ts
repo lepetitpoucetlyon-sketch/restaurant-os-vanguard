@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { GymVertical, GymCommerceAdapter } from '@/verticals/gym';
 import { CoworkingVertical, CoworkingCommerceAdapter } from '@/verticals/coworking';
 import { VeterinaryVertical, VeterinaryCommerceAdapter } from '@/verticals/veterinary';
-import { FloristVertical, FloristLogisticsAdapter } from '@/verticals/florist';
+import { FloristVertical, FloristCommerceAdapter, FloristLogisticsAdapter } from '@/verticals/florist';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 describe('V2-VERT-03: Minimal Adapters & Plugins for 4 New Verticals', () => {
@@ -75,6 +75,9 @@ describe('V2-VERT-03: Minimal Adapters & Plugins for 4 New Verticals', () => {
     const emitSpy = vi.spyOn(NexusEventBus, 'emitDurable').mockResolvedValue(undefined as any);
     VeterinaryCommerceAdapter.emitVaccineReminderSent({ tenantId: 'vet_01', animalId: 'dog_rex', ownerId: 'user_1', vaccineName: 'Rage' });
     expect(emitSpy).toHaveBeenCalledWith('veterinary.vaccine_reminder_sent', { tenantId: 'vet_01', animalId: 'dog_rex', ownerId: 'user_1', vaccineName: 'Rage' });
+
+    VeterinaryCommerceAdapter.emitConsultationBilled({ tenantId: 'vet_01', consultationId: 'consult_1', ownerId: 'user_1', totalInMicrounits: 65_000_000, paymentMode: 'card' });
+    expect(emitSpy).toHaveBeenCalledWith('veterinary.consultation_billed', { tenantId: 'vet_01', consultationId: 'consult_1', ownerId: 'user_1', totalInMicrounits: 65_000_000, paymentMode: 'card' });
     emitSpy.mockRestore();
   });
 
@@ -98,6 +101,9 @@ describe('V2-VERT-03: Minimal Adapters & Plugins for 4 New Verticals', () => {
     const emitSpy = vi.spyOn(NexusEventBus, 'emitDurable').mockResolvedValue(undefined as any);
     FloristLogisticsAdapter.emitDeliveryDispatched({ tenantId: 'florist_01', deliveryId: 'del_123', recipientAddress: '10 Rue de Paris' });
     expect(emitSpy).toHaveBeenCalledWith('florist.delivery_dispatched', { tenantId: 'florist_01', deliveryId: 'del_123', recipientAddress: '10 Rue de Paris' });
+
+    FloristCommerceAdapter.emitArrangementSold({ tenantId: 'florist_01', arrangementId: 'arr_123', customerId: 'cust_1', totalInMicrounits: 40_000_000, paymentMode: 'card' });
+    expect(emitSpy).toHaveBeenCalledWith('florist.arrangement_sold', { tenantId: 'florist_01', arrangementId: 'arr_123', customerId: 'cust_1', totalInMicrounits: 40_000_000, paymentMode: 'card' });
     emitSpy.mockRestore();
   });
 });

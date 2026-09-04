@@ -60,6 +60,7 @@ export const VETERINARY_BLUEPRINT: VerticalBlueprint = {
   ],
   events: [
     { name: 'veterinary.pet_consultation_completed', pillar: 'ops', durable: true },
+    { name: 'veterinary.consultation_billed', pillar: 'commerce', durable: true },
     { name: 'veterinary.icad_chip_scanned', pillar: 'ops' },
     { name: 'veterinary.vaccine_reminder_sent', pillar: 'commerce', durable: true },
   ],

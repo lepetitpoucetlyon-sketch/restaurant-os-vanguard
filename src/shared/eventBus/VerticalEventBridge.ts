@@ -53,6 +53,14 @@ const BRIDGE_RULES: BridgeRule<BridgePayload>[] = [
       target: 'order.paid',
       transform: (p) => ({ v: 1, tenantId: p['tenantId'] as string, orderId: p['actId'] as string ?? '', tableId: p['bedId'] as string ?? null, operatorId: p['practitionerId'] as string ?? 'system', items: [], totalInMicrounits: p['totalInMicrounits'] as number ?? 0, paymentMode: p['paymentMode'] as string ?? 'transfer' }) },
 
+    { source: 'florist.arrangement_sold',
+      target: 'order.paid',
+      transform: (p) => ({ v: 1, tenantId: p['tenantId'] as string, orderId: p['arrangementId'] as string ?? '', tableId: null, operatorId: 'system', items: [], totalInMicrounits: p['totalInMicrounits'] as number ?? 0, paymentMode: p['paymentMode'] as string ?? 'card' }) },
+
+    { source: 'veterinary.consultation_billed',
+      target: 'order.paid',
+      transform: (p) => ({ v: 1, tenantId: p['tenantId'] as string, orderId: p['consultationId'] as string ?? '', tableId: null, operatorId: 'system', items: [], totalInMicrounits: p['totalInMicrounits'] as number ?? 0, paymentMode: p['paymentMode'] as string ?? 'card' }) },
+
     // ── INVENTORY.DEDUCTED — déclenche StockDeductionHandler ──
 
     { source: 'auto.part_consumed',

@@ -102,10 +102,12 @@ export interface VERTICALEvents {
   // ── Vertical: Veterinary ────────────────────────────────────────────────
   'veterinary.vaccine_reminder_sent': { tenantId: string; animalId: string; ownerId: string; vaccineName: string };
   'veterinary.pet_consultation_completed': { tenantId: string; consultationId: string; animalId: string; vetId: string };
+  'veterinary.consultation_billed': { tenantId: string; consultationId: string; ownerId?: string; totalInMicrounits: number; paymentMode: string };
   'veterinary.icad_chip_scanned': { tenantId: string; icadNumber: string; animalId: string };
 
   // ── Vertical: Florist ───────────────────────────────────────────────────
   'florist.arrangement_created': { tenantId: string; arrangementId?: string; recipeId?: string; floristId?: string; orderId?: string; customerId?: string; flowers?: string[] };
+  'florist.arrangement_sold': { tenantId: string; arrangementId: string; customerId?: string; totalInMicrounits: number; paymentMode: string };
   'florist.perishable_stem_logged': { tenantId: string; stemType: string; quantity: number; expiryDate: string };
   'florist.delivery_dispatched': { tenantId: string; deliveryId: string; recipientAddress: string };
 }
