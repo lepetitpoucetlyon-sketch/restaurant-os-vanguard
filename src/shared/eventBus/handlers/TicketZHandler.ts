@@ -5,7 +5,6 @@ import { empireAudit } from '@/lib/audit';
 import { CryptoService } from '@/lib/CryptoService';
 import { toSovereignData } from "@/lib/toSovereignData";
 import type { INexusTransaction } from '@/lib/nexus/types';
-import { IdempotencyGuard } from '../IdempotencyGuard';
 
 type TicketZDoc = {
   id: string;
@@ -21,6 +20,23 @@ type TicketZDoc = {
 };
 
 import { BusinessClock } from '@/kernel/time/BusinessClock';
+
+function applyTaxRate(ttc: number, rate: string | number): number {
+  if (typeof rate === 'number') {
+    const bps = Math.round(rate * 10000);
+    return Math.round((ttc * bps) / (10000 + bps));
+  }
+  const clean = rate.trim();
+  let bps: number;
+  if (clean.includes('%')) {
+    bps = Math.round(parseFloat(clean.replace('%', '')) * 100);
+  } else {
+    const [intPart, decPart = ''] = clean.split('.');
+    const padded = (decPart + '0000').slice(0, 4);
+    bps = (parseInt(intPart, 10) || 0) * 10000 + (parseInt(padded, 10) || 0);
+  }
+  return Math.round((ttc * bps) / (10000 + bps));
+}
 
 /**
  * Met à jour l'agrégat Ticket Z en temps réel à chaque paiement.
@@ -73,13 +89,11 @@ export function registerTicketZHandler(): () => void {
           return;
         }
 
-        // Import dynamique : casse le cycle shared/eventBus → modules/finance.
-        const { TaxCalculator } = await import('@/modules/finance/fiscalite/TaxCalculator');
         const taxBreakdown = { ...existing.taxBreakdown };
         for (const item of items) {
           const rate = item.taxRate ?? '0.10';
           const lineTotal = (item.unitPriceInMicrounits ?? 0) * (item.quantity || 1) - (item.discountInMicrounits ?? 0);
-          const tva = TaxCalculator.applyRate(lineTotal, rate);
+          const tva = applyTaxRate(lineTotal, rate);
           taxBreakdown[rate] = (taxBreakdown[rate] ?? 0) + tva;
         }
 
