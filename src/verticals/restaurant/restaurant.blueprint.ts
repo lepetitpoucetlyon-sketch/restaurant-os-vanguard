@@ -1,4 +1,5 @@
 import type { VerticalBlueprint } from '@/verticals/_shared/blueprint';
+import { deriveBaselineStudy } from '@/verticals/_shared/sector-study/SectorStudyAgent';
 
 /**
  * 🗺️ Blueprint de la verticale RESTAURANT (Profil A — Food & Périssable).
@@ -68,17 +69,67 @@ export const RESTAURANT_BLUEPRINT: VerticalBlueprint = {
     },
   },
   healthMetrics: { tablesActive: 'number', coversToday: 'number' },
-// PLAN LOGIQUE MÉTIER LOT H : la verticale restaurant est écrite à la main
-  // (référence produit), pas générée par la forge. Les vraies routes vivent
-  // dans RestaurantVertical.ts (componentLoader dynamique). Ce blueprint est
-  // conservé pour les métadonnées (tokens, healthMetrics, DNA overrides, IA)
-  // consommées par MCC/Sector Studio, mais routes[] est intentionnellement vide.
-  routes: [],
-// PLAN LOGIQUE MÉTIER LOT H : 4 événements 'restaurant.*' étaient déclarés
-  // mais jamais émis (0 émetteur mesuré). La chaîne réelle passe par les
-  // événements ops.* / order.* / reservation.* du bus canonique. Retiré pour
-  // éviter d'induire en erreur les générateurs (forge, sector-study, MCC).
-  events: [],
+  routes: [
+    {
+      path: '/menu-engineering',
+      label: 'Ingénierie Menus',
+      icon: 'ChartPie',
+      roles: ['admin', 'directeur', 'manager', 'chef_cuisinier'],
+      componentPath: '@/verticals/restaurant/presentation/MenuEngineeringDashboard',
+      componentExport: 'MenuEngineeringDashboard',
+    },
+    {
+      path: '/floor-plan',
+      label: 'Plan de Salle',
+      icon: 'Layout',
+      roles: ['admin', 'directeur', 'manager', 'chef_rang', 'serveur', 'hotesse'],
+      componentPath: '@/modules/facility/spaces/floor-plan/FloorPlanEditor',
+      componentExport: 'FloorPlanEditor',
+    },
+    {
+      path: '/nf525',
+      label: 'Export FEC / NF525',
+      icon: 'FileText',
+      roles: ['admin', 'directeur', 'comptable'],
+      componentPath: '@/modules/finance/comptabilite/fec',
+      componentExport: 'FECExportPage',
+    },
+    {
+      path: '/suppliers',
+      label: 'Fournisseurs 360°',
+      icon: 'Building2',
+      roles: ['admin', 'directeur', 'manager', 'chef_cuisinier', 'comptable'],
+      componentPath: '@/modules/logistics/approvisionnement/ui/SupplierHubDashboard',
+      componentExport: 'SupplierHubDashboard',
+    },
+  ],
+  events: [
+    {
+      name: 'restaurant.service_started',
+      pillar: 'operations',
+      durable: true,
+      description: 'Ouverture du service en salle',
+    },
+    {
+      name: 'restaurant.order_placed',
+      pillar: 'encaissement',
+      durable: true,
+      description: 'Prise de commande à table',
+    },
+    {
+      name: 'restaurant.table_seated',
+      pillar: 'operations',
+      durable: false,
+      description: 'Installation des convives à une table',
+    },
+    {
+      name: 'restaurant.bill_closed',
+      pillar: 'encaissement',
+      durable: true,
+      description: 'Clôture et encaissement de l addition',
+    },
+  ],
+  substance: deriveBaselineStudy({ slug: 'restaurant', profileId: 'A' }),
   hardware: ['receipt_printer', 'kitchen_printer', 'cash_drawer', 'card_terminal', 'barcode_scanner'],
   legalType: 'RESTAURANT',
   dnaOverrides: {

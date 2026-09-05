@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import { z } from 'zod';
-import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
 const AdjustSchema = z.object({
@@ -11,23 +11,23 @@ const AdjustSchema = z.object({
   adjustedBy: z.string().min(1).max(120),
 });
 
-export async function POST(req: Request) {
-  const caller = await requireTenantRole(req, 'chef_cuisinier');
-  if (isDenied(caller)) return caller;
+export const POST = withTenantRoute(
+  async (req: NextRequest, ctx) => {
+    const parsed = AdjustSchema.safeParse(await req.json().catch(() => ({})));
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Payload invalide', details: parsed.error.flatten() },
+        { status: 400 },
+      );
+    }
 
-  const parsed = AdjustSchema.safeParse(await req.json().catch(() => ({})));
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: 'Payload invalide', details: parsed.error.flatten() },
-      { status: 400 },
-    );
-  }
+    await NexusEventBus.emitDurable('inventory.stock_adjusted', {
+      v: 1,
+      tenantId: ctx.tenantId,
+      ...parsed.data,
+    });
 
-  await NexusEventBus.emitDurable('inventory.stock_adjusted', {
-    v: 1,
-    tenantId: caller.tenantId,
-    ...parsed.data,
-  });
-
-  return NextResponse.json({ success: true });
-}
+    return NextResponse.json({ success: true });
+  },
+  { minRole: 'chef_cuisinier' },
+);

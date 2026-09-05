@@ -114,19 +114,30 @@ export class MockAdapter implements INexusAdapter, IDocumentStore, IQueryEngine,
         return new Date();
     }
 
+    private _txQueue: Promise<void> = Promise.resolve();
+
     async runTransaction<T>(callback: (tx: INexusTransaction) => Promise<T>, _context?: NexusContext): Promise<T> {
-        const deferred: Array<() => void> = [];
-        const tx: INexusTransaction = {
-            get: (path) => this.get(path),
-            set: (path, data) => { deferred.push(() => { this.storage[path] = data; }); },
-            update: (path, data) => { deferred.push(() => {
-                const existing = (this.storage[path] ?? {}) as Record<string, unknown>;
-                this.storage[path] = { ...existing, ...(data as Record<string, unknown>) };
-            }); },
-            delete: (path) => { deferred.push(() => { delete this.storage[path]; }); },
-        };
-        const result = await callback(tx);
-        for (const op of deferred) op();
-        return result;
+        const prevQueue = this._txQueue;
+        let resolveQueue!: () => void;
+        this._txQueue = new Promise((resolve) => { resolveQueue = resolve; });
+
+        await prevQueue;
+        try {
+            const deferred: Array<() => void> = [];
+            const tx: INexusTransaction = {
+                get: (path) => this.get(path),
+                set: (path, data) => { deferred.push(() => { this.storage[path] = data; }); },
+                update: (path, data) => { deferred.push(() => {
+                    const existing = (this.storage[path] ?? {}) as Record<string, unknown>;
+                    this.storage[path] = { ...existing, ...(data as Record<string, unknown>) };
+                }); },
+                delete: (path) => { deferred.push(() => { delete this.storage[path]; }); },
+            };
+            const result = await callback(tx);
+            for (const op of deferred) op();
+            return result;
+        } finally {
+            resolveQueue();
+        }
     }
 }

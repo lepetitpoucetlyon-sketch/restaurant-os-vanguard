@@ -1,5 +1,5 @@
 import { logger } from '@/lib/axiom';
-import { fetchWithTimeout } from '@/lib/http/resilientFetch';
+import { IntegrationPolicy } from '@/lib/http/integrationPolicy';
 import { StatementIngestionService } from '../../../comptabilite/accounting/domain/StatementIngestionService';
 import type { BankTransaction } from '@nexus/contracts';
 import type {
@@ -63,20 +63,19 @@ export class PowensProvider implements IOpenBankingProvider {
         if (this.isDemoMode()) {
             return { token: `demo-token-${tenantId}` };
         }
-        const res = await fetchWithTimeout(`${PowensProvider.API_URL}/auth/token`, {
+        const data = await IntegrationPolicy.execute<{ access_token: string; expires_in?: number }>({
+            providerName: 'Powens',
+            operationName: 'auth/token',
+            url: `${PowensProvider.API_URL}/auth/token`,
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
                 client_id: PowensProvider.CLIENT_ID!,
                 client_secret: PowensProvider.CLIENT_SECRET,
                 grant_type: 'client_credentials',
-            }),
-        }, 8_000);
-        if (!res.ok) {
-            logger.error('PowensProvider: createConnectionToken failed', { status: res.status });
-            throw new Error('Impossible d\'initialiser la connexion bancaire.');
-        }
-        const data = (await res.json()) as { access_token: string; expires_in?: number };
+            }).toString(),
+            timeoutMs: 8_000,
+        });
         return {
             token: data.access_token,
             expiresAt: data.expires_in ? Date.now() + data.expires_in * 1000 : undefined,
@@ -100,7 +99,10 @@ export class PowensProvider implements IOpenBankingProvider {
         if (this.isDemoMode()) {
             return { userToken: `demo-user-token-${code}` };
         }
-        const res = await fetchWithTimeout(`${PowensProvider.API_URL}/auth/token`, {
+        const data = await IntegrationPolicy.execute<{ access_token: string; expires_in?: number }>({
+            providerName: 'Powens',
+            operationName: 'auth/token',
+            url: `${PowensProvider.API_URL}/auth/token`,
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
@@ -108,13 +110,9 @@ export class PowensProvider implements IOpenBankingProvider {
                 client_secret: PowensProvider.CLIENT_SECRET,
                 grant_type: 'authorization_code',
                 code,
-            }),
-        }, 8_000);
-        if (!res.ok) {
-            logger.error('PowensProvider: exchangeCode failed', { status: res.status });
-            throw new Error('Impossible de finaliser la connexion bancaire.');
-        }
-        const data = (await res.json()) as { access_token: string; expires_in?: number };
+            }).toString(),
+            timeoutMs: 8_000,
+        });
         return {
             userToken: data.access_token,
             expiresAt: data.expires_in ? Date.now() + data.expires_in * 1000 : undefined,
@@ -123,14 +121,13 @@ export class PowensProvider implements IOpenBankingProvider {
 
     async getAccounts(userToken: string): Promise<OpenBankingAccount[]> {
         if (this.isDemoMode()) return [];
-        const res = await fetchWithTimeout(`${PowensProvider.API_URL}/users/me/accounts`, {
+        const data = await IntegrationPolicy.execute<{ accounts?: PowensAccountDTO[] }>({
+            providerName: 'Powens',
+            operationName: 'users/me/accounts',
+            url: `${PowensProvider.API_URL}/users/me/accounts`,
             headers: { Authorization: `Bearer ${userToken}` },
-        }, 8_000);
-        if (!res.ok) {
-            logger.error('PowensProvider: getAccounts failed', { status: res.status });
-            throw new Error('Impossible de récupérer les comptes bancaires.');
-        }
-        const data = (await res.json()) as { accounts?: PowensAccountDTO[] };
+            timeoutMs: 8_000,
+        });
         return (data.accounts ?? []).map((acc) => ({
             id: String(acc.id),
             balance: acc.balance,
@@ -148,16 +145,13 @@ export class PowensProvider implements IOpenBankingProvider {
     ): Promise<Omit<BankTransaction, 'id'>[]> {
         if (this.isDemoMode()) return [];
         const params = fromDate ? `?min_date=${encodeURIComponent(fromDate)}` : '';
-        const res = await fetchWithTimeout(
-            `${PowensProvider.API_URL}/users/me/accounts/${accountId}/transactions${params}`,
-            { headers: { Authorization: `Bearer ${userToken}` } },
-            8_000,
-        );
-        if (!res.ok) {
-            logger.error('PowensProvider: getTransactions failed', { status: res.status, accountId });
-            throw new Error('Impossible de récupérer les transactions bancaires.');
-        }
-        const data = (await res.json()) as { transactions?: PowensTransactionDTO[] };
+        const data = await IntegrationPolicy.execute<{ transactions?: PowensTransactionDTO[] }>({
+            providerName: 'Powens',
+            operationName: 'users/me/transactions',
+            url: `${PowensProvider.API_URL}/users/me/accounts/${accountId}/transactions${params}`,
+            headers: { Authorization: `Bearer ${userToken}` },
+            timeoutMs: 8_000,
+        });
         const out: Omit<BankTransaction, 'id'>[] = [];
         for (const tx of data.transactions ?? []) {
             const label = tx.wording ?? tx.original_wording ?? 'Transaction';
@@ -186,13 +180,13 @@ export class PowensProvider implements IOpenBankingProvider {
 
     async refreshConnection(userToken: string): Promise<void> {
         if (this.isDemoMode()) return;
-        const res = await fetchWithTimeout(`${PowensProvider.API_URL}/users/me/connections`, {
+        await IntegrationPolicy.execute<void>({
+            providerName: 'Powens',
+            operationName: 'users/me/connections/refresh',
+            url: `${PowensProvider.API_URL}/users/me/connections`,
             method: 'PUT',
             headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
-        }, 8_000);
-        if (!res.ok) {
-            logger.error('PowensProvider: refreshConnection failed', { status: res.status });
-            throw new Error('Erreur Powens lors de la synchronisation.');
-        }
+            timeoutMs: 8_000,
+        });
     }
 }

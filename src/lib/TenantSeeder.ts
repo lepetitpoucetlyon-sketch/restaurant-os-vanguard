@@ -197,47 +197,52 @@ export const TenantSeeder = {
       await Nexus.adapter.set(`tenants/${tenantId}/fiscalSeals/GENESIS`, genesisSeal);
       seededPaths.push(`tenants/${tenantId}/fiscalSeals/GENESIS`);
 
-      // 5. Default floor + zones + tables
-      const now = Date.now();
-      const floor: Floor = {
-        id: 'floor-rdc',
-        type: 'floor',
-        name: 'Salle principale',
-        level: 0,
-        isActive: true,
-        schemaVersion: 2,
-        updatedAt: now,
-      };
-      await Nexus.adapter.set(`tenants/${tenantId}/floors/floor-rdc`, floor);
-      seededPaths.push(`tenants/${tenantId}/floors/floor-rdc`);
+      // 5. Default floor + zones + tables — CONDITIONNÉ par mod_floor_plan
+      // Les verticales sans plan de salle (gym, coworking, vétérinaire, fleuriste, garage, etc.)
+      // ne reçoivent AUCUNE table ni salle de restaurant par défaut (Loi 8 / Phase 3).
+      const hasFloorPlan = Boolean((baseDNA.capabilities as Record<string, boolean> | undefined)?.mod_floor_plan ?? (variant === 'restaurant'));
+      if (hasFloorPlan) {
+        const now = Date.now();
+        const floor: Floor = {
+          id: 'floor-rdc',
+          type: 'floor',
+          name: 'Salle principale',
+          level: 0,
+          isActive: true,
+          schemaVersion: 2,
+          updatedAt: now,
+        };
+        await Nexus.adapter.set(`tenants/${tenantId}/floors/floor-rdc`, floor);
+        seededPaths.push(`tenants/${tenantId}/floors/floor-rdc`);
 
-      const zones: Zone[] = [
-        { id: 'zone-interieur', type: 'zone', name: 'Intérieur', color: '#4A90D9', floorId: 'floor-rdc', schemaVersion: 2, updatedAt: now },
-        { id: 'zone-terrasse', type: 'zone', name: 'Terrasse', color: '#7ED321', floorId: 'floor-rdc', schemaVersion: 2, updatedAt: now },
-      ];
-      await Promise.all(
-        zones.map((z) => Nexus.adapter.set(`tenants/${tenantId}/zones/${z.id}`, z))
-      );
-      seededPaths.push(`tenants/${tenantId}/zones (2)`);
+        const zones: Zone[] = [
+          { id: 'zone-interieur', type: 'zone', name: 'Intérieur', color: '#4A90D9', floorId: 'floor-rdc', schemaVersion: 2, updatedAt: now },
+          { id: 'zone-terrasse', type: 'zone', name: 'Terrasse', color: '#7ED321', floorId: 'floor-rdc', schemaVersion: 2, updatedAt: now },
+        ];
+        await Promise.all(
+          zones.map((z) => Nexus.adapter.set(`tenants/${tenantId}/zones/${z.id}`, z))
+        );
+        seededPaths.push(`tenants/${tenantId}/zones (2)`);
 
-      const tables: Table[] = Array.from({ length: 10 }, (_, i) => ({
-        id: `table-${i + 1}`,
-        type: 'table' as const,
-        number: String(i + 1),
-        seats: i < 8 ? 4 : 6,
-        status: 'free' as const,
-        shape: 'rect' as const,
-        x: (i % 5) * 160 + 40,
-        y: Math.floor(i / 5) * 140 + 40,
-        zoneId: i < 8 ? 'zone-interieur' : 'zone-terrasse',
-        floorId: 'floor-rdc',
-        schemaVersion: 2 as const,
-        updatedAt: now,
-      }));
-      await Promise.all(
-        tables.map((t) => Nexus.adapter.set(`tenants/${tenantId}/ops_nodes/${t.id}`, t))
-      );
-      seededPaths.push(`tenants/${tenantId}/ops_nodes (10)`);
+        const tables: Table[] = Array.from({ length: 10 }, (_, i) => ({
+          id: `table-${i + 1}`,
+          type: 'table' as const,
+          number: String(i + 1),
+          seats: i < 8 ? 4 : 6,
+          status: 'free' as const,
+          shape: 'rect' as const,
+          x: (i % 5) * 160 + 40,
+          y: Math.floor(i / 5) * 140 + 40,
+          zoneId: i < 8 ? 'zone-interieur' : 'zone-terrasse',
+          floorId: 'floor-rdc',
+          schemaVersion: 2 as const,
+          updatedAt: now,
+        }));
+        await Promise.all(
+          tables.map((t) => Nexus.adapter.set(`tenants/${tenantId}/ops_nodes/${t.id}`, t))
+        );
+        seededPaths.push(`tenants/${tenantId}/ops_nodes (10)`);
+      }
 
       // 5b. Menu démo — catégories + produits de base pour les verticals food
       if (['restaurant', 'bakery', 'hotel'].includes(variant)) {

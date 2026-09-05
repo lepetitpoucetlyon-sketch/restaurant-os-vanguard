@@ -1,7 +1,6 @@
 import { getDefaultStore } from 'jotai';
 import { tenantIdAtom } from '@nexus/state/SovereignGenome';
 import { logger } from '@/lib/logger';
-import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { CryptoService } from '@/lib/CryptoService';
 import { NexusError, NexusErrorCode } from '@/shared/nexus/errors';
 import type {
@@ -38,6 +37,12 @@ function resolveCurrentTenant(anchoredTenantId?: string): string {
         const g = globalThis as unknown as { __nexusServerTenant?: { tenantId?: string } };
         const serverTenant = g.__nexusServerTenant?.tenantId;
         if (typeof serverTenant === 'string' && serverTenant.length > 0) return serverTenant;
+        if (process.env.STRICT_ISOLATION_TEST === 'true') {
+            throw new NexusError(
+                NexusErrorCode.ACCESS_DENIED,
+                '[SovereignGuard] Accès serveur interdit sans contexte tenant ancré (runWithServerTenant obligatoire).',
+            );
+        }
     }
     return (getDefaultStore().get(tenantIdAtom) as string | undefined) || 'main';
 }
@@ -398,13 +403,16 @@ export const SovereignGuard = {
         // Découplage du cycle : le push du kill-switch global passe par le bus.
         // SovereignBreachHandler (CRITICAL) consomme l'événement et appelle MasterBridge.
         try {
-            await NexusEventBus.emit('sovereign.breach', {
-                v: 1,
-                targetTenantId: targetId,
-                anchoredTenantId: anchoredId,
-                path: fullPath,
-                message: errorMsg,
-            });
+            const bus = (globalThis as unknown as { __nexusEventBus?: { emit: (event: string, payload: unknown) => Promise<unknown> } }).__nexusEventBus;
+            if (bus) {
+                await bus.emit('sovereign.breach', {
+                    v: 1,
+                    targetTenantId: targetId,
+                    anchoredTenantId: anchoredId,
+                    path: fullPath,
+                    message: errorMsg,
+                });
+            }
         } catch { /* BroadcastChannel / WebWorker indisponible */ }
 
         if (typeof window !== 'undefined') {

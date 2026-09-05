@@ -12,64 +12,67 @@ import { handlePaymentFailed, handlePaymentIntentSucceeded } from './handlers/ha
 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET ?? '';
 
+import { withWebhookRoute } from '@/lib/server/routeWrapper';
+
 /**
  * POST /api/webhooks/stripe
  * Reçoit les events Stripe, valide HMAC et délègue aux handlers spécialisés.
  */
-export async function POST(req: NextRequest) {
-  const signatureHeader = req.headers.get('stripe-signature');
-  const rawBody = await req.text();
+export const POST = withWebhookRoute(
+  async (req: NextRequest, ctx) => {
+    const rawBody = await req.text();
 
-  if (!STRIPE_WEBHOOK_SECRET) {
-    logger.error('[Stripe Webhook] STRIPE_WEBHOOK_SECRET non configuré — requête rejetée (Sécurité P0)');
-    return NextResponse.json({ error: 'Configuration serveur invalide' }, { status: 500 });
-  }
-
-  const isValid = verifyStripeSignature(rawBody, signatureHeader, STRIPE_WEBHOOK_SECRET);
-  if (!isValid) {
-    logger.warn('[Stripe Webhook] Signature invalide — requête rejetée');
-    return NextResponse.json({ error: 'Signature invalide' }, { status: 400 });
-  }
-
-  let event: StripeEvent;
-  try {
-    event = JSON.parse(rawBody) as StripeEvent;
-  } catch {
-    return NextResponse.json({ error: 'Payload JSON invalide' }, { status: 400 });
-  }
-
-  logger.info(`[Stripe Webhook] Event reçu: ${event.type} (id: ${event.id})`);
-
-  try {
-    switch (event.type) {
-      case 'checkout.session.completed':
-        await handleCheckoutSessionCompleted(event.data.object as StripeCheckoutSession);
-        break;
-
-      case 'customer.subscription.deleted':
-      case 'customer.subscription.updated':
-        await handleSubscriptionEvent(
-          event.type,
-          event.data.object as StripeSubscription
-        );
-        break;
-
-      case 'payment_intent.payment_failed':
-      case 'invoice.payment_failed':
-        await handlePaymentFailed(event.data.object as Record<string, unknown>);
-        break;
-
-      case 'payment_intent.succeeded':
-        await handlePaymentIntentSucceeded(event.data.object as Record<string, unknown>);
-        break;
-
-      default:
-        logger.info(`[Stripe Webhook] Event non géré: ${event.type}`);
+    let event: StripeEvent;
+    try {
+      event = JSON.parse(rawBody) as StripeEvent;
+    } catch {
+      return NextResponse.json({ error: 'Payload JSON invalide' }, { status: 400 });
     }
-  } catch (error) {
-    logger.error('[Stripe Webhook] Erreur traitement event', error);
-    return NextResponse.json({ received: true, error: 'Erreur interne' });
-  }
 
-  return NextResponse.json({ received: true });
-}
+    logger.info(`[Stripe Webhook] Event reçu: ${event.type} (id: ${event.id})`, { correlationId: ctx.correlationId });
+
+    try {
+      switch (event.type) {
+        case 'checkout.session.completed':
+          await handleCheckoutSessionCompleted(event.data.object as StripeCheckoutSession);
+          break;
+
+        case 'customer.subscription.deleted':
+        case 'customer.subscription.updated':
+          await handleSubscriptionEvent(
+            event.type,
+            event.data.object as StripeSubscription
+          );
+          break;
+
+        case 'payment_intent.payment_failed':
+        case 'invoice.payment_failed':
+          await handlePaymentFailed(event.data.object as Record<string, unknown>);
+          break;
+
+        case 'payment_intent.succeeded':
+          await handlePaymentIntentSucceeded(event.data.object as Record<string, unknown>);
+          break;
+
+        default:
+          logger.info(`[Stripe Webhook] Event non géré: ${event.type}`);
+      }
+    } catch (error) {
+      logger.error('[Stripe Webhook] Erreur traitement event', { error, correlationId: ctx.correlationId });
+      return NextResponse.json({ received: true, error: 'Erreur interne' });
+    }
+
+    return NextResponse.json({ received: true });
+  },
+  {
+    verifySignature: async (req) => {
+      if (!STRIPE_WEBHOOK_SECRET) {
+        logger.error('[Stripe Webhook] STRIPE_WEBHOOK_SECRET non configuré — requête rejetée (Sécurité P0)');
+        return false;
+      }
+      const signatureHeader = req.headers.get('stripe-signature');
+      const rawBody = await req.text();
+      return verifyStripeSignature(rawBody, signatureHeader, STRIPE_WEBHOOK_SECRET);
+    },
+  },
+);

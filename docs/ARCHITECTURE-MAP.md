@@ -5,17 +5,17 @@
 > Une carte n'aide que si elle est **vraie** → elle est dérivée du code, pas écrite à la main.
 
 ## Totaux
-- Fichiers `.ts/.tsx` : **3797** · LOC : **371 031**
+- Fichiers `.ts/.tsx` : **3809** · LOC : **375 546**
 - Pages : **87** · Routes API : **222**
 
 ## Couches
 | Couche | Fichiers |
 |---|---:|
 | `src/modules/` | 1624 |
-| `src/shared/` | 749 |
+| `src/shared/` | 750 |
 | `src/app/` | 470 |
-| `src/verticals/` | 253 |
-| `src/lib/` | 244 |
+| `src/verticals/` | 254 |
+| `src/lib/` | 248 |
 | `src/kernel/` | 42 |
 | `src/infrastructure/` | 41 |
 | `src/store/` | 24 |
@@ -35,7 +35,7 @@
 ## `src/shared/` — détail (couche à trancher)
 | Sous-dossier | Fichiers |
 |---|---:|
-| `shared/eventBus/` | 230 |
+| `shared/eventBus/` | 231 |
 | `shared/components/` | 209 |
 | `shared/nexus/` | 140 |
 | `shared/hooks/` | 52 |
@@ -79,6 +79,7 @@
 ## Top 15 gros fichiers (candidats god-file)
 | Fichier | LOC |
 |---|---:|
+| `src/lib/api/apiManifest.ts` | 2720 |
 | `src/i18n/locales/en.ts` | 998 |
 | `src/i18n/locales/es.ts` | 998 |
 | `src/i18n/locales/fr.ts` | 998 |
@@ -93,4 +94,3 @@
 | `src/__tests__/helpers/saga.finance2.test.ts` | 571 |
 | `src/shared/eventBus/events/ops.events.ts` | 563 |
 | `src/config/navConfig.ts` | 539 |
-| `src/app/(admin)/admin/mcc/components/TenantChangelogPanel.tsx` | 503 |

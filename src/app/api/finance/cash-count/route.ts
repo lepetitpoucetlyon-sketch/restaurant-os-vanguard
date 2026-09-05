@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import { z } from 'zod';
-import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { requireUnlockedPeriod } from '@/lib/server/fiscalLockGuard';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
@@ -11,26 +11,26 @@ const CashCountSchema = z.object({
   countedBy: z.string().min(1).max(120),
 });
 
-export async function POST(req: Request) {
-  const caller = await requireTenantRole(req, 'comptable');
-  if (isDenied(caller)) return caller;
+export const POST = withTenantRoute(
+  async (req: NextRequest, ctx) => {
+    const lockDenied = await requireUnlockedPeriod(ctx.tenantId, Date.now());
+    if (lockDenied) return lockDenied;
 
-  const lockDenied = await requireUnlockedPeriod(caller.tenantId, Date.now());
-  if (lockDenied) return lockDenied;
+    const parsed = CashCountSchema.safeParse(await req.json().catch(() => ({})));
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Payload invalide', details: parsed.error.flatten() },
+        { status: 400 },
+      );
+    }
 
-  const parsed = CashCountSchema.safeParse(await req.json().catch(() => ({})));
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: 'Payload invalide', details: parsed.error.flatten() },
-      { status: 400 },
-    );
-  }
+    await NexusEventBus.emitDurable('finance.cash_counted', {
+      v: 1,
+      tenantId: ctx.tenantId,
+      ...parsed.data,
+    });
 
-  await NexusEventBus.emitDurable('finance.cash_counted', {
-    v: 1,
-    tenantId: caller.tenantId,
-    ...parsed.data,
-  });
-
-  return NextResponse.json({ success: true });
-}
+    return NextResponse.json({ success: true });
+  },
+  { minRole: 'comptable' },
+);

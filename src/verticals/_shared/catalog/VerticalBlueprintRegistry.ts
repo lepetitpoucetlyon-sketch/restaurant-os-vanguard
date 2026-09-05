@@ -65,3 +65,24 @@ export function getAllBlueprintSlugs(): string[] {
 export function hasVerticalBlueprint(slug: string): boolean {
   return slug in VERTICAL_BLUEPRINTS;
 }
+
+export type VerticalCommercialStatus = 'L0_CATALOGUE' | 'L1_PROTOTYPE' | 'L2_INTERNAL' | 'L3_COMMERCIALISABLE';
+
+/**
+ * Retourne le statut commercial et de certification d'une verticale (Phase 6).
+ */
+export function getVerticalReadiness(slug: string): {
+  tier: string;
+  status: VerticalCommercialStatus;
+  commercialisable: boolean;
+} {
+  const bp = getVerticalBlueprint(slug);
+  const tier = bp?.precision ?? 'L0';
+  const mapping: Record<string, { status: VerticalCommercialStatus; commercialisable: boolean }> = {
+    L0: { status: 'L0_CATALOGUE', commercialisable: false },
+    L1: { status: 'L1_PROTOTYPE', commercialisable: false },
+    L2: { status: 'L2_INTERNAL', commercialisable: false },
+    L3: { status: 'L3_COMMERCIALISABLE', commercialisable: true },
+  };
+  return { tier, ...(mapping[tier] ?? mapping.L0) };
+}

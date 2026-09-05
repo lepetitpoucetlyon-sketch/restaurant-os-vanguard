@@ -62,7 +62,9 @@ async function pingNexus(): Promise<ServiceCheck> {
   }
 }
 
-export async function GET(): Promise<NextResponse> {
+import { withPublicRoute } from '@/lib/server/routeWrapper';
+
+export const GET = withPublicRoute(async () => {
   const [stripeResult, resendResult, nexusResult] = await Promise.allSettled([
     pingStripe(),
     pingResend(),
@@ -101,4 +103,4 @@ export async function GET(): Promise<NextResponse> {
   return NextResponse.json(snapshot, {
     headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30' },
   });
-}
+});

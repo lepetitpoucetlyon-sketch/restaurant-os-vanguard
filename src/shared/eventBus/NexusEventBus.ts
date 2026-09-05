@@ -331,4 +331,5 @@ class NexusEventBusClass {
 }
 
 export const NexusEventBus = new NexusEventBusClass();
+(globalThis as unknown as { __nexusEventBus?: typeof NexusEventBus }).__nexusEventBus = NexusEventBus;
 export { IdempotencyGuard } from './IdempotencyGuard';

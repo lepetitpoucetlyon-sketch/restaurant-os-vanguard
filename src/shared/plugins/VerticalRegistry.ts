@@ -34,21 +34,33 @@ export const VerticalRegistry = {
     return factory();
   },
 
+  has(variant: PlatformVariant): boolean {
+    return registry.has(variant);
+  },
+
   list(): PlatformVariant[] {
     return Array.from(registry.keys());
+  },
+
+  async ready(): Promise<void> {
+    await initPromise;
   },
 };
 
 // Auto-registration — lazy imports avoid circular deps at module init
-import('@/verticals/restaurant').then(m => VerticalRegistry.register('restaurant', () => new m.RestaurantVertical())).catch(() => {});
-import('@/verticals/hotel').then(m => VerticalRegistry.register('hotel', () => new m.HotelVertical())).catch(() => {});
-import('@/verticals/garage').then(m => VerticalRegistry.register('garage', () => new m.AutoVertical())).catch(() => {});
-import('@/verticals/clinic').then(m => VerticalRegistry.register('clinic', () => new m.HealthVertical())).catch(() => {});
-import('@/verticals/bakery').then(m => VerticalRegistry.register('bakery', () => new m.BakeryVertical())).catch(() => {});
-import('@/verticals/salon').then(m => VerticalRegistry.register('salon', () => new m.SalonVertical())).catch(() => {});
-import('@/verticals/retail').then(m => VerticalRegistry.register('retail', () => new m.RetailVertical())).catch(() => {});
-import('@/verticals/gym').then(m => VerticalRegistry.register('gym', () => new m.GymVertical())).catch(() => {});
-import('@/verticals/coworking').then(m => VerticalRegistry.register('coworking', () => new m.CoworkingVertical())).catch(() => {});
-import('@/verticals/veterinary').then(m => VerticalRegistry.register('veterinary', () => new m.VeterinaryVertical())).catch(() => {});
-import('@/verticals/florist').then(m => VerticalRegistry.register('florist', () => new m.FloristVertical())).catch(() => {});
-import('@/verticals/custom').then(m => VerticalRegistry.register('custom', () => new m.CustomVertical())).catch(() => {});
+const initPromise = Promise.all([
+  import('@/verticals/restaurant').then(m => VerticalRegistry.register('restaurant', () => new m.RestaurantVertical())).catch((err) => {
+    logger.error('[VerticalRegistry] failed to register restaurant:', err);
+  }),
+  import('@/verticals/hotel').then(m => VerticalRegistry.register('hotel', () => new m.HotelVertical())).catch(() => {}),
+  import('@/verticals/garage').then(m => VerticalRegistry.register('garage', () => new m.AutoVertical())).catch(() => {}),
+  import('@/verticals/clinic').then(m => VerticalRegistry.register('clinic', () => new m.HealthVertical())).catch(() => {}),
+  import('@/verticals/bakery').then(m => VerticalRegistry.register('bakery', () => new m.BakeryVertical())).catch(() => {}),
+  import('@/verticals/salon').then(m => VerticalRegistry.register('salon', () => new m.SalonVertical())).catch(() => {}),
+  import('@/verticals/retail').then(m => VerticalRegistry.register('retail', () => new m.RetailVertical())).catch(() => {}),
+  import('@/verticals/gym').then(m => VerticalRegistry.register('gym', () => new m.GymVertical())).catch(() => {}),
+  import('@/verticals/coworking').then(m => VerticalRegistry.register('coworking', () => new m.CoworkingVertical())).catch(() => {}),
+  import('@/verticals/veterinary').then(m => VerticalRegistry.register('veterinary', () => new m.VeterinaryVertical())).catch(() => {}),
+  import('@/verticals/florist').then(m => VerticalRegistry.register('florist', () => new m.FloristVertical())).catch(() => {}),
+  import('@/verticals/custom').then(m => VerticalRegistry.register('custom', () => new m.CustomVertical())).catch(() => {}),
+]);

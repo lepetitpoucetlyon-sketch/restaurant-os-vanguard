@@ -1,5 +1,7 @@
 import { db } from '@/lib/offline/offline-store';
 import { logger } from '@/lib/logger';
+import { toError } from '@/lib/toError';
+import { ServerIdempotencyPersistence } from './ServerIdempotencyPersistence';
 
 export interface ProcessedEventLog {
     id: string; // `${eventId}_${handlerId}`
@@ -155,17 +157,47 @@ export class IdempotencyGuard {
             const tenantId = (payload as Record<string, unknown>)?.tenantId as string | undefined;
 
             if (eventKey) {
-                const duplicate = await IdempotencyGuard.isDuplicate(eventKey, handlerId, tenantId);
-                if (duplicate) {
-                    logger.info(`[IdempotencyGuard] Duplicate event detected for ${eventName}#${handlerId} (key: ${eventKey}) — skipping execution.`);
+                const memKey = `${eventKey}_${handlerId}`;
+                if (IdempotencyGuard.memoryCache.has(memKey)) {
+                    logger.info(`[IdempotencyGuard] Duplicate event detected in memory for ${eventName}#${handlerId} (key: ${eventKey}) — skipping.`);
                     return;
+                }
+
+                if (tenantId) {
+                    const lease = await ServerIdempotencyPersistence.acquireLease(
+                        eventKey,
+                        handlerId,
+                        eventName,
+                        tenantId,
+                    );
+                    if (!lease.acquired) {
+                        logger.info(`[IdempotencyGuard] Lease rejected (${lease.reason}) for ${eventName}#${handlerId} (key: ${eventKey}) — skipping duplicate.`);
+                        IdempotencyGuard.rememberInMemory(memKey);
+                        return;
+                    }
+                } else {
+                    const duplicate = await IdempotencyGuard.isDuplicate(eventKey, handlerId, tenantId);
+                    if (duplicate) {
+                        logger.info(`[IdempotencyGuard] Duplicate event detected for ${eventName}#${handlerId} (key: ${eventKey}) — skipping execution.`);
+                        return;
+                    }
                 }
             }
 
-            await fn(payload);
+            try {
+                await fn(payload);
 
-            if (eventKey) {
-                await IdempotencyGuard.markProcessed(eventKey, handlerId, eventName, tenantId);
+                if (eventKey) {
+                    if (tenantId) {
+                        await ServerIdempotencyPersistence.completeLease(eventKey, handlerId, eventName, tenantId);
+                    }
+                    await IdempotencyGuard.markProcessed(eventKey, handlerId, eventName, tenantId);
+                }
+            } catch (error) {
+                if (eventKey && tenantId) {
+                    await ServerIdempotencyPersistence.failLease(eventKey, handlerId, eventName, tenantId, toError(error));
+                }
+                throw error;
             }
         };
     }

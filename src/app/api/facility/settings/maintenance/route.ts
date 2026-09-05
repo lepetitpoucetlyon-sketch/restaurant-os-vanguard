@@ -1,38 +1,38 @@
-import { NextResponse } from 'next/server';
-import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
+import { NextResponse, type NextRequest } from 'next/server';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { MaintenanceAlertConfigService } from '@/modules/facility';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(req: Request) {
-  const caller = await requireTenantRole(req, 'manager');
-  if (isDenied(caller)) return caller;
+export const GET = withTenantRoute(
+  async (_req: NextRequest, ctx) => {
+    try {
+      const config = await MaintenanceAlertConfigService.getConfig(ctx.tenantId);
+      return NextResponse.json({ success: true, data: config });
+    } catch (error) {
+      logger.error('[API Maintenance Settings] Error fetching config', { error: toError(error).message, correlationId: ctx.correlationId });
+      return NextResponse.json({ success: false, error: toError(error).message }, { status: 500 });
+    }
+  },
+  { minRole: 'manager' },
+);
 
-  try {
-    const config = await MaintenanceAlertConfigService.getConfig(caller.tenantId);
-    return NextResponse.json({ success: true, data: config });
-  } catch (error) {
-    logger.error('[API Maintenance Settings] Error fetching config', toError(error).message);
-    return NextResponse.json({ success: false, error: toError(error).message }, { status: 500 });
-  }
-}
-
-export async function PUT(req: Request) {
-  const caller = await requireTenantRole(req, 'manager');
-  if (isDenied(caller)) return caller;
-
-  try {
-    const body = await req.json();
-    const updated = await MaintenanceAlertConfigService.updateConfig(
-      caller.tenantId,
-      body,
-      caller.uid || 'manager'
-    );
-    return NextResponse.json({ success: true, data: updated });
-  } catch (error) {
-    logger.error('[API Maintenance Settings] Error updating config', toError(error).message);
-    return NextResponse.json({ success: false, error: toError(error).message }, { status: 400 });
-  }
-}
+export const PUT = withTenantRoute(
+  async (req: NextRequest, ctx) => {
+    try {
+      const body = await req.json();
+      const updated = await MaintenanceAlertConfigService.updateConfig(
+        ctx.tenantId,
+        body,
+        ctx.caller.uid || 'manager',
+      );
+      return NextResponse.json({ success: true, data: updated });
+    } catch (error) {
+      logger.error('[API Maintenance Settings] Error updating config', { error: toError(error).message, correlationId: ctx.correlationId });
+      return NextResponse.json({ success: false, error: toError(error).message }, { status: 400 });
+    }
+  },
+  { minRole: 'manager' },
+);

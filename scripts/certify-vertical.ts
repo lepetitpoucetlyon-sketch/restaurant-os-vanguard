@@ -120,11 +120,13 @@ async function certify(slug: string, strict: boolean): Promise<CertReport> {
         profileId: bp.profile,
     });
     const bsReport = detectVerticalBlindSpots({ blueprint: bp, study });
+    const triggered = bsReport.triggered;
+
     const bySeverity: Record<string, number> = { critical: 0, high: 0, medium: 0, low: 0 };
-    for (const bs of bsReport.triggered) {
+    for (const bs of triggered) {
         bySeverity[bs.severity] = (bySeverity[bs.severity] ?? 0) + 1;
     }
-    const critical = bsReport.triggered
+    const critical = triggered
         .filter((bs) => bs.severity === 'critical')
         .map((bs) => ({ id: bs.id, title: bs.title }));
 
@@ -133,7 +135,7 @@ async function certify(slug: string, strict: boolean): Promise<CertReport> {
     if (structureErrors.length > 0) verdict = 'FAILED';
     else if (parity.missingInEnum.length + parity.missingInRegistry.length > 0) verdict = 'FAILED';
     else if (strict && critical.length > 0) verdict = 'DEGRADED';
-    else if (bsReport.triggered.length > 0) verdict = 'DEGRADED';
+    else if (triggered.length > 0) verdict = 'DEGRADED';
 
     return {
         slug,

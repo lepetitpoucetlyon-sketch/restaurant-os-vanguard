@@ -14,7 +14,7 @@ import { logger } from '@/lib/logger';
 
 export interface TenantBranding {
     /** 'default' = Restaurant OS branding. 'custom' = charte propre. */
-    mode: 'default' | 'custom';
+    mode?: 'default' | 'custom';
     primaryColor: string;
     accentColor?: string;
     logoUrl?: string | null;
@@ -36,7 +36,8 @@ function colorToRgb(hex: string): string {
  * Appelé une fois au provisioning, puis à chaque mise à jour depuis les settings.
  */
 export async function injectBrandingVars(tenantId: string, branding: TenantBranding): Promise<void> {
-    const { mode, primaryColor, accentColor, logoUrl, displayName, splashEnabled } = branding;
+    const mode = branding?.mode ?? (branding?.primaryColor ? 'custom' : 'default');
+    const { primaryColor, accentColor, logoUrl, displayName, splashEnabled } = branding ?? {};
 
     // En mode 'default', on persiste quand même le mode pour que le client le lise.
     // Les CSS vars ne sont pas surchargées (BrandingProvider ignore si mode=default).

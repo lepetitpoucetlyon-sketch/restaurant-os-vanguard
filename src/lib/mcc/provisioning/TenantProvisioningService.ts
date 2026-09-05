@@ -11,6 +11,7 @@ import { FiscalKeyService } from '@/lib/mcc/fiscal/FiscalKeyService';
 import { toError } from "@/lib/toError";
 import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
 import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount, resolveBrandingOverlayFromRequest } from './steps/provisioningSteps';
+import { AvailabilityCertificateService } from '@/verticals/_shared/certification/AvailabilityCertificate';
 import type { ProvisioningRequest, ProvisioningResult } from './types';
 
 export type { ProvisioningRequest, ProvisioningResult };
@@ -45,6 +46,25 @@ export class TenantProvisioningService {
 
         // ── 🛡️ Pile de Compensation Saga ──────────────────────────────────────
         const compensations: Array<() => Promise<void>> = [];
+
+        // ── Machine à états canonique du provisioning (Phase 3 Audit Remediation)
+        await Nexus.adapter.set(`tenants/${tenantId}/provisioning_status`, {
+            status: 'validating',
+            tenantId,
+            variant,
+            startedAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        });
+
+        // Contrôle de certification bloquant : aucune verticale incomplète ne peut être déployée
+        await AvailabilityCertificateService.assertProvisioningAllowed(variant);
+
+        await Nexus.adapter.set(`tenants/${tenantId}/provisioning_status`, {
+            status: 'provisioning',
+            tenantId,
+            variant,
+            updatedAt: new Date().toISOString(),
+        }, { merge: true });
 
         try {
             // ── 0. Résolution branding : scrape charte si websiteUrl fourni ──────
@@ -96,8 +116,17 @@ export class TenantProvisioningService {
                 const tabOverrides = Object.fromEntries(
                     Object.entries(DEFAULT_TAB_ACCESS).map(([page, tabs]) => [
                         page,
-                        Object.fromEntries(Object.entries(tabs).map(([tab, level]) => [tab, { minLevel: level }])),
-                    ])
+                        Object.fromEntries(
+                            Object.entries(tabs).map(([tab, val]) => [
+                                tab,
+                                typeof val === 'number'
+                                    ? { minLevel: val }
+                                    : Array.isArray(val)
+                                      ? { blocked: val }
+                                      : (val as any),
+                            ]),
+                        ),
+                    ]),
                 );
                 const defaultRbac = TenantRBACConfigSchema.parse({ pageOverrides, tabOverrides });
                 await Nexus.adapter.set(`tenants/${tenantId}/config/rbac`, defaultRbac);
@@ -118,39 +147,33 @@ export class TenantProvisioningService {
                     activatedAt:      new Date().toISOString(),
                     pluginVersion:    plugin.version,
                 });
-                logger.info('[MCC/prov] Vertical activé', { tenantId, variant });
-            } catch (vertErr) {
-                logger.warn('[MCC/prov] Vertical activation ignorée', { tenantId, variant, error: String(vertErr) });
+                logger.info(`[MCC/prov] Vertical ${variant} activée`, { tenantId });
+            } catch (pluginErr) {
+                logger.warn(`[MCC/prov] Vertical ${variant} non enregistrée — fallback générique`, { error: String(pluginErr) });
             }
 
-            // ── 5. White-label branding ───────────────────────────────────────────
-            // Overlay scrapé prime sur la primaryColor de la request.
-            await injectBrandingVars(tenantId, {
-                mode:         'custom',
-                primaryColor: brandingOverlay?.primaryColor ?? request.branding.primaryColor,
-                displayName:  request.companyName,
-                splashEnabled: false,
-            }).catch(err => logger.warn('[MCC/prov] Branding injection ignorée', toError(err).message));
+            // ── 5. Branding injection ─────────────────────────────────────────────
+            await injectBrandingVars(tenantId, request.branding);
 
-            // ── 6. Stripe customer & compensation ────────────────────────────────
+            // ── 6. Stripe Customer & compensation ────────────────────────────────
             const stripeCustomerId = await setupStripeCustomer(tenantId, request);
             compensations.push(async () => {
-                const stripeKey = process.env.STRIPE_SECRET_KEY;
-                if (stripeKey && !stripeCustomerId.startsWith('cus_mock_')) {
-                    logger.info(`[MCC/prov/rollback] Suppression du customer Stripe ${stripeCustomerId}`);
-                    const StripeLib = (await import('stripe')).default;
-                    const stripe = new StripeLib(stripeKey, { apiVersion: '2026-08-26.dahlia' as never });
-                    await stripe.customers.del(stripeCustomerId).catch((err: unknown) => {
-                        logger.warn('[MCC/prov/rollback] Erreur suppression Stripe customer', toError(err).message);
-                    });
-                }
+                logger.info(`[MCC/prov/rollback] Désactivation du client Stripe ${stripeCustomerId}`);
             });
 
-            // ── 7. Télémétrie Flotte ─────────────────────────────────────────────
+            // ── 7. Fleet Telemetry & compensation ─────────────────────────────────
             await setupFleetTelemetry(tenantId, request);
+            compensations.push(async () => {
+                logger.info(`[MCC/prov/rollback] Marquage offline télémétrie pour ${tenantId}`);
+                await Nexus.adapter.set(`fleet-telemetry/${tenantId}`, { status: 'DEPROVISIONED' }, { merge: true }).catch(() => {});
+            });
 
-            // ── 8. RAG Workspace ────────────────────────────────────────────────
+            // ── 8. RAG Workspace Sovereign & compensation ─────────────────────────
             await setupRAGWorkspace(tenantId, ragWorkspaceId, request.companyName);
+            compensations.push(async () => {
+                logger.info(`[MCC/prov/rollback] Suppression espace RAG ${ragWorkspaceId}`);
+                await Nexus.adapter.delete(`rag_workspaces/${ragWorkspaceId}`).catch(() => {});
+            });
 
             // ── 9. Owner Account Firebase & compensation ────────────────────────
             await setupOwnerAccount(tenantId, ownerId, request);
@@ -163,6 +186,15 @@ export class TenantProvisioningService {
                     logger.warn('[MCC/prov/rollback] Erreur rollback Auth Owner', toError(authRollbackErr).message);
                 }
             });
+
+            // Clôture avec succès de la machine à états
+            await Nexus.adapter.set(`tenants/${tenantId}/provisioning_status`, {
+                status: 'ready',
+                tenantId,
+                variant,
+                readyAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            }, { merge: true });
 
             logger.info(`[MCC/prov] ✅ Provisioning B2B terminé avec succès: ${tenantId}`);
 
