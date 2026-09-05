@@ -9,8 +9,7 @@ import type { PlatformVariant } from '@/kernel/contracts';
 import { getSystemTenantId } from '@/lib/mcc/SystemTenantRegistry';
 import { FiscalKeyService } from '@/lib/mcc/fiscal/FiscalKeyService';
 import { toError } from "@/lib/toError";
-import { getServerAuthProvider } from '@/lib/auth/ServerAuthProvider';
-import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount, resolveBrandingOverlayFromRequest } from './steps/provisioningSteps';
+import { setupStripeCustomer, setupFleetTelemetry, setupRAGWorkspace, setupOwnerAccount, resolveBrandingOverlayFromRequest, deleteProvisionedOwner } from './steps/provisioningSteps';
 import { AvailabilityCertificateService } from '@/verticals/_shared/certification/AvailabilityCertificate';
 import type { ProvisioningRequest, ProvisioningResult } from './types';
 
@@ -180,7 +179,7 @@ export class TenantProvisioningService {
             compensations.push(async () => {
                 try {
                     logger.info(`[MCC/prov/rollback] Suppression compte auth Owner ${ownerId}`);
-                    await getServerAuthProvider().deleteUser(ownerId).catch(() => {});
+                    await deleteProvisionedOwner(ownerId);
                     await Nexus.adapter.delete(`tenants/${tenantId}/users/${ownerId}`).catch(() => {});
                 } catch (authRollbackErr) {
                     logger.warn('[MCC/prov/rollback] Erreur rollback Auth Owner', toError(authRollbackErr).message);

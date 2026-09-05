@@ -34,6 +34,72 @@ export class ServerIdempotencyPersistence {
     return `tenants/${tenantId}/events_processed_log/${safeKey}`;
   }
 
+  private static checkExistingLease(
+    existing: IdempotencyLeaseRecord | null | undefined,
+    now: number,
+  ): LeaseAcquisitionResult | null {
+    if (!existing) return null;
+    if (existing.status === 'completed') {
+      return { acquired: false, reason: 'already_completed', record: existing };
+    }
+    if (existing.status === 'leased' && now < existing.expiresAt) {
+      return { acquired: false, reason: 'already_leased', record: existing };
+    }
+    return null;
+  }
+
+  private static buildLeaseRecord(
+    eventId: string,
+    handlerId: string,
+    eventName: string,
+    tenantId: string,
+    now: number,
+    ttlMs: number,
+  ): IdempotencyLeaseRecord {
+    return {
+      id: `${eventId}_${handlerId}`,
+      eventId,
+      handlerId,
+      eventName,
+      tenantId,
+      status: 'leased',
+      leasedAt: now,
+      expiresAt: now + ttlMs,
+    };
+  }
+
+  private static async acquireViaTransaction(
+    path: string,
+    record: IdempotencyLeaseRecord,
+    now: number,
+  ): Promise<LeaseAcquisitionResult> {
+    return await Nexus.adapter.runTransaction<LeaseAcquisitionResult>(async (tx) => {
+      const existing = await tx.get<IdempotencyLeaseRecord>(path);
+      const conflict = this.checkExistingLease(existing, now);
+      if (conflict) return conflict;
+
+      if (typeof tx.set === 'function') {
+        tx.set(path, record);
+      } else if (typeof tx.update === 'function') {
+        tx.update(path, record);
+      }
+      return { acquired: true, record };
+    });
+  }
+
+  private static async acquireViaDirectAdapter(
+    path: string,
+    record: IdempotencyLeaseRecord,
+    now: number,
+  ): Promise<LeaseAcquisitionResult> {
+    const existing = await Nexus.adapter.get<IdempotencyLeaseRecord>(path);
+    const conflict = this.checkExistingLease(existing, now);
+    if (conflict) return conflict;
+
+    await Nexus.adapter.set(path, record);
+    return { acquired: true, record };
+  }
+
   /**
    * Tente d'acquérir atomiquement un bail d'exécution pour (tenantId, eventId, handlerId).
    */
@@ -50,35 +116,13 @@ export class ServerIdempotencyPersistence {
 
     const path = this.getDocumentPath(tenantId, eventId, handlerId);
     const now = Date.now();
+    const newRecord = this.buildLeaseRecord(eventId, handlerId, eventName, tenantId, now, ttlMs);
 
     try {
-      return await Nexus.adapter.runTransaction<LeaseAcquisitionResult>(async (tx) => {
-        const existing = await tx.get<IdempotencyLeaseRecord>(path);
-
-        if (existing) {
-          if (existing.status === 'completed') {
-            return { acquired: false, reason: 'already_completed', record: existing };
-          }
-          if (existing.status === 'leased' && now < existing.expiresAt) {
-            return { acquired: false, reason: 'already_leased', record: existing };
-          }
-          // Bail expiré ou échec précédent : on ré-acquiert le bail
-        }
-
-        const newRecord: IdempotencyLeaseRecord = {
-          id: `${eventId}_${handlerId}`,
-          eventId,
-          handlerId,
-          eventName,
-          tenantId,
-          status: 'leased',
-          leasedAt: now,
-          expiresAt: now + ttlMs,
-        };
-
-        tx.set(path, newRecord);
-        return { acquired: true, record: newRecord };
-      });
+      if (typeof Nexus.adapter?.runTransaction === 'function') {
+        return await this.acquireViaTransaction(path, newRecord, now);
+      }
+      return await this.acquireViaDirectAdapter(path, newRecord, now);
     } catch (err) {
       logger.error(
         `[ServerIdempotencyPersistence] Échec critique acquisition bail pour ${eventId}#${handlerId} (fail-closed)`,

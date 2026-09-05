@@ -63,6 +63,68 @@ export class IntegrationPolicy {
     return sanitized;
   }
 
+  private static classifyHttpStatus(status: number): ExternalErrorCategory {
+    if (status === 401 || status === 403) return 'AUTH_ERROR';
+    if (status === 429) return 'RATE_LIMIT';
+    if (status >= 400 && status < 500) return 'CLIENT_ERROR';
+    if (status >= 500) return 'SERVER_ERROR';
+    return 'UNKNOWN';
+  }
+
+  private static classifyCatchError(err: Error, isAborted: boolean): ExternalErrorCategory {
+    const isTimeout = err.name === 'AbortError' || err.message.includes('timeout') || isAborted;
+    return isTimeout ? 'TIMEOUT' : 'NETWORK_ERROR';
+  }
+
+  private static assertIdempotencyInvariant(
+    isMutation: boolean,
+    maxRetries: number,
+    idempotencyKey?: string,
+    provider?: string,
+    operation?: string,
+  ): void {
+    if (isMutation && maxRetries > 0 && !idempotencyKey) {
+      throw new Error(
+        `[IntegrationPolicy] Invariant violé : Tentative de retry sur mutation externe (${provider}:${operation}) sans clé d idempotence fournisseur.`,
+      );
+    }
+  }
+
+  private static buildHeaders(
+    headers: Record<string, string>,
+    isMutation: boolean,
+    idempotencyKey?: string,
+  ): Record<string, string> {
+    const result = { ...headers };
+    if (idempotencyKey && isMutation) {
+      result['Idempotency-Key'] = idempotencyKey;
+    }
+    return result;
+  }
+
+  private static async handleFailedResponse(
+    response: Response,
+    provider: string,
+    operation: string,
+    attempt: number,
+    totalAllowed: number,
+  ): Promise<void> {
+    const status = response.status;
+    const category = this.classifyHttpStatus(status);
+
+    if (category === 'CLIENT_ERROR' || category === 'AUTH_ERROR') {
+      throw new ExternalIntegrationError(provider, operation, category, status, `Réponse HTTP ${status}`);
+    }
+
+    if (attempt < totalAllowed) {
+      const backoffMs = Math.min(1000 * Math.pow(2, attempt - 1), 5000);
+      await new Promise((r) => setTimeout(r, backoffMs));
+      return;
+    }
+
+    throw new ExternalIntegrationError(provider, operation, category, status, `Échec final HTTP ${status}`);
+  }
+
   static async execute<T>(options: ExternalRequestOptions): Promise<T> {
     const {
       providerName,
@@ -78,23 +140,11 @@ export class IntegrationPolicy {
       fetcher = globalThis.fetch,
     } = options;
 
-    // Règle d'inviolabilité financière : interdiction de rejouer une mutation sans clé d'idempotence
-    if (isMutation && maxRetries > 0 && !idempotencyKey) {
-      throw new Error(
-        `[IntegrationPolicy] Invariant violé : Tentative de retry sur mutation externe (${providerName}:${operationName}) sans clé d idempotence fournisseur.`,
-      );
-    }
-
-    const effectiveHeaders = { ...headers };
-    if (idempotencyKey && isMutation) {
-      effectiveHeaders['Idempotency-Key'] = idempotencyKey;
-    }
-
-    let attempts = 0;
+    this.assertIdempotencyInvariant(isMutation, maxRetries, idempotencyKey, providerName, operationName);
+    const effectiveHeaders = this.buildHeaders(headers, isMutation, idempotencyKey);
     const totalAllowedAttempts = Math.max(1, 1 + maxRetries);
 
-    while (attempts < totalAllowedAttempts) {
-      attempts++;
+    for (let attempts = 1; attempts <= totalAllowedAttempts; attempts++) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -109,43 +159,11 @@ export class IntegrationPolicy {
         clearTimeout(timer);
 
         if (!response.ok) {
-          const status = response.status;
-          let category: ExternalErrorCategory = 'UNKNOWN';
-
-          if (status === 401 || status === 403) category = 'AUTH_ERROR';
-          else if (status === 429) category = 'RATE_LIMIT';
-          else if (status >= 400 && status < 500) category = 'CLIENT_ERROR';
-          else if (status >= 500) category = 'SERVER_ERROR';
-
-          // Les erreurs 4xx (hors 429) ne doivent jamais être réessayées
-          if (category === 'CLIENT_ERROR' || category === 'AUTH_ERROR') {
-            throw new ExternalIntegrationError(
-              providerName,
-              operationName,
-              category,
-              status,
-              `Réponse HTTP ${status}`,
-            );
-          }
-
-          // Si on peut réessayer (5xx ou 429) et qu'il reste des tentatives
-          if (attempts < totalAllowedAttempts) {
-            const backoffMs = Math.min(1000 * Math.pow(2, attempts - 1), 5000);
-            await new Promise((r) => setTimeout(r, backoffMs));
-            continue;
-          }
-
-          throw new ExternalIntegrationError(
-            providerName,
-            operationName,
-            category,
-            status,
-            `Échec final HTTP ${status}`,
-          );
+          await this.handleFailedResponse(response, providerName, operationName, attempts, totalAllowedAttempts);
+          continue;
         }
 
-        const data = (await response.json()) as T;
-        return data;
+        return (await response.json()) as T;
       } catch (error) {
         clearTimeout(timer);
 
@@ -154,8 +172,7 @@ export class IntegrationPolicy {
         }
 
         const err = toError(error);
-        const isTimeout = err.name === 'AbortError' || err.message.includes('timeout') || controller.signal.aborted;
-        const category: ExternalErrorCategory = isTimeout ? 'TIMEOUT' : 'NETWORK_ERROR';
+        const category = this.classifyCatchError(err, controller.signal.aborted);
 
         if (attempts < totalAllowedAttempts) {
           const backoffMs = Math.min(1000 * Math.pow(2, attempts - 1), 5000);
@@ -169,17 +186,11 @@ export class IntegrationPolicy {
           sanitizedHeaders: this.sanitizeHeaders(headers),
         });
 
-        throw new ExternalIntegrationError(
-          providerName,
-          operationName,
-          category,
-          undefined,
-          err.message,
-          error,
-        );
+        throw new ExternalIntegrationError(providerName, operationName, category, undefined, err.message, error);
       }
     }
 
     throw new ExternalIntegrationError(providerName, operationName, 'UNKNOWN', undefined, 'Max retries exceeded');
   }
 }
+

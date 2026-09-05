@@ -305,7 +305,11 @@ describe('OrderCancelRestockHandler', () => {
 
   it('restitue les stocks si la commande annulée n\'était pas en cuisine', async () => {
     const mockTransaction = {
-      get: vi.fn(async () => ({ quantity: 500 })),
+      get: vi.fn(async (path?: string) => {
+        if (path?.includes('idempotency_leases')) return null;
+        return { quantity: 500 };
+      }),
+      set: vi.fn(),
       update: vi.fn(),
     };
     mockGet

@@ -1,6 +1,7 @@
 import 'server-only';
 import { type NextRequest, NextResponse } from 'next/server';
 import { withMccRoute } from '@/lib/server/routeWrapper';
+import type { MccRole } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 
 export interface MCCHealthStatus {

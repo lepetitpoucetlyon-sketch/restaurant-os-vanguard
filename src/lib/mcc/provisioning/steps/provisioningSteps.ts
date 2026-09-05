@@ -15,6 +15,10 @@ import {
 } from '@/lib/tenantBrandingFromScrape';
 import type { ProvisioningRequest } from '../types';
 
+export async function deleteProvisionedOwner(ownerId: string): Promise<void> {
+    await getServerAuthProvider().deleteUser(ownerId).catch(() => {});
+}
+
 export async function setupStripeCustomer(tenantId: string, request: ProvisioningRequest): Promise<string> {
     const stripeKey = process.env.STRIPE_SECRET_KEY;
     let stripeCustomerId: string;

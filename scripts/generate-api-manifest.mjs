@@ -39,6 +39,22 @@ function extractMethods(content) {
   });
 }
 
+const PUBLIC_EXACT = new Set([
+  '/api/health',
+  '/api/status',
+  '/api/resolve-domain',
+  '/api/menu.json',
+  '/api/v1/openapi.json',
+  '/api/share-target',
+  '/api/signup',
+]);
+const PUBLIC_PREFIXES = ['/api/health/', '/api/status/', '/api/widget/', '/api/auth/'];
+
+function isPublicRoute(apiPath) {
+  if (PUBLIC_EXACT.has(apiPath)) return true;
+  return PUBLIC_PREFIXES.some((prefix) => apiPath.startsWith(prefix));
+}
+
 function inferAudience(apiPath) {
   if (apiPath.startsWith('/api/admin/') || apiPath.startsWith('/api/mcc/')) {
     return 'mcc';
@@ -46,39 +62,39 @@ function inferAudience(apiPath) {
   if (apiPath.startsWith('/api/webhooks/') || apiPath.includes('/webhook')) {
     return 'webhook';
   }
-  if (
-    apiPath === '/api/health' ||
-    apiPath.startsWith('/api/health/') ||
-    apiPath === '/api/status' ||
-    apiPath.startsWith('/api/status/') ||
-    apiPath === '/api/resolve-domain' ||
-    apiPath === '/api/menu.json' ||
-    apiPath.startsWith('/api/widget/') ||
-    apiPath === '/api/v1/openapi.json' ||
-    apiPath === '/api/share-target' ||
-    apiPath === '/api/signup' ||
-    apiPath.startsWith('/api/auth/')
-  ) {
+  if (isPublicRoute(apiPath)) {
     return 'public';
   }
   return 'tenant';
 }
 
-function inferRole(audience, content, method) {
-  if (audience === 'public') return undefined;
-  if (audience === 'webhook') return undefined;
-  if (audience === 'mcc') {
-    if (content.includes('mcc_support') || content.includes('support-ai')) return 'mcc_support';
-    if (content.includes('mcc_readonly')) return 'mcc_readonly';
-    return 'mcc_admin';
+function inferMccRole(content) {
+  if (content.includes('mcc_support') || content.includes('support-ai')) return 'mcc_support';
+  if (content.includes('mcc_readonly')) return 'mcc_readonly';
+  return 'mcc_admin';
+}
+
+const TENANT_ROLE_KEYWORDS = [
+  { role: 'chef_cuisinier', keywords: ["'chef_cuisinier'", '"chef_cuisinier"'] },
+  { role: 'comptable', keywords: ["'comptable'", '"comptable"'] },
+  { role: 'serveur', keywords: ["'serveur'", '"serveur"'] },
+  { role: 'admin', keywords: ['requireTenantAdmin', "'admin'", '"admin"'] },
+  { role: 'manager', keywords: ["'manager'", '"manager"'] },
+];
+
+function inferTenantRole(content, method) {
+  for (const entry of TENANT_ROLE_KEYWORDS) {
+    if (entry.keywords.some((kw) => content.includes(kw))) {
+      return entry.role;
+    }
   }
-  // tenant audience
-  if (content.includes("'chef_cuisinier'") || content.includes('"chef_cuisinier"')) return 'chef_cuisinier';
-  if (content.includes("'comptable'") || content.includes('"comptable"')) return 'comptable';
-  if (content.includes("'serveur'") || content.includes('"serveur"')) return 'serveur';
-  if (content.includes('requireTenantAdmin') || content.includes("'admin'") || content.includes('"admin"')) return 'admin';
-  if (content.includes("'manager'") || content.includes('"manager"')) return 'manager';
   return method === 'GET' ? 'employee' : 'manager';
+}
+
+function inferRole(audience, content, method) {
+  if (audience === 'public' || audience === 'webhook') return undefined;
+  if (audience === 'mcc') return inferMccRole(content);
+  return inferTenantRole(content, method);
 }
 
 function inferIdempotency(apiPath, method) {

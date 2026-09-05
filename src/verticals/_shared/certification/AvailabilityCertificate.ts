@@ -3,7 +3,7 @@ import { getVerticalBlueprint } from '../catalog/VerticalBlueprintRegistry';
 import { validateBlueprint, resolveBlueprintCapabilities } from '../blueprint';
 import { resolveCapabilityDependencies } from '../catalog/CapabilityCatalog';
 import { routesForCapabilities } from '../catalog/CapabilityWiring';
-import { VerticalRegistry } from '@/shared/plugins';
+import { VerticalRegistry } from '@/shared/plugins/VerticalRegistry';
 
 export interface AvailabilityCertificate {
   variant: string;
