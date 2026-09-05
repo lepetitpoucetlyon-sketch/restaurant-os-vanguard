@@ -1,5 +1,6 @@
 import { createHmac } from 'crypto';
 import { logger } from '@/lib/logger';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 import type {
   IEInvoicingProvider,
   InboundEInvoice,
@@ -56,9 +57,9 @@ export class SuperPdpProvider implements IEInvoicingProvider {
   }
 
   async fetchInvoice(providerInvoiceId: string): Promise<InboundEInvoice> {
-    const res = await fetch(`${this.baseUrl}/invoices/${providerInvoiceId}`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/invoices/${providerInvoiceId}`, {
       headers: this.headers(),
-    });
+    }, 8_000);
     if (!res.ok) {
       throw new Error(`[SuperPDP] fetchInvoice ${providerInvoiceId} → ${res.status}`);
     }
@@ -67,30 +68,30 @@ export class SuperPdpProvider implements IEInvoicingProvider {
   }
 
   async acknowledgeReceipt(providerInvoiceId: string): Promise<void> {
-    const res = await fetch(`${this.baseUrl}/invoices/${providerInvoiceId}/acknowledge`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/invoices/${providerInvoiceId}/acknowledge`, {
       method: 'POST',
       headers: this.headers(),
-    });
+    }, 8_000);
     if (!res.ok) {
       logger.warn(`[SuperPDP] acknowledgeReceipt ${providerInvoiceId} → ${res.status}`);
     }
   }
 
   async rejectInvoice(providerInvoiceId: string, _tenantId: string, reason: string): Promise<void> {
-    const res = await fetch(`${this.baseUrl}/invoices/${providerInvoiceId}/reject`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/invoices/${providerInvoiceId}/reject`, {
       method: 'POST',
       headers: this.headers(),
       body: JSON.stringify({ reason }),
-    });
+    }, 8_000);
     if (!res.ok) {
       throw new Error(`[SuperPDP] rejectInvoice ${providerInvoiceId} → ${res.status}`);
     }
   }
 
   async listPendingInvoices(_tenantId: string): Promise<InboundEInvoice[]> {
-    const res = await fetch(`${this.baseUrl}/invoices?status=pending`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/invoices?status=pending`, {
       headers: this.headers(),
-    });
+    }, 8_000);
     if (!res.ok) {
       throw new Error(`[SuperPDP] listPendingInvoices → ${res.status}`);
     }
@@ -101,11 +102,11 @@ export class SuperPdpProvider implements IEInvoicingProvider {
   // ── Outbound ─────────────────────────────────────────────────────────────
 
   async registerCompany(siret: string, companyName: string): Promise<void> {
-    const res = await fetch(`${this.baseUrl}/companies`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/companies`, {
       method: 'POST',
       headers: this.headers(),
       body: JSON.stringify({ siret, name: companyName, country: 'FR' }),
-    });
+    }, 8_000);
     if (!res.ok && res.status !== 409) {
       // 409 = déjà enregistré → idempotent
       throw new Error(`[SuperPDP] registerCompany ${siret} → ${res.status}`);
@@ -114,14 +115,14 @@ export class SuperPdpProvider implements IEInvoicingProvider {
   }
 
   async emitInvoice(invoice: OutboundEInvoice): Promise<OutboundEmitResult> {
-    const res = await fetch(`${this.baseUrl}/invoices/outbound`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/invoices/outbound`, {
       method: 'POST',
       headers: {
         ...this.headers(),
         'X-Idempotency-Key': invoice.internalRef,
       },
       body: JSON.stringify(this.mapOutbound(invoice)),
-    });
+    }, 8_000);
     if (!res.ok) {
       const err = await res.text().catch(() => '');
       throw new Error(`[SuperPDP] emitInvoice ${invoice.invoiceNumber} → ${res.status}: ${err}`);
@@ -135,9 +136,9 @@ export class SuperPdpProvider implements IEInvoicingProvider {
   }
 
   async getOutboundStatus(providerInvoiceId: string): Promise<OutboundEInvoiceStatus> {
-    const res = await fetch(`${this.baseUrl}/invoices/outbound/${providerInvoiceId}`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/invoices/outbound/${providerInvoiceId}`, {
       headers: this.headers(),
-    });
+    }, 8_000);
     if (!res.ok) {
       throw new Error(`[SuperPDP] getOutboundStatus ${providerInvoiceId} → ${res.status}`);
     }

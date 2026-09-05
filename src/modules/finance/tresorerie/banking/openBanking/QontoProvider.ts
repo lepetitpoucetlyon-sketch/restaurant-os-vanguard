@@ -7,6 +7,7 @@ import type {
 } from './types';
 import type { BankTransaction } from '@nexus/contracts';
 import { logger } from '@/lib/logger';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 import type { JsonObject } from "@/shared/types/json";
 
 const QONTO_BASE = 'https://thirdparty.qonto.com/v2';
@@ -92,12 +93,12 @@ export class QontoProvider implements IOpenBankingProvider {
     private async fetch<T>(path: string): Promise<T> {
         const login  = process.env.QONTO_LOGIN ?? '';
         const secret = process.env.QONTO_SECRET_KEY ?? '';
-        const res    = await fetch(`${QONTO_BASE}${path}`, {
+        const res    = await fetchWithTimeout(`${QONTO_BASE}${path}`, {
             headers: {
                 'Authorization': `${login}:${secret}`,
                 'Content-Type':  'application/json',
             },
-        });
+        }, 8_000);
         if (!res.ok) throw new Error(`Qonto ${path} → ${res.status}`);
         return res.json() as Promise<T>;
     }

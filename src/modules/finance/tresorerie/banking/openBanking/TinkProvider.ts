@@ -1,4 +1,5 @@
 import { logger } from '@/lib/axiom';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 import type {
     IOpenBankingProvider,
     OpenBankingAccount,
@@ -55,7 +56,7 @@ export class TinkProvider implements IOpenBankingProvider {
     async createConnectionToken(tenantId: string): Promise<OpenBankingConnectionToken> {
         if (this.isDemoMode()) return { token: `tink-demo-${tenantId}` };
 
-        const res = await fetch(`${TinkProvider.API_URL}/api/v1/oauth/token`, {
+        const res = await fetchWithTimeout(`${TinkProvider.API_URL}/api/v1/oauth/token`, {
             method:  'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
@@ -64,7 +65,7 @@ export class TinkProvider implements IOpenBankingProvider {
                 grant_type:    'client_credentials',
                 scope:         'authorization:read,authorization:grant',
             }),
-        });
+        }, 8_000);
         if (!res.ok) {
             logger.error('TinkProvider: createConnectionToken failed', { status: res.status });
             throw new Error('Impossible d\'initialiser la connexion Tink.');
@@ -84,7 +85,7 @@ export class TinkProvider implements IOpenBankingProvider {
     async exchangeCode(code: string): Promise<OpenBankingUserToken> {
         if (this.isDemoMode()) return { userToken: `tink-user-demo-${code}` };
 
-        const res = await fetch(`${TinkProvider.API_URL}/api/v1/oauth/token`, {
+        const res = await fetchWithTimeout(`${TinkProvider.API_URL}/api/v1/oauth/token`, {
             method:  'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
@@ -93,7 +94,7 @@ export class TinkProvider implements IOpenBankingProvider {
                 grant_type:    'authorization_code',
                 code,
             }),
-        });
+        }, 8_000);
         if (!res.ok) {
             logger.error('TinkProvider: exchangeCode failed', { status: res.status });
             throw new Error('Impossible de finaliser la connexion Tink.');
@@ -108,9 +109,9 @@ export class TinkProvider implements IOpenBankingProvider {
     async getAccounts(userToken: string): Promise<OpenBankingAccount[]> {
         if (this.isDemoMode()) return [];
 
-        const res = await fetch(`${TinkProvider.API_URL}/data/v2/accounts`, {
+        const res = await fetchWithTimeout(`${TinkProvider.API_URL}/data/v2/accounts`, {
             headers: { Authorization: `Bearer ${userToken}` },
-        });
+        }, 8_000);
         if (!res.ok) throw new Error('TinkProvider: getAccounts failed');
 
         const data = await res.json() as { accounts?: TinkAccountDTO[] };
@@ -130,9 +131,9 @@ export class TinkProvider implements IOpenBankingProvider {
         const params = new URLSearchParams({ accountIdIn: accountId });
         if (fromDate) params.set('bookedDateGte', fromDate);
 
-        const res = await fetch(`${TinkProvider.API_URL}/data/v2/transactions?${params}`, {
+        const res = await fetchWithTimeout(`${TinkProvider.API_URL}/data/v2/transactions?${params}`, {
             headers: { Authorization: `Bearer ${userToken}` },
-        });
+        }, 8_000);
         if (!res.ok) throw new Error('TinkProvider: getTransactions failed');
 
         const data  = await res.json() as { transactions?: TinkTransactionDTO[] };
@@ -158,10 +159,10 @@ export class TinkProvider implements IOpenBankingProvider {
 
     async refreshConnection(userToken: string): Promise<void> {
         if (this.isDemoMode()) return;
-        await fetch(`${TinkProvider.API_URL}/api/v1/credentials/refresh`, {
+        await fetchWithTimeout(`${TinkProvider.API_URL}/api/v1/credentials/refresh`, {
             method:  'POST',
             headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
-        });
+        }, 8_000);
     }
 
     normalizeWebhookPayload(raw: unknown): WebhookEnvelope {

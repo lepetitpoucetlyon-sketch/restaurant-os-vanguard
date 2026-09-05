@@ -1,5 +1,6 @@
 import { createHmac } from 'crypto';
 import { logger } from '@/lib/logger';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 import type {
   IEInvoicingProvider,
   InboundEInvoice,
@@ -48,9 +49,9 @@ export class DirectApiEInvoicingProvider implements IEInvoicingProvider {
   }
 
   async fetchInvoice(providerInvoiceId: string, tenantId: string): Promise<InboundEInvoice> {
-    const res = await fetch(`${this.baseUrl}/inbound/${providerInvoiceId}?tenantId=${encodeURIComponent(tenantId)}`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/inbound/${providerInvoiceId}?tenantId=${encodeURIComponent(tenantId)}`, {
       headers: this.headers(),
-    });
+    }, 8_000);
     if (!res.ok) {
       throw new Error(`[DirectApiProvider] fetchInvoice ${providerInvoiceId} → ${res.status}`);
     }
@@ -59,11 +60,11 @@ export class DirectApiEInvoicingProvider implements IEInvoicingProvider {
   }
 
   async acknowledgeReceipt(providerInvoiceId: string, tenantId: string): Promise<void> {
-    const res = await fetch(`${this.baseUrl}/inbound/${providerInvoiceId}/acknowledge`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/inbound/${providerInvoiceId}/acknowledge`, {
       method: 'POST',
       headers: this.headers(),
       body: JSON.stringify({ tenantId, acknowledgedAt: new Date().toISOString() }),
-    });
+    }, 8_000);
     if (!res.ok) {
       throw new Error(`[DirectApiProvider] acknowledgeReceipt ${providerInvoiceId} → ${res.status}`);
     }
@@ -74,20 +75,20 @@ export class DirectApiEInvoicingProvider implements IEInvoicingProvider {
     tenantId: string,
     reason: string,
   ): Promise<void> {
-    const res = await fetch(`${this.baseUrl}/inbound/${providerInvoiceId}/reject`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/inbound/${providerInvoiceId}/reject`, {
       method: 'POST',
       headers: this.headers(),
       body: JSON.stringify({ tenantId, reason, rejectedAt: new Date().toISOString() }),
-    });
+    }, 8_000);
     if (!res.ok) {
       throw new Error(`[DirectApiProvider] rejectInvoice ${providerInvoiceId} → ${res.status}`);
     }
   }
 
   async listPendingInvoices(tenantId: string): Promise<InboundEInvoice[]> {
-    const res = await fetch(`${this.baseUrl}/inbound/pending?tenantId=${encodeURIComponent(tenantId)}`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/inbound/pending?tenantId=${encodeURIComponent(tenantId)}`, {
       headers: this.headers(),
-    });
+    }, 8_000);
     if (!res.ok) {
       throw new Error(`[DirectApiProvider] listPendingInvoices → ${res.status}`);
     }
@@ -98,11 +99,11 @@ export class DirectApiEInvoicingProvider implements IEInvoicingProvider {
   // ── Outbound ─────────────────────────────────────────────────────────────
 
   async registerCompany(siret: string, companyName: string): Promise<void> {
-    const res = await fetch(`${this.baseUrl}/companies/register`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/companies/register`, {
       method: 'POST',
       headers: this.headers(),
       body: JSON.stringify({ siret, companyName, registeredAt: new Date().toISOString() }),
-    });
+    }, 8_000);
     if (!res.ok && res.status !== 409) {
       // 409 = déjà enregistré, non bloquant
       throw new Error(`[DirectApiProvider] registerCompany ${siret} → ${res.status}`);
@@ -111,14 +112,14 @@ export class DirectApiEInvoicingProvider implements IEInvoicingProvider {
   }
 
   async emitInvoice(invoice: OutboundEInvoice): Promise<OutboundEmitResult> {
-    const res = await fetch(`${this.baseUrl}/outbound/invoices`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/outbound/invoices`, {
       method: 'POST',
       headers: {
         ...this.headers(),
         'X-Idempotency-Key': invoice.internalRef,
       },
       body: JSON.stringify(invoice),
-    });
+    }, 8_000);
     if (!res.ok) {
       const err = await res.text().catch(() => '');
       throw new Error(`[DirectApiProvider] emitInvoice ${invoice.invoiceNumber} → ${res.status} : ${err}`);
@@ -131,9 +132,9 @@ export class DirectApiEInvoicingProvider implements IEInvoicingProvider {
   }
 
   async getOutboundStatus(providerInvoiceId: string): Promise<OutboundEInvoiceStatus> {
-    const res = await fetch(`${this.baseUrl}/outbound/invoices/${providerInvoiceId}/status`, {
+    const res = await fetchWithTimeout(`${this.baseUrl}/outbound/invoices/${providerInvoiceId}/status`, {
       headers: this.headers(),
-    });
+    }, 8_000);
     if (!res.ok) {
       throw new Error(`[DirectApiProvider] getOutboundStatus ${providerInvoiceId} → ${res.status}`);
     }

@@ -1,4 +1,5 @@
 import { logger } from '@/lib/axiom';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 import { StatementIngestionService } from '../../../comptabilite/accounting/domain/StatementIngestionService';
 import type { BankTransaction } from '@nexus/contracts';
 import type {
@@ -87,14 +88,14 @@ export class GoCardlessProvider implements IOpenBankingProvider {
 
     /** Authentification serveur → access_token court-terme. */
     private async authenticate(): Promise<string> {
-        const res = await fetch(`${GoCardlessProvider.API_URL}/token/new/`, {
+        const res = await fetchWithTimeout(`${GoCardlessProvider.API_URL}/token/new/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
             body: JSON.stringify({
                 secret_id:  GoCardlessProvider.SECRET_ID,
                 secret_key: GoCardlessProvider.SECRET_KEY,
             }),
-        });
+        }, 8_000);
         if (!res.ok) {
             logger.error('GoCardlessProvider: authenticate failed', { status: res.status });
             throw new Error('Impossible d\'authentifier le serveur auprès de GoCardless.');
@@ -123,7 +124,7 @@ export class GoCardlessProvider implements IOpenBankingProvider {
         // Encode le state dans le redirect_uri — GoCardless préserve les query params existants
         const redirectWithState = `${redirectUri}?state=${encodeURIComponent(state)}`;
 
-        const res = await fetch(`${GoCardlessProvider.API_URL}/requisitions/`, {
+        const res = await fetchWithTimeout(`${GoCardlessProvider.API_URL}/requisitions/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -137,7 +138,7 @@ export class GoCardlessProvider implements IOpenBankingProvider {
                 user_language:   'FR',
                 account_selection: false,
             }),
-        });
+        }, 8_000);
 
         if (!res.ok) {
             logger.error('GoCardlessProvider: createRequisition failed', { status: res.status });
@@ -171,9 +172,9 @@ export class GoCardlessProvider implements IOpenBankingProvider {
         const accessToken = await this.authenticate();
 
         // Récupérer les account IDs depuis la réquisition
-        const reqRes = await fetch(`${GoCardlessProvider.API_URL}/requisitions/${userToken}/`, {
+        const reqRes = await fetchWithTimeout(`${GoCardlessProvider.API_URL}/requisitions/${userToken}/`, {
             headers: { Authorization: `Bearer ${accessToken}`, Accept: 'application/json' },
-        });
+        }, 8_000);
         if (!reqRes.ok) {
             logger.error('GoCardlessProvider: getRequisition failed', { status: reqRes.status });
             throw new Error('Impossible de récupérer la réquisition bancaire.');
@@ -183,12 +184,12 @@ export class GoCardlessProvider implements IOpenBankingProvider {
         const accounts: OpenBankingAccount[] = [];
         for (const accountId of requisition.accounts ?? []) {
             const [detailRes, balanceRes] = await Promise.all([
-                fetch(`${GoCardlessProvider.API_URL}/accounts/${accountId}/details/`, {
+                fetchWithTimeout(`${GoCardlessProvider.API_URL}/accounts/${accountId}/details/`, {
                     headers: { Authorization: `Bearer ${accessToken}`, Accept: 'application/json' },
-                }),
-                fetch(`${GoCardlessProvider.API_URL}/accounts/${accountId}/balances/`, {
+                }, 8_000),
+                fetchWithTimeout(`${GoCardlessProvider.API_URL}/accounts/${accountId}/balances/`, {
                     headers: { Authorization: `Bearer ${accessToken}`, Accept: 'application/json' },
-                }),
+                }, 8_000),
             ]);
 
             if (!detailRes.ok || !balanceRes.ok) continue;
@@ -262,9 +263,10 @@ export class GoCardlessProvider implements IOpenBankingProvider {
 
         const accessToken = await this.authenticate();
         const params = fromDate ? `?date_from=${encodeURIComponent(fromDate)}` : '';
-        const res = await fetch(
+        const res = await fetchWithTimeout(
             `${GoCardlessProvider.API_URL}/accounts/${accountId}/transactions/${params}`,
-            { headers: { Authorization: `Bearer ${accessToken}`, Accept: 'application/json' } }
+            { headers: { Authorization: `Bearer ${accessToken}`, Accept: 'application/json' } },
+            8_000,
         );
         if (!res.ok) {
             logger.error('GoCardlessProvider: getTransactions failed', { status: res.status, accountId });

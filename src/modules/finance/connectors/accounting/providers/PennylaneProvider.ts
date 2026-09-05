@@ -1,5 +1,6 @@
 import type { IAccountingProvider, LedgerEntry, ExpenseEntry, AccountingBalance, SyncResult } from '../types';
 import { logger } from '@/lib/logger';
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 const PENNYLANE_BASE = 'https://app.pennylane.com/api/external/v1';
 
@@ -23,14 +24,14 @@ export class PennylaneProvider implements IAccountingProvider {
     }
 
     private async fetch<T>(path: string, options?: RequestInit): Promise<T> {
-        const res = await fetch(`${PENNYLANE_BASE}${path}`, {
+        const res = await fetchWithTimeout(`${PENNYLANE_BASE}${path}`, {
             ...options,
             headers: {
                 'Authorization': `Bearer ${this.token}`,
                 'Content-Type':  'application/json',
                 ...options?.headers,
             },
-        });
+        }, 8_000);
         if (!res.ok) throw new Error(`Pennylane ${path} → ${res.status}`);
         return res.json() as Promise<T>;
     }

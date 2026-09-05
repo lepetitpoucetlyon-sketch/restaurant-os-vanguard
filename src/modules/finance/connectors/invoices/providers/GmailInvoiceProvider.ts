@@ -2,6 +2,7 @@ import type { IEmailInvoiceProvider, EmailWithAttachments } from '../types';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { toError } from "@/lib/toError";
+import { fetchWithTimeout } from '@/lib/http/resilientFetch';
 
 /**
  * Gmail — OAuth 2.0 Google, lecture inbox pour factures fournisseurs.
@@ -16,14 +17,14 @@ export class GmailInvoiceProvider implements IEmailInvoiceProvider {
         const clientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET ?? '';
         const redirectUri  = `${process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.restaurant-os.app'}/api/connectors/invoices/oauth/callback`;
 
-        const res = await fetch('https://oauth2.googleapis.com/token', {
+        const res = await fetchWithTimeout('https://oauth2.googleapis.com/token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
                 code: oauthCode, client_id: clientId, client_secret: clientSecret,
                 redirect_uri: redirectUri, grant_type: 'authorization_code',
             }),
-        });
+        }, 8_000);
         if (!res.ok) throw new Error(`Gmail OAuth → ${res.status}`);
         const token = await res.json() as { access_token: string; refresh_token: string; expires_in: number };
         await Nexus.adapter.set(`tenants/${tenantId}/connectors/invoices/gmail_token`, {
@@ -42,9 +43,10 @@ export class GmailInvoiceProvider implements IEmailInvoiceProvider {
     async fetchUnprocessed(tenantId: string): Promise<EmailWithAttachments[]> {
         const token = await this.getAccessToken(tenantId);
         const query  = encodeURIComponent('has:attachment filename:pdf -label:facture_traitee');
-        const listRes = await fetch(
+        const listRes = await fetchWithTimeout(
             `https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${query}&maxResults=20`,
-            { headers: { 'Authorization': `Bearer ${token}` } }
+            { headers: { 'Authorization': `Bearer ${token}` } },
+            8_000,
         );
         if (!listRes.ok) throw new Error(`Gmail list → ${listRes.status}`);
         const list = await listRes.json() as { messages?: Array<{ id: string }> };
@@ -53,9 +55,10 @@ export class GmailInvoiceProvider implements IEmailInvoiceProvider {
         const emails: EmailWithAttachments[] = [];
         for (const msg of list.messages) {
             try {
-                const msgRes = await fetch(
+                const msgRes = await fetchWithTimeout(
                     `https://gmail.googleapis.com/gmail/v1/users/me/messages/${msg.id}`,
-                    { headers: { 'Authorization': `Bearer ${token}` } }
+                    { headers: { 'Authorization': `Bearer ${token}` } },
+                    8_000,
                 );
                 if (!msgRes.ok) continue;
                 const msgData = await msgRes.json() as { payload: Record<string, unknown> };
@@ -95,7 +98,7 @@ export class GmailInvoiceProvider implements IEmailInvoiceProvider {
         if (!stored) throw new Error('Gmail non connecté pour ce tenant');
 
         if (Date.now() > (stored.expires_at ?? 0)) {
-            const res = await fetch('https://oauth2.googleapis.com/token', {
+            const res = await fetchWithTimeout('https://oauth2.googleapis.com/token', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({
@@ -103,7 +106,7 @@ export class GmailInvoiceProvider implements IEmailInvoiceProvider {
                     client_id: process.env.GOOGLE_OAUTH_CLIENT_ID ?? '',
                     client_secret: process.env.GOOGLE_OAUTH_CLIENT_SECRET ?? '',
                 }),
-            });
+            }, 8_000);
             const refreshed = await res.json() as { access_token: string; expires_in: number };
             await Nexus.adapter.set(`tenants/${tenantId}/connectors/invoices/gmail_token`, {
                 ...stored,
