@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { InboundInvoiceLifecycle } from '@/modules/finance';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 import { z } from 'zod';
@@ -46,102 +47,109 @@ const ROLE_REQUIREMENTS = {
   receive_goods: 'chef_rang',
 } as const;
 
-export async function POST(req: Request): Promise<NextResponse> {
-  try {
-    const body = await req.json();
-    const parsed = ActionSchema.safeParse(body);
-    if (!parsed.success) {
-      return NextResponse.json(
-        { error: parsed.error.issues[0]?.message ?? 'Payload invalide' },
-        { status: 400 },
+export const POST = withTenantRoute(
+  async (req: NextRequest, ctx): Promise<NextResponse> => {
+    try {
+      const body = await req.json();
+      const parsed = ActionSchema.safeParse(body);
+      if (!parsed.success) {
+        return NextResponse.json(
+          { error: parsed.error.issues[0]?.message ?? 'Payload invalide' },
+          { status: 400 },
+        );
+      }
+
+      const { action } = parsed.data;
+      const minRole = ROLE_REQUIREMENTS[action];
+      if (minRole !== 'chef_rang') {
+        const callerCheck = await requireTenantRole(req, minRole);
+        if (isDenied(callerCheck)) return callerCheck as NextResponse;
+      }
+      const { tenantId, uid } = ctx.caller;
+
+      switch (parsed.data.action) {
+        case 'validate': {
+          await InboundInvoiceLifecycle.validate(tenantId, parsed.data.invoiceId, uid);
+          return NextResponse.json({ ok: true, action: 'validated' });
+        }
+
+        case 'approve': {
+          await InboundInvoiceLifecycle.approve(
+            tenantId, parsed.data.invoiceId, uid, parsed.data.deliveryNoteId,
+          );
+          return NextResponse.json({ ok: true, action: 'approved' });
+        }
+
+        case 'reject': {
+          await InboundInvoiceLifecycle.reject(
+            tenantId, parsed.data.invoiceId, uid, parsed.data.reason,
+          );
+          return NextResponse.json({ ok: true, action: 'rejected' });
+        }
+
+        case 'pay': {
+          await InboundInvoiceLifecycle.markPaid(
+            tenantId, parsed.data.invoiceId, uid, parsed.data.paymentReference,
+          );
+          return NextResponse.json({ ok: true, action: 'paid' });
+        }
+
+        case 'receive_goods': {
+          const dnId = `dn_${parsed.data.invoiceId}_${Date.now()}`;
+          const allAccepted = parsed.data.items.every(i => i.accepted);
+
+          await NexusEventBus.emitDurable('einvoice.goods_received', {
+            v: 1,
+            tenantId,
+            invoiceId: parsed.data.invoiceId,
+            deliveryNoteId: dnId,
+            receivedBy: uid,
+            items: parsed.data.items,
+            allAccepted,
+          });
+
+          return NextResponse.json({ ok: true, action: 'goods_received', deliveryNoteId: dnId });
+        }
+
+        default:
+          return NextResponse.json({ error: 'Action inconnue' }, { status: 400 });
+      }
+    } catch (err) {
+      logger.error('[EInvoicing/lifecycle]', { error: err, correlationId: ctx.correlationId });
+      const message = err instanceof Error ? err.message : 'Erreur serveur';
+      const status = message.includes('Transition invalide') ? 409 : 500;
+      return NextResponse.json({ error: message }, { status });
+    }
+  },
+  { minRole: 'chef_rang' },
+);
+
+export const GET = withTenantRoute(
+  async (req: NextRequest, ctx): Promise<NextResponse> => {
+    try {
+      const { tenantId } = ctx;
+
+      const url = new URL(req.url);
+      const invoiceId = url.searchParams.get('invoiceId');
+      const status = url.searchParams.get('status');
+
+      if (invoiceId) {
+        const invoice = await InboundInvoiceLifecycle.getInvoice(tenantId, invoiceId);
+        if (!invoice) return NextResponse.json({ error: 'Facture introuvable' }, { status: 404 });
+        return NextResponse.json(invoice);
+      }
+
+      const invoices = await InboundInvoiceLifecycle.listInvoices(
+        tenantId,
+        (status as 'received' | 'validated' | 'approved' | 'rejected' | 'paid' | 'disputed') ?? undefined,
       );
+
+      return NextResponse.json({ invoices, count: invoices.length });
+    } catch (err) {
+      logger.error('[EInvoicing/lifecycle GET]', { error: err, correlationId: ctx.correlationId });
+      return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
     }
+  },
+  { minRole: 'serveur' },
+);
 
-    const { action } = parsed.data;
-    const minRole = ROLE_REQUIREMENTS[action];
-    const caller = await requireTenantRole(req, minRole);
-    if (isDenied(caller)) return caller as NextResponse;
-    const { tenantId, uid } = caller;
-
-    switch (parsed.data.action) {
-      case 'validate': {
-        await InboundInvoiceLifecycle.validate(tenantId, parsed.data.invoiceId, uid);
-        return NextResponse.json({ ok: true, action: 'validated' });
-      }
-
-      case 'approve': {
-        await InboundInvoiceLifecycle.approve(
-          tenantId, parsed.data.invoiceId, uid, parsed.data.deliveryNoteId,
-        );
-        return NextResponse.json({ ok: true, action: 'approved' });
-      }
-
-      case 'reject': {
-        await InboundInvoiceLifecycle.reject(
-          tenantId, parsed.data.invoiceId, uid, parsed.data.reason,
-        );
-        return NextResponse.json({ ok: true, action: 'rejected' });
-      }
-
-      case 'pay': {
-        await InboundInvoiceLifecycle.markPaid(
-          tenantId, parsed.data.invoiceId, uid, parsed.data.paymentReference,
-        );
-        return NextResponse.json({ ok: true, action: 'paid' });
-      }
-
-      case 'receive_goods': {
-        const dnId = `dn_${parsed.data.invoiceId}_${Date.now()}`;
-        const allAccepted = parsed.data.items.every(i => i.accepted);
-
-        await NexusEventBus.emitDurable('einvoice.goods_received', {
-          v: 1,
-          tenantId,
-          invoiceId: parsed.data.invoiceId,
-          deliveryNoteId: dnId,
-          receivedBy: uid,
-          items: parsed.data.items,
-          allAccepted,
-        });
-
-        return NextResponse.json({ ok: true, action: 'goods_received', deliveryNoteId: dnId });
-      }
-
-      default:
-        return NextResponse.json({ error: 'Action inconnue' }, { status: 400 });
-    }
-  } catch (err) {
-    logger.error('[EInvoicing/lifecycle]', err);
-    const message = err instanceof Error ? err.message : 'Erreur serveur';
-    const status = message.includes('Transition invalide') ? 409 : 500;
-    return NextResponse.json({ error: message }, { status });
-  }
-}
-
-export async function GET(req: Request): Promise<NextResponse> {
-  try {
-    const caller = await requireTenantRole(req, 'serveur');
-    if (isDenied(caller)) return caller as NextResponse;
-    const { tenantId } = caller;
-
-    const url = new URL(req.url);
-    const invoiceId = url.searchParams.get('invoiceId');
-    const status = url.searchParams.get('status');
-
-    if (invoiceId) {
-      const invoice = await InboundInvoiceLifecycle.getInvoice(tenantId, invoiceId);
-      if (!invoice) return NextResponse.json({ error: 'Facture introuvable' }, { status: 404 });
-      return NextResponse.json(invoice);
-    }
-
-    const invoices = await InboundInvoiceLifecycle.listInvoices(
-      tenantId,
-      (status as 'received' | 'validated' | 'approved' | 'rejected' | 'paid' | 'disputed') ?? undefined,
-    );
-
-    return NextResponse.json({ invoices, count: invoices.length });
-  } catch (err) {
-    logger.error('[EInvoicing/lifecycle GET]', err);
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
-  }
-}

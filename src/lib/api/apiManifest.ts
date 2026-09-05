@@ -1268,7 +1268,7 @@ export const API_MANIFEST: ApiRouteContract[] = [
     "path": "/api/billing/checkout",
     "method": "POST",
     "audience": "tenant",
-    "minRole": "admin",
+    "minRole": "manager",
     "tenantSource": "header",
     "rateLimited": true,
     "idempotencyRequired": true,

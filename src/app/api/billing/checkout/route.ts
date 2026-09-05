@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/payments/stripeClient';
-import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { getStripePriceId } from '@/shared/constants/pricing';
 import type { PricingTier } from '@/shared/constants/pricing';
 import { logger } from '@/lib/logger';
-import { toError } from "@/lib/toError";
+import { toError } from '@/lib/toError';
 
 /**
  * POST /api/billing/checkout
@@ -17,14 +17,13 @@ import { toError } from "@/lib/toError";
 
 const VALID_TIERS: PricingTier[] = ['STANDARD', 'PREMIUM', 'ENTERPRISE'];
 
-export async function POST(request: NextRequest) {
-    const caller = await requireTenantAdmin(request);
-    if (isDenied(caller)) return caller;
-    const { tenantId, uid } = caller;
+export const POST = withTenantRoute(
+  async (request: NextRequest, ctx) => {
+    const { tenantId, uid } = ctx.caller;
 
     const secret = process.env.STRIPE_SECRET_KEY;
     if (!secret) {
-        logger.error('[billing/checkout] STRIPE_SECRET_KEY manquant');
+        logger.error('[billing/checkout] STRIPE_SECRET_KEY manquant', { correlationId: ctx.correlationId });
         return NextResponse.json({ error: 'Stripe non configuré.' }, { status: 503 });
     }
 
@@ -42,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     const priceId = getStripePriceId(tier);
     if (!priceId) {
-        logger.error(`[billing/checkout] STRIPE_PRICE_${tier} manquant dans les variables d'env`);
+        logger.error(`[billing/checkout] STRIPE_PRICE_${tier} manquant dans les variables d'env`, { correlationId: ctx.correlationId });
         return NextResponse.json({ error: `Prix Stripe non configuré pour le tier ${tier}.` }, { status: 503 });
     }
 
@@ -68,13 +67,15 @@ export async function POST(request: NextRequest) {
             expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
         });
 
-        logger.info(`[billing/checkout] Session créée`, { tenantId, tier, sessionId: session.id });
+        logger.info(`[billing/checkout] Session créée`, { tenantId, tier, sessionId: session.id, correlationId: ctx.correlationId });
         return NextResponse.json({ url: session.url });
     } catch (err) {
-        logger.error('[billing/checkout] Stripe error', toError(err).message);
+        logger.error('[billing/checkout] Stripe error', { error: toError(err).message, correlationId: ctx.correlationId });
         return NextResponse.json(
             { error: err instanceof Error ? err.message : 'Erreur Stripe.' },
             { status: 500 }
         );
     }
-}
+  },
+  { requireAdmin: true },
+);

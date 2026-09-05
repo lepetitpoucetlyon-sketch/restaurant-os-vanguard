@@ -17,20 +17,19 @@
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/payments/stripeClient';
-import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 import type { JsonObject } from '@/shared/types/json';
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
-    const caller = await requireTenantAdmin(request);
-    if (isDenied(caller)) return caller as NextResponse;
-    const { tenantId } = caller;
+export const POST = withTenantRoute(
+  async (request: NextRequest, ctx): Promise<NextResponse> => {
+    const { tenantId } = ctx.caller;
 
     const secret = process.env.STRIPE_SECRET_KEY;
     if (!secret) {
-        logger.error('[billing/portal] STRIPE_SECRET_KEY manquant');
+        logger.error('[billing/portal] STRIPE_SECRET_KEY manquant', { correlationId: ctx.correlationId });
         return NextResponse.json(
             { error: 'La facturation en ligne n\'est pas configurée sur ce déploiement. Contactez le support.' },
             { status: 503 },
@@ -39,16 +38,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     let body: { returnUrl?: string } = {};
     try {
-        body = await request.json() as { returnUrl?: string };
+        body = (await request.json()) as { returnUrl?: string };
     } catch {
         // Corps optionnel : un POST sans payload est valide.
     }
 
-    const config = await Nexus.adapter.get(`tenants/${tenantId}/config`) as JsonObject | null;
+    const config = (await Nexus.adapter.get(`tenants/${tenantId}/config`)) as JsonObject | null;
     const stripeCustomerId = (config?.billing as JsonObject | undefined)?.stripeCustomerId as string | undefined;
 
     if (!stripeCustomerId) {
-        logger.warn(`[billing/portal] Aucun stripeCustomerId pour ${tenantId}`);
+        logger.warn(`[billing/portal] Aucun stripeCustomerId pour ${tenantId}`, { correlationId: ctx.correlationId });
         return NextResponse.json(
             { error: 'Aucun dossier de facturation n\'est rattaché à cet établissement. Contactez le support.' },
             { status: 503 },
@@ -69,13 +68,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             return_url: returnUrl,
         });
 
-        logger.info('[billing/portal] Session portail créée', { tenantId });
+        logger.info('[billing/portal] Session portail créée', { tenantId, correlationId: ctx.correlationId });
         return NextResponse.json({ url: session.url });
     } catch (err) {
-        logger.error('[billing/portal] Stripe error', toError(err).message);
+        logger.error('[billing/portal] Stripe error', { error: toError(err).message, correlationId: ctx.correlationId });
         return NextResponse.json(
             { error: 'Le portail de facturation est momentanément indisponible. Réessayez ou contactez le support.' },
             { status: 502 },
         );
     }
-}
+  },
+  { requireAdmin: true },
+);

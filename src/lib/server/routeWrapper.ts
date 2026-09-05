@@ -71,11 +71,11 @@ function resolveCorrelationId(req: Request): string {
  *  4. Propagation transparente du correlation-id.
  *  5. Rejet immédiat (401/403/404) si absence de contexte ou rôle insuffisant.
  */
-export function withTenantRoute(
-  handler: (req: NextRequest, ctx: TenantRouteContext) => Promise<Response | NextResponse>,
+export function withTenantRoute<T = unknown>(
+  handler: (req: NextRequest, ctx: TenantRouteContext, routeParams?: T) => Promise<Response | NextResponse>,
   options: TenantRouteOptions = {},
 ) {
-  return async (req: NextRequest): Promise<Response | NextResponse> => {
+  return async (req: NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
     const correlationId = resolveCorrelationId(req);
 
     return runWithCorrelation({ correlationId }, async () => {
@@ -103,11 +103,15 @@ export function withTenantRoute(
 
       return runWithServerTenant(tenantContext, async () => {
         try {
-          return await handler(req, {
-            tenantId: caller.tenantId,
-            caller,
-            correlationId,
-          });
+          return await handler(
+            req,
+            {
+              tenantId: caller.tenantId,
+              caller,
+              correlationId,
+            },
+            routeParams,
+          );
         } catch (error) {
           const err = toError(error);
           logger.error(`[withTenantRoute] Erreur non gérée pour ${caller.tenantId}: ${err.message}`, {
@@ -133,11 +137,11 @@ export function withTenantRoute(
  *  3. Ancrage serveur avec `isMcc: true`.
  *  4. Propagation du correlation-id.
  */
-export function withMccRoute(
-  handler: (req: NextRequest, ctx: MccRouteContext) => Promise<Response | NextResponse>,
+export function withMccRoute<T = unknown>(
+  handler: (req: NextRequest, ctx: MccRouteContext, routeParams?: T) => Promise<Response | NextResponse>,
   options: MccRouteOptions = {},
 ) {
-  return async (req: NextRequest): Promise<Response | NextResponse> => {
+  return async (req: NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
     const correlationId = resolveCorrelationId(req);
 
     return runWithCorrelation({ correlationId }, async () => {
@@ -163,10 +167,14 @@ export function withMccRoute(
 
       return runWithServerTenant(mccContext, async () => {
         try {
-          return await handler(req, {
-            caller,
-            correlationId,
-          });
+          return await handler(
+            req,
+            {
+              caller,
+              correlationId,
+            },
+            routeParams,
+          );
         } catch (error) {
           const err = toError(error);
           logger.error(`[withMccRoute] Erreur opérateur ${caller.uid}: ${err.message}`, {
@@ -191,10 +199,10 @@ export function withMccRoute(
  *  2. Résolution optionnelle du tenant via sous-domaine vérifié `x-resolved-tenant-id`.
  *  3. Correlation-id injecté.
  */
-export function withPublicRoute(
-  handler: (req: NextRequest, ctx: PublicRouteContext) => Promise<Response | NextResponse>,
+export function withPublicRoute<T = unknown>(
+  handler: (req: NextRequest, ctx: PublicRouteContext, routeParams?: T) => Promise<Response | NextResponse>,
 ) {
-  return async (req: NextRequest): Promise<Response | NextResponse> => {
+  return async (req: NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
     const correlationId = resolveCorrelationId(req);
     const resolvedTenantId = req.headers.get('x-resolved-tenant-id') ?? undefined;
 
@@ -207,7 +215,7 @@ export function withPublicRoute(
 
       return runWithServerTenant(publicContext, async () => {
         try {
-          return await handler(req, { correlationId, resolvedTenantId });
+          return await handler(req, { correlationId, resolvedTenantId }, routeParams);
         } catch (error) {
           const err = toError(error);
           logger.error(`[withPublicRoute] Erreur route publique: ${err.message}`, { correlationId });
@@ -229,11 +237,11 @@ export function withPublicRoute(
  *  2. Refus 401 si signature invalide.
  *  3. Contexte serveur isolé avec correlation-id.
  */
-export function withWebhookRoute(
-  handler: (req: NextRequest, ctx: WebhookRouteContext) => Promise<Response | NextResponse>,
+export function withWebhookRoute<T = unknown>(
+  handler: (req: NextRequest, ctx: WebhookRouteContext, routeParams?: T) => Promise<Response | NextResponse>,
   options: WebhookRouteOptions,
 ) {
-  return async (req: NextRequest): Promise<Response | NextResponse> => {
+  return async (req: NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
     const correlationId = resolveCorrelationId(req);
 
     return runWithCorrelation({ correlationId }, async () => {
@@ -256,7 +264,7 @@ export function withWebhookRoute(
 
       return runWithServerTenant(webhookContext, async () => {
         try {
-          return await handler(req, { correlationId });
+          return await handler(req, { correlationId }, routeParams);
         } catch (error) {
           const err = toError(error);
           logger.error(`[withWebhookRoute] Erreur traitement webhook: ${err.message}`, { correlationId });
