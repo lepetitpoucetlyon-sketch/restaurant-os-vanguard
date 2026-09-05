@@ -16,9 +16,9 @@
  * Protégé : requireTenantUser (client self-service) ou requireTenantAdmin.
  */
 import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
@@ -41,64 +41,62 @@ interface ConsentRecord {
 
 type ConsentMap = Partial<Record<Channel, ConsentRecord>>;
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantAdmin(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller as { tenantId: string };
+export const GET = withTenantRoute(
+  async (req, { tenantId }) => {
+    const customerId = req.nextUrl.searchParams.get('customerId');
+    if (!customerId) return NextResponse.json({ error: 'customerId requis' }, { status: 400 });
 
-  const customerId = req.nextUrl.searchParams.get('customerId');
-  if (!customerId) return NextResponse.json({ error: 'customerId requis' }, { status: 400 });
+    const consents = await Nexus.adapter.get(`tenants/${tenantId}/customerConsents/${customerId}`) as ConsentMap | null;
+    return NextResponse.json({ customerId, consents: consents ?? {} });
+  },
+  { requireAdmin: true },
+);
 
-  const consents = await Nexus.adapter.get(`tenants/${tenantId}/customerConsents/${customerId}`) as ConsentMap | null;
-  return NextResponse.json({ customerId, consents: consents ?? {} });
-}
+export const POST = withTenantRoute(
+  async (req, { tenantId }) => {
+    const parsed = ConsentPostSchema.safeParse(await req.json().catch(() => ({})));
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Payload invalide', details: parsed.error.flatten() },
+        { status: 400 },
+      );
+    }
+    const { customerId, channel, granted, source = 'backoffice' } = parsed.data;
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantAdmin(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller as { tenantId: string };
+    const now = new Date().toISOString();
+    const record: ConsentRecord = granted
+      ? { granted: true,  grantedAt: now, source }
+      : { granted: false, revokedAt: now, source };
 
-  const parsed = ConsentPostSchema.safeParse(await req.json().catch(() => ({})));
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: 'Payload invalide', details: parsed.error.flatten() },
-      { status: 400 },
-    );
-  }
-  const { customerId, channel, granted, source = 'backoffice' } = parsed.data;
+    await Nexus.adapter.set(`tenants/${tenantId}/customerConsents/${customerId}`, {
+      [channel]: record,
+      updatedAt: now,
+    }, { merge: true });
 
-  const now = new Date().toISOString();
-  const record: ConsentRecord = granted
-    ? { granted: true,  grantedAt: now, source }
-    : { granted: false, revokedAt: now, source };
+    logger.info(`[Consent] ${channel} → ${granted ? 'OPT-IN' : 'OPT-OUT'} pour client ${customerId} (${tenantId})`);
+    return NextResponse.json({ success: true, customerId, channel, granted });
+  },
+  { requireAdmin: true },
+);
 
-  await Nexus.adapter.set(`tenants/${tenantId}/customerConsents/${customerId}`, {
-    [channel]: record,
-    updatedAt: now,
-  }, { merge: true });
+export const DELETE = withTenantRoute(
+  async (req, { tenantId }) => {
+    const customerId = req.nextUrl.searchParams.get('customerId');
+    const channelRaw = req.nextUrl.searchParams.get('channel');
+    if (!customerId) return NextResponse.json({ error: 'customerId requis' }, { status: 400 });
+    const channelParse = ChannelSchema.safeParse(channelRaw);
+    if (!channelParse.success) {
+      return NextResponse.json({ error: `Canal invalide: email, sms, whatsapp` }, { status: 400 });
+    }
+    const channel: Channel = channelParse.data;
 
-  logger.info(`[Consent] ${channel} → ${granted ? 'OPT-IN' : 'OPT-OUT'} pour client ${customerId} (${tenantId})`);
-  return NextResponse.json({ success: true, customerId, channel, granted });
-}
+    await Nexus.adapter.set(`tenants/${tenantId}/customerConsents/${customerId}`, {
+      [channel]: { granted: false, revokedAt: new Date().toISOString(), source: 'revocation' },
+    }, { merge: true });
 
-export async function DELETE(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantAdmin(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller as { tenantId: string };
+    logger.info(`[Consent] Révocation ${channel} pour client ${customerId} (${tenantId})`);
+    return NextResponse.json({ success: true, customerId, channel, revoked: true });
+  },
+  { requireAdmin: true },
+);
 
-  const customerId = req.nextUrl.searchParams.get('customerId');
-  const channelRaw = req.nextUrl.searchParams.get('channel');
-  if (!customerId) return NextResponse.json({ error: 'customerId requis' }, { status: 400 });
-  const channelParse = ChannelSchema.safeParse(channelRaw);
-  if (!channelParse.success) {
-    return NextResponse.json({ error: `Canal invalide: email, sms, whatsapp` }, { status: 400 });
-  }
-  const channel: Channel = channelParse.data;
-
-  await Nexus.adapter.set(`tenants/${tenantId}/customerConsents/${customerId}`, {
-    [channel]: { granted: false, revokedAt: new Date().toISOString(), source: 'revocation' },
-  }, { merge: true });
-
-  logger.info(`[Consent] Révocation ${channel} pour client ${customerId} (${tenantId})`);
-  return NextResponse.json({ success: true, customerId, channel, revoked: true });
-}

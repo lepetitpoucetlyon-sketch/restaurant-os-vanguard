@@ -1,6 +1,7 @@
 import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { withPublicRoute } from '@/lib/server/routeWrapper';
 import { getStripe } from '@/lib/payments/stripeClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
@@ -42,7 +43,7 @@ function getConfiguredStripe() {
   return getStripe(key); // fabrique centralisée (timeout+retries, audit S10)
 }
 
-export async function POST(request: NextRequest) {
+export const POST = withPublicRoute(async (request) => {
   try {
     const rawBody = await request.json();
     const parsed = BodySchema.safeParse(rawBody);
@@ -211,4 +212,5 @@ export async function POST(request: NextRequest) {
     logger.error('[card-imprint/route]', err);
     return NextResponse.json({ error: 'Erreur serveur lors du traitement de l\'empreinte bancaire' }, { status: 500 });
   }
-}
+});
+

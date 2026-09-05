@@ -5,8 +5,9 @@
  * Fallback : retourne des appareils mock si MOSYLE_API_KEY est absent.
  */
 import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { type NextRequest, NextResponse } from 'next/server';
+import { withMccRoute } from '@/lib/server/routeWrapper';
+import type { MccRole } from '@/lib/server/adminAuthGuard';
 import { MosyleClient, type MosyleDevice } from '@/lib/MosyleClient';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
@@ -52,23 +53,23 @@ const MOCK_DEVICES: MosyleDevice[] = [
   },
 ];
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'mcc_super_admin');
-  if (isDenied(caller)) return caller as NextResponse;
+export const GET = withMccRoute(
+  async () => {
+    if (!process.env.MOSYLE_API_KEY) {
+      logger.info('[MDM] MOSYLE_API_KEY absent — mode démo');
+      return NextResponse.json({ devices: MOCK_DEVICES, demo: true });
+    }
 
-  if (!process.env.MOSYLE_API_KEY) {
-    logger.info('[MDM] MOSYLE_API_KEY absent — mode démo');
-    return NextResponse.json({ devices: MOCK_DEVICES, demo: true });
-  }
-
-  try {
-    const devices = await MosyleClient.listDevices();
-    return NextResponse.json({ devices, demo: false });
-  } catch (err) {
-    logger.warn('[MDM] listDevices failed — fallback mock', toError(err).message);
-    return NextResponse.json({ devices: MOCK_DEVICES, demo: true });
-  }
-}
+    try {
+      const devices = await MosyleClient.listDevices();
+      return NextResponse.json({ devices, demo: false });
+    } catch (err) {
+      logger.warn('[MDM] listDevices failed — fallback mock', toError(err).message);
+      return NextResponse.json({ devices: MOCK_DEVICES, demo: true });
+    }
+  },
+  { minLevel: 'mcc_super_admin' },
+);
 
 /**
  * POST /api/admin/mdm/devices
@@ -76,25 +77,23 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
  * Body: { serialNumber: string, tenantId: string, deviceName: string }
  * Auth : super_admin minimum.
  */
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'mcc_super_admin');
-  if (isDenied(caller)) return caller as NextResponse;
+export const POST = withMccRoute(
+  async (req, { caller }) => {
+    const { serialNumber, tenantId, deviceName } = await req.json() as {
+      serialNumber?: string;
+      tenantId?: string;
+      deviceName?: string;
+    };
 
-  const { serialNumber, tenantId, deviceName } = await req.json() as {
-    serialNumber?: string;
-    tenantId?: string;
-    deviceName?: string;
-  };
+    if (!serialNumber || !tenantId || !deviceName) {
+      return NextResponse.json(
+        { error: 'serialNumber, tenantId et deviceName requis' },
+        { status: 400 },
+      );
+    }
 
-  if (!serialNumber || !tenantId || !deviceName) {
-    return NextResponse.json(
-      { error: 'serialNumber, tenantId et deviceName requis' },
-      { status: 400 },
-    );
-  }
-
-  const uid = (caller as import('@/lib/server/adminAuthGuard').AdminCaller).uid;
-  const now = Date.now();
+    const uid = caller.uid;
+    const now = Date.now();
 
   try {
     // Register in Mosyle if API key is available
@@ -154,4 +153,5 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     logger.error(`[MDM] Provisioning failed for ${serialNumber}`, err);
     return NextResponse.json({ error: 'Erreur provisionnement' }, { status: 500 });
   }
-}
+}, { minLevel: 'mcc_super_admin' });
+

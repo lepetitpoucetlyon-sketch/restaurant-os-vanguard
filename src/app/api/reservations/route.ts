@@ -18,9 +18,9 @@
  *   - statuts valides : 'pending' | 'confirmed' | 'arrived' | 'completed' | 'cancelled' | 'no_show'
  */
 import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { requireTenantUser, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
@@ -45,85 +45,80 @@ const PatchReservationSchema = z.object({
   notes:   z.string().max(500).optional(),
 });
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantUser(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller as { tenantId: string };
+export const GET = withTenantRoute(
+  async (req, { tenantId }) => {
+    const date = req.nextUrl.searchParams.get('date');
+    // Audit S7 : pagination cursor-based (utile même quand `date` filtre, pour les gros jours).
+    const pagination = parsePaginationParams(req.url);
 
-  const date = req.nextUrl.searchParams.get('date');
-  // Audit S7 : pagination cursor-based (utile même quand `date` filtre, pour les gros jours).
-  const pagination = parsePaginationParams(req.url);
+    const all = await Nexus.adapter.query(`tenants/${tenantId}/reservations`) as Array<{ id?: string; date?: string }>;
+    const filtered = date ? all.filter(r => r.date === date) : all;
+    const page = paginateAfterId(filtered, pagination);
 
-  const all = await Nexus.adapter.query(`tenants/${tenantId}/reservations`) as Array<{ id?: string; date?: string }>;
-  const filtered = date ? all.filter(r => r.date === date) : all;
-  const page = paginateAfterId(filtered, pagination);
+    return NextResponse.json({
+      reservations: page.items,
+      date: date ?? 'all',
+      total: page.total,
+      nextCursor: page.nextCursor,
+    });
+  },
+);
 
-  return NextResponse.json({
-    reservations: page.items,
-    date: date ?? 'all',
-    total: page.total,
-    nextCursor: page.nextCursor,
-  });
-}
+export const POST = withTenantRoute(
+  async (req, { tenantId }) => {
+    const raw = await req.json().catch(() => null);
+    const parsed = CreateReservationSchema.safeParse(raw);
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Données invalides', details: parsed.error.flatten() }, { status: 400 });
+    }
+    const { date, time, covers, customerName, phone, email, notes, tableId } = parsed.data;
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantUser(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller as { tenantId: string };
+    const id = Nexus.adapter.generateId(`tenants/${tenantId}/reservations`);
+    const reservation = {
+      id,
+      date,
+      time,
+      covers,
+      customerName,
+      ...(phone   ? { phone }   : {}),
+      ...(email   ? { email }   : {}),
+      ...(notes   ? { notes }   : {}),
+      ...(tableId ? { tableId } : {}),
+      status:        'confirmed' as ReservationStatus,
+      source:        'backoffice',
+      schemaVersion: 2,
+      createdAt:     new Date().toISOString(),
+      updatedAt:     Date.now(),
+    };
 
-  const raw = await req.json().catch(() => null);
-  const parsed = CreateReservationSchema.safeParse(raw);
-  if (!parsed.success) {
-    return NextResponse.json({ error: 'Données invalides', details: parsed.error.flatten() }, { status: 400 });
-  }
-  const { date, time, covers, customerName, phone, email, notes, tableId } = parsed.data;
+    await Nexus.adapter.set(`tenants/${tenantId}/reservations/${id}`, reservation);
 
-  const id = Nexus.adapter.generateId(`tenants/${tenantId}/reservations`);
-  const reservation = {
-    id,
-    date,
-    time,
-    covers,
-    customerName,
-    ...(phone   ? { phone }   : {}),
-    ...(email   ? { email }   : {}),
-    ...(notes   ? { notes }   : {}),
-    ...(tableId ? { tableId } : {}),
-    status:        'confirmed' as ReservationStatus,
-    source:        'backoffice',
-    schemaVersion: 2,
-    createdAt:     new Date().toISOString(),
-    updatedAt:     Date.now(),
-  };
+    logger.info(`[Reservations] Réservation backoffice ${id} créée — ${customerName} le ${date}`);
+    return NextResponse.json({ success: true, reservation });
+  },
+);
 
-  await Nexus.adapter.set(`tenants/${tenantId}/reservations/${id}`, reservation);
+export const PATCH = withTenantRoute(
+  async (req, { tenantId }) => {
+    const id = req.nextUrl.searchParams.get('id');
+    if (!id) return NextResponse.json({ error: 'id requis' }, { status: 400 });
 
-  logger.info(`[Reservations] Réservation backoffice ${id} créée — ${customerName} le ${date}`);
-  return NextResponse.json({ success: true, reservation });
-}
+    const rawPatch = await req.json().catch(() => null);
+    const patchParsed = PatchReservationSchema.safeParse(rawPatch);
+    if (!patchParsed.success) {
+      return NextResponse.json({ error: 'Données invalides', details: patchParsed.error.flatten() }, { status: 400 });
+    }
+    const { status, tableId, notes } = patchParsed.data;
 
-export async function PATCH(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantUser(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller as { tenantId: string };
+    const update: Record<string, unknown> = { updatedAt: Date.now() };
+    if (status  !== undefined) update.status  = status;
+    if (tableId !== undefined) update.tableId = tableId;
+    if (notes   !== undefined) update.notes   = notes;
 
-  const id = req.nextUrl.searchParams.get('id');
-  if (!id) return NextResponse.json({ error: 'id requis' }, { status: 400 });
+    await Nexus.adapter.set(`tenants/${tenantId}/reservations/${id}`, update, { merge: true });
 
-  const rawPatch = await req.json().catch(() => null);
-  const patchParsed = PatchReservationSchema.safeParse(rawPatch);
-  if (!patchParsed.success) {
-    return NextResponse.json({ error: 'Données invalides', details: patchParsed.error.flatten() }, { status: 400 });
-  }
-  const { status, tableId, notes } = patchParsed.data;
+    logger.info(`[Reservations] Réservation ${id} mise à jour — status: ${status ?? 'inchangé'}`);
+    return NextResponse.json({ success: true, id, updated: patchParsed.data });
+  },
+);
 
-  const update: Record<string, unknown> = { updatedAt: Date.now() };
-  if (status  !== undefined) update.status  = status;
-  if (tableId !== undefined) update.tableId = tableId;
-  if (notes   !== undefined) update.notes   = notes;
-
-  await Nexus.adapter.set(`tenants/${tenantId}/reservations/${id}`, update, { merge: true });
-
-  logger.info(`[Reservations] Réservation ${id} mise à jour — status: ${status ?? 'inchangé'}`);
-  return NextResponse.json({ success: true, id, updated: patchParsed.data });
-}

@@ -8,6 +8,7 @@ const ADMIN_GUARDS = [
   'requireMccAuth',
   'adminAuthGuard',
   'withAdminGuard',
+  'withMccRoute',
   'CRON_SECRET',
 ];
 

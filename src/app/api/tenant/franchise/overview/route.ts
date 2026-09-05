@@ -4,15 +4,13 @@
  */
 
 import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
-import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { type NextRequest, NextResponse } from 'next/server';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { FranchiseService } from '@/modules/commerce';
 import { logger } from '@/lib/logger';
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-    const caller = await requireTenantAdmin(req);
-    if (isDenied(caller)) return caller as NextResponse;
-
+export const GET = withTenantRoute(
+  async (req, { caller }) => {
     const { email } = caller as { tenantId: string; email?: string; role: string };
 
     try {
@@ -34,4 +32,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             { status: 500 }
         );
     }
-}
+  },
+  { requireAdmin: true },
+);
+

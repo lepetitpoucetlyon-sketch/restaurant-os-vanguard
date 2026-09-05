@@ -4,26 +4,29 @@
  * Auth : super_admin.
  * Body : { serialNumber: string }
  */
-import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import 'server-only';
+import { type NextRequest, NextResponse } from 'next/server';
+import { withMccRoute } from '@/lib/server/routeWrapper';
+import type { MccRole } from '@/lib/server/adminAuthGuard';
 import { MosyleClient } from '@/lib/MosyleClient';
 import { logger } from '@/lib/logger';
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'mcc_super_admin');
-  if (isDenied(caller)) return caller as NextResponse;
+export const POST = withMccRoute(
+  async (req, { caller }) => {
+    const { serialNumber } = await req.json() as { serialNumber?: string };
+    if (!serialNumber) {
+      return NextResponse.json({ error: 'serialNumber requis' }, { status: 400 });
+    }
 
-  const { serialNumber } = await req.json() as { serialNumber?: string };
-  if (!serialNumber) {
-    return NextResponse.json({ error: 'serialNumber requis' }, { status: 400 });
-  }
+    if (!process.env.MOSYLE_API_KEY) {
+      logger.info(`[MDM] lock ${serialNumber} — mode démo (pas de MOSYLE_API_KEY)`);
+      return NextResponse.json({ ok: true, demo: true });
+    }
 
-  if (!process.env.MOSYLE_API_KEY) {
-    logger.info(`[MDM] lock ${serialNumber} — mode démo (pas de MOSYLE_API_KEY)`);
-    return NextResponse.json({ ok: true, demo: true });
-  }
+    await MosyleClient.lockDevice(serialNumber);
+    logger.info(`[MDM] lock ${serialNumber} — OK (caller: ${caller.uid})`);
+    return NextResponse.json({ ok: true });
+  },
+  { minLevel: 'mcc_super_admin' },
+);
 
-  await MosyleClient.lockDevice(serialNumber);
-  logger.info(`[MDM] lock ${serialNumber} — OK (caller: ${(caller as import('@/lib/server/adminAuthGuard').AdminCaller).uid})`);
-  return NextResponse.json({ ok: true });
-}

@@ -15,8 +15,9 @@
  * Protégé : mcc_support pour GET, super_admin pour POST.
  */
 import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { type NextRequest, NextResponse } from 'next/server';
+import { withMccRoute } from '@/lib/server/routeWrapper';
+import type { MccRole } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
@@ -31,58 +32,59 @@ const AI_MODULES = {
 
 type AIModuleKey = keyof typeof AI_MODULES;
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'mcc_support');
-  if (isDenied(caller)) return caller as NextResponse;
+export const GET = withMccRoute(
+  async (req) => {
+    const tenantId = req.nextUrl.searchParams.get('tenantId');
+    if (!tenantId) return NextResponse.json({ error: 'tenantId requis' }, { status: 400 });
 
-  const tenantId = req.nextUrl.searchParams.get('tenantId');
-  if (!tenantId) return NextResponse.json({ error: 'tenantId requis' }, { status: 400 });
+    const config  = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as
+      { aiModules?: Record<string, boolean> } | null;
+    const enabled = config?.aiModules ?? {};
 
-  const config  = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as
-    { aiModules?: Record<string, boolean> } | null;
-  const enabled = config?.aiModules ?? {};
+    const modules = Object.entries(AI_MODULES).map(([key, meta]) => ({
+      key,
+      ...meta,
+      enabled: enabled[key] === true,
+    }));
 
-  const modules = Object.entries(AI_MODULES).map(([key, meta]) => ({
-    key,
-    ...meta,
-    enabled: enabled[key] === true,
-  }));
+    return NextResponse.json({ tenantId, modules });
+  },
+  { minLevel: 'mcc_support' },
+);
 
-  return NextResponse.json({ tenantId, modules });
-}
+export const POST = withMccRoute(
+  async (req) => {
+    let body: { tenantId: string; module: AIModuleKey; enabled: boolean };
+    try {
+      body = await req.json() as typeof body;
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+    }
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'mcc_super_admin');
-  if (isDenied(caller)) return caller as NextResponse;
+    const { tenantId, module: mod, enabled } = body;
+    if (!tenantId || !mod) {
+      return NextResponse.json({ error: 'tenantId et module requis' }, { status: 400 });
+    }
 
-  let body: { tenantId: string; module: AIModuleKey; enabled: boolean };
-  try {
-    body = await req.json() as typeof body;
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
-  }
+    if (!Object.keys(AI_MODULES).includes(mod)) {
+      return NextResponse.json({ error: `Module invalide: ${Object.keys(AI_MODULES).join(', ')}` }, { status: 400 });
+    }
 
-  const { tenantId, module: mod, enabled } = body;
-  if (!tenantId || !mod) {
-    return NextResponse.json({ error: 'tenantId et module requis' }, { status: 400 });
-  }
+    await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {
+      aiModules: { [mod]: enabled },
+    }, { merge: true });
 
-  if (!Object.keys(AI_MODULES).includes(mod)) {
-    return NextResponse.json({ error: `Module invalide: ${Object.keys(AI_MODULES).join(', ')}` }, { status: 400 });
-  }
+    empireAudit.log({
+      module: 'fleet',
+      action: enabled ? 'AI_MODULE_ENABLED' : 'AI_MODULE_DISABLED',
+      severity: 'medium',
+      details: { tenantId, aiModule: mod, enabled },
+      timestamp: new Date(),
+    });
 
-  await Nexus.adapter.set(`tenants/${tenantId}/tenantConfig`, {
-    aiModules: { [mod]: enabled },
-  }, { merge: true });
+    logger.info(`[AIToggle] ${mod} → ${enabled ? 'ON' : 'OFF'} pour ${tenantId}`);
+    return NextResponse.json({ success: true, tenantId, module: mod, enabled, label: AI_MODULES[mod].label });
+  },
+  { minLevel: 'mcc_super_admin' },
+);
 
-  empireAudit.log({
-    module: 'fleet',
-    action: enabled ? 'AI_MODULE_ENABLED' : 'AI_MODULE_DISABLED',
-    severity: 'medium',
-    details: { tenantId, aiModule: mod, enabled },
-    timestamp: new Date(),
-  });
-
-  logger.info(`[AIToggle] ${mod} → ${enabled ? 'ON' : 'OFF'} pour ${tenantId}`);
-  return NextResponse.json({ success: true, tenantId, module: mod, enabled, label: AI_MODULES[mod].label });
-}

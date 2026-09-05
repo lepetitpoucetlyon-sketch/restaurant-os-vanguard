@@ -16,9 +16,9 @@
  * Protégé : requireTenantAdmin.
  */
 import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
@@ -100,76 +100,75 @@ async function sendDPAE(
   return { sent: false, method };
 }
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantAdmin(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller as { tenantId: string };
+export const POST = withTenantRoute(
+  async (req, { tenantId }) => {
+    const raw = await req.json().catch(() => null);
+    const parsed = EmployeeSchema.safeParse(raw);
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Données invalides', details: parsed.error.flatten() }, { status: 400 });
+    }
+    const body: EmployeeInput = parsed.data;
 
-  const raw = await req.json().catch(() => null);
-  const parsed = EmployeeSchema.safeParse(raw);
-  if (!parsed.success) {
-    return NextResponse.json({ error: 'Données invalides', details: parsed.error.flatten() }, { status: 400 });
-  }
-  const body: EmployeeInput = parsed.data;
+    const employeeId = crypto.randomUUID();
+    const createdAt  = new Date().toISOString();
 
-  const employeeId = crypto.randomUUID();
-  const createdAt  = new Date().toISOString();
+    const employee = {
+      id:                   employeeId,
+      firstName:            body.firstName,
+      lastName:             body.lastName,
+      birthDate:            body.birthDate,
+      birthCity:            body.birthCity,
+      birthCountry:         body.birthCountry,
+      socialSecurityNumber: body.socialSecurityNumber,
+      contractType:         body.contractType,
+      startDate:            body.startDate,
+      role:                 body.role,
+      ...(body.email ? { email: body.email } : {}),
+      ...(body.phone ? { phone: body.phone } : {}),
+      tenantId,
+      status:     'active',
+      createdAt,
+      dpaeStatus: 'pending',
+    };
 
-  const employee = {
-    id:                   employeeId,
-    firstName:            body.firstName,
-    lastName:             body.lastName,
-    birthDate:            body.birthDate,
-    birthCity:            body.birthCity,
-    birthCountry:         body.birthCountry,
-    socialSecurityNumber: body.socialSecurityNumber,
-    contractType:         body.contractType,
-    startDate:            body.startDate,
-    role:                 body.role,
-    ...(body.email ? { email: body.email } : {}),
-    ...(body.phone ? { phone: body.phone } : {}),
-    tenantId,
-    status:     'active',
-    createdAt,
-    dpaeStatus: 'pending',
-  };
+    await Nexus.adapter.set(`tenants/${tenantId}/staff/${employeeId}`, employee);
 
-  await Nexus.adapter.set(`tenants/${tenantId}/staff/${employeeId}`, employee);
+    // DPAE automatique
+    const config  = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as { siret?: string } | null;
+    const siret   = config?.siret ?? 'SIRET_INCONNU';
+    const dpaeResult = await sendDPAE(body, tenantId, siret, employeeId);
 
-  // DPAE automatique
-  const config  = await Nexus.adapter.get(`tenants/${tenantId}/tenantConfig`) as { siret?: string } | null;
-  const siret   = config?.siret ?? 'SIRET_INCONNU';
-  const dpaeResult = await sendDPAE(body, tenantId, siret, employeeId);
+    await Nexus.adapter.set(`tenants/${tenantId}/staff/${employeeId}`, {
+      dpaeStatus: dpaeResult.sent ? 'transmitted' : 'pending_manual',
+      dpaeSentAt: dpaeResult.sent ? new Date().toISOString() : null,
+      dpaeMethod: dpaeResult.method,
+    }, { merge: true });
 
-  await Nexus.adapter.set(`tenants/${tenantId}/staff/${employeeId}`, {
-    dpaeStatus: dpaeResult.sent ? 'transmitted' : 'pending_manual',
-    dpaeSentAt: dpaeResult.sent ? new Date().toISOString() : null,
-    dpaeMethod: dpaeResult.method,
-  }, { merge: true });
+    empireAudit.log({
+      module: 'fleet',
+      action: 'EMPLOYEE_CREATED',
+      severity: 'medium',
+      details: { tenantId, employeeId, dpaeMethod: dpaeResult.method },
+      timestamp: new Date(),
+    });
 
-  empireAudit.log({
-    module: 'fleet',
-    action: 'EMPLOYEE_CREATED',
-    severity: 'medium',
-    details: { tenantId, employeeId, dpaeMethod: dpaeResult.method },
-    timestamp: new Date(),
-  });
+    logger.info(`[HR] Employé ${employeeId} créé — DPAE: ${dpaeResult.method}`);
+    return NextResponse.json({
+      success:    true,
+      employeeId,
+      dpae:       dpaeResult,
+      employee:   { id: employeeId, firstName: body.firstName, lastName: body.lastName, startDate: body.startDate },
+    });
+  },
+  { requireAdmin: true },
+);
 
-  logger.info(`[HR] Employé ${employeeId} créé — DPAE: ${dpaeResult.method}`);
-  return NextResponse.json({
-    success:    true,
-    employeeId,
-    dpae:       dpaeResult,
-    employee:   { id: employeeId, firstName: body.firstName, lastName: body.lastName, startDate: body.startDate },
-  });
-}
+export const GET = withTenantRoute(
+  async (req, { tenantId }) => {
+    const employees = await Nexus.adapter.query<{ id?: string }>(`tenants/${tenantId}/staff`);
+    const page = paginateAfterId(employees, parsePaginationParams(req.url));
+    return NextResponse.json({ employees: page.items, total: page.total, nextCursor: page.nextCursor });
+  },
+  { requireAdmin: true },
+);
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantAdmin(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller as { tenantId: string };
-
-  const employees = await Nexus.adapter.query<{ id?: string }>(`tenants/${tenantId}/staff`);
-  const page = paginateAfterId(employees, parsePaginationParams(req.url));
-  return NextResponse.json({ employees: page.items, total: page.total, nextCursor: page.nextCursor });
-}

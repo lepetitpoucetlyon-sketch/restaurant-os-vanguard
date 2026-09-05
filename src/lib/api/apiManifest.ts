@@ -1505,7 +1505,7 @@ export const API_MANIFEST: ApiRouteContract[] = [
     "path": "/api/crm/campaign",
     "method": "POST",
     "audience": "tenant",
-    "minRole": "admin",
+    "minRole": "manager",
     "tenantSource": "header",
     "rateLimited": true,
     "summary": "POST crm campaign"
@@ -2279,7 +2279,7 @@ export const API_MANIFEST: ApiRouteContract[] = [
     "path": "/api/tenant/api-keys/[keyId]",
     "method": "DELETE",
     "audience": "tenant",
-    "minRole": "admin",
+    "minRole": "manager",
     "tenantSource": "header",
     "rateLimited": true,
     "summary": "DELETE tenant api-keys [keyId]"
@@ -2288,7 +2288,7 @@ export const API_MANIFEST: ApiRouteContract[] = [
     "path": "/api/tenant/api-keys",
     "method": "GET",
     "audience": "tenant",
-    "minRole": "admin",
+    "minRole": "employee",
     "tenantSource": "header",
     "rateLimited": true,
     "summary": "GET tenant api-keys"
@@ -2297,7 +2297,7 @@ export const API_MANIFEST: ApiRouteContract[] = [
     "path": "/api/tenant/api-keys",
     "method": "POST",
     "audience": "tenant",
-    "minRole": "admin",
+    "minRole": "manager",
     "tenantSource": "header",
     "rateLimited": true,
     "summary": "POST tenant api-keys"
@@ -2387,7 +2387,7 @@ export const API_MANIFEST: ApiRouteContract[] = [
     "path": "/api/tenant/franchise/overview",
     "method": "GET",
     "audience": "tenant",
-    "minRole": "admin",
+    "minRole": "employee",
     "tenantSource": "header",
     "rateLimited": true,
     "summary": "Synthèse réseau & consolidation multi-restaurants pour l'Admin / Propriétaire connecté."
@@ -2396,7 +2396,7 @@ export const API_MANIFEST: ApiRouteContract[] = [
     "path": "/api/tenant/franchise/transfers",
     "method": "GET",
     "audience": "tenant",
-    "minRole": "admin",
+    "minRole": "employee",
     "tenantSource": "header",
     "rateLimited": true,
     "summary": "Gestion et exécution des transferts de stock inter-sites."
@@ -2405,7 +2405,7 @@ export const API_MANIFEST: ApiRouteContract[] = [
     "path": "/api/tenant/franchise/transfers",
     "method": "POST",
     "audience": "tenant",
-    "minRole": "admin",
+    "minRole": "manager",
     "tenantSource": "header",
     "rateLimited": true,
     "summary": "Gestion et exécution des transferts de stock inter-sites."
@@ -2486,7 +2486,7 @@ export const API_MANIFEST: ApiRouteContract[] = [
     "path": "/api/tenant/rgpd",
     "method": "GET",
     "audience": "tenant",
-    "minRole": "admin",
+    "minRole": "employee",
     "tenantSource": "header",
     "rateLimited": true,
     "summary": "Registre RGPD tenant — Art. 30"
@@ -2495,7 +2495,7 @@ export const API_MANIFEST: ApiRouteContract[] = [
     "path": "/api/tenant/rgpd",
     "method": "POST",
     "audience": "tenant",
-    "minRole": "admin",
+    "minRole": "manager",
     "tenantSource": "header",
     "rateLimited": true,
     "summary": "Registre RGPD tenant — Art. 30"
@@ -2504,7 +2504,7 @@ export const API_MANIFEST: ApiRouteContract[] = [
     "path": "/api/tenant/support-access",
     "method": "PATCH",
     "audience": "tenant",
-    "minRole": "admin",
+    "minRole": "manager",
     "tenantSource": "header",
     "rateLimited": true,
     "summary": "PATCH /api/tenant/support-access"

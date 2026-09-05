@@ -15,8 +15,8 @@
  * Cf. docs/anglemort-restaurant-mcc.md § L25 / T30 (débloqué par ADR-014).
  */
 import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { type NextRequest, NextResponse } from 'next/server';
+import { withMccRoute } from '@/lib/server/routeWrapper';
 import { AuditLogger, type SecurityAuditAction as AuditAction } from '@/modules/compliance';
 import { toError } from '@/lib/toError';
 import { logger } from '@/lib/logger';
@@ -29,11 +29,9 @@ const ACTION_FILTERS: Record<InspectionMode, AuditAction[]> = {
   URSSAF: ['CROSS_SCOPE_REVEAL', 'CROSS_SCOPE_GRANT', 'CROSS_SCOPE_REVOKE', 'ROLE_ELEVATED', 'TIP_REDISTRIBUTED'],
 };
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'mcc_support');
-  if (isDenied(caller)) return caller as NextResponse;
-
-  const startedAt = Date.now();
+export const POST = withMccRoute(
+  async (req, { caller }) => {
+    const startedAt = Date.now();
 
   try {
     const body = (await req.json()) as { mode: InspectionMode; fromTs?: number; toTs?: number };
@@ -79,4 +77,5 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     logger.error('[inspection-mode] Export échoué', toError(err).message);
     return NextResponse.json({ error: `Export inspection échoué : ${toError(err).message}` }, { status: 500 });
   }
-}
+}, { minLevel: 'mcc_support' });
+

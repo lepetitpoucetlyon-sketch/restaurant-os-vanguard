@@ -26,18 +26,16 @@
  * Réponse (500) : erreurs inattendues (page géante, timeout, parse crashé).
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import 'server-only';
+import { type NextRequest, NextResponse } from 'next/server';
+import { withMccRoute } from '@/lib/server/routeWrapper';
 import { logger } from '@/lib/logger';
 import { toError } from '@/lib/toError';
 import { scrapeCompany } from '@/modules/commerce';
 import { tenantBrandingFromScrape } from '@/lib/tenantBrandingFromScrape';
 
-export async function POST(req: NextRequest) {
-    const caller = await requireMccLevel(req, 'mcc_support');
-    if (isDenied(caller)) return caller;
-
+export const POST = withMccRoute(
+  async (req, { caller }) => {
     let body: {
         websiteUrl?: string;
         fallbackName?: string;
@@ -95,4 +93,7 @@ export async function POST(req: NextRequest) {
             { status: isSecurityBlock ? 400 : 500 },
         );
     }
-}
+  },
+  { minLevel: 'mcc_support' },
+);
+

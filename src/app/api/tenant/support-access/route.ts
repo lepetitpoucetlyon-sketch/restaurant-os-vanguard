@@ -9,9 +9,9 @@
  */
 import 'server-only';
 
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { empireAudit } from '@/lib/audit';
 import { logger } from '@/lib/logger';
@@ -21,12 +21,8 @@ const SupportAccessSchema = z.object({
     decision: z.enum(['APPROVE', 'DENY']),
 });
 
-export async function PATCH(req: NextRequest): Promise<NextResponse> {
-    const caller = await requireTenantAdmin(req);
-    if (isDenied(caller)) return caller as NextResponse;
-
-    const { tenantId } = caller;
-
+export const PATCH = withTenantRoute(
+  async (req, { tenantId, caller }) => {
     const parsed = SupportAccessSchema.safeParse(await req.json().catch(() => ({})));
     if (!parsed.success) {
         return NextResponse.json(
@@ -100,4 +96,7 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
 
     logger.info(`[tenant/support-access] Accès refusé par ${caller.uid} pour ${tenantId}`);
     return NextResponse.json({ success: true, decision: 'DENIED' });
-}
+  },
+  { requireAdmin: true },
+);
+

@@ -1,7 +1,7 @@
 import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { createHash } from 'node:crypto';
 import jwt from 'jsonwebtoken';
@@ -36,64 +36,63 @@ function hashKey(key: string): string {
   return createHash('sha256').update(key).digest('hex');
 }
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantAdmin(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller;
+export const GET = withTenantRoute(
+  async (req, { tenantId }) => {
+    const all = await Nexus.adapter.query<StoredApiKey>(`tenants/${tenantId}/apiKeys`);
+    const pagination = parsePaginationParams(req.url);
+    const active = all
+      .filter(k => !k.revokedAt)
+      .map(k => ({
+        id: k.id,
+        keyPrefix: k.keyPrefix,
+        name: k.name,
+        permissions: k.permissions ?? [],
+        createdAt: k.createdAt,
+        lastUsedAt: k.lastUsedAt,
+      }));
+    const page = paginateAfterId(active, pagination);
 
-  const all = await Nexus.adapter.query<StoredApiKey>(`tenants/${tenantId}/apiKeys`);
-  const pagination = parsePaginationParams(req.url);
-  const active = all
-    .filter(k => !k.revokedAt)
-    .map(k => ({
-      id: k.id,
-      keyPrefix: k.keyPrefix,
-      name: k.name,
-      permissions: k.permissions ?? [],
-      createdAt: k.createdAt,
-      lastUsedAt: k.lastUsedAt,
-    }));
-  const page = paginateAfterId(active, pagination);
+    return NextResponse.json({ keys: page.items, total: page.total, nextCursor: page.nextCursor });
+  },
+  { requireAdmin: true },
+);
 
-  return NextResponse.json({ keys: page.items, total: page.total, nextCursor: page.nextCursor });
-}
+export const POST = withTenantRoute(
+  async (req, { tenantId, caller }) => {
+    const parsed = CreateKeySchema.safeParse(await req.json().catch(() => ({})));
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Payload invalide', details: parsed.error.flatten() },
+        { status: 400 },
+      );
+    }
+    const { name, permissions = [] } = parsed.data;
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantAdmin(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller;
+    const key = generateApiKey(tenantId);
+    const keyHash = hashKey(key);
+    const keyPrefix = key.slice(0, 12);
+    const id = crypto.randomUUID();
+    const now = new Date().toISOString();
 
-  const parsed = CreateKeySchema.safeParse(await req.json().catch(() => ({})));
-  if (!parsed.success) {
+    await Nexus.adapter.set(`tenants/${tenantId}/apiKeys/${id}`, {
+      id,
+      keyHash,
+      keyPrefix,
+      name: name.trim(),
+      permissions,
+      createdAt: now,
+      createdBy: caller.uid,
+      revokedAt: null,
+      lastUsedAt: null,
+    });
+
+    logger.info(`[api-keys] Created ${id} for tenant ${tenantId} by ${caller.uid}`);
+
     return NextResponse.json(
-      { error: 'Payload invalide', details: parsed.error.flatten() },
-      { status: 400 },
+      { key, keyPrefix, id, name: name.trim(), permissions, createdAt: now },
+      { status: 201 },
     );
-  }
-  const { name, permissions = [] } = parsed.data;
+  },
+  { requireAdmin: true },
+);
 
-  const key = generateApiKey(tenantId);
-  const keyHash = hashKey(key);
-  const keyPrefix = key.slice(0, 12);
-  const id = crypto.randomUUID();
-  const now = new Date().toISOString();
-
-  await Nexus.adapter.set(`tenants/${tenantId}/apiKeys/${id}`, {
-    id,
-    keyHash,
-    keyPrefix,
-    name: name.trim(),
-    permissions,
-    createdAt: now,
-    createdBy: caller.uid,
-    revokedAt: null,
-    lastUsedAt: null,
-  });
-
-  logger.info(`[api-keys] Created ${id} for tenant ${tenantId} by ${caller.uid}`);
-
-  return NextResponse.json(
-    { key, keyPrefix, id, name: name.trim(), permissions, createdAt: now },
-    { status: 201 },
-  );
-}

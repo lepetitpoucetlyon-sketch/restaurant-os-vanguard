@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { RgpdRegisterService } from '@/modules/compliance';
 import { z } from 'zod';
 
@@ -21,40 +21,38 @@ const CreateRequestSchema = z.object({
   reason: z.string().optional(),
 });
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantAdmin(req);
-  if (isDenied(caller)) return caller as NextResponse;
+export const GET = withTenantRoute(
+  async (req, { tenantId }) => {
+    const wantSummary = req.nextUrl.searchParams.get('summary') === 'true';
 
-  const tenantId = (caller as { tenantId: string }).tenantId;
-  const wantSummary = req.nextUrl.searchParams.get('summary') === 'true';
+    if (wantSummary) {
+      const summary = await RgpdRegisterService.getSummary(tenantId);
+      return NextResponse.json(summary);
+    }
 
-  if (wantSummary) {
-    const summary = await RgpdRegisterService.getSummary(tenantId);
-    return NextResponse.json(summary);
-  }
+    const status = req.nextUrl.searchParams.get('status') as 'pending' | 'processing' | 'completed' | 'rejected' | null;
+    const requests = await RgpdRegisterService.listRequests(tenantId, {
+      status: status ?? undefined,
+    });
 
-  const status = req.nextUrl.searchParams.get('status') as 'pending' | 'processing' | 'completed' | 'rejected' | null;
-  const requests = await RgpdRegisterService.listRequests(tenantId, {
-    status: status ?? undefined,
-  });
+    return NextResponse.json({ requests, total: requests.length });
+  },
+  { requireAdmin: true },
+);
 
-  return NextResponse.json({ requests, total: requests.length });
-}
+export const POST = withTenantRoute(
+  async (req, { tenantId }) => {
+    let body: z.infer<typeof CreateRequestSchema>;
+    try {
+      body = CreateRequestSchema.parse(await req.json());
+    } catch (err) {
+      return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
+    }
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantAdmin(req);
-  if (isDenied(caller)) return caller as NextResponse;
+    const request = await RgpdRegisterService.createRequest(tenantId, body);
 
-  const tenantId = (caller as { tenantId: string }).tenantId;
+    return NextResponse.json(request, { status: 201 });
+  },
+  { requireAdmin: true },
+);
 
-  let body: z.infer<typeof CreateRequestSchema>;
-  try {
-    body = CreateRequestSchema.parse(await req.json());
-  } catch (err) {
-    return NextResponse.json({ error: 'Validation failed', details: err }, { status: 400 });
-  }
-
-  const request = await RgpdRegisterService.createRequest(tenantId, body);
-
-  return NextResponse.json(request, { status: 201 });
-}

@@ -75,7 +75,7 @@ export function withTenantRoute<T = unknown>(
   handler: (req: NextRequest, ctx: TenantRouteContext, routeParams?: T) => Promise<Response | NextResponse>,
   options: TenantRouteOptions = {},
 ) {
-  return async (req: NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
+  return async (req: Request | NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
     const correlationId = resolveCorrelationId(req);
 
     return runWithCorrelation({ correlationId }, async () => {
@@ -104,7 +104,7 @@ export function withTenantRoute<T = unknown>(
       return runWithServerTenant(tenantContext, async () => {
         try {
           return await handler(
-            req,
+            req as NextRequest,
             {
               tenantId: caller.tenantId,
               caller,
@@ -141,7 +141,7 @@ export function withMccRoute<T = unknown>(
   handler: (req: NextRequest, ctx: MccRouteContext, routeParams?: T) => Promise<Response | NextResponse>,
   options: MccRouteOptions = {},
 ) {
-  return async (req: NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
+  return async (req: Request | NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
     const correlationId = resolveCorrelationId(req);
 
     return runWithCorrelation({ correlationId }, async () => {
@@ -168,7 +168,7 @@ export function withMccRoute<T = unknown>(
       return runWithServerTenant(mccContext, async () => {
         try {
           return await handler(
-            req,
+            req as NextRequest,
             {
               caller,
               correlationId,
@@ -202,7 +202,7 @@ export function withMccRoute<T = unknown>(
 export function withPublicRoute<T = unknown>(
   handler: (req: NextRequest, ctx: PublicRouteContext, routeParams?: T) => Promise<Response | NextResponse>,
 ) {
-  return async (req: NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
+  return async (req: Request | NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
     const correlationId = resolveCorrelationId(req);
     const resolvedTenantId = req.headers.get('x-resolved-tenant-id') ?? undefined;
 
@@ -215,7 +215,7 @@ export function withPublicRoute<T = unknown>(
 
       return runWithServerTenant(publicContext, async () => {
         try {
-          return await handler(req, { correlationId, resolvedTenantId }, routeParams);
+          return await handler(req as NextRequest, { correlationId, resolvedTenantId }, routeParams);
         } catch (error) {
           const err = toError(error);
           logger.error(`[withPublicRoute] Erreur route publique: ${err.message}`, { correlationId });
@@ -241,7 +241,7 @@ export function withWebhookRoute<T = unknown>(
   handler: (req: NextRequest, ctx: WebhookRouteContext, routeParams?: T) => Promise<Response | NextResponse>,
   options: WebhookRouteOptions,
 ) {
-  return async (req: NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
+  return async (req: Request | NextRequest, routeParams?: T): Promise<Response | NextResponse> => {
     const correlationId = resolveCorrelationId(req);
 
     return runWithCorrelation({ correlationId }, async () => {
@@ -264,7 +264,7 @@ export function withWebhookRoute<T = unknown>(
 
       return runWithServerTenant(webhookContext, async () => {
         try {
-          return await handler(req, { correlationId }, routeParams);
+          return await handler(req as NextRequest, { correlationId }, routeParams);
         } catch (error) {
           const err = toError(error);
           logger.error(`[withWebhookRoute] Erreur traitement webhook: ${err.message}`, { correlationId });

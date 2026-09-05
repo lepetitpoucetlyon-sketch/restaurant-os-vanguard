@@ -16,9 +16,9 @@
  * Protégé : requireTenantAdmin.
  */
 import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 
@@ -71,44 +71,43 @@ async function checkCustomer(tenantId: string, customerId: string, channel: Chan
   return { customerId, allowed: true };
 }
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantAdmin(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller as { tenantId: string };
+export const POST = withTenantRoute(
+  async (req, { tenantId }) => {
+    const parsed = FilterSchema.safeParse(await req.json().catch(() => ({})));
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Payload invalide', details: parsed.error.flatten() },
+        { status: 400 },
+      );
+    }
+    const { customerIds, channel } = parsed.data;
 
-  const parsed = FilterSchema.safeParse(await req.json().catch(() => ({})));
-  if (!parsed.success) {
-    return NextResponse.json(
-      { error: 'Payload invalide', details: parsed.error.flatten() },
-      { status: 400 },
+    const results = await Promise.all(
+      customerIds.map(id => checkCustomer(tenantId, id, channel))
     );
-  }
-  const { customerIds, channel } = parsed.data;
 
-  const results = await Promise.all(
-    customerIds.map(id => checkCustomer(tenantId, id, channel))
-  );
+    const allowed = results.filter(r => r.allowed).map(r => r.customerId);
+    const blocked = results.filter(r => !r.allowed).map(r => ({ id: r.customerId, reason: r.reason }));
 
-  const allowed = results.filter(r => r.allowed).map(r => r.customerId);
-  const blocked = results.filter(r => !r.allowed).map(r => ({ id: r.customerId, reason: r.reason }));
+    logger.info(`[AntiSpam] Filter ${channel}: ${allowed.length}/${customerIds.length} autorisés`);
+    return NextResponse.json({ allowed, blocked, channel });
+  },
+  { requireAdmin: true },
+);
 
-  logger.info(`[AntiSpam] Filter ${channel}: ${allowed.length}/${customerIds.length} autorisés`);
-  return NextResponse.json({ allowed, blocked, channel });
-}
+export const GET = withTenantRoute(
+  async (req, { tenantId }) => {
+    const customerId = req.nextUrl.searchParams.get('customerId');
+    if (!customerId) return NextResponse.json({ error: 'customerId requis' }, { status: 400 });
+    const channelParse = ChannelSchema.safeParse(req.nextUrl.searchParams.get('channel'));
+    if (!channelParse.success) {
+      return NextResponse.json({ error: 'channel invalide (email|sms|whatsapp)' }, { status: 400 });
+    }
+    const channel = channelParse.data;
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireTenantAdmin(req);
-  if (isDenied(caller)) return caller as NextResponse;
-  const { tenantId } = caller as { tenantId: string };
+    const result = await checkCustomer(tenantId, customerId, channel);
+    return NextResponse.json(result);
+  },
+  { requireAdmin: true },
+);
 
-  const customerId = req.nextUrl.searchParams.get('customerId');
-  if (!customerId) return NextResponse.json({ error: 'customerId requis' }, { status: 400 });
-  const channelParse = ChannelSchema.safeParse(req.nextUrl.searchParams.get('channel'));
-  if (!channelParse.success) {
-    return NextResponse.json({ error: 'channel invalide (email|sms|whatsapp)' }, { status: 400 });
-  }
-  const channel = channelParse.data;
-
-  const result = await checkCustomer(tenantId, customerId, channel);
-  return NextResponse.json(result);
-}

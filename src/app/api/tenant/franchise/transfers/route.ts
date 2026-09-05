@@ -3,22 +3,16 @@
  * Gestion et exécution des transferts de stock inter-sites.
  */
 import 'server-only';
-
-import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
-import { requireTenantAdmin, isDenied } from '@/lib/server/adminAuthGuard';
+import { type NextRequest, NextResponse } from 'next/server';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { FranchiseService } from '@/modules/commerce';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { logger } from '@/lib/logger';
 import { parsePaginationParams, paginateAfterId } from '@/lib/api/pagination';
 import type { InterSiteTransfer } from '@/shared/nexus/contracts/franchise.types';
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-    const caller = await requireTenantAdmin(req);
-    if (isDenied(caller)) return caller as NextResponse;
-
-    const { tenantId } = caller as { tenantId: string };
-
+export const GET = withTenantRoute(
+  async (req, { tenantId }) => {
     try {
         // Audit S7 : pagination cursor-based
         const pagination = parsePaginationParams(req.url);
@@ -36,13 +30,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         logger.error('[FranchiseAPI] Erreur de récupération des transferts', { error });
         return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
     }
-}
+  },
+  { requireAdmin: true },
+);
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-    const caller = await requireTenantAdmin(req);
-    if (isDenied(caller)) return caller as NextResponse;
-
-    const { tenantId, email } = caller as { tenantId: string; email?: string };
+export const POST = withTenantRoute(
+  async (req, { tenantId, caller }) => {
+    const { email } = caller as { tenantId: string; email?: string };
 
     try {
         const body = await req.json() as {
@@ -87,4 +81,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         logger.error('[FranchiseAPI] Erreur lors du traitement du transfert', { error });
         return NextResponse.json({ error: 'Erreur lors du traitement du transfert' }, { status: 500 });
     }
-}
+  },
+  { requireAdmin: true },
+);
+

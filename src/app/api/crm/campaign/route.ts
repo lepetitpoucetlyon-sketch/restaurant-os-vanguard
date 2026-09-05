@@ -2,7 +2,7 @@ import 'server-only';
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { Resend } from "resend";
-import { requireTenantAdmin, isDenied } from "@/lib/server/adminAuthGuard";
+import { withTenantRoute } from "@/lib/server/routeWrapper";
 import { getRateLimiter } from "@/infrastructure/services/rate-limiter";
 import { logger } from "@/lib/logger";
 
@@ -58,65 +58,66 @@ async function getCustomersForSegment(
   });
 }
 
-export async function POST(request: NextRequest) {
-  const caller = await requireTenantAdmin(request);
-  if (isDenied(caller)) return caller;
-
-  // P1-B : rate-limit anti-spam email (envoi masse via Resend, coûteux + réputation).
-  // 5 campagnes/heure/tenant — un admin qui triple-clique n'envoie pas 3 campagnes.
-  const rl = await getRateLimiter().check(`crm-campaign:${caller.tenantId}`, 5, 60 * 60 * 1000);
-  if (!rl.allowed) {
-    return NextResponse.json({ success: false, message: "Trop de campagnes envoyées — réessayez dans 1h." }, { status: 429 });
-  }
-
-  try {
-    const json = await request.json();
-    const parse = CampaignPayloadSchema.safeParse(json);
-    if (!parse.success) {
-      return NextResponse.json({ success: false, message: "Payload invalide", errors: parse.error.flatten() }, { status: 400 });
+export const POST = withTenantRoute(
+  async (request, { tenantId }) => {
+    // P1-B : rate-limit anti-spam email (envoi masse via Resend, coûteux + réputation).
+    // 5 campagnes/heure/tenant — un admin qui triple-clique n'envoie pas 3 campagnes.
+    const rl = await getRateLimiter().check(`crm-campaign:${tenantId}`, 5, 60 * 60 * 1000);
+    if (!rl.allowed) {
+      return NextResponse.json({ success: false, message: "Trop de campagnes envoyées — réessayez dans 1h." }, { status: 429 });
     }
 
-    const { segment, subject, body } = parse.data;
-    const customers = await getCustomersForSegment(caller.tenantId, segment);
-
-    if (customers.length === 0) {
-      return NextResponse.json({ success: true, sent: 0, message: "Aucun destinataire" });
-    }
-
-    if (!resend) {
-      // RESEND_API_KEY absent — simulation mode (set in .env.local to enable real sends)
-      console.info(`[CRM Campaign] RESEND not configured — would send to ${customers.length} recipients. Subject: "${subject}"`);
-      return NextResponse.json({ success: true, sent: customers.length, simulated: true });
-    }
-
-    // Batch sends — Resend supports up to 100 per call; chunk if needed
-    const BATCH_SIZE = 50;
-    let sent = 0;
-
-    for (let i = 0; i < customers.length; i += BATCH_SIZE) {
-      const chunk = customers.slice(i, i + BATCH_SIZE);
-      const emails = chunk.map((c) => ({
-        from: FROM_EMAIL,
-        to: c.email as string,
-        subject,
-        html: body
-          .replace(/{{prenom}}/g, c.firstName ?? "")
-          .replace(/{{nom}}/g, c.lastName ?? "")
-          .replace(/{{email}}/g, c.email ?? ""),
-      }));
-
-      const { error } = await resend.batch.send(emails);
-      if (error) {
-        logger.error("[CRM Campaign] Resend batch error:", error);
-        // Continue — partial send is better than full abort
-      } else {
-        sent += chunk.length;
+    try {
+      const json = await request.json();
+      const parse = CampaignPayloadSchema.safeParse(json);
+      if (!parse.success) {
+        return NextResponse.json({ success: false, message: "Payload invalide", errors: parse.error.flatten() }, { status: 400 });
       }
-    }
 
-    return NextResponse.json({ success: true, sent });
-  } catch (err) {
-    logger.error("[CRM Campaign] Unexpected error:", err);
-    return NextResponse.json({ success: false, message: "Erreur serveur interne" }, { status: 500 });
-  }
-}
+      const { segment, subject, body } = parse.data;
+      const customers = await getCustomersForSegment(tenantId, segment);
+
+      if (customers.length === 0) {
+        return NextResponse.json({ success: true, sent: 0, message: "Aucun destinataire" });
+      }
+
+      if (!resend) {
+        // RESEND_API_KEY absent — simulation mode (set in .env.local to enable real sends)
+        console.info(`[CRM Campaign] RESEND not configured — would send to ${customers.length} recipients. Subject: "${subject}"`);
+        return NextResponse.json({ success: true, sent: customers.length, simulated: true });
+      }
+
+      // Batch sends — Resend supports up to 100 per call; chunk if needed
+      const BATCH_SIZE = 50;
+      let sent = 0;
+
+      for (let i = 0; i < customers.length; i += BATCH_SIZE) {
+        const chunk = customers.slice(i, i + BATCH_SIZE);
+        const emails = chunk.map((c) => ({
+          from: FROM_EMAIL,
+          to: c.email as string,
+          subject,
+          html: body
+            .replace(/{{prenom}}/g, c.firstName ?? "")
+            .replace(/{{nom}}/g, c.lastName ?? "")
+            .replace(/{{email}}/g, c.email ?? ""),
+        }));
+
+        const { error } = await resend.batch.send(emails);
+        if (error) {
+          logger.error("[CRM Campaign] Resend batch error:", error);
+          // Continue — partial send is better than full abort
+        } else {
+          sent += chunk.length;
+        }
+      }
+
+      return NextResponse.json({ success: true, sent });
+    } catch (err) {
+      logger.error("[CRM Campaign] Unexpected error:", err);
+      return NextResponse.json({ success: false, message: "Erreur serveur interne" }, { status: 500 });
+    }
+  },
+  { requireAdmin: true },
+);
+

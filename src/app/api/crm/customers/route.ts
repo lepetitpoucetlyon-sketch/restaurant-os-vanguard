@@ -1,22 +1,23 @@
 import { NextResponse } from 'next/server';
-import { requireTenantRole, isDenied } from '@/lib/server/adminAuthGuard';
+import { withTenantRoute } from '@/lib/server/routeWrapper';
 import { NexusEventBus } from '@/shared/eventBus/NexusEventBus';
 
-export async function POST(req: Request) {
-  const caller = await requireTenantRole(req, 'manager');
-  if (isDenied(caller)) return caller;
+export const POST = withTenantRoute(
+  async (req, { tenantId }) => {
+    const body = await req.json();
+    const { customerId, email, phone, source } = body;
 
-  const body = await req.json();
-  const { customerId, email, phone, source } = body;
+    await NexusEventBus.emitDurable('crm.customer_created', {
+      v: 1,
+      tenantId,
+      customerId,
+      email,
+      phone,
+      source,
+    });
 
-  await NexusEventBus.emitDurable('crm.customer_created', {
-    v: 1,
-    tenantId: caller.tenantId,
-    customerId,
-    email,
-    phone,
-    source
-  });
+    return NextResponse.json({ success: true });
+  },
+  { minRole: 'manager' },
+);
 
-  return NextResponse.json({ success: true });
-}

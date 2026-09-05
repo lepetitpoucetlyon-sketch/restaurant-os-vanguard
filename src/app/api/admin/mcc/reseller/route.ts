@@ -15,9 +15,9 @@
  * Protégé : super_admin.
  */
 import 'server-only';
-import 'server-only';
-import { NextRequest, NextResponse } from 'next/server';
-import { requireMccLevel, isDenied } from '@/lib/server/adminAuthGuard';
+import { type NextRequest, NextResponse } from 'next/server';
+import { withMccRoute } from '@/lib/server/routeWrapper';
+import type { MccRole } from '@/lib/server/adminAuthGuard';
 import { Nexus } from '@/lib/nexus/NexusAdapter';
 import { randomBytes } from 'node:crypto';
 import { logger } from '@/lib/logger';
@@ -30,88 +30,89 @@ function generateAffiliateCode(): string {
   return `RS_${randomBytes(4).toString('hex').toUpperCase()}`;
 }
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'mcc_super_admin');
-  if (isDenied(caller)) return caller as NextResponse;
+export const GET = withMccRoute(
+  async (req) => {
+    const resellers = await Nexus.adapter.query<{ id?: string }>('mcc/resellers');
+    const page = paginateAfterId(resellers, parsePaginationParams(req.url));
+    return NextResponse.json({ resellers: page.items, total: page.total, nextCursor: page.nextCursor });
+  },
+  { minLevel: 'mcc_super_admin' },
+);
 
-  const resellers = await Nexus.adapter.query<{ id?: string }>('mcc/resellers');
-  const page = paginateAfterId(resellers, parsePaginationParams(req.url));
-  return NextResponse.json({ resellers: page.items, total: page.total, nextCursor: page.nextCursor });
-}
+export const POST = withMccRoute(
+  async (req) => {
+    const body = await req.json() as {
+      name?: string;
+      email?: string;
+      phone?: string;
+      commissionRate?: number;
+      notes?: string;
+    };
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'mcc_super_admin');
-  if (isDenied(caller)) return caller as NextResponse;
+    const { name, email } = body;
+    if (!name || !email) {
+      return NextResponse.json({ error: 'name et email requis' }, { status: 400 });
+    }
 
-  const body = await req.json() as {
-    name?: string;
-    email?: string;
-    phone?: string;
-    commissionRate?: number;
-    notes?: string;
-  };
+    const resellerId = `reseller_${randomBytes(6).toString('hex')}`;
+    const affiliateCode = generateAffiliateCode();
 
-  const { name, email } = body;
-  if (!name || !email) {
-    return NextResponse.json({ error: 'name et email requis' }, { status: 400 });
-  }
+    const reseller = {
+      id: resellerId,
+      name,
+      email,
+      phone: body.phone ?? '',
+      affiliateCode,
+      commissionRate: body.commissionRate ?? COMMISSION_RATE,
+      status: 'active',
+      totalTenantsReferred: 0,
+      totalCommissionsEur: 0,
+      notes: body.notes ?? '',
+      createdAt: Date.now(),
+    };
 
-  const resellerId = `reseller_${randomBytes(6).toString('hex')}`;
-  const affiliateCode = generateAffiliateCode();
+    await Nexus.adapter.set('mcc/resellers/' + resellerId, reseller);
 
-  const reseller = {
-    id: resellerId,
-    name,
-    email,
-    phone: body.phone ?? '',
-    affiliateCode,
-    commissionRate: body.commissionRate ?? COMMISSION_RATE,
-    status: 'active',
-    totalTenantsReferred: 0,
-    totalCommissionsEur: 0,
-    notes: body.notes ?? '',
-    createdAt: Date.now(),
-  };
+    logger.info(`[Reseller] Revendeur créé : ${name} (${affiliateCode})`);
+    return NextResponse.json({ reseller }, { status: 201 });
+  },
+  { minLevel: 'mcc_super_admin' },
+);
 
-  await Nexus.adapter.set('mcc/resellers/' + resellerId, reseller);
+export const PATCH = withMccRoute(
+  async (req) => {
+    const body = await req.json() as { resellerId?: string; status?: string; commissionRate?: number; notes?: string; name?: string; email?: string; phone?: string; };
+    const { resellerId } = body;
+    if (!resellerId) return NextResponse.json({ error: 'resellerId requis' }, { status: 400 });
 
-  logger.info(`[Reseller] Revendeur créé : ${name} (${affiliateCode})`);
-  return NextResponse.json({ reseller }, { status: 201 });
-}
+    const existing = await Nexus.adapter.get('mcc/resellers/' + resellerId) as JsonObject | null;
+    if (!existing) return NextResponse.json({ error: 'Revendeur introuvable' }, { status: 404 });
 
-export async function PATCH(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'mcc_super_admin');
-  if (isDenied(caller)) return caller as NextResponse;
+    const updates: Record<string, unknown> = { updatedAt: Date.now() };
+    if (body.status !== undefined) updates.status = body.status;
+    if (body.commissionRate !== undefined) updates.commissionRate = body.commissionRate;
+    if (body.notes !== undefined) updates.notes = body.notes;
+    if (body.name !== undefined) updates.name = body.name;
+    if (body.email !== undefined) updates.email = body.email;
+    if (body.phone !== undefined) updates.phone = body.phone;
 
-  const body = await req.json() as { resellerId?: string; status?: string; commissionRate?: number; notes?: string; name?: string; email?: string; phone?: string; };
-  const { resellerId } = body;
-  if (!resellerId) return NextResponse.json({ error: 'resellerId requis' }, { status: 400 });
+    await Nexus.adapter.set('mcc/resellers/' + resellerId, { ...existing, ...updates });
 
-  const existing = await Nexus.adapter.get('mcc/resellers/' + resellerId) as JsonObject | null;
-  if (!existing) return NextResponse.json({ error: 'Revendeur introuvable' }, { status: 404 });
+    return NextResponse.json({ ok: true, resellerId });
+  },
+  { minLevel: 'mcc_super_admin' },
+);
 
-  const updates: Record<string, unknown> = { updatedAt: Date.now() };
-  if (body.status !== undefined) updates.status = body.status;
-  if (body.commissionRate !== undefined) updates.commissionRate = body.commissionRate;
-  if (body.notes !== undefined) updates.notes = body.notes;
-  if (body.name !== undefined) updates.name = body.name;
-  if (body.email !== undefined) updates.email = body.email;
-  if (body.phone !== undefined) updates.phone = body.phone;
+export const DELETE = withMccRoute(
+  async (req) => {
+    const resellerId = req.nextUrl.searchParams.get('resellerId');
+    if (!resellerId) return NextResponse.json({ error: 'resellerId requis' }, { status: 400 });
 
-  await Nexus.adapter.set('mcc/resellers/' + resellerId, { ...existing, ...updates });
+    await Nexus.adapter.delete('mcc/resellers/' + resellerId);
+    logger.info(`[Reseller] Revendeur supprimé : ${resellerId}`);
 
-  return NextResponse.json({ ok: true, resellerId });
-}
+    return NextResponse.json({ ok: true });
+  },
+  { minLevel: 'mcc_super_admin' },
+);
 
-export async function DELETE(req: NextRequest): Promise<NextResponse> {
-  const caller = await requireMccLevel(req, 'mcc_super_admin');
-  if (isDenied(caller)) return caller as NextResponse;
-
-  const resellerId = req.nextUrl.searchParams.get('resellerId');
-  if (!resellerId) return NextResponse.json({ error: 'resellerId requis' }, { status: 400 });
-
-  await Nexus.adapter.delete('mcc/resellers/' + resellerId);
-  logger.info(`[Reseller] Revendeur supprimé : ${resellerId}`);
-
-  return NextResponse.json({ ok: true });
-}
